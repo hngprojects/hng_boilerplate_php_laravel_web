@@ -51,8 +51,8 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             echo "About to Deploy"
-            cd /var/www/langlearnai-be/deployment
-            git pull origin dev
+            cd /var/www/langlearnai-be/api
             eval $(ssh-agent)
             ssh-add ~/.ssh/id_ecdsa
+            git pull origin main
             php artisan migrate --force
