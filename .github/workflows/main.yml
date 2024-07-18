@@ -1,9 +1,12 @@
-name: Laravel CI
+name: Laravel CI FOR DEV
 
 on:
   push:
     branches:
-      - main
+      - dev
+  pull_request:
+    branches:
+      - dev
 
 jobs:
   run-tests:
