@@ -54,4 +54,5 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             echo "About to Deploy"
-            cd hng_boilerplate_php_laravel_web
+            cd /var/www/langlearnai-be/deployment
+            php artisan migrate --force
