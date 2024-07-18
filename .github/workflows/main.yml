@@ -1,4 +1,4 @@
-name: Laravel CI FOR DEV
+name: Laravel CI FOR PROD
 
 on:
   push:
