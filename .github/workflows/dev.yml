@@ -19,7 +19,7 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3'
+          php-version: '8.2'
           extensions: sqlite, zip, bcmath
 
       - name: Install PHP dependencies
@@ -58,4 +58,5 @@ jobs:
             eval $(ssh-agent)
             ssh-add ~/.ssh/id_ecdsa
             git pull origin dev
+            composer install
             php artisan migrate --force
