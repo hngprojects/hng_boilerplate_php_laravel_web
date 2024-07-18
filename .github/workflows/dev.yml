@@ -28,7 +28,7 @@ jobs:
       - name: Set environment variables for CI
         run: |
           cp .env.example .env
-          echo "APP_KEY=base64:DKmXu0pLjV+OqdHrGZy2Yo+v8ad7WTJGxrkRhXROZxA=" >> .env
+          echo "APP_KEY=${{ secrets.APP_KEY }}" >> .env
           echo "DB_CONNECTION=sqlite" >> .env
           echo "DB_DATABASE=$(pwd)/database/database.sqlite" >> .env
 
