@@ -1,0 +1,61 @@
+name: Laravel CI FOR DEV
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: sqlite, zip, bcmath
+
+      - name: Install PHP dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Set environment variables for CI
+        run: |
+          cp .env.example .env
+          echo "APP_KEY=base64:DKmXu0pLjV+OqdHrGZy2Yo+v8ad7WTJGxrkRhXROZxA=" >> .env
+          echo "DB_CONNECTION=sqlite" >> .env
+          echo "DB_DATABASE=$(pwd)/database/database.sqlite" >> .env
+
+      - name: Ensure SQLite database file exists
+        run: |
+          mkdir -p database
+          touch database/database.sqlite
+
+      - name: Run database migrations
+        run: php artisan migrate --force
+
+      - name: Clear configuration cache
+        run: php artisan config:clear
+
+      - name: Run Laravel tests
+        run: php artisan test
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            echo "About to Deploy"
+            cd /var/www/langlearnai-be/deployment
+            git pull origin dev
+            eval $(ssh-agent)
+            ssh-add ~/.ssh/id_ecdsa
+            php artisan migrate --force
