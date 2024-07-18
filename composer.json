@@ -9,6 +9,7 @@
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
+	"predis/predis": "^2.1",
         "laravel/tinker": "^2.8"
     },
     "require-dev": {
