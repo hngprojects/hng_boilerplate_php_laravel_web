@@ -1,7 +1,10 @@
-name: Code Quality
+name: PHP Linting
 
 on:
   pull_request:
+    branches:
+      - dev
+  push:
     branches:
       - dev
 
