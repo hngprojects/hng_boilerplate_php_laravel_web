@@ -19,9 +19,6 @@ jobs:
           php-version: '8.2'
           extensions: pgsql, pdo_pgsql, zip, bcmath
 
-      - name: Install PHP dependencies
-        run: composer install --no-interaction --prefer-dist --optimize-autoloader
-
       - name: Run PHP Linting
         run: |
           find . -type f -name "*.php" | xargs -n1 php -l
@@ -33,6 +30,9 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-composer-
+            
+      - name: Install PHP dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
       - name: Set environment variables for CI
         run: |
