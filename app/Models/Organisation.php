@@ -31,6 +31,8 @@ class Organisation extends Model
      */
     protected $keyType = 'string';
 
+    protected $hidden = ['pivot'];
+
     public function users()
     {
         return $this->belongsToMany(User::class, 'organisation_user', 'org_id', 'user_id')->using(OrganisationUser::class);
