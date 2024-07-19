@@ -2,7 +2,6 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\V1\Auth\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,8 +18,4 @@ Route::prefix('v1')->group(function () {
     Route::get('/', function () {
         return 'api scaffold';
     });
-
-    // Authentication Routes
-    Route::post('auth/register', [AuthController::class, 'register']);
-    Route::post('auth/login', [AuthController::class, 'login']);
 });
