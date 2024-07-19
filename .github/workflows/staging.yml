@@ -1,4 +1,4 @@
-name: Laravel CI DEV
+name: Laravel CI STAGING
 
 on:
   push:
@@ -54,6 +54,6 @@ jobs:
             cd /var/www/langlearnai-be/staging
             eval $(ssh-agent)
             ssh-add ~/.ssh/id_ecdsa
-            git pull origin dev
+            git pull origin staging
             composer install --no-dev
             php artisan migrate --force
