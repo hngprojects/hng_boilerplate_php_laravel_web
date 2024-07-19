@@ -32,6 +32,13 @@ class UserController extends Controller
     public function show(User $user)
     {
         return $user->load('profile', 'products', 'organisations');
+        /* $user->load('profile', 'products', 'organisations')
+        // Hide the pivot attribute for each organisation
+        $user->organisations->each(function ($organisation) {
+            $organisation->makeHidden('pivot');
+        });
+
+        return response()->json($user); */
     }
 
     /**
