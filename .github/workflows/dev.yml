@@ -4,10 +4,7 @@ on:
   push:
     branches:
       - dev
-  pull_request:
-    branches:
-      - dev
-
+      
 jobs:
   run-tests:
     runs-on: ubuntu-latest
@@ -20,7 +17,12 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-          extensions: sqlite, zip, bcmath
+          extensions: pgsql, pdo_pgsql, zip, bcmath
+
+      - name: Set up PostgreSQL
+        uses: minesunny/postgresql-action@v1.0.0
+        with:
+          postgresql_version: '11'
 
       - name: Install PHP dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
@@ -29,13 +31,16 @@ jobs:
         run: |
           cp .env.example .env
           echo "APP_KEY=${{ secrets.APP_KEY }}" >> .env
-          echo "DB_CONNECTION=sqlite" >> .env
-          echo "DB_DATABASE=$(pwd)/database/database.sqlite" >> .env
+          echo "DB_CONNECTION=pgsql" >> .env
+          echo "DB_HOST=localhost" >> .env
+          echo "DB_PORT=5432" >> .env
+          echo "DB_DATABASE=testdb" >> .env
+          echo "DB_USERNAME=postgres" >> .env
+          echo "DB_PASSWORD=postgres" >> .env
 
-      - name: Ensure SQLite database file exists
+      - name: Ensure database is ready
         run: |
-          mkdir -p database
-          touch database/database.sqlite
+          psql -U postgres -d testdb -c "SELECT 1"
 
       - name: Run database migrations
         run: php artisan migrate --force
