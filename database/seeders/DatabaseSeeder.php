@@ -24,9 +24,6 @@ class DatabaseSeeder extends Seeder
 
         $product1 = Product::factory()->create(['user_id' => $user1->id]);
         $product2 = Product::factory()->create(['user_id' => $user1->id]);
-        // $user1->profile()->save(Profile::factory()->make(['user_id' => $user1->id, 'first_name' => $full_name1[0], 'last_name' => $full_name1[1]]));
-        // $user1->profile()->create(['user_id' => $user1->id, 'first_name' => $full_name1[0], 'last_name' => $full_name1[1]]);
-        // $user1->products()->save(Product::factory(2)->make(['user_id' => $user1->id]));
 
         $user2 = User::factory()->create();
         $full_name2 = explode(" ", $user2->name);
@@ -35,9 +32,6 @@ class DatabaseSeeder extends Seeder
 
         $product3 = Product::factory()->create(['user_id' => $user2->id]);
         $product4 = Product::factory()->create(['user_id' => $user2->id]);
-        // $user2->profile()->save(Profile::factory()->make(['user_id' => $user2->id, 'first_name' => $full_name2[0], 'last_name' => $full_name2[1]]));
-        // $user2->profile()->create(['user_id' => $user1->id, 'first_name' => $full_name2[0], 'last_name' => $full_name2[1]]);
-        // $user1->products()->save(Product::factory(2)->make(['user_id' => $user2->id]));
 
         $organisation1 = Organisation::factory()->create();
         $organisation2 = Organisation::factory()->create();
