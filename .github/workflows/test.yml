@@ -4,9 +4,6 @@ on:
   pull_request:
     branches:
       - dev
-  push:
-    branches:
-      - dev
       
 jobs:
   lint:
@@ -36,9 +33,6 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-composer-
-
-      - name: Install PHP dependencies
-        run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
       - name: Set environment variables for CI
         run: |
