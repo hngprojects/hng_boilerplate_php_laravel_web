@@ -1,0 +1,55 @@
+name: Code Quality
+
+on:
+  pull_request:
+    branches:
+      - dev
+      
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: pgsql, pdo_pgsql, zip, bcmath
+
+      - name: Run PHP Linting
+        run: |
+          find . -type f -name "*.php" | xargs -n1 php -l
+      - name: Cache Composer dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.composer/cache
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+            
+      - name: Install PHP dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Set environment variables for CI
+        run: |
+          cp .env.example .env
+          echo "APP_KEY=${{ secrets.APP_KEY }}" >> .env
+          echo "DB_CONNECTION=pgsql" >> .env
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
+          echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
+          echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env
+          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+
+      - name: Run database migrations
+        run: php artisan migrate --force
+
+      - name: Clear configuration cache
+        run: php artisan config:clear
+
+      - name: Run Laravel tests
+        run: php artisan test
