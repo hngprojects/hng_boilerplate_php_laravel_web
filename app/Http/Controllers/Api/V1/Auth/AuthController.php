@@ -3,10 +3,19 @@
 namespace App\Http\Controllers\Api\V1\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreUserRequest;
 use Illuminate\Http\Request;
+use App\Traits\HttpResponses;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Models\User;
 
 class AuthController extends Controller
 {
+    use HttpResponses;
+
     /**
      * Display a listing of the resource.
      */
@@ -26,9 +35,37 @@ class AuthController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        //
+        $request->validated($request->all());
+
+        try {
+            DB::beginTransaction();
+
+
+            // creating the user 
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
+
+
+            $token = JWTAuth::fromUser($user);
+            DB::commit();
+
+            return $this->success(data: [
+                'accessToken' => $token,
+                'user' => $user,
+            ], status: true, message: "Registration successful", code: Response::HTTP_CREATED,);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->error(
+                status: false,
+                message: "Registration unsuccessful",
+                code: Response::HTTP_BAD_REQUEST,
+            );
+        }
     }
 
     /**
