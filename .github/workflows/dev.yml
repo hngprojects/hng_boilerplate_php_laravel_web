@@ -19,18 +19,20 @@ jobs:
           php-version: '8.2'
           extensions: pgsql, pdo_pgsql, zip, bcmath
 
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-dir)"
+
       - name: Cache Composer dependencies
         uses: actions/cache@v3
         with:
-          path: |
-            ~/.composer/cache
+          path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-composer-
 
       - name: Install PHP dependencies
-        run: |
-          composer install --no-interaction --prefer-dist --optimize-autoloader
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
       - name: Set environment variables for CI
         run: |
@@ -42,6 +44,8 @@ jobs:
           echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env
           echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+          # Uncomment the line below if you prefer to set DATABASE_URL instead of individual DB environment variables
+          # echo "DATABASE_URL=postgres://${{ secrets.DB_USERNAME }}:${{ secrets.DB_PASSWORD }}@${{ secrets.DB_HOST }}:${{ secrets.DB_PORT }}/${{ secrets.DB_DATABASE }}?sslmode=disable" >> .env
 
       - name: Run database migrations
         run: php artisan migrate --force
