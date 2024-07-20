@@ -93,6 +93,7 @@ class User extends Authenticatable  implements JWTSubject
         return $this->hasOne(Profile::class, 'user_id', 'id');
     }
 
+    // Many to Many relationship with Organisation
     public function organisations(): BelongsToMany
     {
         return $this->belongsToMany(Organisation::class, 'organisation_user', 'user_id', 'org_id')->using(OrganisationUser::class);
