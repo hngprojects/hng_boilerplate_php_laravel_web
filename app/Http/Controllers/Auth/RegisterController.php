@@ -57,7 +57,6 @@ class RegisterController extends Controller
             'data' => [
                 'accessToken' => $token,
                 'user' => [
-                    'name' => count($name),
                     'userId' => $user->id,
                     'first_name' => $first_name,
                     'last_name' => $last_name,
