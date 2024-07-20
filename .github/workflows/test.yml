@@ -59,4 +59,6 @@ jobs:
         run: php artisan config:clear
 
       - name: Run Laravel tests
-        run: php artisan test
+        run: |
+          php artisan jwt:secret
+          php artisan test
