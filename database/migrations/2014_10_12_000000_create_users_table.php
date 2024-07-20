@@ -15,10 +15,17 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('name');
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('phone')->nullable();
+            $table->string('role')->default('user');
+            $table->timestamp('email_verified_at')->nullable();
+            $table->timestamp('last_login_at')->nullable();
+            $table->string('signup_type')->default('email');
+            $table->boolean('is_active')->default(true);
+            $table->boolean('is_verified')->default(false);
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
