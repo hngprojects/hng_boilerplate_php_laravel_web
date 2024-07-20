@@ -36,7 +36,7 @@ jobs:
           cp .env.example .env
           echo "APP_KEY=${{ secrets.APP_KEY }}" >> .env
           echo "DATABASE_URL=postgres://${{ secrets.DB_USERNAME }}:${{ secrets.DB_PASSWORD }}@${{ secrets.DB_HOST }}:${{ secrets.DB_PORT }}/${{ secrets.DB_DATABASE }}?sslmode=disable" >> .env
-
+      
       - name: Run database migrations
         run: php artisan migrate --force
 
