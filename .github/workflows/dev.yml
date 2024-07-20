@@ -31,7 +31,6 @@ jobs:
       - name: Install PHP dependencies
         run: |
           composer install --no-interaction --prefer-dist --optimize-autoloader
-          ls -la ~/.composer/cache
 
       - name: Set environment variables for CI
         run: |
