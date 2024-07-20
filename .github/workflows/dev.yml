@@ -41,9 +41,13 @@ jobs:
           echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env
           echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
-
+          #echo "DATABASE_URL=postgres://${{ secrets.DB_USERNAME }}:${{ secrets.DB_PASSWORD }}@${{ secrets.DB_HOST }}:${{ secrets.DB_PORT }}/${{ secrets.DB_DATABASE }}?sslmode=disable" >> .env
+      
       - name: Run database migrations
-        run: php artisan migrate --force
+        run: php artisan migrate 
+
+      - name: Clear all cache
+        run: php artisan optimize
 
       - name: Clear configuration cache
         run: php artisan config:clear

@@ -42,6 +42,9 @@ jobs:
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
       - name: Run database migrations
         run: php artisan migrate --force
+        
+      - name: Clear all cache
+        run: php artisan optimize
 
       - name: Clear configuration cache
         run: php artisan config:clear
