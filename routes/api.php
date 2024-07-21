@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\User\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\ArticleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,5 +24,7 @@ Route::prefix('v1')->group(function () {
     Route::post('/auth/register', [AuthController::class, 'store']);
 
 
-    Route::apiResource('/users', UserController::class);
+    Route::apiResource('/users', UserController::class);      
+    Route::middleware('throttle:10,1')->get('/topics/search', [ArticleController::class, 'search']);
+
 });
