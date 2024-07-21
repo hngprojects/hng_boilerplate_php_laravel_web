@@ -1,11 +1,15 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Admin\Plan\FeatureController;
+use App\Http\Controllers\Api\V1\Admin\Plan\SubscriptionController;
+use App\Http\Controllers\Api\V1\Admin\BlogController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\User\UserController;
 use App\Http\Controllers\Api\V1\CategoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\ArticleController;
+use App\Http\Controllers\Api\V1\RoleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,13 +27,21 @@ Route::prefix('v1')->group(function () {
         return 'api scaffold';
     });
     Route::post('/auth/register', [AuthController::class, 'store']);
-
+    
+    Route::post('/roles', [RoleController::class, 'store']);
 
     Route::apiResource('/users', UserController::class);
 
     Route::get('/products/categories', [CategoryController::class, 'index']);
-      
+
     Route::middleware('throttle:10,1')->get('/help-center/topics/search', [ArticleController::class, 'search']);
     
     Route::middleware('auth:api')->post('/password-update', [UserController::class, 'updatePassword']);
+    
+    Route::get('/blogs/latest', [BlogController::class, 'latest']);
+
+    Route::middleware('auth:api')->group(function () {
+        Route::apiResource('/features', FeatureController::class);
+        Route::apiResource('/plans', SubscriptionController::class);
+    });
 });
