@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\ArticleController;
 
+
+use App\Http\Controllers\Api\V1\SqueezeController;
+
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -25,7 +29,6 @@ Route::prefix('v1')->group(function () {
     Route::apiResource('/users', UserController::class);
 
     Route::get('/products/categories', [CategoryController::class, 'index']);
-      
-    Route::middleware('throttle:10,1')->get('/topics/search', [ArticleController::class, 'search']);
 
+    Route::middleware('throttle:10,1')->get('/topics/search', [ArticleController::class, 'search']);
 });
