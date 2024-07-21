@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rules\Password;
 
 class UpdatePasswordRequest extends FormRequest
@@ -36,18 +38,16 @@ class UpdatePasswordRequest extends FormRequest
     }
 
     /**
-     * Get custom messages for validator errors.
+     * Handle a failed validation attempt.
      */
-    public function messages(): array
+    protected function failedValidation(Validator $validator)
     {
-        return [
-            'current_password.required' => 'Current password is required',
-            'new_password.required' => 'New password is required',
-            'new_password.min' => 'New password must be at least 8 characters',
-            'new_password.mixedCase' => 'New password must include at least one uppercase and one lowercase letter',
-            'new_password.letters' => 'New password must include at least one letter',
-            'new_password.numbers' => 'New password must include at least one number',
-            'new_password.symbols' => 'New password must include at least one symbol',
-        ];
+        $errors = $validator->errors();
+        throw new HttpResponseException(
+            response()->json([
+                'status' => 'unsuccessful',
+                'message' => $errors->first(),
+            ], 400)
+        );
     }
 }
