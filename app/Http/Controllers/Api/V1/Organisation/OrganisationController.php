@@ -28,8 +28,7 @@ class OrganisationController extends Controller
     public function store(StoreOrganisationRequest $request)
     {
         if($validPayload = $request->validated()){
-            // $user = User::inRandomOrder()->first(); // get a random user, pending authentication module implementation
-            $user = auth('api')->user(); // get the authenticated user
+            $user = auth('api')->user();
             if(!$user) return ResponseHelper::response("Authentication failed", 401, null);
             $validPayload['user_id'] = (string)$user->id;
             DB::beginTransaction();
