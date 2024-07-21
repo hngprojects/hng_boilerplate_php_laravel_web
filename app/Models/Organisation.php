@@ -11,6 +11,13 @@ class Organisation extends Model
     use HasFactory, HasUuids;
 
     /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = ['pivot'];
+
+    /**
      * The primary key associated with the table.
      *
      * @var string

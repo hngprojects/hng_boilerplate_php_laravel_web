@@ -20,7 +20,7 @@ class ProductFactory extends Factory
         $newUser = User::factory()->make();
         return [
             'user_id' => $newUser->id,
-            'name' => $this->faker->productName,
+            'name' => $this->faker->word . "'s product",
             'description' => $this->faker->text,
         ];
     }

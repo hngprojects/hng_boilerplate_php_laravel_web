@@ -13,8 +13,15 @@ return new class extends Migration
     {
         Schema::create('organisations', function (Blueprint $table) {
             $table->uuid('org_id')->primary();
+            $table->foreignUuid('user_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->string('name');
+            $table->string('email');
             $table->text('description');
+            $table->string('industry');
+            $table->string('type');
+            $table->string('country');
+            $table->string('address');
+            $table->string('state');
             $table->timestamps();
         });
     }

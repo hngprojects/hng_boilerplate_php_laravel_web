@@ -1,9 +1,12 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\User\UserController;
 use App\Http\Controllers\Api\V1\WaitListController;
+use App\Http\Controllers\Api\V1\CategoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\ArticleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,8 +23,14 @@ Route::prefix('v1')->group(function () {
     Route::get('/', function () {
         return 'api scaffold';
     });
+    Route::post('/auth/register', [AuthController::class, 'store']);
+
 
     Route::apiResource('/users', UserController::class);
-    Route::get('waitlist', [WaitlistController::class, 'index']);
-    Route::post('waitlist', [WaitlistController::class, 'store']);
+
+    Route::get('/products/categories', [CategoryController::class, 'index']);
+      
+    Route::middleware('throttle:10,1')->get('/help-center/topics/search', [ArticleController::class, 'search']);
+
+    Route::middleware('throttle:10,1')->get('waitlist', [WaitListController::class, 'store']);
 });

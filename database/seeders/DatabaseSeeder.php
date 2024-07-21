@@ -9,6 +9,8 @@ use App\Models\Product;
 use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use App\Models\Article;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,21 +19,21 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $user1 = User::factory()->create();
-        $full_name1 = explode(" ", $user1->name);
+        $user1 = User::factory()->has(
+            Profile::factory()
+                    ->state(function (array $attributes, User $user) {
+                        $full_name = explode(" ", $user->name);
+                        return ['first_name' => $full_name[0], 'last_name' => $full_name[1]];
+                    })
+        )->hasProducts(2)->create();
 
-        $profile1 = Profile::factory()->create(['user_id' => $user1->id, 'first_name' => $full_name1[0], 'last_name' => $full_name1[1]]);
-
-        $product1 = Product::factory()->create(['user_id' => $user1->id]);
-        $product2 = Product::factory()->create(['user_id' => $user1->id]);
-
-        $user2 = User::factory()->create();
-        $full_name2 = explode(" ", $user2->name);
-
-        $profile2 = Profile::factory()->create(['user_id' => $user2->id, 'first_name' => $full_name2[0], 'last_name' => $full_name2[1]]);
-
-        $product3 = Product::factory()->create(['user_id' => $user2->id]);
-        $product4 = Product::factory()->create(['user_id' => $user2->id]);
+        $user2 = User::factory()->has(
+            Profile::factory()
+                    ->state(function (array $attributes, User $user) {
+                        $full_name = explode(" ", $user->name);
+                        return ['first_name' => $full_name[0], 'last_name' => $full_name[1]];
+                    })
+        )->hasProducts(2)->create();
 
         $organisation1 = Organisation::factory()->create();
         $organisation2 = Organisation::factory()->create();
@@ -40,6 +42,9 @@ class DatabaseSeeder extends Seeder
         $organisation1->users()->attach([$user1->id, $user2->id]);
         $organisation2->users()->attach([$user1->id, $user2->id]);
         $organisation3->users()->attach($user2->id);
+
+        $this->call(CategoriesTableSeeder::class);
+        $this->call([ArticlesTableSeeder::class]);
 
     }
 }
