@@ -36,7 +36,7 @@ class AcceptInvitationController extends Controller
         if (!$invitation) {
             return response()->json([
                 'message' => 'Invalid or expired invitation link',
-                'errors' => ['Invitation not found'],
+                'errors' => [' "Invalid invitation link format"'],
                 'status_code' => 400
             ], 400);
         }
@@ -51,11 +51,7 @@ class AcceptInvitationController extends Controller
         }
 
         // Create the user with the email from the invitation
-        $user = User::create([
-            'name' => 'Default Name',
-            'email' => $invitation->email,
-            'password' => Hash::make('defaultpassword'),
-        ]);
+        $user = User::where('email', $invitation->email)->first();
 
         // Add the user to the organization
         $organisation = Organisation::find($invitation->org_id);

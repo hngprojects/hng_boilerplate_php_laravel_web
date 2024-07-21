@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Organisation;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -23,7 +24,7 @@ class InvitationFactory extends Factory
         return [
             'invite_id' => (string) Str::uuid(),
             'link' => $this->generateLink($email, $uniqueId),
-            'email' => $email,
+            'email' => User::factory()->create()->email,
             'org_id' => Organisation::factory(),
             'expires_at' => now()->addDay(),
         ];
@@ -31,6 +32,6 @@ class InvitationFactory extends Factory
 
     private function generateLink($email, $uniqueId)
     {
-        return hash('sha256', $email . $uniqueId);
+        return 'http://www.localhost/api/invite/' . $email . '/' . $uniqueId;
     }
 }
