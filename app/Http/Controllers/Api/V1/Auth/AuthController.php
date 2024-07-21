@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -50,7 +51,6 @@ class AuthController extends Controller
                 'password' => Hash::make($request->password),
             ]);
 
-
             $token = JWTAuth::fromUser($user);
             DB::commit();
 
@@ -60,6 +60,7 @@ class AuthController extends Controller
             ], status: true, message: "Registration successful", code: Response::HTTP_CREATED,);
         } catch (\Exception $e) {
             DB::rollBack();
+            Log::error('Registration error: ' . $e->getMessage());
             return $this->error(
                 status: false,
                 message: "Registration unsuccessful",

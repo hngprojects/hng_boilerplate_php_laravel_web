@@ -9,7 +9,7 @@ trait HttpResponses
         return response()->json([
             'status' => $status,
             'message' => $message,
-            'status-code' => $code,
+            'status_code' => $code,
             'data' => $data,
         ], $code);
     }
@@ -22,14 +22,14 @@ trait HttpResponses
             return response()->json([
                 'status' => $status,
                 'message' => $message,
-                'status-code' => $code,
+                'status_code' => $code,
             ], $code);
         }
 
         return response()->json([
             'status' => $status,
             'message' => $message,
-            'status-code' => $code,
+            'status_code' => $code,
             'data' => $data,
         ], $code);
     }

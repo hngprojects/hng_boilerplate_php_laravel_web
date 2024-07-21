@@ -19,6 +19,7 @@ class RegistrationTest extends TestCase
             'password' => 'password',
             'password_confirmation' => 'password',
         ];
+
         $response = $this->postJson('/api/v1/auth/register', $registrationData);
         // Check the status code
         $response->assertStatus(201);
