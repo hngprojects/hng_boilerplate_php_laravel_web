@@ -19,7 +19,7 @@ class RoleCreationTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         $this->test_user = User::create([
             'name' => 'Test User',
             'email' => 'testuser@example.com',
@@ -28,7 +28,6 @@ class RoleCreationTest extends TestCase
 
         $this->test_org = Organisation::create([
             "name" => 'Test organisation',
-            "user_id" => $this->test_user->id,
             "email" => "test email",
             "description" => "test description",
             "industry" => "test industry",
