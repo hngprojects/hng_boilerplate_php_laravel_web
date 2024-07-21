@@ -14,26 +14,15 @@ class BlogControllerTest extends TestCase
 
     use RefreshDatabase;
 
-    private function authenticate()
-    {
-        $user = User::factory()->create();
-        $token = JWTAuth::fromUser($user);
-        return $token;
-    }
-
     /** @test */
     public function it_fetches_paginated_latest_blog_posts_without_parameters()
     {
         // Create some blog posts
         Blog::factory()->count(15)->create();
 
-        // Authenticate and get the token
-        $token = $this->authenticate();
-
 
         // Send a request without pagination parameters
-        $response = $this->withHeaders(['Authorization' => "Bearer $token"])
-            ->getJson('/api/v1/blogs');
+        $response = $this->getJson('/api/v1/blogs/latest');
 
         // Assert response status and structure
         $response->assertStatus(200)
@@ -66,12 +55,8 @@ class BlogControllerTest extends TestCase
         // Create some blog posts
         Blog::factory()->count(20)->create();
 
-        // Authenticate and get the token
-        $token = $this->authenticate();
-
         // Send a request with pagination parameters
-        $response = $this->withHeaders(['Authorization' => "Bearer $token"])
-            ->getJson('/api/v1/blogs?page=2&page_size=5');
+        $response = $this->getJson('/api/v1/blogs/latest?page=2&page_size=5');
 
         // Assert response status and structure
         $response->assertStatus(200)
@@ -104,12 +89,8 @@ class BlogControllerTest extends TestCase
     public function it_handles_invalid_pagination_parameters()
     {
 
-        // Authenticate and get the token
-        $token = $this->authenticate();
-
         // Send a request with invalid pagination parameters
-        $response = $this->withHeaders(['Authorization' => "Bearer $token"])
-            ->getJson('/api/v1/blogs?page=-1&page_size=abc');
+        $response = $this->getJson('/api/v1/blogs/latest?page=-1&page_size=abc');
 
         // Assert response status and structure
         $response->assertStatus(400)
@@ -122,12 +103,8 @@ class BlogControllerTest extends TestCase
     public function it_handles_no_blog_posts_present()
     {
 
-        // Authenticate and get the token
-        $token = $this->authenticate();
-
         // Send a request when no blog posts are present
-        $response = $this->withHeaders(['Authorization' => "Bearer $token"])
-            ->getJson('/api/v1/blogs');
+        $response = $this->getJson('/api/v1/blogs/latest');
 
         // Assert response status and structure
         $response->assertStatus(200)

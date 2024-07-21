@@ -9,10 +9,7 @@ use Illuminate\Support\Facades\Log;
 
 class BlogController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(Request $request)
+    public function latest(Request $request)
     {
         try {
             // Get pagination parameters
@@ -51,6 +48,14 @@ class BlogController extends Controller
             Log::error('Error fetching latest blog posts: ' . $e->getMessage());
             return response()->json(['error' => 'Internal server error.'], 500);
         }
+    }
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        //
     }
 
     /**

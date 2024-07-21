@@ -29,11 +29,9 @@ Route::prefix('v1')->group(function () {
     Route::apiResource('/users', UserController::class);
 
     Route::get('/products/categories', [CategoryController::class, 'index']);
-      
+
     Route::middleware('throttle:10,1')->get('/help-center/topics/search', [ArticleController::class, 'search']);
 
-    Route::middleware('auth:api')->group(function (){
-        Route::apiResource('/blogs', BlogController::class);
-    });
+    Route::get('/blogs/latest', [BlogController::class, 'latest']);
 
 });
