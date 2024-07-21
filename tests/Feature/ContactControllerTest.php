@@ -22,7 +22,7 @@ class ContactControllerTest extends TestCase
         $response->assertStatus(400)
             ->assertJson([
                 'message' => 'Validation failed',
-                'status' => 400,
+                'status_code' => 400,
                 'errors' => [
                     'The name field is required.',
                     'The email field must be a valid email address.',
@@ -45,7 +45,7 @@ class ContactControllerTest extends TestCase
         $response->assertStatus(500)
             ->assertJson([
                 'message' => 'A server error occurred',
-                'status' => 500,
+                'status_code' => 500,
             ]);
     }
 
@@ -60,7 +60,7 @@ class ContactControllerTest extends TestCase
         $response->assertStatus(200)
             ->assertJson([
                 'message' => 'Inquiry successfully sent',
-                'status' => 200,
+                'status_code' => 200,
             ]);
     }
 }

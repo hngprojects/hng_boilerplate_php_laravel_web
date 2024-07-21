@@ -23,7 +23,7 @@ class ContactController extends Controller
             return response()->json([
                 'message' => 'Validation failed',
                 'errors' => $validator->errors()->all(),
-                'status' => 400,
+                'status_code' => 400,
             ], 400);
         }
 
@@ -34,14 +34,14 @@ class ContactController extends Controller
             Mail::to('amowogbajegideon@gmail.com')->send(new ContactInquiryMail($data));
             return response()->json([
                 'message' => 'Inquiry successfully sent',
-                'status' => 200,
+                'status_code' => 200,
                 
             ], 200);
         } catch (\Exception $e) {
             Log::error('Error sending inquiry: '.$e->getMessage());
             return response()->json([
                 'message' => 'A server error occurred',
-                'status' => 500,
+                'status_code' => 500,
             ], 500);
         }
     }
