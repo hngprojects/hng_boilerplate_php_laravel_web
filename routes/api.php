@@ -4,7 +4,7 @@
 use App\Http\Controllers\Api\V1\Admin\Plan\FeatureController;
 use App\Http\Controllers\Api\V1\Admin\Plan\SubscriptionController;
 use App\Http\Controllers\Api\V1\Admin\BlogController;
-use App\Http\Controllers\Api\V1\Admin\CustomerController;
+
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 
 
