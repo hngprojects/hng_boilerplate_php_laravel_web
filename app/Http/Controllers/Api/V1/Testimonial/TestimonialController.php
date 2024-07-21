@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 
 class TestimonialController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      */
