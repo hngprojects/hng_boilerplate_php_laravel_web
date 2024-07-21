@@ -35,7 +35,6 @@ Route::prefix('v1')->group(function () {
 
     Route::get('/blogs/latest', [BlogController::class, 'latest']);
 
-    // Route::get('/customers', [CustomerController::class, 'index']);
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
 
 });

@@ -17,7 +17,7 @@ class AdminMiddleware
     {
         $user = auth()->user();
 
-        if (!$user || $user->is_admin != 'admin' || !$user->is_active) {
+        if (!$user || $user->role !== 'admin' || !$user->is_active) {
             return response()->json([
                 'status_code' => 401,
                 'message' => 'Unauthorized',

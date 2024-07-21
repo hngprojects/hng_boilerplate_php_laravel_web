@@ -3,39 +3,53 @@
 namespace App\Http\Controllers\Api\V1\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CustomerRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class CustomerController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(CustomerRequest $request)
     {
-        $limit = $request->input('limit', 10);
-        $page = $request->input('page', 1);
+        try {
+            $limit = $request->input('limit');
+            $page = $request->input('page');
 
-        // $customers = User::with('organisations')
-        $customers = User::where('role', 'admin')
-            ->paginate($limit, ['*'], 'page', $page);
+            $customers = User::with('organisations')
+                ->where('role', 'customer')
+                ->paginate($limit, ['*'], 'page', $page);
 
-        return response()->json([
-            'status_code' => 200,
-            'current_page' => $customers->currentPage(),
-            'total_pages' => $customers->lastPage(),
-            'limit' => $customers->perPage(),
-            'total_items' => $customers->total(),
-            'data' => $customers->map(function ($customer) {
-                return [
-                    'first_name' => $customer->first_name,
-                    'last_name' => $customer->last_name,
-                    'email' => $customer->email,
-                    'phone_number' => $customer->phone_number,
-                    'organisations' => $customer->organisations->pluck('uuid')
-                ];
-            })
-        ]);
+            return response()->json([
+                'status_code' => 200,
+                'current_page' => $customers->currentPage(),
+                'total_pages' => $customers->lastPage(),
+                'limit' => $customers->perPage(),
+                'total_items' => $customers->total(),
+                'data' => $customers->map(function ($customer) {
+                    return [
+                        // 'first_name' => $customer->first_name,
+                        // 'last_name' => $customer->last_name, 
+                        'name' => $customer->name, 
+                        'email' => $customer->email,
+                        'phone' => $customer->phone,
+                        'organisations' => $customer->organisations->pluck('org_id')
+                    ];
+                })
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Error fetching customers: ' . $e->getMessage());
+            dd($e);
+            return response()->json([
+                'error' => 'Bad Request',
+                "message" => "Internal server error",
+                "status_code" => 500
+            ], 500);
+        }
     }
 
     /**
