@@ -36,7 +36,7 @@ class AcceptInvitationController extends Controller
         if (!$invitation) {
             return response()->json([
                 'message' => 'Invalid or expired invitation link',
-                'errors' => [' "Invalid invitation link format"'],
+                'errors' => ['Invalid invitation link format'],
                 'status_code' => 400
             ], 400);
         }

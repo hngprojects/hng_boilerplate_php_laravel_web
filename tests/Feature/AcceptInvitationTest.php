@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Models\Invitation;
@@ -13,7 +12,6 @@ use Illuminate\Support\Str;
 class AcceptInvitationTest extends TestCase
 {
     use RefreshDatabase;
-
 
     public function test_accept_invitation()
     {
@@ -46,8 +44,7 @@ class AcceptInvitationTest extends TestCase
         // Assert that the response JSON structure matches the expected format
         $response->assertJson([
             "message" => "Invalid request data",
-            "errors" =>
-            [
+            "errors" => [
                 "invitationLink" => [
                     "The invitation link field is required."
                 ]
@@ -75,7 +72,6 @@ class AcceptInvitationTest extends TestCase
             "status_code" => 400
         ]);
     }
-
 
     public function test_invitation_link_expired()
     {
@@ -108,33 +104,32 @@ class AcceptInvitationTest extends TestCase
         $organisation = Organisation::factory()->create();
 
         // Create an invitation with a non-existent organisation
-        $invitation = Invitation::factory()->create(
-            [
-                'org_id' => $organisation
-            ]
-        );
+        $invitation = Invitation::factory()->create([
+            'org_id' => $organisation,
+        ]);
 
         $this->assertDatabaseHas('invitations', [
             'invite_id' => $invitation->invite_id,
             'link' => $invitation->link,
             'org_id' => $organisation->org_id
         ]);
+
         // delete the organisation
         $organisation->delete();
 
         $response = $this->postJson('api/v1/invite', [
             "invitationLink" => $invitation->link
         ]);
+        print_r($response);
 
         // Assert that the response status code is 400
         $response->assertStatus(400);
 
-        //Assert that the response JSON structure matches the expected format
+        // Assert that the response JSON structure matches the expected format
         $response->assertJson([
             'message' => 'Invalid or expired invitation link',
             'errors' => ['Organization not found'],
             'status_code' => 400
         ]);
-        print_r($response);
     }
 }
