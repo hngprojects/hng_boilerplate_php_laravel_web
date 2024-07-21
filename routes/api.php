@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Admin\BlogController;
 use App\Http\Controllers\Api\V1\User\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -23,5 +24,9 @@ Route::prefix('v1')->group(function () {
 
     Route::apiResource('/users', UserController::class);      
     Route::middleware('throttle:10,1')->get('/topics/search', [ArticleController::class, 'search']);
+
+    Route::middleware('auth:api')->group(function (){
+        Route::apiResource('/blogs', BlogController::class);
+    });
 
 });
