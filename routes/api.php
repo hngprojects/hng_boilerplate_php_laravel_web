@@ -67,6 +67,10 @@ Route::prefix('v1')->group(function () {
 
     Route::delete('/organizations/{org_id}', [OrganisationController::class, 'destroy']);
 
+    Route::middleware('auth:api')->group(function () {
+        Route::post('/testimonials', [TestimonialController::class, 'store']);
+    });
+    
     Route::apiResource('/users', UserController::class);
     Route::get('/products/categories', [CategoryController::class, 'index']);
 });
