@@ -19,7 +19,6 @@ class RoleCreationTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-
         $this->test_user = User::create([
             'name' => 'Test User',
             'email' => 'testuser@example.com',
