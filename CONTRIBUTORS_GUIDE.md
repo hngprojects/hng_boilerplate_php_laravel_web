@@ -24,14 +24,14 @@ Thank you for considering contributing to [App Name]! We welcome all types of co
 
 ## Description
 <!--- Describe your changes in detail -->
-### Created an API endpoint to handle the deletion of an organization. This endpoint validate the organization ID and update the specified organization deleted attribute to true in the database upon successful validation.
+Created an API endpoint to handle the deletion of an organization. This endpoint validate the organization ID and update the specified organization deleted attribute to true in the database upon successful validation.
 ​
 ## Related Issue (Link to Github issue)
 <!--- This project only accepts pull requests related to open issues -->
 <!--- If suggesting a new feature or change, please discuss it in an issue first -->
 <!--- If fixing a bug, there should be an issue describing it with steps to reproduce -->
 <!--- Please link to the issue here: -->
-### Implement Organization Deletion
+ Implement Organization Deletion
 ​
 
 ## Endpoints
@@ -39,13 +39,13 @@ Thank you for considering contributing to [App Name]! We welcome all types of co
 
 ## Motivation and Context
 <!--- Why is this change required? What problem does it solve? -->
-### It provides a backend service to handle the deletion of organizations, ensuring the organization ID is valid and setting the oganization deleted attribute to true in the database.
+It provides a backend service to handle the deletion of organizations, ensuring the organization ID is valid and setting the oganization deleted attribute to true in the database.
 ​
 ## How Has This Been Tested?
 <!--- Please describe in detail how you tested your changes. -->
 <!--- Include details of your testing environment, and the tests you ran to -->
 <!--- see how your change affects other areas of the code, etc. -->
-### the Api has been tested using php units testing and it passed the 3 test it under went.
+the Api has been tested using php units testing and it passed the 3 test it under went.
 ​
 ## Screenshots (if appropriate - Postman, etc):
 ​
