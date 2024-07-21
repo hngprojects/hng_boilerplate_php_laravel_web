@@ -32,7 +32,9 @@ class TestimonialController extends Controller
      */
     public function store(StoreTestimonialRequest $request)
     {
-        if (!Auth::check()) {
+        $user = Auth::user();
+
+        if (!$user) {
             return response()->json([
                 'status' => 'Unauthorized',
                 'message' => 'Unauthorized. Please log in.',
@@ -41,7 +43,6 @@ class TestimonialController extends Controller
         }
 
         try {
-            $user = Auth::user();
             $testimonial = Testimonial::create([
                 'user_id' => $user->id,
                 'name' => $user->name,
@@ -51,18 +52,16 @@ class TestimonialController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'Testimonial created successfully',
-                'data' => $testimonial
-            ], 200);
+                'data' => $testimonial,
+            ], 201);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'Internal Server Error',
                 'message' => 'Internal Server Error. Please try again later.',
-                'status_code' => 500
+                'status_code' => 500,
             ], 500);
         }
-
     }
-
 
 
     /**

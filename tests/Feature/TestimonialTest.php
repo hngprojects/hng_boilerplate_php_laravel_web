@@ -19,7 +19,7 @@ class TestimonialTest extends TestCase
 
         $response->assertStatus(200);
     }
-    public function test_unauthenticated_user_cannot_create_testimonial()
+    public function testUnauthenticatedUserCannotCreateTestimonial()
     {
         $response = $this->postJson('/api/v1/testimonials', [
             'content' => 'This is a testimonial.',
@@ -27,24 +27,22 @@ class TestimonialTest extends TestCase
 
         $response->assertStatus(401);
         $response->assertJson([
-            'status' => 'Unauthorized',
-            'message' => 'Unauthorized. Please log in.',
-            'status_code' => 401,
+            'message' => 'Unauthenticated.',
         ]);
     }
 
-    public function test_authenticated_user_can_create_testimonial()
+
+    public function testAuthenticatedUserCanCreateTestimonial()
     {
         $user = User::factory()->create();
-        Log::info($user);
-        $token = auth()->login($user);
-        Log::info($token);
+        $token = JWTAuth::fromUser($user);
+
         $response = $this->postJson('/api/v1/testimonials', [
             'content' => 'This is a testimonial.',
         ], [
             'Authorization' => 'Bearer ' . $token,
         ]);
-        Log::info($response->getContent());
+
         $response->assertStatus(200);
         $response->assertJson([
             'status' => 'success',
@@ -52,7 +50,8 @@ class TestimonialTest extends TestCase
             'data' => [
                 'name' => $user->name,
                 'content' => 'This is a testimonial.',
-            ],
+            ]
+
         ]);
 
         $this->assertDatabaseHas('testimonials', [
@@ -62,22 +61,19 @@ class TestimonialTest extends TestCase
     }
 
 
-    public function test_validation_errors_are_returned_for_missing_data()
+    public function testValidationErrorsAreReturnedForMissingData()
     {
         $user = User::factory()->create();
-        $token = auth()->login($user);
+        $token = JWTAuth::fromUser($user);
 
         $response = $this->postJson('/api/v1/testimonials', [], [
             'Authorization' => 'Bearer ' . $token,
         ]);
 
-        $response->assertStatus(400);
-        $response->assertJson([
-            'status' => 'Bad Request',
-            'message' => 'Please check the submitted data.',
-            'status_code' => 400,
-        ]);
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['content']);
     }
+
 
 
 }
