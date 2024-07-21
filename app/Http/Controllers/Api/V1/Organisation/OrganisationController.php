@@ -30,20 +30,20 @@ class OrganisationController extends Controller
         if($validPayload = $request->validated()){
             // $user = User::inRandomOrder()->first(); // get a random user, pending authentication module implementation
             $user = auth('api')->user(); // get the authenticated user
-            if(!$user) return ResponseHelper::response('Bad request', "Authentication failed", null, 401);
+            if(!$user) return ResponseHelper::response("Authentication failed", 401, null);
             $validPayload['user_id'] = (string)$user->id;
             DB::beginTransaction();
             try {
                 $organisation = Organisation::create($validPayload);
                 $organisation->users()->attach((string)$user->id);
                 DB::commit();
-                return ResponseHelper::response('success', "Organisation created successfully", $organisation->getPublicColumns(), 201);
+                return ResponseHelper::response("Organisation created successfully", 201, $organisation->getPublicColumns());
             }catch (\Exception $e) {
                 DB::rollBack();
-                return ResponseHelper::response('Bad request', "Client error", null, 400);
+                return ResponseHelper::response("Client error", 400, null);
             }
         }else{
-            return ResponseHelper::response('Bad request', "Client error", null, 400);
+            return ResponseHelper::response("Client error", 400, null);
         }
     }
 

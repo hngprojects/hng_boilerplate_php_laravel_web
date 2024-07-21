@@ -23,7 +23,7 @@ class ResponseHelper
     public static function response($message, $status_code, $data = null ){
         $response = [
             'message' => $message,
-            'status' => $status_code,
+            'status_code' => $status_code,
             'data' => $data
         ];
         return response()->json($response, $status_code);
