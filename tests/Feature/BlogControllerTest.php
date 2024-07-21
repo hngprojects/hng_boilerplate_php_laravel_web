@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Blog;
 use App\Models\User;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -12,7 +13,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 class BlogControllerTest extends TestCase
 {
 
-    use RefreshDatabase;
+    use LazilyRefreshDatabase;
 
     /** @test */
     public function it_fetches_paginated_latest_blog_posts_without_parameters()
