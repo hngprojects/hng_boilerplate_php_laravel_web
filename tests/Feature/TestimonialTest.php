@@ -22,16 +22,19 @@ class TestimonialTest extends TestCase
         ]);
     }
 
-
     public function testAuthenticatedUserCanCreateTestimonial()
     {
-        $user = User::factory()->create();
-        $token = JWTAuth::fromUser($user);
+        // Create a user with a known password
+        $user = User::factory()->create(['password' => bcrypt('password')]);
 
+        // Attempt to log in the user and get a token
+        $token = JWTAuth::attempt(['email' => $user->email, 'password' => 'password']);
+
+        // Make an authenticated request
         $response = $this->postJson('/api/v1/testimonials', [
             'content' => 'This is a testimonial.',
         ], [
-            'Authorization' => 'Bearer '.$token,
+            'Authorization' => 'Bearer ' . $token,
         ]);
 
         $response->assertStatus(200);
@@ -47,11 +50,15 @@ class TestimonialTest extends TestCase
 
     public function testValidationErrorsAreReturnedForMissingData()
     {
-        $user = User::factory()->create();
-        $token = JWTAuth::fromUser($user);
+        // Create a user with a known password
+        $user = User::factory()->create(['password' => bcrypt('password')]);
 
+        // Attempt to log in the user and get a token
+        $token = JWTAuth::attempt(['email' => $user->email, 'password' => 'password']);
+
+        // Make an authenticated request with missing data
         $response = $this->postJson('/api/v1/testimonials', [], [
-            'Authorization' => 'Bearer '.$token,
+            'Authorization' => 'Bearer ' . $token,
         ]);
 
         $response->assertStatus(422);
