@@ -11,8 +11,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\ArticleController;
 use App\Http\Controllers\Api\V1\RoleController;
-
 use App\Http\Controllers\Api\V1\SqueezeController;
+use App\Http\Controllers\Api\V1\Testimonial\TestimonialController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -48,5 +49,11 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('/plans', SubscriptionController::class);
     });
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
+
+
+    
+    Route::middleware('auth:api')->group(function () {
+        Route::post('/testimonials', [TestimonialController::class, 'store']);
+    });
 
 });
