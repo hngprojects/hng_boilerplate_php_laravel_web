@@ -17,7 +17,7 @@ if an unauthorized user attempts to access the method.
   https://github.com/hngprojects/hng_boilerplate_nestjs/issues/206
 - Link to issue on PHP repo:
   https://github.com/hngprojects/hng_boilerplate_php_laravel_web/issues/39
-  ​.
+  
 ## Motivation and Context
 <!--- Why is this change required? What problem does it solve? -->
 This feature allows users to provide feedback about their experience with our service. It helps in showcasing user satisfaction and improving our public image.
