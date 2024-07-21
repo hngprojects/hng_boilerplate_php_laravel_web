@@ -15,10 +15,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\LoginController;
+
 Route::prefix('v1')->group(function () {
     Route::get('/', function () {
         return 'api scaffold';
     });
 
     Route::apiResource('/users', UserController::class);
+    Route::post('auth/register', [RegisterController::class, 'register']);
+    Route::post('auth/login', [LoginController::class, 'login']);
+});
+
+
+
+Route::group([
+    "middleware" => ["auth:api"]
+], function(){
+    // Route::get('v1/user-profile', [LoginController::class, 'profile']);
+    Route::get('v1/auth/refresh', [LoginController::class, 'refreshToken']);
+    Route::get('v1/auth/logout', [LoginController::class, 'logout']);
 });
