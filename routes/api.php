@@ -30,12 +30,12 @@ Route::prefix('v1')->group(function () {
     Route::get('/products/categories', [CategoryController::class, 'index']);
       
     Route::middleware('throttle:10,1')->get('/help-center/topics/search', [ArticleController::class, 'search']);
-
+    Route::put('/notification-settings', [NotificationSettingController::class, 'update']);
 });
 
 
 
 // notifications
 Route::middleware('auth:sanctum')->group(function () {
-    Route::put('/notification-settings', [NotificationSettingController::class, 'update']);
+    
 });
