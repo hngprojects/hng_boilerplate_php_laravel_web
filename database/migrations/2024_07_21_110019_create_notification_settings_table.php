@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('notification_settings', function (Blueprint $table) {
-            $table->uuid('profile_id')->primary();
+            $table->uuid('profile_id')->primary() ->default(1);
             $table->foreignUuid('user_id');
             $table->boolean('email_notifications')->default(true);
             $table->boolean('sms_notifications')->default(true);
