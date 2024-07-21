@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (!Schema::hasTable('testimonials')) {
         Schema::create('testimonials', function (Blueprint $table) {
             $table->id();
             $table->uuid('user_id');
@@ -19,6 +20,7 @@ return new class extends Migration
             $table->text('content');
             $table->timestamps();
         });
+    }
     }
 
 

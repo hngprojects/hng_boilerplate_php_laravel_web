@@ -3,7 +3,7 @@
 ## Description
 <!--- Describe your changes in detail -->
 I have implemented a TestimonialController with a store method to handle the submission of user testimonials.
-This method processes data received from TestimonialRequest, and saves it to the database..
+This method processes data received from TestimonialRequest, and saves it to the database.
 The controller ensures that only authenticated users can submit testimonials, returning a 401 error
 if an unauthorized user attempts to access the method.
 
