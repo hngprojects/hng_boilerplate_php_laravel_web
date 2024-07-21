@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 use App\Models\User;
+use Illuminate\Support\Str;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -19,6 +20,7 @@ class OrganisationFactory extends Factory
     {
         return [
             'name' => $this->faker->company,
+            'slug' => Str::slug($this->faker->company,),
             'description' => $this->faker->text,
             'user_id' => User::factory(),
             'email' => $this->faker->unique()->companyEmail,

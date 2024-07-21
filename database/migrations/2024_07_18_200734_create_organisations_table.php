@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('organisations', function (Blueprint $table) {
             $table->uuid('org_id')->primary();
             $table->foreignUuid('user_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
+            $table->string('slug')->unique();
             $table->string('name');
-            $table->string('email');
+            $table->string('email')->unique();
             $table->text('description');
             $table->string('industry');
             $table->string('type');
