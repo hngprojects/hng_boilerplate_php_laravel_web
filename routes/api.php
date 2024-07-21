@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\User\UserController;
+use App\Http\Controllers\Api\V1\CategoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\ArticleController;
@@ -21,7 +22,10 @@ Route::prefix('v1')->group(function () {
         return 'api scaffold';
     });
 
-    Route::apiResource('/users', UserController::class);      
+    Route::apiResource('/users', UserController::class);
+
+    Route::get('/products/categories', [CategoryController::class, 'index']);
+      
     Route::middleware('throttle:10,1')->get('/topics/search', [ArticleController::class, 'search']);
 
 });
