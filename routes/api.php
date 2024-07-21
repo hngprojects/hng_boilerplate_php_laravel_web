@@ -1,8 +1,12 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Auth\AuthController;
+use App\Http\Controllers\Api\V1\User\UserController;
+use App\Http\Controllers\Api\V1\CategoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\Api\V1\ArticleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,11 +19,20 @@ use App\Http\Controllers\ContactController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
 Route::prefix('v1')->group(function () {
+    Route::get('/', function () {
+        return 'api scaffold';
+    });
+    Route::post('/auth/register', [AuthController::class, 'store']);
+
+
+    Route::apiResource('/users', UserController::class);
+
+    Route::get('/products/categories', [CategoryController::class, 'index']);
+      
+    Route::middleware('throttle:10,1')->get('/help-center/topics/search', [ArticleController::class, 'search']);
     Route::post('/contact', [ContactController::class, 'sendInquiry']);
-    
+
 });
+
 
