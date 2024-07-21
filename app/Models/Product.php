@@ -10,12 +10,6 @@ class Product extends Model
 {
     use HasFactory, HasUuids;
 
-    protected $fillable = [
-        'user_id',
-        'name',
-        'description',
-    ];
-
     /**
      * The primary key associated with the table.
      *
