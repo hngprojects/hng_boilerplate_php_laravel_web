@@ -19,7 +19,7 @@ class ArticleTest extends TestCase
         Article::factory()->create(['title' => 'Different Article']);
 
         // Perform the search
-        $response = $this->get('/api/v1/topics/search?title=Test');
+        $response = $this->get('/api/v1/help-center/topics/search?title=Test');
 
         // Assert the response
         $response->assertStatus(200)
@@ -41,7 +41,7 @@ class ArticleTest extends TestCase
 
     public function test_search_without_title_parameter()
     {
-        $response = $this->get('/api/v1/topics/search');
+        $response = $this->get('/api/v1/help-center/topics/search');
 
         $response->assertStatus(400)
             ->assertJson([
@@ -53,7 +53,7 @@ class ArticleTest extends TestCase
 
     public function test_search_with_no_results()
     {
-        $response = $this->get('/api/v1/topics/search?title=NonexistentArticle');
+        $response = $this->get('/api/v1/help-center/topics/search?title=NonexistentArticle');
 
         $response->assertStatus(404)
             ->assertJson([
