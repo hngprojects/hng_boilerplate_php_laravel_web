@@ -45,7 +45,7 @@ class FeatureTest extends TestCase
 //        dd($response);
         $response->assertJson([
             'message' => 'Feature created successfully',
-            'status' => Response::HTTP_CREATED,
+            'status_code' => Response::HTTP_CREATED,
             'data' => [
                 'feature' => 'xero',
                 'description' => 'xxxxxxxx'

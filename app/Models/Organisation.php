@@ -14,7 +14,6 @@ class Organisation extends Model
     protected $fillable = [
         "name",
         "user_id",
-        "slug",
         "email",
         "description",
         "industry",
@@ -52,24 +51,24 @@ class Organisation extends Model
      */
     protected $keyType = 'string';
 
-    protected static function boot()
-    {
-        parent::boot();
-        self::creating(function ($org) {
-            $org->slug = $org->uniqueSlug($org->name);
-        });
-    }
+    // protected static function boot()
+    // {
+    //     parent::boot();
+    //     self::creating(function ($org) {
+    //         $org->slug = $org->uniqueSlug($org->name);
+    //     });
+    // }
 
-    public function uniqueSlug($name){
-        $slug = Str::slug($name);
-        $count=1;
-        $initialSlug = $slug;
-        while(static::where('slug', $slug)->exists()){
-          $slug = $initialSlug."-".$count;
-          $count++;
-        }
-        return $slug;
-    }
+    // public function uniqueSlug($name){
+    //     $slug = Str::slug($name);
+    //     $count=1;
+    //     $initialSlug = $slug;
+    //     while(static::where('slug', $slug)->exists()){
+    //       $slug = $initialSlug."-".$count;
+    //       $count++;
+    //     }
+    //     return $slug;
+    // }
 
     public function users()
     {
