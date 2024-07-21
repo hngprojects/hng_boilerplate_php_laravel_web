@@ -31,7 +31,7 @@ class ContactController extends Controller
             $data = $request->only(['name', 'email', 'message']);
             
 
-            Mail::to('amowogbajegideon@gmail.com')->send(new ContactInquiryMail($data));
+            Mail::to('amowogbajegideon@gmail.com')->queue(new ContactInquiryMail($data));
             return response()->json([
                 'message' => 'Inquiry successfully sent',
                 'status_code' => 200,
