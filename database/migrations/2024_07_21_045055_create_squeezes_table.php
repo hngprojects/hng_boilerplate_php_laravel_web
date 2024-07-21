@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('location')->nullable();
             $table->string('job_title')->nullable();
             $table->string('company')->nullable();
+            $table->json('interests')->nullable();
             $table->string('referral_source')->nullable();
             $table->timestamps();
         });
