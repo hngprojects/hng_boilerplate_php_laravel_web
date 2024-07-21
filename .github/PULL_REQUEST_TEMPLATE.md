@@ -1,7 +1,7 @@
 <!--- Provide a general summary of your changes in the Title above -->
 ​
 ## Description
-<!--- Describe your changes in detail -->
+<!--- Describe your changes in ddetail -->
 
 
 I have implemented a TestimonialController with a store method to handle the submission of user testimonials.
