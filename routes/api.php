@@ -1,11 +1,17 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Admin\Plan\FeatureController;
+use App\Http\Controllers\Api\V1\Admin\Plan\SubscriptionController;
+use App\Http\Controllers\Api\V1\Admin\BlogController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\User\UserController;
 use App\Http\Controllers\Api\V1\CategoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\ArticleController;
+use App\Http\Controllers\Api\V1\RoleController;
+
+use App\Http\Controllers\Api\V1\SqueezeController;
 use App\Http\Controllers\Api\V1\Invitation\AcceptInvitationController;
 
 /*
@@ -26,6 +32,7 @@ Route::prefix('v1')->group(function () {
     Route::post('/auth/register', [AuthController::class, 'store']);
     Route::post('/invite', [AcceptInvitationController::class, 'acceptInvitation']);
 
+    Route::post('/roles', [RoleController::class, 'store']);
 
     Route::apiResource('/users', UserController::class);
 
