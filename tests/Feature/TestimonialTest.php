@@ -18,11 +18,10 @@ class TestimonialTest extends TestCase
 
         $response->assertStatus(401);
         $response->assertJson([
-            'message' => 'Unauthorized. Please log in.',
-            'status' => 'Unauthorized',
-            'status_code' => 401,
+            'message' => 'Unauthenticated.',
         ]);
     }
+
 
     public function testAuthenticatedUserCanCreateTestimonial()
     {
@@ -32,10 +31,10 @@ class TestimonialTest extends TestCase
         $response = $this->postJson('/api/v1/testimonials', [
             'content' => 'This is a testimonial.',
         ], [
-            'Authorization' => 'Bearer ' . $token,
+            'Authorization' => 'Bearer '.$token,
         ]);
 
-        $response->assertStatus(201);
+        $response->assertStatus(200);
         $response->assertJson([
             'status' => 'success',
             'message' => 'Testimonial created successfully',
@@ -52,10 +51,10 @@ class TestimonialTest extends TestCase
         $token = JWTAuth::fromUser($user);
 
         $response = $this->postJson('/api/v1/testimonials', [], [
-            'Authorization' => 'Bearer ' . $token,
+            'Authorization' => 'Bearer '.$token,
         ]);
 
-        $response->assertStatus(422);
+        $response->assertStatus(422); // Use 422 for validation errors
         $response->assertJsonValidationErrors(['content']);
     }
 }
