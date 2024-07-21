@@ -20,7 +20,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->boolean('is_active')->default(1);
-            $table->boolean('signup_type')->default(1);
+            $table->string('signup_type');
             $table->rememberToken();
             $table->timestamps();
         });
