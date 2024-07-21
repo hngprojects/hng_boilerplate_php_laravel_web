@@ -11,6 +11,19 @@ class Organisation extends Model
 {
     use HasFactory, HasUuids;
 
+    protected $fillable = [
+        "name",
+        "user_id",
+        "slug",
+        "email",
+        "description",
+        "industry",
+        "type",
+        "country",
+        "address",
+        "state",
+    ];
+
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -38,10 +51,6 @@ class Organisation extends Model
      * @var string
      */
     protected $keyType = 'string';
-
-    protected $fillable = [
-        "user_id", "name", "slug", "description", "email", "industry", "type", "country", "address", "state"
-    ];
 
     protected static function boot()
     {

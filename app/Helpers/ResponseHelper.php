@@ -20,17 +20,12 @@ class ResponseHelper
         ], 422);
     }
 
-    public static function response($status, $message, $data = null, $statusCode = 200 ){
+    public static function response($message, $status_code, $data = null ){
         $response = [
-            'status' => $status,
             'message' => $message,
+            'status' => $status_code,
+            'data' => $data
         ];
-        if (!is_null($data)) {
-            $response['data'] = $data;
-        }
-        if (!($statusCode == 200 || $statusCode == 201)) {
-            $response['statusCode'] = $statusCode;
-        }
-        return response()->json($response, $statusCode);
+        return response()->json($response, $status_code);
     }
 }
