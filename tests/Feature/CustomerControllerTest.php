@@ -49,10 +49,11 @@ class CustomerControllerTest extends TestCase
                 'total_items',
                 'data' => [
                     '*' => [
-                        'first_name',
-                        'last_name',
+                        // 'first_name',
+                        // 'last_name',
+                        'name',
                         'email',
-                        'phone_number',
+                        'phone',
                         'organisations'
                     ]
                 ]
@@ -137,7 +138,7 @@ class CustomerControllerTest extends TestCase
                         'name' => $customer->name, 
                         'email' => $customer->email,
                         'phone' => $customer->phone,
-                        'organisations' => $organisations->pluck('id')->toArray()
+                        'organisations' => $customer->organisations->pluck('org_id')->toArray()
                     ]
                 ]
             ]);
