@@ -15,11 +15,10 @@ class ProductFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition(): array
+    public function definition()
     {
-        $newUser = User::factory()->make();
         return [
-            'user_id' => $newUser->id,
+            'user_id' => User::factory(),
             'name' => $this->faker->word . "'s product",
             'description' => $this->faker->text,
         ];

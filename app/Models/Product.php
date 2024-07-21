@@ -31,6 +31,17 @@ class Product extends Model
      */
     protected $keyType = 'string';
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'user_id',
+        'name',
+        'description',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
