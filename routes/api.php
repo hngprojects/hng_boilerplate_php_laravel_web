@@ -5,7 +5,7 @@
 use App\Http\Controllers\Api\V1\Admin\Plan\FeatureController;
 use App\Http\Controllers\Api\V1\Admin\Plan\SubscriptionController;
 use App\Http\Controllers\Api\V1\Admin\BlogController;
-
+use App\Http\Controllers\Api\V1\Admin\CustomerController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 
 
@@ -55,11 +55,15 @@ Route::prefix('v1')->group(function () {
 
     Route::get('/blogs/latest', [BlogController::class, 'latest']);
 
+
     Route::post('/squeeze', [SqueezeController::class, 'store']);
     Route::middleware('auth:api')->group(function () {
         Route::apiResource('/features', FeatureController::class);
         Route::apiResource('/plans', SubscriptionController::class);
     });
+
+    Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
+
 
     Route::delete('/organizations/{org_id}', [OrganisationController::class, 'destroy']);
 
