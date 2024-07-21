@@ -40,7 +40,7 @@ class UpdateJobTest extends TestCase
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->json('patch', "/jobs/{$job->id}", $updateJob);
+        ])->json('patch', "api/v1/jobs/{$job->id}", $updateJob);
 
         $response->assertStatus(200)
             ->assertJson([
@@ -78,7 +78,7 @@ class UpdateJobTest extends TestCase
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->json('patch', "/jobs/{$invalidId}", $updateJob);
+        ])->json('patch', "api/v1/jobs/{$invalidId}", $updateJob);
 
         $response->assertStatus(404)
             ->assertJson([
@@ -99,7 +99,7 @@ class UpdateJobTest extends TestCase
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->json('patch', '/jobs/');
+        ])->json('patch', 'api/v1/jobs/');
 
         $response->assertStatus(404);
     }
@@ -128,7 +128,7 @@ class UpdateJobTest extends TestCase
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->json('patch', "/jobs/{$job->id}", $invalidData);
+        ])->json('patch', "api/v1/jobs/{$job->id}", $invalidData);
 
         $response->assertStatus(400)
             ->assertJson([
