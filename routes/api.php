@@ -32,5 +32,5 @@ Route::prefix('v1')->group(function () {
 
     Route::middleware('throttle:10,1')->get('/topics/search', [ArticleController::class, 'search']);
 
-    Route::post('/squeeze', [SqueezeController::class, 'store']);
+    Route::post('/squeeze', [SqueezeController::class, 'store']);ss
 });
