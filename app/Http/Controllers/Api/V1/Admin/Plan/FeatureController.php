@@ -36,14 +36,14 @@ class FeatureController extends Controller
             $feature = Feature::create($request->validated());
             return response()->json([
                 'data' => $feature,
-                'status' => Response::HTTP_CREATED,
+                'status_code' => Response::HTTP_CREATED,
                 'message' => ucfirst('feature created successfully')
             ], Response::HTTP_CREATED);
         } catch (\Exception $exception) {
             Log::error($exception->getMessage());
             return \response()->json([
                 'error' => ucfirst('feature creation failed'),
-                'status' => Response::HTTP_BAD_REQUEST
+                'status_code' => Response::HTTP_BAD_REQUEST
             ]);
         }
     }
