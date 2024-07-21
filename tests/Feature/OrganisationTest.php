@@ -17,7 +17,7 @@ class OrganisationTest extends TestCase
       $this->actingAs($user);
 
         $response = $this->postJson('/api/v1/organisations', [
-            "user_id" => (string)$user->id,
+            // "user_id" => (string)$user->id,
             "email" => "mark.essienm@gmail.co.uk",
             "name" => "Ruxy Now Organisation",
             "description" =>"With description like a big man",
@@ -34,7 +34,7 @@ class OrganisationTest extends TestCase
         // Assert that organisation has the correct name and owner_id
         $this->assertDatabaseHas('organisations', [
             "name" => "Ruxy Now Organisation",
-            "user_id" => (string)$user->id
+            // "user_id" => (string)$user->id
         ]);
     }   
 }

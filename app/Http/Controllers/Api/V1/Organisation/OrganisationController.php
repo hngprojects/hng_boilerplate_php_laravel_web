@@ -30,7 +30,7 @@ class OrganisationController extends Controller
         if($validPayload = $request->validated()){
             $user = auth('api')->user();
             if(!$user) return ResponseHelper::response("Authentication failed", 401, null);
-            $validPayload['user_id'] = (string)$user->id;
+            // $validPayload['user_id'] = (string)$user->id;
             DB::beginTransaction();
             try {
                 $organisation = Organisation::create($validPayload);
@@ -39,7 +39,7 @@ class OrganisationController extends Controller
                 return ResponseHelper::response("Organisation created successfully", 201, $organisation->getPublicColumns());
             }catch (\Exception $e) {
                 DB::rollBack();
-                return ResponseHelper::response("Client error", 400, null);
+                return ResponseHelper::response("Client error".$e, 400, null);
             }
         }else{
             return ResponseHelper::response("Client error", 400, null);
