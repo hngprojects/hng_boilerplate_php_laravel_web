@@ -50,7 +50,7 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('/plans', SubscriptionController::class);
     });
 
-    Route::middleware('auth')->group(function () {
+    Route::middleware('auth:api')->group(function () {
         Route::post('/testimonials', [TestimonialController::class, 'store']);
     });
 
