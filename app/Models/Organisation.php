@@ -10,6 +10,18 @@ class Organisation extends Model
 {
     use HasFactory, HasUuids;
 
+    protected $fillable = [
+        "name",
+        "user_id",
+        "email",
+        "description",
+        "industry",
+        "type",
+        "country",
+        "address",
+        "state",
+    ];
+
     /**
      * The attributes that should be hidden for arrays.
      *

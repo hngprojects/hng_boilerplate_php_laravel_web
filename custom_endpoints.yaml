@@ -1,0 +1,102 @@
+openapi: 3.0.0
+info:
+  title: Help Center API
+  version: 1.0.0
+  description: API documentation for the Help Center application
+paths:
+  /api/v1/help-center/topics/search:
+    get:
+      summary: Search help center topics
+      description: Retrieves articles based on the search query provided in the title parameter
+      parameters:
+        - name: title
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The title or part of the title of the article to search for
+      responses:
+        '200':
+          description: A list of articles matching the search query
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Articles found
+                  status_code:
+                    type: integer
+                    example: 200
+                  topics:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        article_id:
+                          type: string
+                          example: "3e8b8c0-d1ca-4b9e-a97f-d4c2413ac930"
+                        author:
+                          type: string
+                          example: Clifton Satterfield
+                        title:
+                          type: string
+                          example: How to update your profile
+                        content:
+                          type: string
+                          example: To update your profile, go to the settings page...
+        '400':
+          description: Bad request, possibly due to missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Invalid request parameters
+                  status_code:
+                    type: integer
+                    example: 400
+        '429':
+          description: Too many requests due to rate limiting
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Too many requests, please try again later
+                  status_code:
+                    type: integer
+                    example: 429
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Internal server error
+                  status_code:
+                    type: integer
+                    example: 500
+servers:
+  - url: http://127.0.0.1:8000
+    description: Local server
