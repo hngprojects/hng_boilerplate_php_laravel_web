@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Feature;
 
 use App\Models\User;
@@ -9,6 +10,12 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 class TestimonialTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->artisan('passport:install');
+    }
 
     public function testUnauthenticatedUserCannotCreateTestimonial()
     {
@@ -22,16 +29,13 @@ class TestimonialTest extends TestCase
         ]);
     }
 
-
     public function testAuthenticatedUserCanCreateTestimonial()
     {
         $user = User::factory()->create();
         $token = JWTAuth::fromUser($user);
 
-        $response = $this->postJson('/api/v1/testimonials', [
+        $response = $this->actingAs($user, 'api')->postJson('/api/v1/testimonials', [
             'content' => 'This is a testimonial.',
-        ], [
-            'Authorization' => 'Bearer '.$token,
         ]);
 
         $response->assertStatus(200);
@@ -50,11 +54,11 @@ class TestimonialTest extends TestCase
         $user = User::factory()->create();
         $token = JWTAuth::fromUser($user);
 
-        $response = $this->postJson('/api/v1/testimonials', [], [
-            'Authorization' => 'Bearer '.$token,
+        $response = $this->actingAs($user, 'api')->postJson('/api/v1/testimonials', [], [
+            'Authorization' => 'Bearer ' . $token,
         ]);
 
-        $response->assertStatus(422); // Use 422 for validation errors
+        $response->assertStatus(422);
         $response->assertJsonValidationErrors(['content']);
     }
 }
