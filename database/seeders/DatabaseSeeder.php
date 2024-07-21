@@ -9,6 +9,8 @@ use App\Models\Product;
 use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use App\Models\Article;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -42,6 +44,7 @@ class DatabaseSeeder extends Seeder
         $organisation3->users()->attach($user2->id);
 
         $this->call(CategoriesTableSeeder::class);
+        $this->call([ArticlesTableSeeder::class]);
 
     }
 }

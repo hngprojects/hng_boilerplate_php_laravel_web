@@ -11,17 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('squeezes', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('name');
-            $table->string('email')->unique();
+            $table->string('first_name');
+            $table->string('last_name');
             $table->string('phone')->nullable();
-            $table->string('role')->default('user');
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->boolean('is_active')->default(1);
-            $table->string('signup_type');
-            $table->rememberToken();
+            $table->string('location')->nullable();
+            $table->string('job_title')->nullable();
+            $table->string('company')->nullable();
+            $table->json('interests')->nullable();
+            $table->string('referral_source')->nullable();
             $table->timestamps();
         });
     }
@@ -31,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('squeezes');
     }
 };
