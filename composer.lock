@@ -1853,10 +1853,6 @@
         },
         {
             "name": "lcobucci/clock",
-<<<<<<< HEAD
-            "version": "2.3.0",
-=======
-<<<<<<< HEAD
             "version": "3.0.0",
 >>>>>>> b045743 (route fix)
             "source": {
@@ -1872,7 +1868,6 @@
 =======
                 "url": "https://api.github.com/repos/lcobucci/clock/zipball/039ef98c6b57b101d10bd11d8fdfda12cbd996dc",
                 "reference": "039ef98c6b57b101d10bd11d8fdfda12cbd996dc",
-=======
             "version": "2.3.0",
             "source": {
                 "type": "git",
@@ -1883,21 +1878,15 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/lcobucci/clock/zipball/c7aadcd6fd97ed9e199114269c0be3f335e38876",
                 "reference": "c7aadcd6fd97ed9e199114269c0be3f335e38876",
->>>>>>> 8048c73 (feat: Implementation Organization Deletion endpoint)
->>>>>>> b045743 (route fix)
+
                 "shasum": ""
             },
             "require": {
                 "php": "~8.1.0 || ~8.2.0",
-<<<<<<< HEAD
+
+                "psr/clock": "^1.0",
                 "stella-maris/clock": "^0.1.7"
-=======
-<<<<<<< HEAD
-                "psr/clock": "^1.0"
-=======
-                "stella-maris/clock": "^0.1.7"
->>>>>>> 8048c73 (feat: Implementation Organization Deletion endpoint)
->>>>>>> b045743 (route fix)
+
             },
             "provide": {
                 "psr/clock-implementation": "1.0"
@@ -1931,15 +1920,10 @@
             "description": "Yet another clock abstraction",
             "support": {
                 "issues": "https://github.com/lcobucci/clock/issues",
-<<<<<<< HEAD
+
+                "source": "https://github.com/lcobucci/clock/tree/3.0.0",
+
                 "source": "https://github.com/lcobucci/clock/tree/2.3.0"
-=======
-<<<<<<< HEAD
-                "source": "https://github.com/lcobucci/clock/tree/3.0.0"
-=======
-                "source": "https://github.com/lcobucci/clock/tree/2.3.0"
->>>>>>> 8048c73 (feat: Implementation Organization Deletion endpoint)
->>>>>>> b045743 (route fix)
             },
             "funding": [
                 {
@@ -1951,15 +1935,11 @@
                     "type": "patreon"
                 }
             ],
-<<<<<<< HEAD
+
+            "time": "2022-12-19T15:00:24+00:00",
+
             "time": "2022-12-19T14:38:11+00:00"
-=======
-<<<<<<< HEAD
-            "time": "2022-12-19T15:00:24+00:00"
-=======
-            "time": "2022-12-19T14:38:11+00:00"
->>>>>>> 8048c73 (feat: Implementation Organization Deletion endpoint)
->>>>>>> b045743 (route fix)
+
         },
         {
             "name": "lcobucci/jwt",
@@ -3815,57 +3795,7 @@
             "time": "2024-04-27T21:32:50+00:00"
         },
         {
-<<<<<<< HEAD
-            "name": "stella-maris/clock",
-            "version": "0.1.7",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/stella-maris-solutions/clock.git",
-                "reference": "fa23ce16019289a18bb3446fdecd45befcdd94f8"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/stella-maris-solutions/clock/zipball/fa23ce16019289a18bb3446fdecd45befcdd94f8",
-                "reference": "fa23ce16019289a18bb3446fdecd45befcdd94f8",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.0|^8.0",
-                "psr/clock": "^1.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "StellaMaris\\Clock\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Andreas Heigl",
-                    "role": "Maintainer"
-                }
-            ],
-            "description": "A pre-release of the proposed PSR-20 Clock-Interface",
-            "homepage": "https://gitlab.com/stella-maris/clock",
-            "keywords": [
-                "clock",
-                "datetime",
-                "point in time",
-                "psr20"
-            ],
-            "support": {
-                "source": "https://github.com/stella-maris-solutions/clock/tree/0.1.7"
-            },
-            "time": "2022-11-25T16:15:06+00:00"
-        },
-        {
-=======
-<<<<<<< HEAD
->>>>>>> b045743 (route fix)
+
             "name": "symfony/console",
             "version": "v6.4.9",
             "source": {
@@ -3875,7 +3805,7 @@
             },
             "dist": {
                 "type": "zip",
-=======
+
             "name": "stella-maris/clock",
             "version": "0.1.7",
             "source": {
@@ -4019,7 +3949,7 @@
         },
         {
             "name": "symfony/css-selector",
-<<<<<<< HEAD
+
             "version": "v6.4.8",
             "source": {
                 "type": "git",
@@ -4030,7 +3960,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/css-selector/zipball/4b61b02fe15db48e3687ce1c45ea385d1780fe08",
                 "reference": "4b61b02fe15db48e3687ce1c45ea385d1780fe08",
-=======
+
             "version": "v7.1.1",
             "source": {
                 "type": "git",
@@ -4041,7 +3971,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/css-selector/zipball/1c7cee86c6f812896af54434f8ce29c8d94f9ff4",
                 "reference": "1c7cee86c6f812896af54434f8ce29c8d94f9ff4",
->>>>>>> 8048c73 (feat: Implementation Organization Deletion endpoint)
                 "shasum": ""
             },
             "require": {
@@ -4077,11 +4006,11 @@
             "description": "Converts CSS selectors to XPath expressions",
             "homepage": "https://symfony.com",
             "support": {
-<<<<<<< HEAD
-                "source": "https://github.com/symfony/css-selector/tree/v6.4.8"
-=======
+
+                "source": "https://github.com/symfony/css-selector/tree/v6.4.8",
+
                 "source": "https://github.com/symfony/css-selector/tree/v7.1.1"
->>>>>>> 8048c73 (feat: Implementation Organization Deletion endpoint)
+
             },
             "funding": [
                 {
@@ -4097,11 +4026,11 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
-            "time": "2024-05-31T14:49:08+00:00"
-=======
+
+            "time": "2024-05-31T14:49:08+00:00",
+
             "time": "2024-05-31T14:57:53+00:00"
->>>>>>> 8048c73 (feat: Implementation Organization Deletion endpoint)
+
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -4247,7 +4176,7 @@
         },
         {
             "name": "symfony/event-dispatcher",
-<<<<<<< HEAD
+
             "version": "v6.4.8",
             "source": {
                 "type": "git",
@@ -4258,7 +4187,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/8d7507f02b06e06815e56bb39aa0128e3806208b",
                 "reference": "8d7507f02b06e06815e56bb39aa0128e3806208b",
-=======
+
             "version": "v7.1.1",
             "source": {
                 "type": "git",
@@ -4320,11 +4249,11 @@
             "description": "Provides tools that allow your application components to communicate with each other by dispatching events and listening to them",
             "homepage": "https://symfony.com",
             "support": {
-<<<<<<< HEAD
-                "source": "https://github.com/symfony/event-dispatcher/tree/v6.4.8"
-=======
+
+                "source": "https://github.com/symfony/event-dispatcher/tree/v6.4.8",
+
                 "source": "https://github.com/symfony/event-dispatcher/tree/v7.1.1"
->>>>>>> 8048c73 (feat: Implementation Organization Deletion endpoint)
+
             },
             "funding": [
                 {
@@ -4340,11 +4269,10 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
-            "time": "2024-05-31T14:49:08+00:00"
-=======
+
+            "time": "2024-05-31T14:49:08+00:00",
+
             "time": "2024-05-31T14:57:53+00:00"
->>>>>>> 8048c73 (feat: Implementation Organization Deletion endpoint)
         },
         {
             "name": "symfony/event-dispatcher-contracts",
@@ -5781,7 +5709,7 @@
         },
         {
             "name": "symfony/string",
-<<<<<<< HEAD
+
             "version": "v6.4.9",
             "source": {
                 "type": "git",
@@ -5792,7 +5720,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/string/zipball/76792dbd99690a5ebef8050d9206c60c59e681d7",
                 "reference": "76792dbd99690a5ebef8050d9206c60c59e681d7",
-=======
+
             "version": "v7.1.2",
             "source": {
                 "type": "git",
@@ -5803,7 +5731,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/string/zipball/14221089ac66cf82e3cf3d1c1da65de305587ff8",
                 "reference": "14221089ac66cf82e3cf3d1c1da65de305587ff8",
->>>>>>> 8048c73 (feat: Implementation Organization Deletion endpoint)
+
                 "shasum": ""
             },
             "require": {
@@ -5861,11 +5789,11 @@
                 "utf8"
             ],
             "support": {
-<<<<<<< HEAD
-                "source": "https://github.com/symfony/string/tree/v6.4.9"
-=======
+
+                "source": "https://github.com/symfony/string/tree/v6.4.9",
+
                 "source": "https://github.com/symfony/string/tree/v7.1.2"
->>>>>>> 8048c73 (feat: Implementation Organization Deletion endpoint)
+
             },
             "funding": [
                 {
@@ -5881,11 +5809,10 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
-            "time": "2024-06-28T09:25:38+00:00"
-=======
+
+            "time": "2024-06-28T09:25:38+00:00",
             "time": "2024-06-28T09:27:18+00:00"
->>>>>>> 8048c73 (feat: Implementation Organization Deletion endpoint)
+
         },
         {
             "name": "symfony/translation",
@@ -9409,7 +9336,7 @@
         },
         {
             "name": "symfony/yaml",
-<<<<<<< HEAD
+
             "version": "v6.4.8",
             "source": {
                 "type": "git",
@@ -9420,7 +9347,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/yaml/zipball/52903de178d542850f6f341ba92995d3d63e60c9",
                 "reference": "52903de178d542850f6f341ba92995d3d63e60c9",
-=======
+
             "version": "v7.1.1",
             "source": {
                 "type": "git",
@@ -9431,7 +9358,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/yaml/zipball/fa34c77015aa6720469db7003567b9f772492bf2",
                 "reference": "fa34c77015aa6720469db7003567b9f772492bf2",
->>>>>>> 8048c73 (feat: Implementation Organization Deletion endpoint)
+
                 "shasum": ""
             },
             "require": {
@@ -9473,11 +9400,11 @@
             "description": "Loads and dumps YAML files",
             "homepage": "https://symfony.com",
             "support": {
-<<<<<<< HEAD
-                "source": "https://github.com/symfony/yaml/tree/v6.4.8"
-=======
+
+                "source": "https://github.com/symfony/yaml/tree/v6.4.8",
+
                 "source": "https://github.com/symfony/yaml/tree/v7.1.1"
->>>>>>> 8048c73 (feat: Implementation Organization Deletion endpoint)
+
             },
             "funding": [
                 {
@@ -9493,11 +9420,10 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
-            "time": "2024-05-31T14:49:08+00:00"
-=======
-            "time": "2024-05-31T14:57:53+00:00"
->>>>>>> 8048c73 (feat: Implementation Organization Deletion endpoint)
+
+            "time": "2024-05-31T14:49:08+00:00",
+         "time": "2024-05-31T14:57:53+00:00"
+
         },
         {
             "name": "theseer/tokenizer",
@@ -9549,7 +9475,7 @@
             ],
             "time": "2024-03-03T12:36:25+00:00"
         }
-    ],
+
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": [],
