@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('subscription_plans', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('name');
+            $table->string('name'); //basic or premium
             $table->integer('price'); //stored as kobo
-            $table->string('type'); //basic or premium
             $table->string('duration'); //monthly or yearly
             $table->text('description');
             $table->timestamps();
