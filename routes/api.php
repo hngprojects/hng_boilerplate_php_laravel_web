@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\CategoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\ArticleController;
+use App\Http\Controllers\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +28,8 @@ Route::prefix('v1')->group(function () {
 
 
     Route::apiResource('/users', UserController::class);
+    
+    Route::apiResource('posts', PostController::class);
 
     Route::get('/products/categories', [CategoryController::class, 'index']);
 
