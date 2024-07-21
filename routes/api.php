@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Admin\Plan\FeatureController;
+use App\Http\Controllers\Api\V1\Admin\Plan\SubscriptionController;
 use App\Http\Controllers\Api\V1\Admin\BlogController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\User\UserController;
@@ -34,4 +36,8 @@ Route::prefix('v1')->group(function () {
 
     Route::get('/blogs/latest', [BlogController::class, 'latest']);
 
+    Route::middleware('auth:api')->group(function () {
+        Route::apiResource('/features', FeatureController::class);
+        Route::apiResource('/plans', SubscriptionController::class);
+    });
 });
