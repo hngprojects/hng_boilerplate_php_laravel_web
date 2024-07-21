@@ -26,7 +26,6 @@ class OrganisationFactory extends Factory
             'address' => $this->faker->address,
             'state' => $this->faker->state,
             'description' => $this->faker->text,
-            'user_id' => User::factory(),
             'email' => $this->faker->unique()->companyEmail,
             'industry' => $this->faker->randomElement(['Technology', 'Finance', 'Healthcare', 'Education', 'Manufacturing', 'Retail', 'Agriculture', 'Entertainment']),
             'type' => $this->faker->randomElement(['Public', 'Private', 'Non-profit', 'Government']),
