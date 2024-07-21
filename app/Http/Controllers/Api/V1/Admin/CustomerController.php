@@ -31,8 +31,6 @@ class CustomerController extends Controller
                 'total_items' => $customers->total(),
                 'data' => $customers->map(function ($customer) {
                     return [
-                        // 'first_name' => $customer->first_name,
-                        // 'last_name' => $customer->last_name, 
                         'name' => $customer->name, 
                         'email' => $customer->email,
                         'phone' => $customer->phone,

@@ -49,8 +49,6 @@ class CustomerControllerTest extends TestCase
                 'total_items',
                 'data' => [
                     '*' => [
-                        // 'first_name',
-                        // 'last_name',
                         'name',
                         'email',
                         'phone',
@@ -64,9 +62,6 @@ class CustomerControllerTest extends TestCase
     public function non_admin_cannot_fetch_customers()
     {
         [$user, $token] = $this->getAuthenticatedUser('customer');
-
-        // Create a non-admin user for testing
-        // $nonAdmin = User::factory()->create(['role' => 'customer']);
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
