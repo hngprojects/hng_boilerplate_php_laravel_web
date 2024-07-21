@@ -22,6 +22,6 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::apiResource('/users', UserController::class);      
-    Route::middleware('throttle:10,1')->get('/topics/search', [ArticleController::class, 'search']);
+    Route::middleware('throttle:10,1')->get('/help-center/topics/search', [ArticleController::class, 'search']);
 
 });
