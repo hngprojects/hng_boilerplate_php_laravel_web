@@ -11,11 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // if (!Schema::hasTable('testimonials')) {
+         // Drop the table if it exists
+         if (Schema::hasTable('testimonials')) {
+            Schema::drop('testimonials');
+        }
+
+        // Create the table
         Schema::create('testimonials', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->uuid('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('name');
             $table->text('content');
             $table->timestamps();
