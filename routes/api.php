@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Admin\BlogController;
+use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\User\UserController;
 use App\Http\Controllers\Api\V1\CategoryController;
 use Illuminate\Http\Request;
@@ -25,12 +27,20 @@ Route::prefix('v1')->group(function () {
     Route::get('/', function () {
         return 'api scaffold';
     });
+    Route::post('/auth/register', [AuthController::class, 'store']);
+
 
     Route::apiResource('/users', UserController::class);
 
     Route::get('/products/categories', [CategoryController::class, 'index']);
 
+<<<<<<< HEAD
     Route::middleware('throttle:10,1')->get('/topics/search', [ArticleController::class, 'search']);
+=======
+    Route::middleware('throttle:10,1')->get('/help-center/topics/search', [ArticleController::class, 'search']);
+
+    Route::get('/blogs/latest', [BlogController::class, 'latest']);
+>>>>>>> 43deba032ad37c561add42718889c4012a98ece5
 
     Route::post('/squeeze', [SqueezeController::class, 'store']);
 });
