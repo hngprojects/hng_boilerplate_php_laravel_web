@@ -12,6 +12,10 @@ use App\Http\Controllers\Api\V1\ArticleController;
 use App\Http\Controllers\Api\V1\Organisation\OrganisationController;
 use App\Http\Controllers\Api\V1\RoleController;
 
+
+use App\Http\Controllers\Api\V1\SqueezeController;
+
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -35,14 +39,16 @@ Route::prefix('v1')->group(function () {
 
     Route::get('/products/categories', [CategoryController::class, 'index']);
 
-    Route::post('/organisations', [OrganisationController::class, 'store']);
-      
+    Route::middleware('throttle:10,1')->get('/topics/search', [ArticleController::class, 'search']);
+
     Route::middleware('throttle:10,1')->get('/help-center/topics/search', [ArticleController::class, 'search']);
 
     Route::get('/blogs/latest', [BlogController::class, 'latest']);
-
+  
+    Route::post('/squeeze', [SqueezeController::class, 'store']);
     Route::middleware('auth:api')->group(function () {
         Route::apiResource('/features', FeatureController::class);
         Route::apiResource('/plans', SubscriptionController::class);
+        Route::post('/organisations', [OrganisationController::class, 'store']);
     });
 });
