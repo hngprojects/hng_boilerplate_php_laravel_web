@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\V1\RoleController;
 
 use App\Http\Controllers\Api\V1\SqueezeController;
 
+use App\Http\Controllers\Api\V1\Testimonial\TestimonialController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,4 +49,6 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('/features', FeatureController::class);
         Route::apiResource('/plans', SubscriptionController::class);
     });
+
+    Route::post('/testimonials', [TestimonialController::class, 'store']);
 });
