@@ -32,5 +32,5 @@ Route::prefix('v1')->group(function () {
       
     Route::middleware('throttle:10,1')->get('/help-center/topics/search', [ArticleController::class, 'search']);
 
-    Route::middleware('throttle:10,1')->get('waitlist', [WaitListController::class, 'store']);
+    Route::post('waitlist', [WaitListController::class, 'store']);
 });
