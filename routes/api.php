@@ -31,4 +31,6 @@ Route::prefix('v1')->group(function () {
     Route::get('/products/categories', [CategoryController::class, 'index']);
 
     Route::middleware('throttle:10,1')->get('/topics/search', [ArticleController::class, 'search']);
+
+    Route::post('/squeeze', [SqueezeController::class, 'store']);
 });
