@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\CategoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\ArticleController;
+use App\Http\Controllers\Auth\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,7 +25,7 @@ Route::prefix('v1')->group(function () {
         return 'api scaffold';
     });
     Route::post('/auth/register', [AuthController::class, 'store']);
-    Route::post('/auth/login', [AuthController::class, 'login']);
+    Route::post('/auth/login', [LoginController::class, 'login']);
 
 
     Route::apiResource('/users', UserController::class);
