@@ -35,5 +35,8 @@ Route::prefix('v1')->group(function () {
 
     Route::get('/blogs/latest', [BlogController::class, 'latest']);
 
-    Route::post('/testimonials', [TestimonialController::class, 'store']);
+    Route::middleware('auth')->group(function () {
+        Route::post('/testimonials', [TestimonialController::class, 'store']);
+    });
+
 });
