@@ -42,7 +42,7 @@ class SubscriptionController extends Controller
         if ($hasSub) {
             return response()->json([
                 'error' => "{$request->get('name')} plan already exists for {$request->get('duration')}",
-                'status' => Response::HTTP_UNPROCESSABLE_ENTITY
+                'status_code' => Response::HTTP_UNPROCESSABLE_ENTITY
             ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
@@ -54,7 +54,7 @@ class SubscriptionController extends Controller
             }
             DB::commit();
             return response()->json([
-                'status' => Response::HTTP_CREATED,
+                'status_code' => Response::HTTP_CREATED,
                 'data' => new SubscriptionResource($sub->load('features')),
                 'message' => 'subscription plan created successfully'
             ], Response::HTTP_CREATED);

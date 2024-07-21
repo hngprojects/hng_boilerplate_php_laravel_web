@@ -164,7 +164,7 @@ class SubscriptionPlanTest extends TestCase
                 'description' => 'xxxxxxxx',
                 'duration' => 'yearly',
             ],
-            'status' => Response::HTTP_CREATED,
+            'status_code' => Response::HTTP_CREATED,
             'message' => 'subscription plan created successfully'
         ]);
     }
