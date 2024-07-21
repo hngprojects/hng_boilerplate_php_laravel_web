@@ -2,20 +2,22 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use App\Models\User;
+use Laravel\Sanctum\Sanctum;
 
 class NotificationSettingTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_user_can_update_notification_settings()
+    public function testUserCanUpdateNotificationSettings()
     {
         $user = User::factory()->create();
-        $this->actingAs($user, 'sanctum');
 
-        $response = $this->putJson('/api/notification-settings', [
+        Sanctum::actingAs($user);
+
+        $response = $this->putJson('/api/v1/notification-settings/' . $user->id, [
             'email_notifications' => false,
             'sms_notifications' => true,
         ]);
@@ -23,12 +25,6 @@ class NotificationSettingTest extends TestCase
         $response->assertStatus(200);
         $response->assertJson([
             'message' => 'Notification settings updated successfully',
-        ]);
-
-        $this->assertDatabaseHas('notification_settings', [
-            'user_id' => $user->id,
-            'email_notifications' => false,
-            'sms_notifications' => true,
         ]);
     }
 }

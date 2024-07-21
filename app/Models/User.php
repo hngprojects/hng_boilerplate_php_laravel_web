@@ -42,8 +42,9 @@ class User extends Authenticatable  implements JWTSubject
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'notification_settings' => 'array',
     ];
-
+   
     /**
      * The primary key associated with the table.
      *
@@ -99,4 +100,10 @@ class User extends Authenticatable  implements JWTSubject
     {
         return $this->hasMany(Product::class, 'user_id', 'id');
     }
+   
+    public function notificationSetting(): HasOne
+    {
+        return $this->hasOne(NotificationSetting::class);
+    }
+    
 }
