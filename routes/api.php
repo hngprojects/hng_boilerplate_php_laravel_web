@@ -1,11 +1,13 @@
 <?php
 
 
+
 use App\Http\Controllers\Api\V1\Admin\Plan\FeatureController;
 use App\Http\Controllers\Api\V1\Admin\Plan\SubscriptionController;
 use App\Http\Controllers\Api\V1\Admin\BlogController;
 
 use App\Http\Controllers\Api\V1\Auth\AuthController;
+
 
 
 use App\Http\Controllers\Api\V1\User\UserController;
@@ -37,7 +39,9 @@ Route::prefix('v1')->group(function () {
         return 'api scaffold';
     });
     Route::post('/auth/register', [AuthController::class, 'store']);
-    Route::post('/auth/login', [LoginController::class, 'login']);
+
+    
+
     Route::post('/roles', [RoleController::class, 'store']);
 
     
@@ -62,12 +66,9 @@ Route::prefix('v1')->group(function () {
 
     Route::delete('/organizations/{org_id}', [OrganisationController::class, 'destroy']);
 
-
-    
-    Route::middleware('auth:api')->group(function () {
-        Route::post('/testimonials', [TestimonialController::class, 'store']);
-    });
-
+    Route::apiResource('/users', UserController::class);
+    Route::get('/products/categories', [CategoryController::class, 'index']);
+    Route::middleware('throttle:10,1')->get('/help-center/topics/search', [ArticleController::class, 'search']);
 });
 
 
