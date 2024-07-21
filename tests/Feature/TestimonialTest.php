@@ -35,12 +35,13 @@ class TestimonialTest extends TestCase
             'Authorization' => 'Bearer ' . $token,
         ]);
 
-        $response->assertStatus(201); // Use 201 for created resources
+        $response->assertStatus(201);
         $response->assertJson([
             'status' => 'success',
             'message' => 'Testimonial created successfully',
             'data' => [
-                // Your expected data here
+                'name' => $user->name,
+                'content' => 'This is a testimonial.',
             ],
         ]);
     }
@@ -54,7 +55,7 @@ class TestimonialTest extends TestCase
             'Authorization' => 'Bearer ' . $token,
         ]);
 
-        $response->assertStatus(422); // Use 422 for validation errors
+        $response->assertStatus(422);
         $response->assertJsonValidationErrors(['content']);
     }
 }
