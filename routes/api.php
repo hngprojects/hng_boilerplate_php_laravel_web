@@ -29,7 +29,7 @@ use App\Http\Controllers\Api\V1\Auth\LoginController;
 |
 | Here is where you can register API routes for your application. These
 | routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middlewaree grou. Make something great!
+| be assigned to the "api" middleware grou. Make something great!
 |
 */
 
