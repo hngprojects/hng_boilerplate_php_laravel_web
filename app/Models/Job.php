@@ -11,4 +11,9 @@ class Job extends Model
     use HasFactory, HasUuids;
 
     protected $fillable = [];
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'job_user')->using(JobUser::class);
+    }
 }
