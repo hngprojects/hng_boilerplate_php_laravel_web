@@ -1,7 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\V1\JobController;
 use App\Http\Controllers\Api\V1\User\UserController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,4 +21,9 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::apiResource('/users', UserController::class);
+});
+
+
+Route::middleware('auth:api')->group(function () {
+    Route::apiResource('jobs', JobController::class);
 });
