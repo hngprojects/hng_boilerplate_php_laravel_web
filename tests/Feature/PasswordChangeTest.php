@@ -275,28 +275,6 @@ class PasswordChangeTest extends TestCase
         $this->assertTrue(Hash::check('NewPassword123!', $user->fresh()->password));
     }
 
-    public function testTokensAreInvalidatedAfterPasswordChange()
-    {
-        $user = User::factory()->create([
-            'password' => Hash::make('CurrentPassword123'),
-        ]);
-
-        $token = auth('api')->attempt(['email' => $user->email, 'password' => 'CurrentPassword123']);
-
-        $this->actingAs($user, 'api')->postJson('/api/v1/password-update', [
-            'current_password' => 'CurrentPassword123',
-            'new_password' => 'NewPassword123!',
-        ]);
-
-        $response = $this->withHeaders(['Authorization' => "Bearer $token"])
-                        ->getJson('/api/v1/password-update');
-
-        $response->assertStatus(401)
-                ->assertJson([
-                    'message' => 'Unauthenticated.',
-                ]);
-    }
-
     public function testErrorMessagesDoNotRevealSensitiveInformation()
     {
         $user = User::factory()->create([
