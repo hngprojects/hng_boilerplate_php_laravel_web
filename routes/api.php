@@ -24,6 +24,7 @@ Route::prefix('v1')->group(function () {
         return 'api scaffold';
     });
     Route::post('/auth/register', [AuthController::class, 'store']);
+    Route::post('/auth/login', [AuthController::class, 'login']);
 
 
     Route::apiResource('/users', UserController::class);
