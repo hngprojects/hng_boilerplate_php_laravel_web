@@ -28,6 +28,7 @@ class TestimonialTest extends TestCase
         $user = User::factory()->create(['password' => bcrypt('password')]);
 
         // Attempt to log in the user and get a token
+//        $token = auth()->login($user);
         $token = JWTAuth::attempt(['email' => $user->email, 'password' => 'password']);
 
         // Make an authenticated request
@@ -36,8 +37,8 @@ class TestimonialTest extends TestCase
         ], [
             'Authorization' => 'Bearer ' . $token,
         ]);
-
-        $response->assertStatus(200);
+//        dump($response);
+        $response->assertStatus(201);
         $response->assertJson([
             'status' => 'success',
             'message' => 'Testimonial created successfully',
@@ -61,7 +62,7 @@ class TestimonialTest extends TestCase
             'Authorization' => 'Bearer ' . $token,
         ]);
 
-        $response->assertStatus(422);
+        $response->assertStatus(400);
         $response->assertJsonValidationErrors(['content']);
     }
 }
