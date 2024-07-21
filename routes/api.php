@@ -9,7 +9,10 @@ use App\Http\Controllers\Api\V1\Admin\BlogController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 
 
-
+=======
+use App\Http\Controllers\Api\V1\Auth\AuthController;
+use App\Http\Controllers\Api\V1\Organisation\OrganisationController;
+>>>>>>> c1efc5a (Resolved merge conflict in routes/api.php)
 use App\Http\Controllers\Api\V1\User\UserController;
 use App\Http\Controllers\Api\V1\CategoryController;
 use Illuminate\Http\Request;
@@ -39,9 +42,8 @@ Route::prefix('v1')->group(function () {
         return 'api scaffold';
     });
     Route::post('/auth/register', [AuthController::class, 'store']);
-
+<<<<<<< HEAD
     
-
     Route::post('/roles', [RoleController::class, 'store']);
 
     
@@ -66,9 +68,12 @@ Route::prefix('v1')->group(function () {
 
     Route::delete('/organizations/{org_id}', [OrganisationController::class, 'destroy']);
 
+=======
     Route::apiResource('/users', UserController::class);
     Route::get('/products/categories', [CategoryController::class, 'index']);
     Route::middleware('throttle:10,1')->get('/help-center/topics/search', [ArticleController::class, 'search']);
+    Route::delete('/organizations/{org_id}', [OrganisationController::class, 'destroy']);
+>>>>>>> c1efc5a (Resolved merge conflict in routes/api.php)
 });
 
 
