@@ -121,14 +121,19 @@ trait HasRolesAndPermissions
     // assign roles
     public function assignRole(...$roles)
     {
+        dd($role);
         $roles = $this->getAllRoles($roles);
         if (!$roles) {
             return $this;
         }
 
-        $this->roles()->attach($roles);
+        $this->roles()->attach($roles)
         return $this;
     }
+    /* public function assignRole($role)
+    {
+        $this->roles()->attach($role);
+    } */
 
     // remove roles
     public function removeRole(...$roles)
@@ -142,8 +147,14 @@ trait HasRolesAndPermissions
         return $this;
     }
 
-    protected function getAllPermissions(...$permissions)
+    public function getAllPermissions(...$permissions)
     {
         return Permission::whereIn('name', $permissions)->get();
+    }
+
+    // Helper function to get all roles
+    public function getAllRoles(array $roles)
+    {
+        return Role::whereIn('name', $roles)->get();
     }
 }

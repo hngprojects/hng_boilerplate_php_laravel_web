@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('squeezes', function (Blueprint $table) {
-            $table->string('email')->unique();
+            $table->string('email')->unique()->change();
         });
     }
 
