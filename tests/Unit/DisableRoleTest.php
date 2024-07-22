@@ -34,6 +34,9 @@ class DisableRoleTest extends TestCase
             'state' => 'State',
         ]);
 
+        // Debug statement to ensure organisation is created
+        error_log('Organisation ID: ' . $this->organization->id);
+
         // Creating admin user
         $this->admin = User::create([
             'name' => 'Admin User',
@@ -56,11 +59,17 @@ class DisableRoleTest extends TestCase
             'is_active' => true
         ]);
 
+        // Debug statement to ensure role is created
+        error_log('Role ID: ' . $this->role->id . ' Org ID: ' . $this->role->org_id);
+
         $this->defaultRole = Role::create([
             'name' => 'Default Role',
             'org_id' => $this->organization->id,
             'is_default' => true
         ]);
+
+        // Debug statement to ensure default role is created
+        error_log('Default Role ID: ' . $this->defaultRole->id . ' Org ID: ' . $this->defaultRole->org_id);
 
         // Assigning roles to users
         $this->admin->roles()->attach($this->role->id);
