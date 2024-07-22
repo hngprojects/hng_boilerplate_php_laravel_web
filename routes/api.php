@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Api\V1\ArticleController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Api\V1\Organisation\OrganisationController;
 use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Controllers\Api\V1\SqueezeController;
@@ -35,6 +36,7 @@ Route::prefix('v1')->group(function () {
         return 'api scaffold';
     });
     Route::post('/auth/register', [AuthController::class, 'store']);
+    Route::post('/auth/login', [LoginController::class, 'login']);
 
     Route::post('/roles', [RoleController::class, 'store']);
 

@@ -13,6 +13,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
 
+
 class AuthController extends Controller
 {
     use HttpResponses;
@@ -72,6 +73,9 @@ class AuthController extends Controller
     /**
      * Display the specified resource.
      */
+
+    
+
     public function show(string $id)
     {
         //
