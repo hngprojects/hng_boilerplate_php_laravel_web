@@ -3,10 +3,12 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Validator;
 
 class SqueezeControllerTest extends TestCase
 {
+    use RefreshDatabase;
     public function testValidDataPassesValidation()
     {
         $data = [

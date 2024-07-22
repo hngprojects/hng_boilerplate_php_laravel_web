@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\V1\User\UserController;
 use App\Http\Controllers\Api\V1\CategoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Api\V1\ArticleController;
 use App\Http\Controllers\Api\V1\Organisation\OrganisationController;
 use App\Http\Controllers\Api\V1\RoleController;
@@ -44,6 +45,7 @@ Route::prefix('v1')->group(function () {
     Route::middleware('throttle:10,1')->get('/topics/search', [ArticleController::class, 'search']);
 
     Route::middleware('throttle:10,1')->get('/help-center/topics/search', [ArticleController::class, 'search']);
+    Route::post('/contact', [ContactController::class, 'sendInquiry']);
 
     Route::get('/blogs/latest', [BlogController::class, 'latest']);
 
@@ -66,3 +68,5 @@ Route::prefix('v1')->group(function () {
     });
 
 });
+
+
