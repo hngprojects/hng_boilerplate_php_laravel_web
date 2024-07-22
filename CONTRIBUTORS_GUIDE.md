@@ -28,7 +28,7 @@ Fixes # (issue) [FEAT] Blog Post Deletion Endpoint - Backend #6
 
 ## Endpoints
 
-/api/v1/remove-blog/{blog_id}
+/api/v1/blog/{blog_id}
 
 ## Type of Change
 
