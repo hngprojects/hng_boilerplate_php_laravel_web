@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\Admin\BlogController;
 use App\Http\Controllers\Api\V1\Admin\CustomerController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\User\UserController;
+use App\Http\Controllers\Api\V1\WaitListController;
 use App\Http\Controllers\Api\V1\CategoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -50,6 +51,9 @@ Route::prefix('v1')->group(function () {
     Route::get('/blogs/latest', [BlogController::class, 'latest']);
 
     Route::post('/squeeze', [SqueezeController::class, 'store']);
+
+    Route::post('/waitlist', [WaitListController::class, 'store']);
+
     Route::middleware('auth:api')->group(function () {
         Route::apiResource('/features', FeatureController::class);
         Route::apiResource('/plans', SubscriptionController::class);
