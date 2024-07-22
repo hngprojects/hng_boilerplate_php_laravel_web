@@ -22,6 +22,18 @@ class DisableRoleTest extends TestCase
     {
         parent::setUp();
 
+        // Creating organisation
+        $this->organization = Organisation::create([
+            'name' => 'Test Organisation',
+            'email' => 'org@example.com',
+            'description' => 'Description',
+            'industry' => 'Industry',
+            'type' => 'Type',
+            'country' => 'Country',
+            'address' => 'Address',
+            'state' => 'State',
+        ]);
+
         // Creating admin user
         $this->admin = User::create([
             'name' => 'Admin User',
@@ -35,18 +47,6 @@ class DisableRoleTest extends TestCase
             'name' => 'Regular User',
             'email' => 'user@example.com',
             'password' => bcrypt('password')
-        ]);
-
-        // Creating organisation
-        $this->organization = Organisation::create([
-            'name' => 'Test Organisation',
-            'email' => 'org@example.com',
-            'description' => 'Description',
-            'industry' => 'Industry',
-            'type' => 'Type',
-            'country' => 'Country',
-            'address' => 'Address',
-            'state' => 'State',
         ]);
 
         // Creating roles
