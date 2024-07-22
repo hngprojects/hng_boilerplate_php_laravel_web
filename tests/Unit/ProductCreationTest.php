@@ -2,8 +2,6 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ProductCreationTest extends TestCase
@@ -16,17 +14,17 @@ class ProductCreationTest extends TestCase
     public function test_authenticated_user_can_create_product()
     {
         // Register a user
-        $user = User::factory()->create([
+        $user = [
             'name' => 'Test User',
             'email' => 'testuser@example.com',
-            'password' => Hash::make('password'),
-        ]);
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ];
 
-        // Retrieve the JWT token from the login response
-        $response = $this->postJson('/api/v1/auth/login', [
-            'email' => 'testuser@example.com',
-            'password' => 'password'
-        ]);
+        $response = $this->postJson('/api/v1/auth/register', $user);
+
+        // Ensure registration was successful
+        $response->assertStatus(201); 
 
         // Retrieve the JWT token from the registration response
         $token = $response->json('data.accessToken');

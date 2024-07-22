@@ -26,6 +26,7 @@ class ProductController extends Controller
         $request->validated();
 
         $user = auth()->user();
+
         $product = $user->products()->create($request->all());
 
         return response()->json([

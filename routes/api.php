@@ -47,7 +47,7 @@ Route::prefix('v1')->group(function () {
 
 
     Route::middleware('auth:api')->group(function() {
-        Route::post('/products', [ProductController::class, 'create']);
+        Route::post('/products', [ProductController::class, 'store']);
     });
       
     Route::middleware('throttle:10,1')->get('/help-center/topics/search', [ArticleController::class, 'search']);
