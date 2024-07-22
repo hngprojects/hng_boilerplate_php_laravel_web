@@ -41,6 +41,7 @@ Route::prefix('v1')->group(function () {
     Route::apiResource('/users', UserController::class);
 
     Route::get('/products/categories', [CategoryController::class, 'index']);
+    Route::get('/qualifiers', 'QualifierController@index');
 
     Route::middleware('throttle:10,1')->get('/topics/search', [ArticleController::class, 'search']);
 
