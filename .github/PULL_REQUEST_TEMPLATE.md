@@ -4,7 +4,7 @@ Implement endpoint to update notification settings
 Implement endpoint to update notification settings. 
 Created a table and migrations to allow authenticated users update notifications setting​s.
 ## Related Issue ([Link to Github issue](https://github.com/hngprojects/hng_boilerplate_php_laravel_web/issues/40))
-Endpoint accessible at domain.com/api/v1/notification-settings/{:user_id}
+Endpoint accessible at domain.com/api/v1/notification-settings/{:user_id}nn
 
 <!--- This project only accepts pull requests related to open issues -->
 <!--- If suggesting a new feature or change, please discuss it in an issue first -->
