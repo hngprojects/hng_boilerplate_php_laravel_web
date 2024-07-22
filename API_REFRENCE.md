@@ -6,8 +6,8 @@
 
 ## Base URL
 
-- Live URL: `https://api-php.boilerplate.hng.tech`
-- Staging URL: `https://staging.api-php.boilerplate.hng.tech`
+- Live URL: `https://example.com/api/v1`
+- Staging URL: `https://staging.example.com/api/v1`
 
 ## [Section]
 
@@ -15,21 +15,30 @@
 
 #### [SubTitle]
 
-- **Endpoint:** `/api/v1/organizations/{org_id}/users/{user_id}`
-- **Method:** DELETE
-- **Description:** This endpoint remove member from an organization
+- **Endpoint:** `/api/[version]/[endpoint]`
+- **Method:** [HTTP-Method]
+- **Description:** [Description]
 
+**Body:**
+
+```json
+{
+  "[Key]": "[value]"
+}
+```
 
 **Success Response:**
 
-- **Code:** 200
+- **Code:** [Code]
 - **Content:**
 
 ```json
 {
-  "status": "success",
-  "message": "user deleted successfully",
-  "status_code": 200
+  "status": true,
+  "message": "[Message]",
+  "data": {
+    "[Key]": "[value]"
+  }
 }
 ```
 
@@ -40,9 +49,8 @@
 
 ```json
 {
-  "status": "forbidden",
-  "message": "user not found",
-  "status_code": 404
+  "status": false,
+  "message": "[Message]"
 }
 ```
 
