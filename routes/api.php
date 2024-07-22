@@ -15,6 +15,8 @@ use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Controllers\Api\V1\SqueezeController;
 use App\Http\Controllers\Api\V1\Testimonial\TestimonialController;
 
+use App\Http\Controllers\Api\V1\Organisation\OrganisationRemoveUserController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -50,6 +52,10 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('/features', FeatureController::class);
         Route::apiResource('/plans', SubscriptionController::class);
         Route::post('/organisations', [OrganisationController::class, 'store']);
+    });
+    
+    Route::middleware('auth.jwt')->group(function () {
+        Route::delete('/organizations/{org_id}/users/{user_id}', [OrganisationRemoveUserController::class, 'removeUser']);
     });
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
 

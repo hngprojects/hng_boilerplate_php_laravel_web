@@ -2,9 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-
-use App\Traits\HasRolesAndPermissions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -17,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class User extends Authenticatable  implements JWTSubject
 {
-    use HasApiTokens, HasFactory, Notifiable, HasUuids, HasRolesAndPermissions;
+    use HasApiTokens, HasFactory, Notifiable, HasUuids;
 
     /**
      * The attributes that are mass assignable.
@@ -105,4 +102,74 @@ class User extends Authenticatable  implements JWTSubject
     {
         return $this->hasMany(Product::class, 'user_id', 'id');
     }
+
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class, 'users_permissions', 'user_id', 'permission_id');
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'users_roles', 'user_id', 'role_id');
+    }
+
+    public function hasPermissionTo($permission)
+    {
+        return $this->permissions()->where('name', $permission)->exists() ||
+               $this->roles()->whereHas('permissions', function ($query) use ($permission) {
+                   $query->where('name', $permission);
+               })->exists();
+    }
+
+    public function hasRole($role)
+    {
+        return $this->roles()->where('name', $role)->exists();
+    }
+
+    public function givePermissionTo($permission)
+    {
+        $this->permissions()->attach($permission);
+    }
+
+    public function revokePermissionTo($permission)
+    {
+        $this->permissions()->detach($permission);
+    }
+
+    public function assignRole($role)
+    {
+        $this->roles()->attach($role);
+    }
+
+    public function removeRole($role)
+    {
+        $this->roles()->detach($role);
+    }
+
+    public function getAllPermissions()
+    {
+        $rolePermissions = $this->roles->load('permissions')->pluck('permissions')->flatten();
+        return $this->permissions->merge($rolePermissions)->unique('id');
+    }
+
+    public function hasPermissionThroughRole($permission)
+    {
+        return $this->roles()->whereHas('permissions', function ($query) use ($permission) {
+            $query->where('name', $permission);
+        })->exists();
+    }
+
+    public function hasAnyRole($roles)
+    {
+        return $this->roles()->whereIn('name', $roles)->exists();
+    }
+
+    public function hasAnyPermission($permissions)
+    {
+        return $this->permissions()->whereIn('name', $permissions)->exists() ||
+            $this->roles()->whereHas('permissions', function ($query) use ($permissions) {
+                $query->whereIn('name', $permissions);
+            })->exists();
+    }
+
 }
