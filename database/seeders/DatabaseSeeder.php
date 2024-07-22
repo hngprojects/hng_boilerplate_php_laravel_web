@@ -41,8 +41,11 @@ class DatabaseSeeder extends Seeder
         $organisation2->users()->attach([$user1->id, $user2->id]);
         $organisation3->users()->attach($user2->id);
 
-        $this->call(CategoriesTableSeeder::class);
-        $this->call([ArticlesTableSeeder::class]);
+        $this->call([
+            CategoriesTableSeeder::class,
+            ArticlesTableSeeder::class,
+            WaitlistUserSeeder::class,
+        ]);
 
     }
 }
