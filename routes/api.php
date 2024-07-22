@@ -1,10 +1,13 @@
 <?php
 
+
 use App\Http\Controllers\Api\V1\Admin\Plan\FeatureController;
 use App\Http\Controllers\Api\V1\Admin\Plan\SubscriptionController;
 use App\Http\Controllers\Api\V1\Admin\BlogController;
 use App\Http\Controllers\Api\V1\Admin\CustomerController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
+
+
 use App\Http\Controllers\Api\V1\User\UserController;
 use App\Http\Controllers\Api\V1\CategoryController;
 use Illuminate\Http\Request;
@@ -38,7 +41,9 @@ Route::prefix('v1')->group(function () {
     Route::post('/auth/login', [LoginController::class, 'login']);
     Route::post('/roles', [RoleController::class, 'store']);
 
+    
     Route::apiResource('/users', UserController::class);
+
 
     Route::get('/products/categories', [CategoryController::class, 'index']);
 
@@ -47,6 +52,7 @@ Route::prefix('v1')->group(function () {
     Route::middleware('throttle:10,1')->get('/help-center/topics/search', [ArticleController::class, 'search']);
     Route::post('/contact', [ContactController::class, 'sendInquiry']);
 
+
     Route::get('/blogs/latest', [BlogController::class, 'latest']);
 
     Route::post('/squeeze', [SqueezeController::class, 'store']);
@@ -54,13 +60,8 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('/features', FeatureController::class);
         Route::apiResource('/plans', SubscriptionController::class);
     });
-    
-    Route::middleware('auth.jwt')->group(function () {
-        Route::post('/organisations', [OrganisationController::class, 'store']);
-        Route::put('/organisations/{org_id}', [OrganisationController::class, 'update']);
-        Route::delete('/organizations/{org_id}/users/{user_id}', [OrganisationRemoveUserController::class, 'removeUser']);
-    });
-    Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
+
+    Route::delete('/organizations/{org_id}', [OrganisationController::class, 'destroy']);
 
 
     

@@ -20,36 +20,47 @@ Thank you for considering contributing to [App Name]! We welcome all types of co
 
 # Pull Request Template
 
+
+
 ## Description
-
-[Please include a summary of the change and which issue is fixed. Please also include relevant motivation and context. List any dependencies that are required for this change.]
-
-Fixes # (issue) [Tag the issue number here]
+<!--- Describe your changes in detail -->
+### Created an API endpoint to handle the deletion of an organization. This endpoint validate the organization ID and update the specified organization deleted attribute to true in the database upon successful validation.
+​
+## Related Issue (Link to Github issue)
+<!--- This project only accepts pull requests related to open issues -->
+<!--- If suggesting a new feature or change, please discuss it in an issue first -->
+<!--- If fixing a bug, there should be an issue describing it with steps to reproduce -->
+<!--- Please link to the issue here: -->
+### Implement Organization Deletion
+​
 
 ## Endpoints
+/api/v1/organizations/{org_id}
 
-[If applicable, list any new endpoints added or modified]
-
-## Type of Change
-
-- [ ] Bug fix (non-breaking change which fixes an issue)
-- [ ] New feature (non-breaking change which adds functionality)
-- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
-- [ ] This change requires a documentation update
-
-## Checklist
-
-- [ ] My code follows the style guidelines of this project
-- [ ] I have performed a self-review of my own code
-- [ ] I have commented my code, particularly in hard-to-understand areas
-- [ ] I have made corresponding changes to the documentation
-- [ ] My changes generate no new warnings
-- [ ] I have added tests that prove my fix is effective or that my feature works
-- [ ] New and existing unit tests pass locally with my changes
-- [ ] Any dependent changes have been merged and published in downstream modules
-
-## Screenshots (if appropriate)
-
-## Additional Context
-
-Add any other context or screenshots about the pull request here.
+## Motivation and Context
+<!--- Why is this change required? What problem does it solve? -->
+### It provides a backend service to handle the deletion of organizations, ensuring the organization ID is valid and setting the oganization deleted attribute to true in the database.
+​
+## How Has This Been Tested?
+<!--- Please describe in detail how you tested your changes. -->
+<!--- Include details of your testing environment, and the tests you ran to -->
+<!--- see how your change affects other areas of the code, etc. -->
+### the Api has been tested using php units testing and it passed the 3 test it under went.
+​
+## Screenshots (if appropriate - Postman, etc):
+​
+## Types of changes
+<!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
+- [ ] Bug fix (non-breaking change which fixes an issue) -->
+- [x] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to change)
+​
+## Checklist:
+<!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
+<!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
+- [x] My code follows the code style of this project.
+- [ ] My change requires a change to the documentation.
+- [ ] I have updated the documentation accordingly.
+- [x] I have read the **CONTRIBUTING** document.
+- [x] I have added tests to cover my changes.
+- [x] All new and existing tests passed.
