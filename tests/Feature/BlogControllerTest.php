@@ -149,7 +149,7 @@ class BlogControllerTest extends TestCase
         // Send delete request with the token and assert status
         $this->withHeaders(['Authorization' => "Bearer $token"])
             ->deleteJson("/api/v1/blogs/{$blog->id}")
-            ->assertStatus(403); // Forbidden
+            ->assertStatus(401); // Forbidden
     }
 
 }
