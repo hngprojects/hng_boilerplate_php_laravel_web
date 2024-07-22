@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateJobRequest;
 use App\Models\Job;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 
 class JobController extends Controller
 {
@@ -40,32 +42,33 @@ class JobController extends Controller
      * Update the specified resource in storage.
      */
 
-    public function update(UpdateJobRequest $request, string $id)
+    public function update(UpdateJobRequest $request, string $id): JsonResponse
     {
+        if (empty($id)) {
+            return response()->json([
+                'message' => 'Job post id is missing',
+            ], Response::HTTP_METHOD_NOT_ALLOWED);
+        }
+
         $validated = $request->validated();
 
-        $user = User::where('id', auth()->id())->first();
-
-        $job = $user->jobs()->where('job_id', $id)->first();
-
-        if (!$job) {
-            return $this->jsonReponse([
-                'status' => 'error',
-                'message' => 'User not found',
-                'data' => null
+        $job = Job::find($id);
+        if (!$job->users->contains(auth()->id())) {
+            return response()->json([
+                'message' => 'Invalid job post id',
             ], Response::HTTP_NOT_FOUND);
         }
 
-        if ($user) {
+        $updateJob = $job->update($validated);
 
-            $job = $job->update($validated);
+        if ($updateJob) {
+            $job->users()->attach(auth()->id());
 
-            $job = $user->jobs()->where('job_id', $id)->first();
-
-            return $this->jsonReponse([
+            return response()->json([
                 'message' => 'Job details updated successfully',
-                'status_code' => 200,
-                'data' => [
+                'status_code' => Response::HTTP_OK,
+                'data' =>
+                [
                     'title' => $job->title,
                     'description' => $job->description,
                     'location' => $job->location,
@@ -75,7 +78,7 @@ class JobController extends Controller
                     'created_at' => $job->created_at->toDateTimeString(),
                     'updated_at' => $job->updated_at->toDateTimeString(),
                 ],
-            ],  Response::HTTP_OK);
+            ]);
         }
     }
 

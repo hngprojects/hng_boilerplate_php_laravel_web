@@ -38,8 +38,8 @@ class UpdateJobRequest extends FormRequest
     {
         $response = [
             'status_code' => Response::HTTP_BAD_REQUEST,
-            'message' => $validator->errors()->all(),
-            'error' => 'Bad Request'
+            'error' => 'Bad request',
+            'message' => $validator->errors()->all()
         ];
 
         throw new HttpResponseException(response()->json($response, Response::HTTP_BAD_REQUEST));

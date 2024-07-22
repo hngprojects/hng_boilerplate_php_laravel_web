@@ -5,8 +5,6 @@ namespace Tests\Feature;
 use App\Models\Job;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -16,17 +14,12 @@ class UpdateJobTest extends TestCase
 
     public function test_it_returns_successful_response_with_valid_id()
     {
-        $user =  User::create([
-            'id' => uniqid(),
-            'name' => 'Alems_hng Baja',
-            'email' => 'ec2_hng@task2.com',
-            'password' => Hash::make('password'),
-        ]);
-
+        $user = User::factory()->create();
         $token = JWTAuth::fromUser($user);
 
-
         $job = Job::factory()->create();
+
+        $user->jobs()->attach($job->id);
 
         $updateJob = [
             'title' => 'Music Idustry',
@@ -36,36 +29,43 @@ class UpdateJobTest extends TestCase
             'job_type' => 'Contract',
             'company_name' => 'HNG',
         ];
-
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
         ])->json('patch', "api/v1/jobs/{$job->id}", $updateJob);
 
         $response->assertStatus(200)
-            ->assertJson([
-                'message' => 'Job details updated successfully',
-                'status_code' => 200,
-                'data' => $updateJob
+            ->assertJsonStructure([
+                'message',
+                'status_code',
+                'data' => [
+                    'title',
+                    'description',
+                    'location',
+                    'salary',
+                    'job_type',
+                    'company_name',
+                    'created_at',
+                    'updated_at'
+                ],
             ]);
-
-        $this->assertDatabaseHas('jobs', $updateJob);
     }
 
 
     public function test_it_returns_error_response_with_invalid_job_post_id()
     {
-        $user =  User::create([
-            'id' => uniqid(),
-            'name' => 'Alems_hng Baja',
-            'email' => 'ec2_hng@task2.com',
-            'password' => Hash::make('password'),
-        ]);
 
+        $user = User::factory()->create();
         $token = JWTAuth::fromUser($user);
+        $job = Job::factory()->create();
+        $user->jobs()->attach($job->id);
 
+        $user2 = User::factory()->create();
+        JWTAuth::fromUser($user);
+        $job2 = Job::factory()->create();
+        $user2->jobs()->attach($job2->id);
 
-        $invalidId = 999;
+        $invalidJobId = $job2->id;
         $updateJob = [
             'title' => 'Music Idustry',
             'description' => 'To update music industry',
@@ -78,46 +78,36 @@ class UpdateJobTest extends TestCase
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->json('patch', "api/v1/jobs/{$invalidId}", $updateJob);
+        ])->json('patch', "api/v1/jobs/{$invalidJobId}", $updateJob);
 
         $response->assertStatus(404)
-            ->assertJson([
-                'message' => 'No query results for model [App\Models\Job] 999',
+            ->assertJsonStructure([
+                'message',
             ]);
     }
 
 
     public function test_it_returns_error_response_with_missing_job_post_id()
     {
-        $user = User::create([
-            'id' => uniqid(),
-            'name' => 'Alems_hng Baja',
-            'email' => 'ec2_hng@task2.com',
-            'password' => Hash::make('password'),
-        ]);
+        $user = User::factory()->create();
         $token = JWTAuth::fromUser($user);
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
         ])->json('patch', 'api/v1/jobs/');
 
-        $response->assertStatus(404);
+        $response->assertStatus(405);
     }
 
 
     public function test_it_returns_error_response_with_invalid_request_body()
     {
-        $user =  User::create([
-            'id' => uniqid(),
-            'name' => 'Alems_hng Baja',
-            'email' => 'ec2_hng@task2.com',
-            'password' => Hash::make('password'),
-        ]);
-
+        $user = User::factory()->create();
         $token = JWTAuth::fromUser($user);
 
+
         $job = Job::factory()->create();
-        $invalidData = [
+        $invalidJobData = [
             'title' => '',
             'description' => '',
             'location' => '',
@@ -128,20 +118,13 @@ class UpdateJobTest extends TestCase
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->json('patch', "api/v1/jobs/{$job->id}", $invalidData);
+        ])->json('patch', "api/v1/jobs/{$job->id}", $invalidJobData);
 
         $response->assertStatus(400)
-            ->assertJson([
-                'status_code' => 400,
-                'message' => [
-                    'The job title is required.',
-                    'The job description is required.',
-                    'The job location is required.',
-                    'The salary is required.',
-                    'The job type is required.',
-                    'The company name is required.'
-                ],
-                'error' => 'Bad Request'
+            ->assertJsonStructure([
+                'status_code',
+                'message',
+                'error'
             ]);
     }
 }

@@ -17,7 +17,12 @@ class JobFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'title' => $this->faker->jobTitle,
+            'description' => $this->faker->paragraph,
+            'location' => $this->faker->city,
+            'salary' => $this->faker->numberBetween(50000, 150000),
+            'job_type' => $this->faker->randomElement(['Full-time', 'Part-time', 'Contract']),
+            'company_name' => $this->faker->company,
         ];
     }
 }
