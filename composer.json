@@ -13,6 +13,7 @@
         "laravel/tinker": "^2.8",
         "predis/predis": "^2.2",
         "spatie/ignition": "^1.15",
+        "spatie/laravel-data": "^4.7",
         "tymon/jwt-auth": "^2.1"
     },
     "require-dev": {
