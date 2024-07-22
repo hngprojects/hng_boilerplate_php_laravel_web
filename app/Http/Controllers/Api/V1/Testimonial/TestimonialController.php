@@ -38,8 +38,8 @@ class TestimonialController extends Controller
 
         if (!$user) {
             return response()->json([
-                'status' => 'Unauthenticated',
-                'message' => 'Unauthenticated. Please log in.',
+                'status' => 'Unauthorized',
+                'message' => 'Unauthorized. Please log in.',
                 'status_code' => 401,
             ], 401);
         }
@@ -120,34 +120,34 @@ class TestimonialController extends Controller
 // }
 
 
-    public function show($id)
-    {
-        $user = Auth::user();
+public function show($id)
+{
+    $user = Auth::user();
 
-        if (!$user) {
-            return response()->json([
-                'status' => 'Unauthorized',
-                'message' => 'Unauthorized. Please log in.',
-                'status_code' => 401,
-            ], 401);
-        }
-
-        try {
-            $testimonial = Testimonial::findOrFail($id);
-        } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'status' => 'Not Found',
-                'message' => 'Testimonial not found.',
-                'status_code' => 404,
-            ], 404);
-        }
-
+    if (!$user) {
         return response()->json([
-            'status' => 'success',
-            'message' => 'Testimonial fetched successfully',
-            'data' => $testimonial,
-        ], 200);
+            'status' => 'Unauthorized',
+            'message' => 'Unauthorized. Please log in.',
+            'status_code' => 401,
+        ], 401);
     }
+
+    try {
+        $testimonial = Testimonial::findOrFail($id);
+    } catch (ModelNotFoundException $e) {
+        return response()->json([
+            'status' => 'Not Found',
+            'message' => 'Testimonial not found.',
+            'status_code' => 404,
+        ], 404);
+    }
+
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Testimonial fetched successfully',
+        'data' => $testimonial,
+    ], 200);
+}
 
 
     /**
