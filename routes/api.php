@@ -59,4 +59,6 @@ Route::prefix('v1')->group(function () {
         Route::post('/testimonials', [TestimonialController::class, 'store']);
     });
 
+    Route::middleware(['auth:api', 'admin'])->put('/organisations/{organisationsId}/roles/{roleId}/disable', [RoleController::class, 'disableRole']);
+
 });

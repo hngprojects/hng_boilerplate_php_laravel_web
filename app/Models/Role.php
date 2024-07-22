@@ -20,4 +20,9 @@ class Role extends Model
     {
         return $this->belongsToMany(User::class, 'users_roles');
     }
+
+    public function organisations()
+    {
+        return $this->belongsToMany(Organisation::class, 'organisation_user', 'user_id', 'org_id')->using(OrganisationUser::class);
+    }
 }

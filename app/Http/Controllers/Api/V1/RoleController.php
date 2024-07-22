@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreRoleRequest;
+use App\Models\User;
+use App\Models\Organisation;
 use App\Models\Role;
 use App\Traits\HttpResponses;
 use Illuminate\Http\Response;
@@ -42,6 +44,72 @@ class RoleController extends Controller
             $code = Response::HTTP_BAD_REQUEST;
             return response()->json([
                 'message' => "Role creation failed - ".$e->getMessage(),
+                'status_code' => $code,
+            ], $code);
+        }
+    }
+
+    public function disableRole(StoreRoleRequest $request, $org_id, $roleId)
+    {
+        // check whether user is admin
+        $user = $request->user();
+
+        if (!$user->isAdmin($org_id)) {
+            return response()->json([
+                'message' => 'Insufficient permission.'
+            ], 403);
+        }
+
+        // check whether organisation & role exists
+        $organisation = Organisation::find($org_id);
+
+        if (!$organisation) {
+            return response()->json([
+                'message' => 'Organisation not found.'
+            ], 404);
+        }
+
+        $role = Role::where('organisation_id', $org_id)->find($roleId);
+
+        if (!$role) {
+            return response()->json([
+                'message' => 'Role not found.'
+            ], 404);
+        }
+
+        // disable role
+        try {
+            DB::beginTransaction();
+
+            $role->is_active = false;
+            $role->save();
+
+            // move all users with disabled role to default role
+            $defaultRole = Role::where('organisation_id', $org_id)->where('is_default', true)->first();
+            // User::where('role_id', $roleId)->update([
+            //     'role_id' => $defaultRole->id
+            // ]);
+
+            User::whereHas('roles', function ($query) use ($roleId) {
+                $query->where('role_id', $roleId);
+            })->each(function ($user) use ($defaultRole, $role) {
+                $user->roles()->attach($defaultRole->id);
+                $user->roles()->detach($role->id);
+            });
+            DB::commit();
+            
+            $code = Response::HTTP_CREATED;
+
+            return response()->json([
+                'message' => "Role disabled successfully",
+                'status_code' => $code,
+            ], $code);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Role disabling error: ' . $e->getMessage());
+            $code = Response::HTTP_BAD_REQUEST;
+            return response()->json([
+                'message' => "Role disabling failed - ".$e->getMessage(),
                 'status_code' => $code,
             ], $code);
         }
