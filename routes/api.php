@@ -58,6 +58,7 @@ Route::prefix('v1')->group(function () {
         Route::delete('/organizations/{org_id}/users/{user_id}', [OrganisationRemoveUserController::class, 'removeUser']);
     });
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
+    Route::delete('/blogs/{id}', [BlogController::class, 'destroy'])->middleware(['auth:api', 'admin']);
 
 
     
