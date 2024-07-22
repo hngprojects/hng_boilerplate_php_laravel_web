@@ -5,7 +5,6 @@
 The Technical Code of Conduct aims to create a collaborative, respectful, and productive environment for all contributors involved in technical aspects of the project, including code development, system architecture, and technical documentation. By adhering to this code, we ensure that all interactions are professional and constructive, fostering an environment where innovation and collaboration can thrive.
 
 ## Principles
-
 1. **Respectful Collaboration**
 
    - Treat all team members with respect and professionalism.
