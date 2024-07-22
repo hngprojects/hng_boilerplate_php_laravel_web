@@ -1,9 +1,12 @@
 <?php
 
-use App\Http\Controllers\Api\V1\ProductController;
-use App\Http\Controllers\Api\V1\User\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\ArticleController;
+use App\Http\Controllers\Api\V1\ProductController;
+use App\Http\Controllers\Api\V1\CategoryController;
+use App\Http\Controllers\Api\V1\Auth\AuthController;
+use App\Http\Controllers\Api\V1\User\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,7 +23,16 @@ Route::prefix('v1')->group(function () {
     Route::get('/', function () {
         return 'api scaffold';
     });
+    Route::post('/auth/register', [AuthController::class, 'store']);
 
     Route::apiResource('/users', UserController::class);
-    Route::apiResource('/products', ProductController::class);
+
+    Route::get('/products/categories', [CategoryController::class, 'index']);
+
+    Route::middleware('auth:api')->group(function() {
+        Route::post('/products', [ProductController::class, 'create']);
+    });
+      
+    Route::middleware('throttle:10,1')->get('/help-center/topics/search', [ArticleController::class, 'search']);
+
 });
