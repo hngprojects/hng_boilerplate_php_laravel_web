@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\V1\Organisation\OrganisationController;
 use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Controllers\Api\V1\SqueezeController;
 use App\Http\Controllers\Api\V1\Testimonial\TestimonialController;
+use App\Http\Controllers\NotificationSettingController;
 
 
 /*
@@ -57,6 +58,11 @@ Route::prefix('v1')->group(function () {
     
     Route::middleware('auth:api')->group(function () {
         Route::post('/testimonials', [TestimonialController::class, 'store']);
+    });
+
+
+    Route::middleware('auth:api')->group(function () {
+        Route::put('notification-settings/{user_id}', [NotificationSettingController::class, 'update']);
     });
 
 });
