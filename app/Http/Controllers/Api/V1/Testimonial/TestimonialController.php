@@ -38,8 +38,8 @@ class TestimonialController extends Controller
 
         if (!$user) {
             return response()->json([
-                'status' => 'Unauthorized',
-                'message' => 'Unauthorized. Please log in.',
+                'status' => 'Unauthenticated',
+                'message' => 'Unauthenticated. Please log in.',
                 'status_code' => 401,
             ], 401);
         }
