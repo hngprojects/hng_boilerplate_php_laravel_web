@@ -117,5 +117,39 @@ class BlogControllerTest extends TestCase
             ]);
     }
 
+    public function test_superadmin_can_delete_blog()
+    {
+        // Create a superadmin user
+        $superAdmin = User::factory()->create(['role' => 'admin']);
+    
+        // Create a blog post
+        $blog = Blog::factory()->create();
+    
+        // Generate a JWT token for the superadmin user
+        $token = \Tymon\JWTAuth\Facades\JWTAuth::fromUser($superAdmin);
+    
+        // Act as the superadmin user with the generated token
+        $this->withHeaders(['Authorization' => 'Bearer ' . $token])
+             ->deleteJson("/api/v1/blogs/{$blog->id}")
+             ->assertStatus(202)
+             ->assertJson(['message' => 'Blog successfully deleted']);
+    }
+
+    public function test_non_superadmin_cannot_delete_blog()
+    {
+        // Create a normal user
+        $user = User::factory()->create(['role' => 'user']);
+        
+          // Authenticate the user with a valid JWT token
+        $token = auth()->login($user);
+
+        // Create a blog post
+        $blog = Blog::factory()->create();
+
+        // Send delete request with the token and assert status
+        $this->withHeaders(['Authorization' => "Bearer $token"])
+            ->deleteJson("/api/v1/blogs/{$blog->id}")
+            ->assertStatus(403); // Forbidden
+    }
 
 }
