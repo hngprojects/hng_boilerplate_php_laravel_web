@@ -9,7 +9,7 @@ class Role extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'org_id'];
+    protected $fillable = ['name', 'org_id', 'is_active', 'is_default'];
 
     public function permissions()
     {
@@ -21,8 +21,8 @@ class Role extends Model
         return $this->belongsToMany(User::class, 'users_roles');
     }
 
-    public function organisations()
+    public function organisation()
     {
-        return $this->belongsToMany(Organisation::class, 'organisation_user', 'user_id', 'org_id')->using(OrganisationUser::class);
+        return $this->belongsTo(Organisation::class, 'org_id', 'org_id');
     }
 }

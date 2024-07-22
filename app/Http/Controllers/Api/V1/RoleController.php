@@ -53,8 +53,10 @@ class RoleController extends Controller
     {
         // check whether user is admin
         $user = $request->user();
+        Log::info('Disabling role request by user:', ['user_id' => $user->id, 'org_id' => $org_id]);
 
         if (!$user->isAdmin($org_id)) {
+            Log::warning('User does not have admin permissions.', ['user_id' => $user->id, 'org_id' => $org_id]);
             return response()->json([
                 'message' => 'Insufficient permission.'
             ], 403);
@@ -62,16 +64,16 @@ class RoleController extends Controller
 
         // check whether organisation & role exists
         $organisation = Organisation::find($org_id);
-
         if (!$organisation) {
+            Log::warning('Organisation not found.', ['org_id' => $org_id]);
             return response()->json([
                 'message' => 'Organisation not found.'
             ], 404);
         }
 
-        $role = Role::where('organisation_id', $org_id)->find($roleId);
-
+        $role = Role::where('org_id', $org_id)->findOrFail($roleId);
         if (!$role) {
+            Log::warning('Role not found.', ['role_id' => $roleId]);
             return response()->json([
                 'message' => 'Role not found.'
             ], 404);
@@ -86,32 +88,26 @@ class RoleController extends Controller
 
             // move all users with disabled role to default role
             $defaultRole = Role::where('organisation_id', $org_id)->where('is_default', true)->first();
-            // User::where('role_id', $roleId)->update([
-            //     'role_id' => $defaultRole->id
-            // ]);
-
             User::whereHas('roles', function ($query) use ($roleId) {
                 $query->where('role_id', $roleId);
             })->each(function ($user) use ($defaultRole, $role) {
                 $user->roles()->attach($defaultRole->id);
                 $user->roles()->detach($role->id);
             });
+
             DB::commit();
             
-            $code = Response::HTTP_CREATED;
-
+            Log::info('Role disabled successfully.', ['role_id' => $roleId]);
             return response()->json([
                 'message' => "Role disabled successfully",
-                'status_code' => $code,
-            ], $code);
+            ], 200);
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Role disabling error: ' . $e->getMessage());
-            $code = Response::HTTP_BAD_REQUEST;
             return response()->json([
                 'message' => "Role disabling failed - ".$e->getMessage(),
-                'status_code' => $code,
-            ], $code);
+            ], 400);
         }
     }
+
 }

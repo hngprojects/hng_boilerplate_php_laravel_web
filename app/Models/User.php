@@ -113,14 +113,6 @@ class User extends Authenticatable  implements JWTSubject
 
     public function isAdmin($org_id) 
     {
-        $roles = $this->roles()->where('org_id', $org_id)->get();
-
-        foreach ($roles as $role) {
-            if ($role->is_admin) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->roles()->where('org_id', $org_id)->where('is_admin', true)->exists();
     }
 }

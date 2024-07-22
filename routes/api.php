@@ -59,6 +59,10 @@ Route::prefix('v1')->group(function () {
         Route::post('/testimonials', [TestimonialController::class, 'store']);
     });
 
-    Route::middleware(['auth:api', 'admin'])->put('/organisations/{organisationsId}/roles/{roleId}/disable', [RoleController::class, 'disableRole']);
+    // Route::middleware(['auth:api', 'admin'])->put('/organisations/{org_id}/roles/{role_id}/disable', [RoleController::class, 'disableRole']);
+
+    Route::middleware('auth:api')->group(function () {
+        Route::put('/organisations/{org_id}/roles/{role_id}/disable', [RoleController::class, 'disableRole']);
+    });
 
 });
