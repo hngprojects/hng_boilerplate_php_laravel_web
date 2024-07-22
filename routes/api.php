@@ -17,7 +17,7 @@ use App\Http\Controllers\Api\V1\SqueezeController;
 use App\Http\Controllers\Api\V1\Testimonial\TestimonialController;
 
 use App\Http\Controllers\Api\V1\Organisation\OrganisationRemoveUserController;
-
+use App\Http\Controllers\Api\V1\Auth\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,7 +35,7 @@ Route::prefix('v1')->group(function () {
         return 'api scaffold';
     });
     Route::post('/auth/register', [AuthController::class, 'store']);
-
+    Route::post('/auth/login', [LoginController::class, 'login']);
     Route::post('/roles', [RoleController::class, 'store']);
 
     Route::apiResource('/users', UserController::class);
