@@ -31,17 +31,18 @@ class Handler extends ExceptionHandler
         });
     }
 
-    public function render($request, Throwable $exception)
-    {
-        if ($exception instanceof AuthenticationException) {
-            if ($request->expectsJson()) {
-                return response()->json([
-                    'status_code' => 401,
-                    'error' => 'Could not validate user credentials'
-                ], 401);
-            }
-        }
+    // public function render($request, Throwable $exception)
+    // {
+    //     if ($exception instanceof AuthenticationException) {
+    //         if ($request->expectsJson()) {
+    //             return response()->json([
+    //                 'status_code' => 401,
+    //                 'error' => 'Could not validate user credentials',
+    //                 'message' => 'Unauthenticated'
+    //             ], 401);
+    //         }
+    //     }
 
-        return parent::render($request, $exception);
-    }
+    //     return parent::render($request, $exception);
+    // }
 }

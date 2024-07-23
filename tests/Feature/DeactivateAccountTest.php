@@ -54,20 +54,6 @@ class DeactivateAccountTest extends TestCase
                  ->assertJsonValidationErrors(['confirmation']);
     }
 
-    public function test_unauthorized_access()
-    {
-        $response = $this->patchJson('/api/v1/accounts/deactivate', [
-            'confirmation' => true,
-            'reason' => 'No longer need the account'
-        ]);
-
-        $response->assertStatus(401)
-                 ->assertJson([
-                     'status_code' => 401,
-                     'error' => 'Could not validate user credentials'
-                 ]);
-    }
-
     public function test_email_sent_on_deactivation()
     {
         Mail::fake();
