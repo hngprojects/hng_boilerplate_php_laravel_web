@@ -15,9 +15,9 @@ use App\Http\Controllers\Api\V1\Organisation\OrganisationController;
 use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Controllers\Api\V1\SqueezeController;
 use App\Http\Controllers\Api\V1\Testimonial\TestimonialController;
-
 use App\Http\Controllers\Api\V1\Organisation\OrganisationRemoveUserController;
 use App\Http\Controllers\Api\V1\Auth\LoginController;
+use App\Http\Controllers\JobController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,8 +34,9 @@ Route::prefix('v1')->group(function () {
     Route::get('/', function () {
         return 'api scaffold';
     });
+
     Route::post('/auth/register', [AuthController::class, 'store']);
-    Route::post('/auth/login', [LoginController::class, 'login']);
+    Route::post('/auth/login', [LoginController::class, 'login'])->name('login');
     Route::post('/roles', [RoleController::class, 'store']);
 
     Route::apiResource('/users', UserController::class);
@@ -50,6 +51,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/blogs/latest', [BlogController::class, 'latest']);
 
     Route::post('/squeeze', [SqueezeController::class, 'store']);
+
     Route::middleware('auth:api')->group(function () {
         Route::apiResource('/features', FeatureController::class);
         Route::apiResource('/plans', SubscriptionController::class);
@@ -59,12 +61,14 @@ Route::prefix('v1')->group(function () {
     Route::middleware('auth.jwt')->group(function () {
         Route::delete('/organizations/{org_id}/users/{user_id}', [OrganisationRemoveUserController::class, 'removeUser']);
     });
+
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
 
 
     
     Route::middleware('auth:api')->group(function () {
         Route::post('/testimonials', [TestimonialController::class, 'store']);
+        Route::post('/jobs', [JobController::class, 'create']);
     });
 
 });

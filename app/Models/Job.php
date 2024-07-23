@@ -3,17 +3,26 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Job extends Model
 {
-    use HasFactory, HasUuids;
+    use HasFactory;
 
-    protected $fillable = [];
+    public $incrementing = false;
+    protected $keyType = 'string';
 
-    public function users()
-    {
-        return $this->belongsToMany(User::class, 'job_user')->using(JobUser::class);
-    }
+    protected $fillable = [
+        'id',
+        'title',
+        'description',
+        'location',
+        'salary',
+        'job_type',
+        'company_name',
+        'user_id',
+        'organisation_id',
+    ];
 }
