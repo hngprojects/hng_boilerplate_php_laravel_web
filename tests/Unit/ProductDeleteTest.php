@@ -7,6 +7,40 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class ProductDeleteTest extends TestCase
 {
     use RefreshDatabase;
+    public function test_authenticated_user_can_create_product()
+{
+    $user = [
+        'name' => 'Test User',
+        'email' => 'testuser@example.com',
+        'password' => 'password',
+        'password_confirmation' => 'password',
+    ];
+
+    $response = $this->postJson('/api/v1/auth/register', $user);
+
+    $response->assertStatus(201);
+
+    $token = $response->json('data.accessToken');
+
+    $this->assertNotEmpty($token);
+
+    $product = [
+        'name' => 'Test Product',
+        'description' => 'Test description'
+    ];
+
+    $createProduct = $this->postJson('/api/v1/products', $product, [
+        'Authorization' => "Bearer $token"
+    ]);
+
+    $createProduct->assertStatus(201);
+
+    $this->assertDatabaseHas('products', [
+        'name' => 'Test Product',
+        'description' => 'Test description'
+    ]);
+}
+
 public function test_authenticated_user_can_delete_product()
 {
     $user = [
