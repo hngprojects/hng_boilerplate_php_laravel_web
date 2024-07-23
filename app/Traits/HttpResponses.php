@@ -2,35 +2,25 @@
 
 namespace App\Traits;
 
+use Illuminate\Http\JsonResponse;
+
 trait HttpResponses
 {
-    protected function success(array|object $data, bool $status, string $message = null, int $code = 200)
+
+    protected function apiResponse($status = 'success', $message = '', $status_code = 200, $data = null): JsonResponse
     {
-        return response()->json([
+        $response = [
             'status' => $status,
             'message' => $message,
-            'status_code' => $code,
-            'data' => $data,
-        ], $code);
-    }
+            'status_code' => $status_code,
+        ];
 
-
-
-    protected function error(bool $status, string $message = null, int $code = 400, array|string $data = null)
-    {
-        if (!$data) {
-            return response()->json([
-                'status' => $status,
-                'message' => $message,
-                'status_code' => $code,
-            ], $code);
+        // Conditionally add the 'data' key if $data is not null
+        if ($data !== null) {
+            $response['data'] = $data;
         }
 
-        return response()->json([
-            'status' => $status,
-            'message' => $message,
-            'status_code' => $code,
-            'data' => $data,
-        ], $code);
+        // Return the JSON response
+        return response()->json($response, $status_code);
     }
 }

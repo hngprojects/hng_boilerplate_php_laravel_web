@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
+use App\Models\Validators\AuthValidator;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\Password;
 
 class AuthController extends Controller
 {
@@ -36,36 +39,44 @@ class AuthController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreUserRequest $request)
+    public function store(Request $request)
     {
-        $request->validated($request->all());
+         // Validate the request data
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email:rfc|max:255|unique:users',
+            'password' => ['required', Password::min(8)],
+        ]);
+
+        // Check if validation fails
+        if ($validator->fails()) {
+            return $this->apiResponse('Forbidden', $validator->errors(), 422);
+        }
 
         try {
             DB::beginTransaction();
 
-
-            // creating the user 
+            // Creating the user
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
             ]);
 
+            // Generate JWT token
             $token = JWTAuth::fromUser($user);
-            DB::commit();
 
-            return $this->success(data: [
+            DB::commit();
+            $data = [
                 'accessToken' => $token,
                 'user' => $user,
-            ], status: true, message: "Registration successful", code: Response::HTTP_CREATED,);
+            ]; 
+            return $this->apiResponse('Success', 'Registration successful', Response::HTTP_CREATED, $data);
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Registration error: ' . $e->getMessage());
-            return $this->error(
-                status: false,
-                message: "Registration unsuccessful",
-                code: Response::HTTP_BAD_REQUEST,
-            );
+
+            return $this->apiResponse('Forbidden', 'Registration unsuccessful', Response::HTTP_BAD_REQUEST);
         }
     }
 
