@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Middleware;
 
 use Closure;
@@ -10,76 +11,69 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ThrottleLogins
 {
-/**
-* Handle an incoming request.
-*
-* @param \Illuminate\Http\Request $request
-* @param \Closure $next
-* @param int $maxAttempts
-* @param int $decayMinutes
-* @return mixed
-*/
-public function handle($request, Closure $next, $maxAttempts = 3, $decayMinutes = 1)
-{
-$key = $this->throttleKey($request);
+    /**
+     * Handle an incoming request.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure $next
+     * @param int $maxAttempts
+     * @param int $decayMinutes
+     * @return mixed
+     */
+    public function handle($request, Closure $next, $maxAttempts = 3, $decayMinutes = 1)
+    {
+        $key = $this->throttleKey($request);
 
-if (RateLimiter::tooManyAttempts($key, $maxAttempts)) {
-$this->fireLockoutEvent($request);
+        if (RateLimiter::tooManyAttempts($key, $maxAttempts)) {
+            $seconds = RateLimiter::availableIn($key);
+            $minutes = ceil($seconds / 60);
+            return response()->json([
+                'message' => "Too many login attempts. Please try again in {$minutes} minutes."
+            ], Response::HTTP_TOO_MANY_REQUESTS);
+        }
 
-$seconds = RateLimiter::availableIn($key);
-$minutes = ceil($seconds / 60);
+        $response = $next($request);
 
-return response()->json(['message' => 'Too many login attempts. Please try again in ' . $minutes . ' minutes.'], Response::HTTP_FORBIDDEN);
-}
+        if ($response->status() === 401) {
+            RateLimiter::hit($key, $decayMinutes * 60);
+        }
 
-RateLimiter::hit($key, $decayMinutes * 60);
+        return $response;
+    }
+    
 
-$response = $next($request);
+    /**
+     * Get the throttle key for the given request.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return string
+     */
+    protected function throttleKey($request)
+    {
+        return strtolower($request->input('email')) . '|' . $request->ip();
+    }
 
-if ($this->tooManyAttempts($request)) {
-RateLimiter::clear($key);
-Cache::put('login_lockout_' . $request->input('email'), now()->addHour(), 3600);
+    /**
+     * Determine if the user has too many failed login attempts.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return bool
+     */
+    protected function tooManyAttempts($request)
+    {
+        $key = $this->throttleKey($request);
 
-Auth::logout();
+        return RateLimiter::tooManyAttempts($key, 3);
+    }
 
-return response()->json(['message' => 'Too many login attempts. You have been logged out for 1 hour.'], Response::HTTP_FORBIDDEN);
-}
-
-return $response;
-}
-
-/**
-* Get the throttle key for the given request.
-*
-* @param \Illuminate\Http\Request $request
-* @return string
-*/
-protected function throttleKey($request)
-{
-return strtolower($request->input('email')) . '|' . $request->ip();
-}
-
-/**
-* Determine if the user has too many failed login attempts.
-*
-* @param \Illuminate\Http\Request $request
-* @return bool
-*/
-protected function tooManyAttempts($request)
-{
-$key = $this->throttleKey($request);
-
-return RateLimiter::tooManyAttempts($key, 3);
-}
-
-/**
-* Fire an event when a lockout occurs.
-*
-* @param \Illuminate\Http\Request $request
-* @return void
-*/
-protected function fireLockoutEvent($request)
-{
-event(new \Illuminate\Auth\Events\Lockout($request));
-}
+    /**
+     * Fire an event when a lockout occurs.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return void
+     */
+    protected function fireLockoutEvent($request)
+    {
+        event(new \Illuminate\Auth\Events\Lockout($request));
+    }
 }

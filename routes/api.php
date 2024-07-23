@@ -36,7 +36,7 @@ Route::prefix('v1')->group(function () {
     });
     Route::post('/auth/register', [AuthController::class, 'store']);
     // the throotle should be added to the login route when created
-    Route::post('/auth/login', [LoginController::class, 'login']) -> middleware('throttle.logins');
+    Route::post('/auth/login', [LoginController::class, 'login'])->middleware('throttle.logins:3,1');
 
 
     Route::post('/roles', [RoleController::class, 'store']);

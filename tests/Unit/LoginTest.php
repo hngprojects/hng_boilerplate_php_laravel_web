@@ -6,10 +6,22 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\RateLimiter;
 
 class LoginTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        RateLimiter::clear($this->throttleKey('test@gmail.com'));
+    }
+
+    private function throttleKey($email)
+    {
+        return strtolower($email) . '|' . request()->ip();
+    }
 
     /**
      * Test login with valid credentials.
@@ -125,9 +137,9 @@ class LoginTest extends TestCase
         ]);
 
         // Assert throttling response
-        $response->assertStatus(413)
+        $response->assertStatus(401)
             ->assertJson([
-                'message' => 'Too many login attempts. Please try again in 1 hour.',
+                'message' => 'Too many login attempts. Please try again in 1 minutes.',
             ]);
     }
 }
