@@ -73,7 +73,7 @@ class OrganizationMemberControllerTest extends TestCase
                         'totalItems'
                     ]
                 ],
-                'statusCode'
+                'status_code'
             ]);
     }
 }
