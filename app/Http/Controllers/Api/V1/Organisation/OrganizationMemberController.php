@@ -57,7 +57,7 @@ class OrganizationMemberController extends Controller
                     'totalItems' => $members->total(),
                 ],
             ],
-            'statusCode' => 200,
+            'status_code' => 200,
         ], 200);
     }
 }
