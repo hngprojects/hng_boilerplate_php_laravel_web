@@ -30,11 +30,13 @@ class ProductController extends Controller
         $product = $user->products()->create($request->all());
 
         return response()->json([
+            'message' => 'Product created successfully',
             'status_code' => 201,
-            'product_id' => $product->product_id,
-            'name' => $product->name,
-            'description' => $product->description,
-            'message' => 'Product created successfully'
+            'data' => [
+                'product_id' => $product->product_id,
+                'name' => $product->name,
+                'description' => $product->description,
+            ]
         ], 201);
 
     }
