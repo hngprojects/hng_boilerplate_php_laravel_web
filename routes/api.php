@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\V1\Testimonial\TestimonialController;
 
 use App\Http\Controllers\Api\V1\Organisation\OrganisationRemoveUserController;
 use App\Http\Controllers\Api\V1\Auth\LoginController;
+use App\Http\Middleware\LoginAttempts;
 
 /*
 |--------------------------------------------------------------------------
