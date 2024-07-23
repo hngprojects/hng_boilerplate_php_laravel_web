@@ -7,6 +7,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateProductRequest;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -60,8 +61,28 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($productId)
     {
-        //
+        if (!Auth::check()) {
+            return response()->json([
+                'error' => 'Unauthorized',
+                'message' => 'You must be authenticated to delete a product.'
+            ], 401);
+        }
+
+        $product = Product::find($productId);
+
+        if (!$product) {
+            return response()->json([
+                'error' => 'Product not found',
+                'message' => "The product with ID $productId does not exist."
+            ], 404);
+        }
+
+        $product->delete();
+
+        return response()->json([
+            'message' => 'Product deleted successfully.'
+        ], 200);
     }
 }
