@@ -61,15 +61,12 @@ Route::prefix('v1')->group(function () {
     Route::middleware('auth:api')->group(function () {
         Route::apiResource('/features', FeatureController::class);
         Route::apiResource('/plans', SubscriptionController::class);
-<<<<<<< HEAD
-=======
         Route::post('/organisations', [OrganisationController::class, 'store']);
         
     });
 
     Route::middleware('auth:api')->group(function () {
         Route::delete('/organizations/{org_id}/users/{user_id}', [OrganisationRemoveUserController::class, 'removeUser']);
->>>>>>> cd8c56e (route fix)
     });
 
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
