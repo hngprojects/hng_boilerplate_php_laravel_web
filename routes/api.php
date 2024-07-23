@@ -37,6 +37,7 @@ Route::prefix('v1')->group(function () {
     });
     Route::post('/auth/register', [AuthController::class, 'store']);
     Route::post('/auth/login', [LoginController::class, 'login']);
+    Route::post('/auth/logout', [LoginController::class, 'logout'])->middleware('auth:api');
     Route::post('/roles', [RoleController::class, 'store']);
 
     Route::apiResource('/users', UserController::class);
@@ -56,18 +57,15 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('/plans', SubscriptionController::class);
         Route::post('/organisations', [OrganisationController::class, 'store']);
     });
-    
+
     Route::middleware('auth.jwt')->group(function () {
         Route::delete('/organizations/{org_id}/users/{user_id}', [OrganisationRemoveUserController::class, 'removeUser']);
     });
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
 
 
-    
+
     Route::middleware('auth:api')->group(function () {
         Route::post('/testimonials', [TestimonialController::class, 'store']);
     });
-
 });
-
-
