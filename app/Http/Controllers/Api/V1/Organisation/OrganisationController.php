@@ -39,7 +39,7 @@ class OrganisationController extends Controller
                 return ResponseHelper::response("Organisation created successfully", 201, $organisation->getPublicColumns());
             }catch (\Exception $e) {
                 DB::rollBack();
-                return ResponseHelper::response("Client error".$e, 400, null);
+                return ResponseHelper::response("Client error", 400, null);
             }
         }else{
             return ResponseHelper::response("Client error", 400, null);
@@ -57,9 +57,24 @@ class OrganisationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(StoreOrganisationRequest $request, $org_id)
     {
-        //
+        if($validPayload = $request->validated()){
+            $user = auth('api')->user();
+            if(!$user) return ResponseHelper::response("Authentication failed", 401, null);
+            $organisation = Organisation::find($org_id);
+            if(!$organisation) return ResponseHelper::response("Organisation not found", 404, null);
+            if(!$organisation->users->contains($user->id)) return ResponseHelper::response("You are not authorised to perform this action", 403, null);
+            try {
+                unset($validPayload['email']);
+                $organisation->update($validPayload);
+                return ResponseHelper::response("Organisation updated successfully", 200, $organisation->getPublicColumns());
+            }catch (\Exception $e) {
+                return ResponseHelper::response("Client error", 400, null);
+            }
+        }else{
+            return ResponseHelper::response("Client error", 400, null);
+        }
     }
 
     /**
