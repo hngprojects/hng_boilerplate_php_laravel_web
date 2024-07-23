@@ -26,7 +26,7 @@ endpoints:
         name: name
         description: 'Must not be greater than 255 characters.'
         required: true
-        example: nzujovlhb
+        example: jocrcyvqnnc
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -35,7 +35,7 @@ endpoints:
         name: email
         description: 'Must be a valid email address. Must not be greater than 255 characters.'
         required: true
-        example: chelsea.jones@example.net
+        example: huels.kayli@example.net
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -44,15 +44,15 @@ endpoints:
         name: password
         description: ''
         required: true
-        example: quam
+        example: debitis
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      name: nzujovlhb
-      email: chelsea.jones@example.net
-      password: quam
+      name: jocrcyvqnnc
+      email: huels.kayli@example.net
+      password: debitis
     fileParameters: []
     responses: []
     responseFields: []
@@ -86,7 +86,7 @@ endpoints:
         name: email
         description: 'Must be a valid email address. Must not be greater than 255 characters.'
         required: true
-        example: nschmitt@example.com
+        example: blanche.gleichner@example.com
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -95,14 +95,14 @@ endpoints:
         name: password
         description: 'Must be at least 8 characters.'
         required: true
-        example: $61x-|pB;ts.Fza
+        example: '68g;0&#,sgcNgO\1w"'
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      email: nschmitt@example.com
-      password: $61x-|pB;ts.Fza
+      email: blanche.gleichner@example.com
+      password: '68g;0&#,sgcNgO\1w"'
     fileParameters: []
     responses: []
     responseFields: []
@@ -136,7 +136,7 @@ endpoints:
         name: role_name
         description: 'Must not be greater than 255 characters.'
         required: true
-        example: eqadaxnjbcjwi
+        example: ewp
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -145,7 +145,7 @@ endpoints:
         name: organisation_id
         description: 'Must not be greater than 255 characters.'
         required: true
-        example: yqffqmwbw
+        example: choblyvgir
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -154,15 +154,15 @@ endpoints:
         name: permissions_id
         description: ''
         required: true
-        example: molestiae
+        example: doloremque
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      role_name: eqadaxnjbcjwi
-      organisation_id: yqffqmwbw
-      permissions_id: molestiae
+      role_name: ewp
+      organisation_id: choblyvgir
+      permissions_id: doloremque
     fileParameters: []
     responses: []
     responseFields: []
@@ -197,7 +197,7 @@ endpoints:
     responses:
       -
         status: 200
-        content: '{"current_page":1,"data":[{"id":"9c9765e3-8ee5-4235-a851-feb09b8bd11e","name":"Vena Hayes","email":"lindsey94@example.com","phone":null,"role":"user","email_verified_at":"2024-07-23T13:17:13.000000Z","is_active":true,"signup_type":"user","created_at":"2024-07-23T13:17:14.000000Z","updated_at":"2024-07-23T13:17:14.000000Z"},{"id":"9c9765e4-9ba3-437f-925c-be6ae72d4627","name":"Abraham Heller","email":"kylie91@example.net","phone":null,"role":"user","email_verified_at":"2024-07-23T13:17:14.000000Z","is_active":true,"signup_type":"user","created_at":"2024-07-23T13:17:14.000000Z","updated_at":"2024-07-23T13:17:14.000000Z"},{"id":"9c9766b0-02ef-4a3f-af07-be1e5aabd6d3","name":"timiajayi","email":"timiajayi2001@gmail.com","phone":null,"role":"user","email_verified_at":null,"is_active":true,"signup_type":"Token","created_at":"2024-07-23T13:19:28.000000Z","updated_at":"2024-07-23T13:19:28.000000Z"}],"first_page_url":"http:\/\/localhost\/api\/v1\/users?page=1","from":1,"last_page":1,"last_page_url":"http:\/\/localhost\/api\/v1\/users?page=1","links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"http:\/\/localhost\/api\/v1\/users?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"next_page_url":null,"path":"http:\/\/localhost\/api\/v1\/users","per_page":15,"prev_page_url":null,"to":3,"total":3}'
+        content: '{"current_page":1,"data":[{"id":"9c97777e-fd0a-4aaa-a554-d672c9ef16a4","name":"timiajayi","email":"timiajayi2001@gmail.com","phone":null,"role":"user","email_verified_at":null,"is_active":true,"signup_type":"Token","created_at":"2024-07-23T14:06:28.000000Z","updated_at":"2024-07-23T14:06:28.000000Z"}],"first_page_url":"http:\/\/localhost\/api\/v1\/users?page=1","from":1,"last_page":1,"last_page_url":"http:\/\/localhost\/api\/v1\/users?page=1","links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"http:\/\/localhost\/api\/v1\/users?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"next_page_url":null,"path":"http:\/\/localhost\/api\/v1\/users","per_page":15,"prev_page_url":null,"to":1,"total":1}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -263,13 +263,13 @@ endpoints:
         name: id
         description: 'The ID of the user.'
         required: true
-        example: 9c9765e3-8ee5-4235-a851-feb09b8bd11e
+        example: 9c97777e-fd0a-4aaa-a554-d672c9ef16a4
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: 9c9765e3-8ee5-4235-a851-feb09b8bd11e
+      id: 9c97777e-fd0a-4aaa-a554-d672c9ef16a4
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -278,7 +278,7 @@ endpoints:
     responses:
       -
         status: 200
-        content: '{"id":"9c9765e3-8ee5-4235-a851-feb09b8bd11e","name":"Vena Hayes","email":"lindsey94@example.com","phone":null,"role":"user","email_verified_at":"2024-07-23T13:17:13.000000Z","is_active":true,"signup_type":"user","created_at":"2024-07-23T13:17:14.000000Z","updated_at":"2024-07-23T13:17:14.000000Z","profile":{"profile_id":"9c9765e4-9694-414e-b967-d1ccdf445c6b","user_id":"9c9765e3-8ee5-4235-a851-feb09b8bd11e","first_name":"Vena","last_name":"Hayes","phone":"1-480-803-0527","avatar_url":"https:\/\/via.placeholder.com\/640x480.png\/0033cc?text=voluptas","created_at":"2024-07-23T13:17:14.000000Z","updated_at":"2024-07-23T13:17:14.000000Z"},"products":[{"product_id":"9c9765e4-9963-4d93-98f6-93d8234edfd7","user_id":"9c9765e3-8ee5-4235-a851-feb09b8bd11e","name":"laboriosam''s product","description":"Nostrum rem in cupiditate. Quia et amet molestiae repudiandae qui consequuntur assumenda. Cupiditate autem omnis omnis dolore inventore. Assumenda delectus vel commodi fugit.","created_at":"2024-07-23T13:17:14.000000Z","updated_at":"2024-07-23T13:17:14.000000Z"},{"product_id":"9c9765e4-9a9d-411b-91c3-049592c2b0c4","user_id":"9c9765e3-8ee5-4235-a851-feb09b8bd11e","name":"enim''s product","description":"Qui inventore et et quia. Eius quia excepturi nemo ratione omnis ratione. Minima rem maiores ullam ut.","created_at":"2024-07-23T13:17:14.000000Z","updated_at":"2024-07-23T13:17:14.000000Z"}],"organisations":[{"org_id":"9c9765e4-9fe8-492e-920c-369bf083f7f1","name":"Strosin-Casper","email":"fkuhic@wintheiser.com","description":"Quod eos magnam enim cupiditate. Ullam eos ut molestiae consequuntur nulla culpa id. Corporis porro fuga culpa porro veritatis itaque magni. Quia dolorem saepe ipsam odio modi quia.","industry":"Entertainment","type":"Public","country":"Saint Helena","address":"95951 Nikolaus Spurs\nNorth Delphiaview, DC 03289","state":"Iowa","created_at":"2024-07-23T13:17:14.000000Z","updated_at":"2024-07-23T13:17:14.000000Z"},{"org_id":"9c9765e4-a197-4979-b775-525a2fc72b3f","name":"Abbott-Quitzon","email":"gusikowski.mikayla@lemke.net","description":"Sunt voluptas quos quam praesentium recusandae unde nulla. Labore sit ea voluptas cupiditate et et ipsam. Asperiores debitis unde voluptas.","industry":"Agriculture","type":"Government","country":"Lithuania","address":"3749 Darion Landing Apt. 305\nWest Maynardstad, HI 25908","state":"Montana","created_at":"2024-07-23T13:17:14.000000Z","updated_at":"2024-07-23T13:17:14.000000Z"}]}'
+        content: '{"id":"9c97777e-fd0a-4aaa-a554-d672c9ef16a4","name":"timiajayi","email":"timiajayi2001@gmail.com","phone":null,"role":"user","email_verified_at":null,"is_active":true,"signup_type":"Token","created_at":"2024-07-23T14:06:28.000000Z","updated_at":"2024-07-23T14:06:28.000000Z","profile":null,"products":[],"organisations":[]}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -315,13 +315,13 @@ endpoints:
         name: id
         description: 'The ID of the user.'
         required: true
-        example: 9c9765e3-8ee5-4235-a851-feb09b8bd11e
+        example: 9c97777e-fd0a-4aaa-a554-d672c9ef16a4
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: 9c9765e3-8ee5-4235-a851-feb09b8bd11e
+      id: 9c97777e-fd0a-4aaa-a554-d672c9ef16a4
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -355,13 +355,13 @@ endpoints:
         name: id
         description: 'The ID of the user.'
         required: true
-        example: 9c9765e3-8ee5-4235-a851-feb09b8bd11e
+        example: 9c97777e-fd0a-4aaa-a554-d672c9ef16a4
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: 9c9765e3-8ee5-4235-a851-feb09b8bd11e
+      id: 9c97777e-fd0a-4aaa-a554-d672c9ef16a4
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -400,7 +400,7 @@ endpoints:
     responses:
       -
         status: 200
-        content: '{"status_code":200,"categories":[{"id":1,"name":"Electronics","description":"Electronic devices and accessories","slug":"electronics","parent_id":null},{"id":2,"name":"Clothing","description":"Apparel and fashion items","slug":"clothing","parent_id":null},{"id":3,"name":"Home","description":"Home and kitchen items","slug":"home","parent_id":null},{"id":4,"name":"Books","description":"Various types of books","slug":"books","parent_id":null},{"id":5,"name":"Sports","description":"Sports and outdoor equipment","slug":"sports","parent_id":null}]}'
+        content: '{"status_code":200,"categories":[]}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -522,7 +522,7 @@ endpoints:
         name: name
         description: ''
         required: true
-        example: quia
+        example: dolorem
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -531,7 +531,7 @@ endpoints:
         name: email
         description: 'Must be a valid email address.'
         required: true
-        example: herminio.dubuque@example.com
+        example: ztorphy@example.com
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -540,15 +540,15 @@ endpoints:
         name: message
         description: ''
         required: true
-        example: eos
+        example: deleniti
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      name: quia
-      email: herminio.dubuque@example.com
-      message: eos
+      name: dolorem
+      email: ztorphy@example.com
+      message: deleniti
     fileParameters: []
     responses: []
     responseFields: []
@@ -692,7 +692,7 @@ endpoints:
         name: feature
         description: ''
         required: true
-        example: nam
+        example: qui
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -701,14 +701,14 @@ endpoints:
         name: description
         description: 'Must not be greater than 255 characters.'
         required: false
-        example: 'Quia ipsam quam occaecati aut et.'
+        example: 'Nemo dolorem sunt dolorem a.'
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      feature: nam
-      description: 'Quia ipsam quam occaecati aut et.'
+      feature: qui
+      description: 'Nemo dolorem sunt dolorem a.'
     fileParameters: []
     responses: []
     responseFields: []
@@ -738,13 +738,13 @@ endpoints:
         name: id
         description: 'The ID of the feature.'
         required: true
-        example: a
+        example: ad
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: a
+      id: ad
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -788,13 +788,13 @@ endpoints:
         name: id
         description: 'The ID of the feature.'
         required: true
-        example: qui
+        example: libero
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: qui
+      id: libero
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -828,13 +828,13 @@ endpoints:
         name: id
         description: 'The ID of the feature.'
         required: true
-        example: officia
+        example: voluptatem
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: officia
+      id: voluptatem
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -911,7 +911,7 @@ endpoints:
         name: name
         description: ''
         required: true
-        example: voluptatem
+        example: voluptas
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -920,7 +920,7 @@ endpoints:
         name: duration
         description: ''
         required: true
-        example: yearly
+        example: monthly
         type: string
         enumValues:
           - monthly
@@ -931,7 +931,7 @@ endpoints:
         name: price
         description: ''
         required: true
-        example: 18
+        example: 2
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -940,7 +940,7 @@ endpoints:
         name: description
         description: ''
         required: true
-        example: 'Itaque delectus at dolor laboriosam.'
+        example: 'Dolor voluptatem et dolorem assumenda voluptas consequatur.'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -959,7 +959,7 @@ endpoints:
         name: 'features[].id'
         description: 'Must be a valid UUID.'
         required: true
-        example: 05ff218a-ca70-32a9-8ddb-ac9be697ca9c
+        example: c5385fa2-a2e9-37a9-82ed-f2b3436d3f32
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -976,13 +976,13 @@ endpoints:
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      name: voluptatem
-      duration: yearly
-      price: 18
-      description: 'Itaque delectus at dolor laboriosam.'
+      name: voluptas
+      duration: monthly
+      price: 2
+      description: 'Dolor voluptatem et dolorem assumenda voluptas consequatur.'
       features:
         -
-          id: 05ff218a-ca70-32a9-8ddb-ac9be697ca9c
+          id: c5385fa2-a2e9-37a9-82ed-f2b3436d3f32
           status: '0'
     fileParameters: []
     responses: []
@@ -1013,13 +1013,13 @@ endpoints:
         name: id
         description: 'The ID of the plan.'
         required: true
-        example: sit
+        example: sed
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: sit
+      id: sed
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1063,13 +1063,13 @@ endpoints:
         name: id
         description: 'The ID of the plan.'
         required: true
-        example: vero
+        example: animi
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: vero
+      id: animi
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1103,13 +1103,13 @@ endpoints:
         name: id
         description: 'The ID of the plan.'
         required: true
-        example: id
+        example: beatae
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: id
+      id: beatae
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1147,7 +1147,7 @@ endpoints:
         name: name
         description: ''
         required: true
-        example: officia
+        example: minima
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1156,7 +1156,7 @@ endpoints:
         name: description
         description: ''
         required: true
-        example: 'Illum ex aperiam architecto quae et.'
+        example: 'Rem eum sit voluptates nesciunt officiis.'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1165,7 +1165,7 @@ endpoints:
         name: email
         description: 'Must be a valid email address. Must not be greater than 255 characters.'
         required: true
-        example: roderick38@example.org
+        example: cordelia37@example.org
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1174,7 +1174,7 @@ endpoints:
         name: industry
         description: ''
         required: true
-        example: voluptate
+        example: neque
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1183,7 +1183,7 @@ endpoints:
         name: type
         description: ''
         required: true
-        example: asperiores
+        example: et
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1192,7 +1192,7 @@ endpoints:
         name: country
         description: ''
         required: true
-        example: quia
+        example: voluptate
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1201,7 +1201,7 @@ endpoints:
         name: address
         description: ''
         required: true
-        example: alias
+        example: dolorum
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1210,20 +1210,139 @@ endpoints:
         name: state
         description: ''
         required: true
-        example: quia
+        example: non
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      name: officia
-      description: 'Illum ex aperiam architecto quae et.'
-      email: roderick38@example.org
-      industry: voluptate
-      type: asperiores
-      country: quia
-      address: alias
-      state: quia
+      name: minima
+      description: 'Rem eum sit voluptates nesciunt officiis.'
+      email: cordelia37@example.org
+      industry: neque
+      type: et
+      country: voluptate
+      address: dolorum
+      state: non
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+    uri: 'api/v1/organisations/{org_id}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Update the specified resource in storage.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      org_id:
+        name: org_id
+        description: 'The ID of the org.'
+        required: true
+        example: qui
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      org_id: qui
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        name: name
+        description: ''
+        required: true
+        example: ut
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      description:
+        name: description
+        description: ''
+        required: true
+        example: 'Occaecati tempora qui velit laudantium blanditiis non ut voluptatum.'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      email:
+        name: email
+        description: ''
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      industry:
+        name: industry
+        description: ''
+        required: true
+        example: qui
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      type:
+        name: type
+        description: ''
+        required: true
+        example: natus
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      country:
+        name: country
+        description: ''
+        required: true
+        example: veniam
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      address:
+        name: address
+        description: ''
+        required: true
+        example: ullam
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      state:
+        name: state
+        description: ''
+        required: true
+        example: dolorem
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      name: ut
+      description: 'Occaecati tempora qui velit laudantium blanditiis non ut voluptatum.'
+      industry: qui
+      type: natus
+      country: veniam
+      address: ullam
+      state: dolorem
     fileParameters: []
     responses: []
     responseFields: []
@@ -1253,7 +1372,7 @@ endpoints:
         name: org_id
         description: 'The ID of the org.'
         required: true
-        example: quia
+        example: vero
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1262,14 +1381,14 @@ endpoints:
         name: user_id
         description: 'The ID of the user.'
         required: true
-        example: 9c9765e3-8ee5-4235-a851-feb09b8bd11e
+        example: 9c97777e-fd0a-4aaa-a554-d672c9ef16a4
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      org_id: quia
-      user_id: 9c9765e3-8ee5-4235-a851-feb09b8bd11e
+      org_id: vero
+      user_id: 9c97777e-fd0a-4aaa-a554-d672c9ef16a4
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1307,7 +1426,7 @@ endpoints:
         name: limit
         description: 'Must be at least 1.'
         required: true
-        example: 35
+        example: 56
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -1316,14 +1435,14 @@ endpoints:
         name: page
         description: 'Must be at least 1.'
         required: true
-        example: 41
+        example: 26
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      limit: 35
-      page: 41
+      limit: 56
+      page: 26
     fileParameters: []
     responses:
       -
@@ -1366,13 +1485,13 @@ endpoints:
         name: content
         description: ''
         required: true
-        example: et
+        example: qui
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      content: et
+      content: qui
     fileParameters: []
     responses: []
     responseFields: []
