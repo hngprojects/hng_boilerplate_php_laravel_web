@@ -50,11 +50,7 @@ class AuthController extends Controller
 
         // Check if validation fails
         if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'message' => $validator->errors(),
-                'status_code' => 422,
-            ], 422); // 422 Unprocessable Entity
+            return $this->apiResponse('Forbidden', $validator->errors(), 422);
         }
 
         try {
@@ -71,25 +67,16 @@ class AuthController extends Controller
             $token = JWTAuth::fromUser($user);
 
             DB::commit();
-
-            return response()->json([
-                'status' => true,
-                'message' => 'Registration successful',
-                'status_code' => Response::HTTP_CREATED,
-                'data' => [
-                    'accessToken' => $token,
-                    'user' => $user,
-                ],
-            ]);
+            $data = [
+                'accessToken' => $token,
+                'user' => $user,
+            ]; 
+            return $this->apiResponse('Success', 'Registration successful', Response::HTTP_CREATED, $data);
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Registration error: ' . $e->getMessage());
 
-            return response()->json([
-                'status' => false,
-                'message' => 'Registration unsuccessful',
-                'status_code' => Response::HTTP_BAD_REQUEST,
-            ]);
+            return $this->apiResponse('Forbidden', 'Registration unsuccessful', Response::HTTP_BAD_REQUEST);
         }
     }
 

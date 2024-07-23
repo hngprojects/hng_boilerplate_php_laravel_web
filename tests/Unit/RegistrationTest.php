@@ -22,7 +22,7 @@ class RegistrationTest extends TestCase
 
         $response = $this->postJson('/api/v1/auth/register', $registrationData);
         // Check the status code
-        $response->assertStatus(200);
+        $response->assertStatus(201);
 
         // Check the response structure
         $response->assertJsonStructure([
@@ -59,7 +59,7 @@ class RegistrationTest extends TestCase
         // Check the status code
         $response->assertStatus(422);
         $response->assertJson([
-            'status' => false,
+            'status' => "Forbidden",
             'message' => [
                 'email' => [
                     'The email field is required.'
