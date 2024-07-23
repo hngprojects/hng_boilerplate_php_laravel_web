@@ -3,6 +3,8 @@ namespace Tests\Unit;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Str;
+
 
 class ProductCreationTest extends TestCase
 {
@@ -34,6 +36,10 @@ class ProductCreationTest extends TestCase
         // Create a product as the authenticated user
         $product = [
             'name' => 'Test Product',
+            'price' => 400,
+            'slug' => Str::slug("test product"),
+            'tags' => "thanks, done",
+            "imageUrl" => "xyx.com/img",
             'description' => 'Test description'
         ];
 
@@ -47,6 +53,8 @@ class ProductCreationTest extends TestCase
         // // Assert that the product was created in the database
         $this->assertDatabaseHas('products', [
             'name' => 'Test Product',
+            'price' => 400,
+            'slug' => Str::slug("test product"),
             'description' => 'Test description'
         ]);
     }
