@@ -1,5 +1,4 @@
 <?php
-
 namespace Tests\Unit;
 
 use Tests\TestCase;
@@ -9,7 +8,6 @@ class ProductDeleteTest extends TestCase
 {
     use RefreshDatabase;
 
-   
     /**
      * Test that an authenticated user can delete a product.
      */
@@ -113,8 +111,11 @@ class ProductDeleteTest extends TestCase
 
         $this->assertNotEmpty($token);
 
+        // Use a non-existent product UUID
+        $nonExistentProductId = '123e4567-e89b-12d3-a456-426614174000';
+
         // Attempt to delete a non-existent product
-        $deleteProduct = $this->deleteJson('/api/v1/products/999', [], [
+        $deleteProduct = $this->deleteJson("/api/v1/products/{$nonExistentProductId}", [], [
             'Authorization' => "Bearer $token"
         ]);
 
