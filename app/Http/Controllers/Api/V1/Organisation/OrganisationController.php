@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Resources\OrganisationResource;
 
 class OrganisationController extends Controller
 {
@@ -18,7 +19,37 @@ class OrganisationController extends Controller
      */
     public function index()
     {
-        //
+        // Get authenticated user
+        $user = auth('api')->user();
+        if (!$user) {
+            return response()->json([
+                'status' => 'Unauthorized',
+                'message' => 'Unauthorized. Please log in.',
+                'status-code' => 401
+            ], 401);
+        }
+
+        $organisations = $user->organisations;
+
+        if ($organisations->isEmpty()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'No organisations available',
+                'data' => [
+                    'organisations' => []
+                ]
+                ],200);
+        };
+
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Organizations retrieved successfully',
+            'status-code' => 200,
+            'data' => [
+                'organisations' => OrganisationResource::collection($organisations)
+            ]
+        ]);
     }
 
 
