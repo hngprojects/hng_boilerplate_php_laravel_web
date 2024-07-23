@@ -7,86 +7,65 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class ProductDeleteTest extends TestCase
 {
     use RefreshDatabase;
+public function test_authenticated_user_can_delete_product()
+{
+    $user = [
+        'name' => 'Test User',
+        'email' => 'testuser@example.com',
+        'password' => 'password',
+        'password_confirmation' => 'password',
+    ];
 
-    /**
-     * Test that an authenticated user can delete a product.
-     */
-    public function test_authenticated_user_can_delete_product()
-    {
-        // Register a user
-        $user = [
-            'name' => 'Test User',
-            'email' => 'testuser@example.com',
-            'password' => 'password',
-            'password_confirmation' => 'password',
-        ];
+    $response = $this->postJson('/api/v1/auth/register', $user);
 
-        $response = $this->postJson('/api/v1/auth/register', $user);
+    $response->assertStatus(201);
 
-        // Ensure registration was successful
-        $response->assertStatus(201);
+    $token = $response->json('data.accessToken');
 
-        // Retrieve the JWT token from the registration response
-        $token = $response->json('data.accessToken');
+    $this->assertNotEmpty($token);
 
-        $this->assertNotEmpty($token);
+    $product = [
+        'name' => 'Test Product',
+        'description' => 'Test description'
+    ];
 
-        // Create a product as the authenticated user
-        $product = [
-            'name' => 'Test Product',
-            'description' => 'Test description'
-        ];
+    $createProduct = $this->postJson('/api/v1/products', $product, [
+        'Authorization' => "Bearer $token"
+    ]);
 
-        $createProduct = $this->postJson('/api/v1/products', $product, [
-            'Authorization' => "Bearer $token"
-        ]);
+    $createProduct->assertStatus(201);
 
-        // Check the status code
-        $createProduct->assertStatus(201);
+    $productId = $createProduct->json('data.product_id');
 
-        // Retrieve the created product ID
-        $productId = $createProduct->json('data.product_id');
+    $deleteProduct = $this->deleteJson("/api/v1/products/{$productId}", [], [
+        'Authorization' => "Bearer $token"
+    ]);
 
-        // Delete the product
-        $deleteProduct = $this->deleteJson("/api/v1/products/{$productId}", [], [
-            'Authorization' => "Bearer $token"
-        ]);
+    $deleteProduct->assertStatus(200);
 
-        // Check the status code
-        $deleteProduct->assertStatus(200);
+    $this->assertDatabaseMissing('products', [
+        'id' => $productId,
+        'name' => 'Test Product',
+        'description' => 'Test description'
+    ]);
+}
 
-        // Assert the product was deleted from the database
-        $this->assertDatabaseMissing('products', [
-            'id' => $productId,
-            'name' => 'Test Product',
-            'description' => 'Test description'
-        ]);
-    }
+public function test_unauthenticated_user_cannot_delete_product()
+{
+    $user = User::factory()->create();
+    $product = Product::factory()->create(['user_id' => $user->id]);
 
-    /**
-     * Test that an unauthenticated user cannot delete a product.
-     */
-    public function test_unauthenticated_user_cannot_delete_product()
-    {
-        // Create a user
-        $user = User::factory()->create();
+    $response = $this->deleteJson("/api/v1/products/{$product->id}");
 
-        // Create a product for the user
-        $product = Product::factory()->create(['user_id' => $user->id]);
+    $response->assertStatus(401);
 
-        // Attempt to delete the product without authentication
-        $response = $this->deleteJson("/api/v1/products/{$product->id}");
+    $this->assertDatabaseHas('products', [
+        'id' => $product->id,
+        'name' => $product->name,
+        'description' => $product->description
+    ]);
+}
 
-        // Check the status code
-        $response->assertStatus(401);
-
-        // Assert the product still exists in the database
-        $this->assertDatabaseHas('products', [
-            'id' => $product->id,
-            'name' => $product->name,
-            'description' => $product->description
-        ]);
-    }
 
     /**
      * Test that a user cannot delete a non-existent product.
