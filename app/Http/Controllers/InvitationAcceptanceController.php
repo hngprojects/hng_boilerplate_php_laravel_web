@@ -11,11 +11,16 @@ use Carbon\Carbon;
 
 class InvitationAcceptanceController extends Controller
 {
-    // Method to generate and store an invitation
+    /**
+     * Generate and store an invitation.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function generateInvitation(Request $request)
     {
         $data = $request->validate([
-            'org_id' => 'required|exists:organizations,org_id',
+            'org_id' => 'required|exists:organisations,org_id', // Correct table name
             'expires_at' => 'required|date|after:now'
         ]);
 
@@ -35,7 +40,12 @@ class InvitationAcceptanceController extends Controller
         ], 201);
     }
 
-    // Method to accept an invitation via GET request
+    /**
+     * Accept an invitation via GET request.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function acceptInvitation(Request $request)
     {
         $token = $request->query('token');
@@ -49,6 +59,7 @@ class InvitationAcceptanceController extends Controller
             ], 400);
         }
 
+        // Find or create user by email (assuming email is included in the Invitation model)
         $user = User::firstOrCreate(['email' => $invitation->email]);
         $organization = $invitation->organization;
 
@@ -60,6 +71,7 @@ class InvitationAcceptanceController extends Controller
             ], 400);
         }
 
+        // Attach the user to the organization
         $organization->users()->attach($user->id);
 
         return response()->json([
@@ -68,7 +80,12 @@ class InvitationAcceptanceController extends Controller
         ], 200);
     }
 
-    // Method to accept an invitation via POST request
+    /**
+     * Accept an invitation via POST request.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function acceptInvitationPost(Request $request)
     {
         $data = $request->validate([
@@ -85,6 +102,7 @@ class InvitationAcceptanceController extends Controller
             ], 400);
         }
 
+        // Find or create user by email (assuming email is included in the Invitation model)
         $user = User::firstOrCreate(['email' => $invitation->email]);
         $organization = $invitation->organization;
 
@@ -96,6 +114,7 @@ class InvitationAcceptanceController extends Controller
             ], 400);
         }
 
+        // Attach the user to the organization
         $organization->users()->attach($user->id);
 
         return response()->json([
