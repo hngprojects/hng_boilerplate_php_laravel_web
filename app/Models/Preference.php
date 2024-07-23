@@ -6,14 +6,12 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Testimonial extends Model
+class Preference extends Model
 {
     use HasFactory, HasUuids;
 
-    protected $fillable = [
-        'user_id',
-        'name',
-        'content',
-    ];
-
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
