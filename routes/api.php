@@ -53,10 +53,11 @@ Route::prefix('v1')->group(function () {
     Route::middleware('auth:api')->group(function () {
         Route::apiResource('/features', FeatureController::class);
         Route::apiResource('/plans', SubscriptionController::class);
-        Route::post('/organisations', [OrganisationController::class, 'store']);
     });
     
     Route::middleware('auth.jwt')->group(function () {
+        Route::post('/organisations', [OrganisationController::class, 'store']);
+        Route::put('/organisations/{org_id}', [OrganisationController::class, 'update']);
         Route::delete('/organizations/{org_id}/users/{user_id}', [OrganisationRemoveUserController::class, 'removeUser']);
     });
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);

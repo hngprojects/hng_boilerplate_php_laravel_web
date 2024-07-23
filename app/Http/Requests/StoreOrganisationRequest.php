@@ -26,10 +26,12 @@ class StoreOrganisationRequest extends FormRequest
      */
     public function rules()
     {
+        $isUpdate = $this->isMethod('put') || $this->isMethod('patch');
+
         return [
             'name' => 'required|string',
             'description' => 'required|string',
-            'email' => 'required|string|email|unique:organisations|max:255',
+            'email' => $isUpdate ? 'sometimes' : 'required|email|max:255|unique:organisations,email',
             'industry' => 'required|string',
             'type' => 'required|string',
             'country' => 'required|string',

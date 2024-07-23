@@ -13,7 +13,7 @@ class Organisation extends Model
 
     protected $fillable = [
         "name",
-        "user_id",
+        // "user_id",
         "email",
         "description",
         "industry",
