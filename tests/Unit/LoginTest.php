@@ -122,7 +122,7 @@ class LoginTest extends TestCase
         // The 4th attempt should be blocked
         $response = $this->postJson('/api/v1/auth/login', [
             'email' => 'test@gmail.com',
-            'password' => 'wrongpassword',
+            'password' => 'wrongpasswords',
         ]);
 
         $response->assertStatus(403)
