@@ -35,9 +35,7 @@ class JobController extends Controller
      */
     public function show(GetJobRequest $request, $id): JsonResponse
     {
-        $user = $request->auth;
         $job = Job::findOrFail($id);
-
         return $this->successResponse(new JobResource($job));
     }
 
