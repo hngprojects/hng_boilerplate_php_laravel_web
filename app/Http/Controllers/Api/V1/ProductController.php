@@ -38,7 +38,6 @@ class ProductController extends Controller
                 'description' => $product->description,
             ]
         ], 201);
-
     }
 
     /**
@@ -62,6 +61,21 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user = auth()->user();
+        $product = $user->products()->find($id);
+
+        if (!$product) {
+            return response()->json([
+                'message' => 'Product not found',
+                'status_code' => 404,
+            ], 404);
+        }
+
+        $product->delete();
+
+        return response()->json([
+            'message' => 'Product deleted successfully',
+            'status_code' => 200,
+        ], 200);
     }
 }

@@ -15,13 +15,12 @@ use App\Http\Controllers\Api\V1\Admin\CustomerController;
 use App\Http\Controllers\Api\V1\Admin\Plan\FeatureController;
 use App\Http\Controllers\Api\V1\Admin\Plan\SubscriptionController;
 use App\Http\Controllers\Api\V1\Testimonial\TestimonialController;
-
 use App\Http\Controllers\Api\V1\Organisation\OrganisationController;
 use App\Http\Controllers\Api\V1\Organisation\OrganisationRemoveUserController;
 use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Middleware\LoginAttempts;
-
 use App\Http\Controllers\Api\V1\JobController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -48,11 +47,11 @@ Route::prefix('v1')->group(function () {
 
     Route::middleware('throttle:10,1')->get('/topics/search', [ArticleController::class, 'search']);
 
-
-    Route::middleware('auth:api')->group(function() {
+    Route::middleware('auth:api')->group(function () {
         Route::post('/products', [ProductController::class, 'store']);
+        Route::delete('/products/{id}', [ProductController::class, 'destroy']);
     });
-      
+    
     Route::middleware('throttle:10,1')->get('/help-center/topics/search', [ArticleController::class, 'search']);
     Route::post('/contact', [ContactController::class, 'sendInquiry']);
 
@@ -69,9 +68,8 @@ Route::prefix('v1')->group(function () {
         Route::get('/organisations', [OrganisationController::class, 'index']);
         Route::delete('/organisations/{org_id}/users/{user_id}', [OrganisationRemoveUserController::class, 'removeUser']);
     });
+
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
-
-
 
     Route::middleware('auth:api')->group(function () {
         Route::post('/testimonials', [TestimonialController::class, 'store']);
