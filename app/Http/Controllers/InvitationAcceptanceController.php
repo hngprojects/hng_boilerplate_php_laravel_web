@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Invitation;
 use App\Models\User;
-use App\Models\Organization;
+use App\Models\Organisation;
 use Illuminate\Support\Facades\Log;
 
 class InvitationAcceptanceController extends Controller
@@ -32,7 +32,7 @@ class InvitationAcceptanceController extends Controller
         }
 
         $user = User::firstOrCreate(['email' => $invitation->email]);
-        $organization = Organization::find($invitation->org_id);
+        $organization = Organisation::find($invitation->org_id);
 
         if (!$organization) {
             return response()->json([
@@ -75,7 +75,7 @@ class InvitationAcceptanceController extends Controller
         }
 
         $user = User::firstOrCreate(['email' => $invitation->email]);
-        $organization = Organization::find($invitation->org_id);
+        $organization = Organisation::find($invitation->org_id);
 
         if (!$organization) {
             return response()->json([

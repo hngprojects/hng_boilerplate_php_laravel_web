@@ -9,4 +9,51 @@ use Illuminate\Database\Eloquent\Model;
 class Invitation extends Model
 {
     use HasFactory, HasUuids;
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'invitations';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'uuid',
+        'org_id',
+        'link',
+        'expires_at',
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'expires_at' => 'datetime',
+    ];
+
+    /**
+     * Get the organization associated with the invitation.
+     */
+    public function organization()
+    {
+        return $this->belongsTo(Organisation::class, 'org_id', 'org_id');
+    }
+
+    /**
+     * Scope a query to only include valid invitations.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeValid($query)
+    {
+        return $query->where('expires_at', '>', now());
+    }
 }
