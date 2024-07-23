@@ -21,6 +21,7 @@ use App\Http\Controllers\Api\V1\Organisation\OrganisationRemoveUserController;
 use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Middleware\LoginAttempts;
 
+use App\Http\Controllers\Api\V1\JobController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -74,6 +75,7 @@ Route::prefix('v1')->group(function () {
     Route::middleware('auth:api')->group(function () {
         Route::post('/testimonials', [TestimonialController::class, 'store']);
         Route::get('/testimonials/{testimonial_id}', [TestimonialController::class, 'show']);
+        Route::get('/jobs', [JobController::class, 'index']);
     });
 
 });
