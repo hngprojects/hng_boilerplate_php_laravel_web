@@ -20,33 +20,30 @@ Thank you for considering contributing to [App Name]! We welcome all types of co
 
 # Pull Request Template
 
-## Description
+[Please include a summary of the change and which issue is fixed. Please also include relevant motivation and context. List any dependencies that are required for this change.]
 
-Created an API endpoint to handle the deletion of a blog. This endpoint validates the blog ID and update the specified blog status column to 0 to indicate it has been soft deleted on the database upon successful validation.
-
-Fixes # (issue) [FEAT] Blog Post Deletion Endpoint - Backend #6
+Fixes # (issue) [Tag the issue number here]
 
 ## Endpoints
 
-/api/v1/blog/{blog_id}
+[If applicable, list any new endpoints added or modified]
 
 ## Type of Change
 
 - [ ] Bug fix (non-breaking change which fixes an issue)
-- [X] New feature (non-breaking change which adds functionality)
+- [ ] New feature (non-breaking change which adds functionality)
 - [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
 - [ ] This change requires a documentation update
 
 ## Checklist
 
-- [X] My code follows the style guidelines of this project
-- [X] I have performed a self-review of my own code
-- [X] I have commented my code, particularly in hard-to-understand areas
-- [X] I have made corresponding changes to the documentation
-- [X] My changes generate no new warnings
-- [X] I have added tests that prove my fix is effective or that my feature works
-- [X] New and existing unit tests pass locally with my changes
-- [X] Any dependent changes have been merged and published in downstream modules
+- [ ] My code follows the style guidelines of this project
+- [ ] I have performed a self-review of my own code
+- [ ] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [ ] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] New and existing unit tests pass locally with my changes
 
 ## Screenshots (if appropriate)
 
