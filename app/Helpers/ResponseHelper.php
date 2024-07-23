@@ -19,13 +19,23 @@ class ResponseHelper
             'errors' => $formattedErrors,
         ], 422);
     }
-
-    public static function response($message, $status_code, $data = null ){
-        $response = [
+    public static function response($message, $statusCode, $data = [])
+    {
+        return response()->json([
+            'status' => $statusCode == 200 ? 'success' : 'error',
             'message' => $message,
-            'status_code' => $status_code,
+            'status-code' => $statusCode,
             'data' => $data
-        ];
-        return response()->json($response, $status_code);
+        ], $statusCode);
     }
+
+
+//    public static function response($message, $status_code, $data = null ){
+//        $response = [
+//            'message' => $message,
+//            'status_code' => $status_code,
+//            'data' => $data
+//        ];
+//        return response()->json($response, $status_code);
+//    }
 }
