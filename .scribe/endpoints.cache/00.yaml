@@ -28,7 +28,7 @@ endpoints:
         name: name
         description: 'Must not be greater than 255 characters.'
         required: true
-        example: caog
+        example: kyqjicowiqcvbipmclenjzwa
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -37,7 +37,7 @@ endpoints:
         name: email
         description: 'Must be a valid email address. Must not be greater than 255 characters.'
         required: true
-        example: marks.enid@example.net
+        example: mante.carmel@example.net
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -46,15 +46,15 @@ endpoints:
         name: password
         description: ''
         required: true
-        example: iure
+        example: quos
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      name: caog
-      email: marks.enid@example.net
-      password: iure
+      name: kyqjicowiqcvbipmclenjzwa
+      email: mante.carmel@example.net
+      password: quos
     fileParameters: []
     responses: []
     responseFields: []
@@ -88,7 +88,7 @@ endpoints:
         name: email
         description: 'Must be a valid email address. Must not be greater than 255 characters.'
         required: true
-        example: willms.adriel@example.org
+        example: anderson.alex@example.net
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -97,14 +97,14 @@ endpoints:
         name: password
         description: 'Must be at least 8 characters.'
         required: true
-        example: '-<Bj+R'
+        example: hTGB64
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      email: willms.adriel@example.org
-      password: '-<Bj+R'
+      email: anderson.alex@example.net
+      password: hTGB64
     fileParameters: []
     responses: []
     responseFields: []
@@ -138,7 +138,7 @@ endpoints:
         name: role_name
         description: 'Must not be greater than 255 characters.'
         required: true
-        example: jsfnkrxoxokisukul
+        example: kmub
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -147,7 +147,7 @@ endpoints:
         name: organisation_id
         description: 'Must not be greater than 255 characters.'
         required: true
-        example: gzlqbqb
+        example: v
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -156,15 +156,15 @@ endpoints:
         name: permissions_id
         description: ''
         required: true
-        example: in
+        example: tenetur
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      role_name: jsfnkrxoxokisukul
-      organisation_id: gzlqbqb
-      permissions_id: in
+      role_name: kmub
+      organisation_id: v
+      permissions_id: tenetur
     fileParameters: []
     responses: []
     responseFields: []
@@ -265,13 +265,13 @@ endpoints:
         name: id
         description: 'The ID of the user.'
         required: true
-        example: rerum
+        example: consequuntur
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: rerum
+      id: consequuntur
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -282,7 +282,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "No query results for model [App\\Models\\User] rerum"
+              "message": "No query results for model [App\\Models\\User] consequuntur"
           }
         headers:
           cache-control: 'no-cache, private'
@@ -320,13 +320,13 @@ endpoints:
         name: id
         description: 'The ID of the user.'
         required: true
-        example: rerum
+        example: sed
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: rerum
+      id: sed
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -360,13 +360,13 @@ endpoints:
         name: id
         description: 'The ID of the user.'
         required: true
-        example: soluta
+        example: non
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: soluta
+      id: non
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -463,6 +463,56 @@ endpoints:
     custom: []
   -
     httpMethods:
+      - POST
+    uri: api/v1/products
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Store a newly created resource in storage.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        name: name
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: tvzfqfvqihaycqsdmrt
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      description:
+        name: description
+        description: ''
+        required: true
+        example: 'Praesentium laborum error impedit autem.'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      name: tvzfqfvqihaycqsdmrt
+      description: 'Praesentium laborum error impedit autem.'
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
       - GET
     uri: api/v1/help-center/topics/search
     metadata:
@@ -527,7 +577,7 @@ endpoints:
         name: name
         description: ''
         required: true
-        example: nulla
+        example: odit
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -536,7 +586,7 @@ endpoints:
         name: email
         description: 'Must be a valid email address.'
         required: true
-        example: hettinger.aracely@example.com
+        example: boehm.vidal@example.net
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -545,15 +595,15 @@ endpoints:
         name: message
         description: ''
         required: true
-        example: velit
+        example: accusamus
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      name: nulla
-      email: hettinger.aracely@example.com
-      message: velit
+      name: odit
+      email: boehm.vidal@example.net
+      message: accusamus
     fileParameters: []
     responses: []
     responseFields: []
@@ -697,7 +747,7 @@ endpoints:
         name: feature
         description: ''
         required: true
-        example: esse
+        example: modi
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -706,14 +756,14 @@ endpoints:
         name: description
         description: 'Must not be greater than 255 characters.'
         required: false
-        example: 'Est consequuntur quo aspernatur.'
+        example: 'Modi voluptatibus hic enim.'
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      feature: esse
-      description: 'Est consequuntur quo aspernatur.'
+      feature: modi
+      description: 'Modi voluptatibus hic enim.'
     fileParameters: []
     responses: []
     responseFields: []
@@ -743,13 +793,13 @@ endpoints:
         name: id
         description: 'The ID of the feature.'
         required: true
-        example: doloremque
+        example: itaque
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: doloremque
+      id: itaque
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -793,13 +843,13 @@ endpoints:
         name: id
         description: 'The ID of the feature.'
         required: true
-        example: molestiae
+        example: qui
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: molestiae
+      id: qui
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -833,13 +883,13 @@ endpoints:
         name: id
         description: 'The ID of the feature.'
         required: true
-        example: repudiandae
+        example: quia
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: repudiandae
+      id: quia
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -916,7 +966,7 @@ endpoints:
         name: name
         description: ''
         required: true
-        example: ducimus
+        example: tenetur
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -936,7 +986,7 @@ endpoints:
         name: price
         description: ''
         required: true
-        example: 9
+        example: 15
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -945,7 +995,7 @@ endpoints:
         name: description
         description: ''
         required: true
-        example: 'Quidem voluptates modi veniam officiis ipsa deleniti.'
+        example: 'Veniam accusamus sequi quam est modi soluta quia.'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -964,7 +1014,7 @@ endpoints:
         name: 'features[].id'
         description: 'Must be a valid UUID.'
         required: true
-        example: 6b623f69-63b4-3497-a1cf-3d0d986af718
+        example: 2f725c0c-e035-359c-98f9-aebee287982e
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -981,13 +1031,13 @@ endpoints:
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      name: ducimus
+      name: tenetur
       duration: yearly
-      price: 9
-      description: 'Quidem voluptates modi veniam officiis ipsa deleniti.'
+      price: 15
+      description: 'Veniam accusamus sequi quam est modi soluta quia.'
       features:
         -
-          id: 6b623f69-63b4-3497-a1cf-3d0d986af718
+          id: 2f725c0c-e035-359c-98f9-aebee287982e
           status: '1'
     fileParameters: []
     responses: []
@@ -1018,13 +1068,13 @@ endpoints:
         name: id
         description: 'The ID of the plan.'
         required: true
-        example: nisi
+        example: nihil
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: nisi
+      id: nihil
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1068,13 +1118,13 @@ endpoints:
         name: id
         description: 'The ID of the plan.'
         required: true
-        example: qui
+        example: ea
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: qui
+      id: ea
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1108,13 +1158,13 @@ endpoints:
         name: id
         description: 'The ID of the plan.'
         required: true
-        example: quis
+        example: minima
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: quis
+      id: minima
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1152,7 +1202,7 @@ endpoints:
         name: name
         description: ''
         required: true
-        example: est
+        example: praesentium
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1161,7 +1211,7 @@ endpoints:
         name: description
         description: ''
         required: true
-        example: 'Inventore asperiores nesciunt voluptatem facilis voluptates est.'
+        example: 'Asperiores eligendi sint et libero repellat perspiciatis suscipit harum.'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1170,7 +1220,7 @@ endpoints:
         name: email
         description: 'Must be a valid email address. Must not be greater than 255 characters.'
         required: true
-        example: tdicki@example.net
+        example: krystel05@example.com
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1179,7 +1229,7 @@ endpoints:
         name: industry
         description: ''
         required: true
-        example: voluptas
+        example: nihil
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1188,7 +1238,7 @@ endpoints:
         name: type
         description: ''
         required: true
-        example: aliquid
+        example: sed
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1197,7 +1247,7 @@ endpoints:
         name: country
         description: ''
         required: true
-        example: similique
+        example: aut
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1206,7 +1256,7 @@ endpoints:
         name: address
         description: ''
         required: true
-        example: nisi
+        example: repellendus
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1215,20 +1265,20 @@ endpoints:
         name: state
         description: ''
         required: true
-        example: impedit
+        example: iusto
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      name: est
-      description: 'Inventore asperiores nesciunt voluptatem facilis voluptates est.'
-      email: tdicki@example.net
-      industry: voluptas
-      type: aliquid
-      country: similique
-      address: nisi
-      state: impedit
+      name: praesentium
+      description: 'Asperiores eligendi sint et libero repellat perspiciatis suscipit harum.'
+      email: krystel05@example.com
+      industry: nihil
+      type: sed
+      country: aut
+      address: repellendus
+      state: iusto
     fileParameters: []
     responses: []
     responseFields: []
@@ -1239,117 +1289,39 @@ endpoints:
     custom: []
   -
     httpMethods:
-      - PUT
-    uri: 'api/v1/organisations/{org_id}'
+      - GET
+    uri: api/v1/organisations
     metadata:
       groupName: Endpoints
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Update the specified resource in storage.'
+      title: 'Display a listing of the resource.'
       description: ''
       authenticated: false
       custom: []
     headers:
       Content-Type: application/json
       Accept: application/json
-    urlParameters:
-      org_id:
-        name: org_id
-        description: 'The ID of the org.'
-        required: true
-        example: incidunt
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        custom: []
-    cleanUrlParameters:
-      org_id: incidunt
+    urlParameters: []
+    cleanUrlParameters: []
     queryParameters: []
     cleanQueryParameters: []
-    bodyParameters:
-      name:
-        name: name
-        description: ''
-        required: true
-        example: temporibus
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        custom: []
-      description:
-        name: description
-        description: ''
-        required: true
-        example: 'Consequuntur qui assumenda sit.'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        custom: []
-      email:
-        name: email
-        description: ''
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        custom: []
-      industry:
-        name: industry
-        description: ''
-        required: true
-        example: et
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        custom: []
-      type:
-        name: type
-        description: ''
-        required: true
-        example: id
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        custom: []
-      country:
-        name: country
-        description: ''
-        required: true
-        example: harum
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        custom: []
-      address:
-        name: address
-        description: ''
-        required: true
-        example: libero
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        custom: []
-      state:
-        name: state
-        description: ''
-        required: true
-        example: nihil
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        custom: []
-    cleanBodyParameters:
-      name: temporibus
-      description: 'Consequuntur qui assumenda sit.'
-      industry: et
-      type: id
-      country: harum
-      address: libero
-      state: nihil
+    bodyParameters: []
+    cleanBodyParameters: []
     fileParameters: []
-    responses: []
+    responses:
+      -
+        status: 401
+        content: '{"status":"Unauthorized","message":"User not authenticated","status_code":401}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '53'
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
     responseFields: []
     auth: []
     controller: null
@@ -1359,7 +1331,7 @@ endpoints:
   -
     httpMethods:
       - DELETE
-    uri: 'api/v1/organizations/{org_id}/users/{user_id}'
+    uri: 'api/v1/organisations/{org_id}/users/{user_id}'
     metadata:
       groupName: Endpoints
       groupDescription: ''
@@ -1377,7 +1349,7 @@ endpoints:
         name: org_id
         description: 'The ID of the org.'
         required: true
-        example: incidunt
+        example: qui
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1386,14 +1358,14 @@ endpoints:
         name: user_id
         description: 'The ID of the user.'
         required: true
-        example: qui
+        example: et
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      org_id: incidunt
-      user_id: qui
+      org_id: qui
+      user_id: et
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1431,7 +1403,7 @@ endpoints:
         name: limit
         description: 'Must be at least 1.'
         required: true
-        example: 12
+        example: 63
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -1440,14 +1412,14 @@ endpoints:
         name: page
         description: 'Must be at least 1.'
         required: true
-        example: 3
+        example: 34
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      limit: 12
-      page: 3
+      limit: 63
+      page: 34
     fileParameters: []
     responses:
       -
@@ -1490,15 +1462,64 @@ endpoints:
         name: content
         description: ''
         required: true
-        example: nemo
+        example: sit
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      content: nemo
+      content: sit
     fileParameters: []
     responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/testimonials/{testimonial_id}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Display the specified resource.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      testimonial_id:
+        name: testimonial_id
+        description: 'The ID of the testimonial.'
+        required: true
+        example: accusantium
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      testimonial_id: accusantium
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
     responseFields: []
     auth: []
     controller: null
