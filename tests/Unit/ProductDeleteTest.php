@@ -1,8 +1,10 @@
 <?php
+
 namespace Tests\Unit;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Log;
 
 
 class ProductDeleteTest extends TestCase
