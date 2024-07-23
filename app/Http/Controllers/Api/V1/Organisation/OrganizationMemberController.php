@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api\V1\Organisation;
 
 use App\Http\Controllers\Controller;
-
 use App\Models\OrganisationUser;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -41,6 +40,7 @@ class OrganizationMemberController extends Controller
         $page = $request->query('page', 1);
         $pageSize = $request->query('page_size', 10);
 
+        // Fetch members of the organization
         $members = OrganisationUser::where('org_id', $organizationId)
             ->join('users', 'organisation_user.user_id', '=', 'users.id')
             ->paginate($pageSize, ['users.id as userId', 'users.name as firstName', 'users.email', 'users.phone'], 'page', $page);
