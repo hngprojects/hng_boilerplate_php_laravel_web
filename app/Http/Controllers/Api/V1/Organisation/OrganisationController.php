@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Api\V1\Organisation;
 
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
+
+
+use Illuminate\Support\Facades\Auth;
+
 use App\Http\Requests\StoreOrganisationRequest;
 use App\Models\Organisation;
 use Illuminate\Support\Str;
@@ -11,6 +15,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Resources\OrganisationResource;
+
 
 class OrganisationController extends Controller
 {
@@ -113,6 +118,35 @@ class OrganisationController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+
+        if (!preg_match('/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/', $id)) {
+            return response()->json([
+                "message" => "Failed to delete organization",
+                "error" => "Invalid organization ID format",
+                "status_code" => 400
+            ]);
+        }
+        $org = Organisation::find($id);
+        if (!$org) {
+            return response()->json([
+                "message" => "Failed to delete organization",
+                "error" => "Invalid organization ID",
+                "status_code" => 404
+            ]);
+        }
+
+
+        $user = Auth::user();
+        if (!$user || !$org->users->contains($user->id)) {
+            return response()->json([
+                "message" => "Failed to delete organization",
+                "error" => "User not authorized to delete this organization",
+                "status_code" => 401
+            ], 401);
+        }
+
+        $org->delete();
+
+        return response()->noContent();
     }
 }

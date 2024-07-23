@@ -16,11 +16,17 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->text('description');
+
+
             $table->string('industry');
             $table->string('type')->nullable();
             $table->string('country');
             $table->string('address');
             $table->string('state');
+
+
+            $table->softDeletes();
+
             $table->timestamps();
         });
     }
