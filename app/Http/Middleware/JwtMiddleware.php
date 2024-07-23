@@ -13,6 +13,7 @@ use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
 use Illuminate\Support\Facades\Log;
 
+
 class JwtMiddleware
 {
     /**
@@ -46,8 +47,8 @@ class JwtMiddleware
         }
 
         $request->auth = $user;
-       
-       
+
+
         return $next($request);
     }
 }

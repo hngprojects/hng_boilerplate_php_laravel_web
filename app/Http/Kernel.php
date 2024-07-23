@@ -46,6 +46,10 @@ class Kernel extends HttpKernel
         ],
     ];
 
+    protected $routeMiddleware = [
+        // ...
+        'jwt.auth' => \App\Http\Middleware\JwtMiddleware::class,
+    ];
     /**
      * The application's middleware aliases.
      *

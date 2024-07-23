@@ -4,9 +4,15 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\GetJobRequest;
+use App\Http\Resources\JobResource;
+use App\Models\Job;
+use App\Traits\ApiResponses;
+use Illuminate\Http\JsonResponse;
 
 class JobController extends Controller
 {
+    use ApiResponses;
     /**
      * Display a listing of the resource.
      */
@@ -27,9 +33,12 @@ class JobController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(GetJobRequest $request, $id): JsonResponse
     {
-        //
+        $user = $request->auth;
+        $job = Job::findOrFail($id);
+
+        return $this->successResponse(new JobResource($job));
     }
 
     /**
