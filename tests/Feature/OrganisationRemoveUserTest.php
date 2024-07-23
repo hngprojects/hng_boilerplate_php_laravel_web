@@ -20,7 +20,7 @@ class OrganisationRemoveUserTest extends TestCase
     public function it_test_unauthenticated_user_cannot_remove_user()
     {
         $user = User::factory()->create();
-        $response = $this->delete('/api/v1/organizations/1/users/1');
+        $response = $this->delete('/api/v1/organisations/1/users/1');
         $response->assertStatus(401)
                  ->assertJson([
                      'status' => 'Unauthorized',
@@ -39,7 +39,7 @@ class OrganisationRemoveUserTest extends TestCase
         $token = JWTAuth::fromUser($anotherUser);
 
         $response = $this->withHeaders(['Authorization' => "Bearer $token"])
-                        ->deleteJson("/api/v1/organizations/{$organization->org_id}/users/{$user->id}");
+                        ->deleteJson("/api/v1/organisations/{$organization->org_id}/users/{$user->id}");
 
         $response->assertStatus(403)
                 ->assertJson([
@@ -62,7 +62,7 @@ class OrganisationRemoveUserTest extends TestCase
         $token = JWTAuth::fromUser($superadmin);
 
         $response = $this->withHeaders(['Authorization' => "Bearer $token"])
-                         ->deleteJson("/api/v1/organizations/{$org->org_id}/users/{$user->id}");
+                         ->deleteJson("/api/v1/organisations/{$org->org_id}/users/{$user->id}");
 
         $response->assertStatus(200)
                  ->assertJson([
@@ -90,7 +90,7 @@ class OrganisationRemoveUserTest extends TestCase
         $token = JWTAuth::fromUser($superadmin);
 
         $response = $this->withHeaders(['Authorization' => "Bearer $token"])
-                        ->deleteJson("/api/v1/organizations/{$org->org_id}/users/{$user->id}");
+                        ->deleteJson("/api/v1/organisations/{$org->org_id}/users/{$user->id}");
 
         $response->assertStatus(200)
                 ->assertJson([
@@ -124,7 +124,7 @@ class OrganisationRemoveUserTest extends TestCase
         $token = JWTAuth::fromUser($admin);
 
         $response = $this->withHeaders(['Authorization' => "Bearer $token"])
-                        ->deleteJson("/api/v1/organizations/{$org->org_id}/users/{$user->id}");
+                        ->deleteJson("/api/v1/organisations/{$org->org_id}/users/{$user->id}");
 
         $response->assertStatus(200)
                 ->assertJson([
@@ -146,8 +146,8 @@ class OrganisationRemoveUserTest extends TestCase
         $token = JWTAuth::fromUser($orgAdmin);
 
         $response = $this->withHeaders(['Authorization' => "Bearer $token"])
-                        ->deleteJson("/api/v1/organizations/{$organization->org_id}/users/9c945f25-9870-477b-acbd-7633c9996855");
-        
+                        ->deleteJson("/api/v1/organisations/{$organization->org_id}/users/9c945f25-9870-477b-acbd-7633c9996855");
+
         $response->assertStatus(404)
                 ->assertJson([
                     'status' => 'forbidden',
@@ -155,5 +155,5 @@ class OrganisationRemoveUserTest extends TestCase
                     'status_code' => 404,
                 ]);
     }
-    
+
 }
