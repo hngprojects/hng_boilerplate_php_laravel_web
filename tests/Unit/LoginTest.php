@@ -95,4 +95,39 @@ class LoginTest extends TestCase
         $response->assertStatus(422)
                  ->assertJsonValidationErrors(['password']);
     }
+
+    /**
+     * Test login throttling.
+     *
+     * @return void
+     */
+    public function test_login_throttling()
+    {
+        // Create a test user
+        $user = User::create([
+            'name' => 'Tiamiyu Rasheed',
+            'email' => 'test@gmail.com',
+            'password' => Hash::make('password123'),
+        ]);
+
+        // Simulate two failed login attempts
+        for ($i = 0; $i < 2; $i++) {
+            $this->postJson('/api/v1/auth/login', [
+                'email' => 'test@gmail.com',
+                'password' => 'wrongpassword',
+            ]);
+        }
+
+        // The 3rd attempt should trigger throttling
+        $response = $this->postJson('/api/v1/auth/login', [
+            'email' => 'test@gmail.com',
+            'password' => 'wrongpassword',
+        ]);
+
+        // Assert throttling response
+        $response->assertStatus(413)
+            ->assertJson([
+                'message' => 'Too many login attempts. Please try again in 1 hour.',
+            ]);
+    }
 }
