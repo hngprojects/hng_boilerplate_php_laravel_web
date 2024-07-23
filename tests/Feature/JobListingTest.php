@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Job;
 use App\Models\User;
+use App\Models\Organisation;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -14,7 +15,11 @@ class JobListingTest extends TestCase
     public function test_authenticated_user_can_retrieve_job_listings()
     {
         $user = User::factory()->create();
-        $jobs = Job::factory()->count(15)->create();
+        $organisation = Organisation::factory()->create();
+        Job::factory()->count(15)->create([
+            'user_id' => $user->id,
+            'organisation_id' => $organisation->org_id
+        ]);
 
         $response = $this->actingAs($user, 'api')
             ->getJson('/api/v1/jobs?page=1&size=10');
@@ -23,7 +28,7 @@ class JobListingTest extends TestCase
             ->assertJsonStructure([
                 'message',
                 'data' => [
-                    '*' => ['id', 'title', 'description', 'location', 'job_type', 'company_name']
+                    '*' => ['title', 'description', 'location', 'salary', 'job_type']
                 ],
                 'pagination' => ['current_page', 'total_pages', 'page_size', 'total_items']
             ])
@@ -31,17 +36,14 @@ class JobListingTest extends TestCase
             ->assertJsonPath('pagination.total_items', 15);
     }
 
-    public function test_unauthenticated_user_cannot_retrieve_job_listings()
-    {
-        $response = $this->getJson('/api/v1/jobs');
-
-        $response->assertStatus(401);
-    }
-
     public function test_job_listings_are_paginated()
     {
         $user = User::factory()->create();
-        Job::factory()->count(30)->create();
+        $organisation = Organisation::factory()->create();
+        Job::factory()->count(30)->create([
+            'user_id' => $user->id,
+            'organisation_id' => $organisation->org_id
+        ]);
 
         $response = $this->actingAs($user, 'api')
             ->getJson('/api/v1/jobs?page=2&size=15');

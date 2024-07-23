@@ -10,7 +10,7 @@ class Job extends Model
 {
     use HasFactory, HasUuids;
 
-    protected $fillable = ['title', 'description', 'location', 'job_type', 'company_name'];
+    protected $fillable = ['title', 'description', 'location', 'salary', 'job_type', 'company_name'];
 
     public function users()
     {

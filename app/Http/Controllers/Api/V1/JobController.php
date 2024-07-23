@@ -17,7 +17,7 @@ class JobController extends Controller
             $page = $request->input('page', 1);
             $size = $request->input('size', 10);
     
-            $jobs = Job::paginate($size, ['*'], 'page', $page);
+            $jobs = Job::paginate($size, ['title', 'description', 'location', 'salary', 'job_type'], 'page', $page);
     
             return response()->json([
                 'message' => 'Job listings retrieved successfully.',
