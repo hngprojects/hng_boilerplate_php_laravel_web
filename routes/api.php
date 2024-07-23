@@ -22,6 +22,9 @@ use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Middleware\LoginAttempts;
 
 use App\Http\Controllers\Api\V1\JobController;
+
+
+use App\Http\Controllers\InvitationAcceptanceController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -49,16 +52,21 @@ Route::prefix('v1')->group(function () {
     Route::middleware('throttle:10,1')->get('/topics/search', [ArticleController::class, 'search']);
 
 
-    Route::middleware('auth:api')->group(function() {
+    Route::middleware('auth:api')->group(function () {
         Route::post('/products', [ProductController::class, 'store']);
     });
-      
+
     Route::middleware('throttle:10,1')->get('/help-center/topics/search', [ArticleController::class, 'search']);
     Route::post('/contact', [ContactController::class, 'sendInquiry']);
 
     Route::get('/blogs/latest', [BlogController::class, 'latest']);
 
     Route::post('/squeeze', [SqueezeController::class, 'store']);
+
+    Route::get('/invite/accept', [InvitationAcceptanceController::class, 'acceptInvitation']);
+    Route::post('/invite', [InvitationAcceptanceController::class, 'acceptInvitationPost']);
+
+
     Route::middleware('auth:api')->group(function () {
         Route::apiResource('/features', FeatureController::class);
         Route::apiResource('/plans', SubscriptionController::class);
