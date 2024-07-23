@@ -4,6 +4,8 @@ Thank you for considering contributing to [App Name]! We welcome all types of co
 
 ## Contribution Rules
 
+name Nwanozie Promise 
+
 1. **Follow the Code of Conduct:** Please read and adhere to the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 2. **Style Guide:** Ensure your code follows the project's coding style. This includes proper indentation, variable naming conventions, and inline comments where necessary.
