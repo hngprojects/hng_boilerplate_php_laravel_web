@@ -63,6 +63,8 @@ Route::prefix('v1')->group(function () {
 
     Route::post('/squeeze', [SqueezeController::class, 'store']);
 
+
+    Route::post('/invitations/generate', [InvitationAcceptanceController::class, 'generateInvitation']);
     Route::get('/invite/accept', [InvitationAcceptanceController::class, 'acceptInvitation']);
     Route::post('/invite', [InvitationAcceptanceController::class, 'acceptInvitationPost']);
 
