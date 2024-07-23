@@ -28,7 +28,7 @@ class JobListingTest extends TestCase
             ->assertJsonStructure([
                 'message',
                 'data' => [
-                    '*' => ['title', 'description', 'location', 'salary', 'job_type']
+                    '*' => ['id', 'title', 'description', 'location', 'salary', 'job_type']
                 ],
                 'pagination' => ['current_page', 'total_pages', 'page_size', 'total_items']
             ])
