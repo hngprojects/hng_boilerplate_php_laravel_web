@@ -47,10 +47,11 @@ Route::prefix('v1')->group(function () {
     Route::middleware('throttle:10,1')->get('/topics/search', [ArticleController::class, 'search']);
 
 
-    Route::middleware('auth:api')->group(function() {
+    Route::middleware('auth:api')->group(function () {
         Route::post('/products', [ProductController::class, 'store']);
+        Route::put('/products/{id}', [ProductController::class, 'update']);
     });
-      
+
     Route::middleware('throttle:10,1')->get('/help-center/topics/search', [ArticleController::class, 'search']);
     Route::post('/contact', [ContactController::class, 'sendInquiry']);
 
@@ -75,7 +76,4 @@ Route::prefix('v1')->group(function () {
         Route::post('/testimonials', [TestimonialController::class, 'store']);
         Route::get('/testimonials/{testimonial_id}', [TestimonialController::class, 'show']);
     });
-
 });
-
-
