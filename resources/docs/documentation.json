@@ -1,0 +1,340 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Laravel Team Api Documentation",
+    "description": "Api Documentation for Laravel Team",
+    "contact": {
+      "email": "hng@a.com"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://virtserver.swaggerhub.com/bhimbho/SubPlanFeature/1.0.0",
+      "description": "Subscription Plan and Feature"
+    }
+  ],
+  "tags": [
+    {
+      "name": "features",
+      "description": "feature"
+    },
+    {
+      "name": "plans",
+      "description": "Plans"
+    }
+  ],
+  "paths": {
+    "/features": {
+      "post": {
+        "tags": [
+          "features"
+        ],
+        "summary": "creates a feature for reuse",
+        "description": "creates a feature for reuse",
+        "operationId": "addFeature",
+        "requestBody": {
+          "description": "Inventory item to add",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeaturesInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "feature created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Features"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "feature creation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_422"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/plans": {
+      "post": {
+        "tags": [
+          "plans"
+        ],
+        "summary": "creates a subscription plan",
+        "description": "Adds an item to the system",
+        "operationId": "addplan",
+        "requestBody": {
+          "description": "Inventory item to add",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubscriptionPlanInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "subscription plan created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubscriptionPlan"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "creation of subscription plan failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400_1"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_422"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "SubscriptionPlan": {
+        "required": [
+          "description",
+          "duration",
+          "name",
+          "price"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+          },
+          "name": {
+            "type": "string",
+            "example": "basic"
+          },
+          "price": {
+            "type": "integer",
+            "example": 1000
+          },
+          "duration": {
+            "type": "string",
+            "example": "monthly"
+          },
+          "description": {
+            "type": "string",
+            "example": "this plan is valid for one month with extra 3days"
+          },
+          "features": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Features"
+            }
+          }
+        }
+      },
+      "Features": {
+        "required": [
+          "name",
+          "status"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "2TB space"
+          },
+          "description": {
+            "type": "string",
+            "format": "string",
+            "example": "xeoo"
+          },
+          "status": {
+            "type": "integer",
+            "description": "Status of the feature (can only be 1 or 0)",
+            "example": 1
+          },
+          "status_text": {
+            "type": "string",
+            "description": "Status text of the feature (can only be active or inactive)",
+            "example": "active"
+          }
+        }
+      },
+      "SubscriptionPlanInput": {
+        "required": [
+          "description",
+          "duration",
+          "name",
+          "price"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+          },
+          "name": {
+            "type": "string",
+            "example": "basic"
+          },
+          "price": {
+            "type": "integer",
+            "example": 1000
+          },
+          "duration": {
+            "type": "string",
+            "example": "monthly"
+          },
+          "description": {
+            "type": "string",
+            "example": "this plan is valid for one month with extra 3days"
+          },
+          "features": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SubscriptionPlanInput_features"
+            }
+          }
+        }
+      },
+      "FeaturesInput": {
+        "required": [
+          "name",
+          "status"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "2TB space"
+          },
+          "description": {
+            "type": "string",
+            "format": "string",
+            "example": "xeoo"
+          }
+        }
+      },
+      "inline_response_401": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Unauthenticated"
+          }
+        }
+      },
+      "inline_response_422": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "one or more validation errors"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/inline_response_422_errors"
+            }
+          }
+        }
+      },
+      "inline_response_400": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "example": "feature creation failed"
+          }
+        }
+      },
+      "inline_response_400_1": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "example": "creation of subscription plan failed"
+          }
+        }
+      },
+      "SubscriptionPlanInput_features": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "example": "1 for active 0 for inactive"
+          }
+        }
+      },
+      "inline_response_422_errors": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "name field required"
+          }
+        }
+      }
+    }
+  }
+}
