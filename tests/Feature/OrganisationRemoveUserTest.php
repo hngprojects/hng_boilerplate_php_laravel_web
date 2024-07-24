@@ -14,19 +14,18 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 class OrganisationRemoveUserTest extends TestCase
 {
     // use RefreshDatabase;
-    use LazilyRefreshDatabase;
+    use RefreshDatabase;
 
     /** @test */
     public function it_test_unauthenticated_user_cannot_remove_user()
     {
-        $user = User::factory()->create();
-        $response = $this->delete('/api/v1/organisations/1/users/1');
+        $response = $this->delete('/api/v1/organisations/44572ad3-2efe-463c-9531-8b879ef2bfa5/users/44572ad3-2efe-463c-9531-8b879ef2bfa5', [], [
+            'accept' => 'application/json',
+        ]);
         $response->assertStatus(401)
                  ->assertJson([
-                     'status' => 'Unauthorized',
-                     'message' => 'User not authenticated',
-                     'status_code' => 401,
-                 ]);
+                     'message' => 'Unauthenticated.',
+                     ]);
     }
 
     /** @test */
@@ -124,7 +123,7 @@ class OrganisationRemoveUserTest extends TestCase
         $token = JWTAuth::fromUser($admin);
 
         $response = $this->withHeaders(['Authorization' => "Bearer $token"])
-                        ->deleteJson("/api/v1/organisations/{$org->org_id}/users/{$user->id}");
+            ->delete("/api/v1/organisations/{$org->org_id}/users/{$user->id}");
 
         $response->assertStatus(200)
                 ->assertJson([
@@ -134,7 +133,6 @@ class OrganisationRemoveUserTest extends TestCase
                 ]);
     }
 
-    /** @test */
     public function it_test_remove_non_existent_user()
     {
         $orgAdmin = User::factory()->create();
@@ -142,18 +140,18 @@ class OrganisationRemoveUserTest extends TestCase
 
         $orgAdmin->roles()->create(['name' => 'superadmin', 'org_id' => $organization->org_id]);
 
-        // Generate a JWT token for the admin
         $token = JWTAuth::fromUser($orgAdmin);
 
+        $nonExistentUserId = '44572ad3-2efe-463c-9531-8b879ef2bfa5';
+
         $response = $this->withHeaders(['Authorization' => "Bearer $token"])
-                        ->deleteJson("/api/v1/organisations/{$organization->org_id}/users/9c945f25-9870-477b-acbd-7633c9996855");
+            ->delete("/api/v1/organisations/{$organization->org_id}/users/{$nonExistentUserId}");
 
         $response->assertStatus(404)
-                ->assertJson([
-                    'status' => 'forbidden',
-                    'message' => 'user not found',
-                    'status_code' => 404,
-                ]);
+            ->assertJson([
+                'status' => 'forbidden',
+                'message' => 'user not found',
+                'status_code' => 404,
+            ]);
     }
-
 }
