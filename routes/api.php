@@ -67,6 +67,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/organisations', [OrganisationController::class, 'index']);
         Route::delete('/organisations/{org_id}/users/{user_id}', [OrganisationController::class, 'removeUser']);
 
+
         // Testimonials
         Route::post('/testimonials', [TestimonialController::class, 'store']);
         Route::get('/testimonials/{testimonial_id}', [TestimonialController::class, 'show']);
