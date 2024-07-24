@@ -71,7 +71,7 @@ jobs:
           cp .env.example .env
           echo "APP_KEY=${{ secrets.APP_KEY }}" >> .env
           echo "DB_CONNECTION=pgsql" >> .env
-          echo "DB_HOST=localhost" >> .env
+          echo "DB_HOST=pgsql" >> .env
           echo "DB_PORT=5432" >> .env
           echo "DB_DATABASE=testing" >> .env
           echo "DB_USERNAME=sail" >> .env
