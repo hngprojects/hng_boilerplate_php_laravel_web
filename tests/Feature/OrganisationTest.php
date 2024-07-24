@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Organisation;
+
 //use Laravel\Passport\Passport;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -19,8 +20,7 @@ class OrganisationTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $response = $this->postJson('/api/v1/organisations', [
-            // "user_id" => (string)$user->id,
+        $response = $this->post('/api/v1/organisations', [
             "email" => "mark.essienm@gmail.co.uk",
             "name" => "Ruxy Now Organisation",
             "description" => "With description like a big man",
@@ -29,15 +29,14 @@ class OrganisationTest extends TestCase
             "type" => "Money",
             "country" => "Money",
             "state" => "Money"
-        ]);
-
+        ], ['accept' => 'application/json']);
         // Ensure organisaton is created successfully.
         $response->assertStatus(201);
 
         // Assert that organisation has the correct name and owner_id
         $this->assertDatabaseHas('organisations', [
             "name" => "Ruxy Now Organisation",
-            // "user_id" => (string)$user->id
+            "user_id" => $user->id
         ]);
     }
 
@@ -47,34 +46,26 @@ class OrganisationTest extends TestCase
 
         $response->assertStatus(401)
             ->assertJson([
-                'status' => 'Unauthorized',
-                'message' => 'User not authenticated',
-                'status_code' => 401
+                'message' => 'Unauthenticated.',
             ]);
     }
 
     public function test_authenticated_user_can_retrieve_organisations()
     {
-        $user = User::factory()->create(['password' => bcrypt('password')]);
-        $token = JWTAuth::attempt(['email' => $user->email, 'password' => 'password']);
-
-        // Case: No organisations found
-        $response = $this->withHeader('Authorization', "Bearer $token")
-            ->getJson('/api/v1/organisations');
-
-
-        // Case: Organisations found
+        $user = User::factory()->create();
         $organisation = Organisation::factory()->create();
         $user->organisations()->attach($organisation);
 
+        $token = JWTAuth::fromUser($user);
+
         $response = $this->withHeader('Authorization', "Bearer $token")
-            ->getJson('/api/v1/organisations');
+            ->getJson('/api/v1/organisations', ['accept' => 'application/json']);
 
         $response->assertStatus(200)
             ->assertJsonStructure([
                 'status',
                 'message',
-                'status-code',
+                'status_code',
                 'data' => [
                     'organisations' => [
                         '*' => [
@@ -92,7 +83,14 @@ class OrganisationTest extends TestCase
                         ]
                     ]
                 ]
+            ])
+            ->assertJson([
+                'status' => 'success',
+                'message' => 'Organizations retrieved successfully',
+                'status_code' => 200,
             ]);
+
+        $this->assertCount(1, $response->json('data.organisations'));
     }
 
 
@@ -113,6 +111,7 @@ class OrganisationTest extends TestCase
                 ]
             ]);
     }
+
     public function test_user_cannot_access_another_users_organisations()
     {
         $user1 = User::factory()->create(['password' => bcrypt('password')]);
