@@ -88,14 +88,7 @@ Route::prefix('v1')->group(function () {
         Route::delete('/organisations/{org_id}/users/{user_id}', [OrganisationController::class, 'removeUser']);
         Route::get('/jobs', [JobController::class, 'index']);
 
-
         Route::get('/user/export/{format}', [ExportUserController::class, 'export']);
-    });
-
-    Route::middleware('auth.jwt')->group(function () {
-
-        // Jobs
-        Route::get('/jobs', [JobController::class, 'index']);
     });
 
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
