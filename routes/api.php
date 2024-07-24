@@ -78,14 +78,11 @@ Route::prefix('v1')->group(function () {
         // Organisations
         Route::post('/organisations', [OrganisationController::class, 'store']);
         Route::get('/organisations', [OrganisationController::class, 'index']);
-        Route::delete('/organisations/{org_id}/users/{user_id}', [OrganisationRemoveUserController::class, 'removeUser']);
-
-        Route::delete('/organizations/{org_id}', [OrganisationController::class, 'destroy']);
-    });
-    Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
-
+        Route::put('/organisations/{org_id}', [OrganisationController::class, 'update']);
         Route::delete('/organisations/{org_id}/users/{user_id}', [OrganisationController::class, 'removeUser']);
+
         Route::delete('/organizations/{org_id}', [OrganisationController::class, 'destroy']);
+
 
         // Testimonials
         Route::post('/testimonials', [TestimonialController::class, 'store']);
@@ -93,10 +90,8 @@ Route::prefix('v1')->group(function () {
 
         // Jobs
         Route::get('/jobs', [JobController::class, 'index']);
-        
         Route::get('/user/export/{format}', [ExportUserController::class, 'export']);
     });
-
 
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
 });
