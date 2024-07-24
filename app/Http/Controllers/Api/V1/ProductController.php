@@ -31,7 +31,6 @@ class ProductController extends Controller
             // Calculate offset
             $offset = ($page - 1) * $limit;
 
-            // Retrieve products with pagination
             $products = Product::select('name', 'price')
                 ->offset($offset)
                 ->limit($limit)
