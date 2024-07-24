@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Preference;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class UpdatePreferenceRequest extends FormRequest
+class DeletePreferenceRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,21 +22,8 @@ class UpdatePreferenceRequest extends FormRequest
      */
     public function rules(): array
     {
-        $id = $this->route('id');
-        $user = Auth::user();
-
         return [
-            'name' => [
-                'required',
-                'string',
-                'unique:preferences,name,' . $id,
-                function ($attribute, $value, $fail) use ($user) {
-                    if ($user->preferences()->where('name', $value)->doesntExist()) {
-                        $fail("$attribute does not exists.");
-                    }
-                },
-            ],
-            'value' => 'required|string',
+            //
         ];
     }
 

@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Requests\DeletePreferenceRequest;
-use App\Http\Requests\StorePreferenceRequest;
-use App\Http\Requests\UpdatePreferenceRequest;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Preference\DeletePreferenceRequest;
+use App\Http\Requests\Preference\StorePreferenceRequest;
+use App\Http\Requests\Preference\UpdatePreferenceRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
