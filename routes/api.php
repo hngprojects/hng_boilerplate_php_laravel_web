@@ -26,7 +26,6 @@ use App\Http\Controllers\Api\V1\JobController;
 use App\Http\Controllers\Api\V1\BlogSearchController;
 use App\Http\Controllers\Api\V1\User\ExportUserController;
 
-
 use App\Http\Controllers\Api\V1\User\AccountController;
 
 use App\Http\Controllers\Api\V1\Organisation\OrganizationMemberController;
@@ -34,6 +33,8 @@ use App\Http\Controllers\Api\V1\Organisation\OrganizationMemberController;
 use App\Http\Controllers\InvitationAcceptanceController;
 
 
+
+use App\Http\Controllers\Api\V1\WaitListController;
 
 /*
 |--------------------------------------------------------------------------
@@ -120,6 +121,8 @@ Route::prefix('v1')->group(function () {
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
     Route::delete('/blogs/{id}', [BlogController::class, 'destroy'])->middleware(['auth:api', 'admin']);
     Route::middleware(['auth:api', 'admin'])->get('/content/about', [AboutPageController::class, 'show']);
+
+    Route::post('/waitlist', [WaitListController::class, 'store']);
 });
 
 
