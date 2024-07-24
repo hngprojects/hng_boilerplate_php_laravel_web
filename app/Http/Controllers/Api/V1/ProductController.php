@@ -36,6 +36,9 @@ class ProductController extends Controller
                 'product_id' => $product->product_id,
                 'name' => $product->name,
                 'description' => $product->description,
+                 'price' => $product->price,
+                 'tags' => $product->tags,
+                 'imageUrl' => $product->imageUrl
             ]
         ], 201);
 
