@@ -50,6 +50,7 @@ Route::prefix('v1')->group(function () {
 
 
     Route::middleware('auth:api')->group(function() {
+        Route::get('/products', [ProductController::class, 'index']);
         Route::post('/products', [ProductController::class, 'store']);
         Route::delete('/products/{productId}', [ProductController::class, 'destroy']);
     });
