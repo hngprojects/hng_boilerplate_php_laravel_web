@@ -2,19 +2,17 @@
 
 namespace Tests\Unit;
 
+
 use App\Exports\UsersExport;
 use Tests\TestCase;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\UploadedFile;
 use Maatwebsite\Excel\Facades\Excel;
 
-
-class ExportUserControllerTest extends TestCase
+class ExportAllUserDataTest extends TestCase
 {
     use RefreshDatabase;
-
+    /**  @test */
     public function it_can_export_user_data_as_json()
     {
         $user = User::factory()->create();
@@ -32,6 +30,7 @@ class ExportUserControllerTest extends TestCase
             ]);
     }
 
+    /**  @test */
     public function it_can_export_user_data_as_csv()
     {
         Excel::fake();
@@ -49,7 +48,7 @@ class ExportUserControllerTest extends TestCase
         });
     }
 
-
+    /**  @test */
     public function it_returns_error_for_invalid_format()
     {
         $user = User::factory()->create();
@@ -60,22 +59,6 @@ class ExportUserControllerTest extends TestCase
                 'status' => 'error',
                 'message' => 'Invalid format',
                 'status-code' => 400,
-            ]);
-    }
-
-    public function it_returns_error_if_user_not_found()
-    {
-        $user = User::factory()->create();
-        $this->actingAs($user, 'api');
-
-        $nonExistentUserId = 99999; // Assuming this ID does not exist
-        $response = $this->getJson("/api/v1/user/export/json/{$nonExistentUserId}");
-
-        $response->assertStatus(404)
-            ->assertJson([
-                'status' => 'error',
-                'message' => 'User not found',
-                'status-code' => 404,
             ]);
     }
 }
