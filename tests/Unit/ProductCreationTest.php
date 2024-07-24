@@ -34,12 +34,11 @@ class ProductCreationTest extends TestCase
 
         // Create a product as the authenticated user
 
-        $name = 'Test Product',
+        $name = 'Test Product';
         $product = [
-            'name' => $name',
+            'name' => $name,
             'description' => 'Test description',
             'price' => 100.00,
-            'slug' => Str::slug($name),
             'tags' => 'tag1, tag2',
             'imageUrl' => 'https://lorempixel.com/640/480'
         ];
@@ -52,10 +51,12 @@ class ProductCreationTest extends TestCase
         $createProduct->assertStatus(201);
 
         // // Assert that the product was created in the database
+
+        $name = 'Test Product';
         $this->assertDatabaseHas('products', [
             'name' => $name,
-            'description' => 'Test description'
-'price' => 100.00,
+            'description' => 'Test description',
+            'price' => 100.00,
             'slug' => Str::slug($name),
             'tags' => 'tag1, tag2',
             'imageUrl' => 'https://lorempixel.com/640/480'
