@@ -1,6 +1,7 @@
 <?php
 namespace Tests\Unit;
 
+use App\Models\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -32,14 +33,15 @@ class ProductCreationTest extends TestCase
         $this->assertNotEmpty($token);
 
         // Create a product as the authenticated user
+        $this->actingAs(User::factory()->create());
         $product = [
             'name' => 'Test Product',
-            'description' => 'Test description'
+            'description' => 'Test description',
+            'price' => 10000,
+            'tags' => 'Test, Product',
         ];
 
-        $createProduct = $this->postJson('/api/v1/products', $product, [
-            'Authorization' => "Bearer $token"
-        ]);
+        $createProduct = $this->postJson('/api/v1/products', $product);
 
         // // Check the status code
         $createProduct->assertStatus(201);
