@@ -25,6 +25,8 @@ use App\Http\Middleware\LoginAttempts;
 use App\Http\Controllers\Api\V1\JobController;
 use App\Http\Controllers\Api\V1\BlogSearchController;
 
+use App\Http\Controllers\Api\V1\User\ExportUserController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -53,12 +55,12 @@ Route::prefix('v1')->group(function () {
     Route::middleware('throttle:10,1')->get('/topics/search', [ArticleController::class, 'search']);
 
 
-    Route::middleware('auth:api')->group(function() {
+    Route::middleware('auth:api')->group(function () {
         Route::get('/products', [ProductController::class, 'index']);
         Route::post('/products', [ProductController::class, 'store']);
         Route::delete('/products/{productId}', [ProductController::class, 'destroy']);
     });
-      
+
     Route::middleware('throttle:10,1')->get('/help-center/topics/search', [ArticleController::class, 'search']);
     Route::post('/contact', [ContactController::class, 'sendInquiry']);
 
@@ -89,6 +91,10 @@ Route::prefix('v1')->group(function () {
 
         // Jobs
         Route::get('/jobs', [JobController::class, 'index']);
+<<<<<<< HEAD
         
+=======
+        Route::get('/user/export/{format}', [ExportUserController::class, 'export']);
+>>>>>>> adb3c2189d0ff32a52feeb9ed73a44abfdcb57d0
     });
    

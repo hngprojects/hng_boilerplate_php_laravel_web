@@ -82,7 +82,6 @@ class TestimonialTest extends TestCase
             'status' => 'Unauthorized',
             'message' => 'Unauthorized. Please log in.',
             'status_code' => 401
-            // 'message' => 'Unauthenticated..',
         ]);
     }
 
@@ -116,10 +115,7 @@ class TestimonialTest extends TestCase
 
         $token = JWTAuth::attempt(['email' => $user->email, 'password' => 'password']);
 
-        $nonExistingTestimonialId = 99999;
-
-
-        $response = $this->getJson('/api/v1/testimonials/{$nonExistingTestimonialId}', [
+        $response = $this->getJson('/api/v1/testimonials/99999', [
             'Authorization' => 'Bearer ' . $token,
         ]);
 
