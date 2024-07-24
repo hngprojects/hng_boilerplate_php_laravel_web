@@ -58,7 +58,7 @@ Route::prefix('v1')->group(function () {
         Route::post('/products', [ProductController::class, 'store']);
         Route::delete('/products/{productId}', [ProductController::class, 'destroy']);
     });
-      
+
     Route::middleware('throttle:10,1')->get('/help-center/topics/search', [ArticleController::class, 'search']);
     Route::post('/contact', [ContactController::class, 'sendInquiry']);
 
@@ -67,24 +67,27 @@ Route::prefix('v1')->group(function () {
 
     Route::post('/squeeze', [SqueezeController::class, 'store']);
     Route::middleware('auth:api')->group(function () {
-        // Products
-        Route::post('/products', [ProductController::class, 'store']);
 
         // Subscriptions, Plans and Features
         Route::apiResource('/features', FeatureController::class);
         Route::apiResource('/plans', SubscriptionController::class);
         // Organisations
         Route::post('/organisations', [OrganisationController::class, 'store']);
-        Route::get('/organisations', [OrganisationController::class, 'index']);
-        Route::delete('/organisations/{org_id}/users/{user_id}', [OrganisationController::class, 'removeUser']);
-
+        Route::post('/blogs', [BlogController::class, 'store']);
 
         // Testimonials
         Route::post('/testimonials', [TestimonialController::class, 'store']);
         Route::get('/testimonials/{testimonial_id}', [TestimonialController::class, 'show']);
+        Route::get('/organisations', [OrganisationController::class, 'index']);
+        Route::delete('/organisations/{org_id}/users/{user_id}', [OrganisationController::class, 'removeUser']);
+        Route::get('/jobs', [JobController::class, 'index']);
+
+
+    });
+
+    Route::middleware('auth.jwt')->group(function () {
 
         // Jobs
-        Route::get('/jobs', [JobController::class, 'index']);
     });
 
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
