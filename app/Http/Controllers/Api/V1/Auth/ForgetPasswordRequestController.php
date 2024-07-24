@@ -27,12 +27,12 @@ class ForgetPasswordRequestController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return $this->apiResponse(status: 'Error', message:  $validator->errors(), status_code: 422);
+            return $this->apiResponse(message:  $validator->errors(), status_code: 422);
         }
 
         $user = User::where('email', $request->email)->first();
         if (!$user) {
-            return $this->apiResponse(status: 'Error', message:  'User does not exist', status_code: 400);
+            return $this->apiResponse(message:  'User does not exist', status_code: 400);
         }
 
         // Create a new token
@@ -57,7 +57,7 @@ class ForgetPasswordRequestController extends Controller
 
         $user->sendPasswordResetNotification($url);
 
-        return $this->apiResponse(status: 'Success', message:  'Password reset link sent');
+        return $this->apiResponse(message:  'Password reset link sent');
 
     }
 }

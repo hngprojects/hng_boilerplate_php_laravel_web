@@ -26,7 +26,7 @@ class ResetUserPasswordController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return $this->apiResponse(status: 'Error', message:  $validator->errors(), status_code: 400);
+            return $this->apiResponse(message: $validator->errors(), status_code: 400);
         }
 
         // Check if the token exists in the password_reset_tokens table
@@ -37,20 +37,17 @@ class ResetUserPasswordController extends Controller
 
         // If the token is invalid, return an error
         if (!$passwordReset) {
-            return response()->json(['message' => 'Invalid token'], 400);
+            return $this->apiResponse(message: 'Invalid token', status_code: 400);
         }
 
         // Check if the token has expired (tokens are typically valid for one hour)
         if (Carbon::parse($passwordReset->created_at)->addMinutes(config('auth.passwords.users.expire'))->isPast()) {
-            return response()->json(['message' => 'Token has expired'], 400);
+            return $this->apiResponse(message: 'Token has expired', status_code: 400);
         }
 
         $user = User::where('email', $request->email)->first();
         if (!$user) {
-            return response()->json([
-                'message' => 'User does not exist',
-                'status_code' => 400
-            ], 400);
+            return $this->apiResponse(message: 'User does not exist', status_code: 400);
         }
 
         // Reset the password
@@ -63,10 +60,7 @@ class ResetUserPasswordController extends Controller
             ['email', $request->email],
             ['token', $token],
         ])->delete();
-
-        return response()->json([
-            'message' => 'Password reset successfully',
-            'status_code' => 200
-        ], 200);
+        
+        return $this->apiResponse(message: 'Password reset successfully', status_code: 200);
     }
 }

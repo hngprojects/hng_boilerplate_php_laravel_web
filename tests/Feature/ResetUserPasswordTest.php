@@ -32,13 +32,16 @@ class ResetUserPasswordTest extends TestCase
             ]
         );
 
-        $res = $this->postJson("/api/v1/auth/request-password-request/{$token}", [
+        $response = $this->postJson("/api/v1/auth/request-password-request/{$token}", [
             'email' => $user->email,
             'password' => 'newpassword',
             'password_confirmation' => 'newpassword'
-        ])
-        ->assertStatus(200)
-          ->assertJson(['message' => 'Password reset successfully']);
+        ]);
+        $response->assertStatus(200)
+             ->assertJson([
+                 'message' => 'Password reset successfully',
+                 'status_code' => 200
+             ]);
 
         $this->assertTrue(Hash::check('newpassword', $user->fresh()->password));
         $this->assertDatabaseMissing('password_reset_tokens', [
@@ -91,6 +94,6 @@ class ResetUserPasswordTest extends TestCase
             'password' => 'short',
             'password_confirmation' => 'notmatching'
         ])->assertStatus(400)
-          ->assertJsonStructure(['status', 'message' => ['email', 'password']]);
+          ->assertJsonStructure(['message' => ['email', 'password']]);
     }
 }
