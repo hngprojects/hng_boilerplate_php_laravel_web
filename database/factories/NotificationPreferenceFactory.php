@@ -17,7 +17,10 @@ class NotificationPreferenceFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'user_id' => \App\Models\User::factory(), // Associate with a User
+            'email_notifications' => $this->faker->boolean,
+            'push_notifications' => $this->faker->boolean,
+            'sms_notifications' => $this->faker->boolean,
         ];
     }
 }

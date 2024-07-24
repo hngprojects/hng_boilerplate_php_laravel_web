@@ -2,7 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\LoginAttempts;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\Api\V1\JobController;
 use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Controllers\Api\V1\ArticleController;
 use App\Http\Controllers\Api\V1\ProductController;
@@ -11,17 +13,16 @@ use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\User\UserController;
 use App\Http\Controllers\Api\V1\Admin\BlogController;
+use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Controllers\Api\V1\Admin\CustomerController;
+
 use App\Http\Controllers\Api\V1\Admin\Plan\FeatureController;
+use App\Http\Controllers\Api\V1\NotificationPreferenceController;
 use App\Http\Controllers\Api\V1\Admin\Plan\SubscriptionController;
 use App\Http\Controllers\Api\V1\Testimonial\TestimonialController;
 
 use App\Http\Controllers\Api\V1\Organisation\OrganisationController;
 use App\Http\Controllers\Api\V1\Organisation\OrganisationRemoveUserController;
-use App\Http\Controllers\Api\V1\Auth\LoginController;
-use App\Http\Middleware\LoginAttempts;
-
-use App\Http\Controllers\Api\V1\JobController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -73,6 +74,9 @@ Route::prefix('v1')->group(function () {
 
         // Jobs
         Route::get('/jobs', [JobController::class, 'index']);
+
+        // Notification settings
+        Route::patch('/notification-settings/{user_id}', [NotificationPreferenceController::class, 'update']);
     });
 
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
