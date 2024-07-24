@@ -29,9 +29,9 @@ jobs:
             sudo service postgresql start
 
             # Create database and user
-            sudo -u postgres psql -c "CREATE DATABASE mydatabase;"
-            sudo -u postgres psql -c "CREATE USER myuser WITH ENCRYPTED PASSWORD 'mypassword';"
-            sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE mydatabase TO myuser;"
+            sudo -u postgres psql -c "CREATE DATABASE testing;"
+            sudo -u postgres psql -c "CREATE USER myuser WITH ENCRYPTED PASSWORD 'password';"
+            sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE mydatabase TO sail;"
           else
             echo "PostgreSQL is already installed."
           fi
@@ -73,9 +73,9 @@ jobs:
           echo "DB_CONNECTION=pgsql" >> .env
           echo "DB_HOST=localhost" >> .env
           echo "DB_PORT=5432" >> .env
-          echo "DB_DATABASE=mydatabase" >> .env
-          echo "DB_USERNAME=myuser" >> .env
-          echo "DB_PASSWORD=mypassword" >> .env
+          echo "DB_DATABASE=testing" >> .env
+          echo "DB_USERNAME=sail" >> .env
+          echo "DB_PASSWORD=password" >> .env
 
       - name: Run database migrations
         run: php artisan migrate --force
