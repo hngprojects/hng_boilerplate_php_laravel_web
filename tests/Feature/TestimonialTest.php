@@ -129,7 +129,7 @@ class TestimonialTest extends TestCase
 
     public function testUnauthenticatedUserCannotDeleteTestimonial()
     {
-        $response = $this->deleteJson('/testimonials/1');
+        $response = $this->deleteJson('api/v1/testimonials/1');
 
         $response->assertStatus(401)
                  ->assertJson([
@@ -141,7 +141,7 @@ class TestimonialTest extends TestCase
     {
         $user = User::factory()->create(['role' => 'user']);
 
-        $response = $this->actingAs($user)->deleteJson('/testimonials/1');
+        $response = $this->actingAs($user)->deleteJson('api/v1/testimonials/1');
 
         $response->assertStatus(403)
                  ->assertJson([
@@ -155,7 +155,7 @@ class TestimonialTest extends TestCase
     {
         $admin = User::factory()->create(['role' => 'admin']);
 
-        $response = $this->actingAs($admin)->deleteJson('/testimonials/1');
+        $response = $this->actingAs($admin)->deleteJson('api/v1/testimonials/1');
 
         $response->assertStatus(404)
                  ->assertJson([
@@ -170,7 +170,7 @@ class TestimonialTest extends TestCase
         $admin = User::factory()->create(['role' => 'admin']);
         $testimonial = Testimonial::factory()->create();
 
-        $response = $this->actingAs($admin)->deleteJson("/testimonials/{$testimonial->id}");
+        $response = $this->actingAs($admin)->deleteJson("api/v1/testimonials/{$testimonial->id}");
 
         $response->assertStatus(200)
                  ->assertJson([
