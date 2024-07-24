@@ -110,7 +110,7 @@ Route::prefix('v1')->group(function () {
         // Accounts
         Route::patch('/accounts/disable', [AccountController::class, 'deactivate']);
 
-        // Roles
+        // Roles-{Disabling}
         Route::put('/organisations/{org_id/roles/{role_id}/disable', [RoleController::class, 'disableRole']);
     });
 
