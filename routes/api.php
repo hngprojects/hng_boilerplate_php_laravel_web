@@ -79,5 +79,7 @@ Route::prefix('v1')->group(function () {
 
         // Jobs
         Route::get('/jobs', [JobController::class, 'index']);
+
+        Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
     });
 });
