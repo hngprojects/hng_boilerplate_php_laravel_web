@@ -10,7 +10,7 @@ use App\Exports\UsersExport;
 
 class ExportUserController extends Controller
 {
-    public function export($format, Request $request)
+    public function export($format = 'json', Request $request)
     {
         $user = $request->user()->with(['profile', 'products', 'organisations',])
             ->where('role', 'user')->find($request->user()->id);
