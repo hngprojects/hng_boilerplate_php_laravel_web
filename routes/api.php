@@ -78,7 +78,9 @@ Route::prefix('v1')->group(function () {
         // Organisations
         Route::post('/organisations', [OrganisationController::class, 'store']);
         Route::get('/organisations', [OrganisationController::class, 'index']);
-        Route::delete('/organisations/{org_id}/users/{user_id}', [OrganisationController::class, 'removeUser']);
+        Route::delete('/organisations/{org_id}/users/{user_id}', [OrganisationRemoveUserController::class, 'removeUser']);
+    });
+    Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
 
 
         // Testimonials
@@ -90,5 +92,3 @@ Route::prefix('v1')->group(function () {
         Route::get('/user/export/{format}', [ExportUserController::class, 'export']);
     });
 
-    Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
-});
