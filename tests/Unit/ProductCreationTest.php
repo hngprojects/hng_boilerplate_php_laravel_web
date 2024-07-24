@@ -3,7 +3,8 @@ namespace Tests\Unit;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-
+use Illuminate\Support\Str;
+ 
 class ProductCreationTest extends TestCase
 {
     use RefreshDatabase;
@@ -32,11 +33,13 @@ class ProductCreationTest extends TestCase
         $this->assertNotEmpty($token);
 
         // Create a product as the authenticated user
+
+        $name = 'Test Product',
         $product = [
-            'name' => 'Test Product',
-            'description' => 'Test description' 
+            'name' => $name',
+            'description' => 'Test description',
             'price' => 100.00,
-            'slug' => Str::slug(),
+            'slug' => Str::slug($name),
             'tags' => 'tag1, tag2',
             'imageUrl' => 'https://lorempixel.com/640/480'
         ];
