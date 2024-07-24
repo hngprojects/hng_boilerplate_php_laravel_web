@@ -53,12 +53,6 @@ Route::prefix('v1')->group(function () {
     Route::middleware('throttle:10,1')->get('/topics/search', [ArticleController::class, 'search']);
 
 
-    Route::middleware('auth:api')->group(function() {
-        Route::get('/products', [ProductController::class, 'index']);
-        Route::post('/products', [ProductController::class, 'store']);
-        Route::delete('/products/{productId}', [ProductController::class, 'destroy']);
-    });
-
     Route::middleware('throttle:10,1')->get('/help-center/topics/search', [ArticleController::class, 'search']);
     Route::post('/contact', [ContactController::class, 'sendInquiry']);
 
@@ -68,7 +62,9 @@ Route::prefix('v1')->group(function () {
     Route::post('/squeeze', [SqueezeController::class, 'store']);
     Route::middleware('auth:api')->group(function () {
         // Products
+        Route::get('/products', [ProductController::class, 'index']);
         Route::post('/products', [ProductController::class, 'store']);
+        Route::delete('/products/{productId}', [ProductController::class, 'destroy']);
 
         // Subscriptions, Plans and Features
         Route::apiResource('/features', FeatureController::class);
