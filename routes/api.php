@@ -100,7 +100,6 @@ Route::prefix('v1')->group(function () {
 
         // Jobs
         Route::get('/jobs', [JobController::class, 'index']);
-        Route::get('/user/export/{format}', [ExportUserController::class, 'export']);
     });
 
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
