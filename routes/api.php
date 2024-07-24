@@ -54,6 +54,7 @@ Route::prefix('v1')->group(function () {
 
 
     Route::middleware('auth:api')->group(function() {
+        Route::get('/products', [ProductController::class, 'index']);
         Route::post('/products', [ProductController::class, 'store']);
         Route::delete('/products/{productId}', [ProductController::class, 'destroy']);
     });
@@ -75,7 +76,8 @@ Route::prefix('v1')->group(function () {
         // Organisations
         Route::post('/organisations', [OrganisationController::class, 'store']);
         Route::get('/organisations', [OrganisationController::class, 'index']);
-        Route::delete('/organisations/{org_id}/users/{user_id}', [OrganisationRemoveUserController::class, 'removeUser']);
+        Route::delete('/organisations/{org_id}/users/{user_id}', [OrganisationController::class, 'removeUser']);
+
 
         Route::delete('/organizations/{org_id}', [OrganisationController::class, 'destroy']);
     });
