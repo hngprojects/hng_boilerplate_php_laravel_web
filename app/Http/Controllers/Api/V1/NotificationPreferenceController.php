@@ -14,15 +14,6 @@ class NotificationPreferenceController extends Controller
     public function update(Request $request, $user_id)
     {
 
-        // Check if the authenticated user is the owner of the settings or has appropriate permissions
-        if (Auth::id() != $user_id) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Unauthorized',
-                'status_code' => 401,
-            ], 401);
-        }
-
         // Validate that the user exists
         $user = User::find($user_id);
         if (!$user) {
@@ -31,6 +22,15 @@ class NotificationPreferenceController extends Controller
                 'message' => 'User not found',
                 'status_code' => 404,
             ], 404);
+        }
+
+        // Check if the authenticated user is the owner of the settings or has appropriate permissions
+        if (Auth::id() != $user_id) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Unauthorized',
+                'status_code' => 401,
+            ], 401);
         }
 
         // Validate the request data
