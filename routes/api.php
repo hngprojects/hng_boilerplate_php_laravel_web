@@ -108,11 +108,13 @@ Route::prefix('v1')->group(function () {
         Route::get('/jobs', [JobController::class, 'index']);
         Route::get('/user/export/{format}', [ExportUserController::class, 'export']);
 
+        // Accounts
+        Route::patch('/accounts/deactivate', [AccountController::class, 'deactivate']);
+
+        // Roles
+        Route::put('/organisations/{org_id/roles/{role_id}/disable', [RoleController::class, 'disableRole']);
+
     });
 
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
-
-    Route::middleware('auth:api')->patch('/accounts/deactivate', [AccountController::class, 'deactivate']);
-
-    Route::middleware('auth:api')->put('/organisations/{org_id/roles/{role_id}/disable', [RoleController::class, 'disableRole']);
 });
