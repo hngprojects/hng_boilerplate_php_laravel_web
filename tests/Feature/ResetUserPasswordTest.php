@@ -45,6 +45,7 @@ class ResetUserPasswordTest extends TestCase
 
         $this->assertTrue(Hash::check('newpassword', $user->fresh()->password));
     }
+
     /** @test */
     public function it_returns_error_with_invalid_token()
     {
