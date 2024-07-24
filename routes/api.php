@@ -91,10 +91,7 @@ Route::prefix('v1')->group(function () {
 
         // Jobs
         Route::get('/jobs', [JobController::class, 'index']);
-<<<<<<< HEAD
         
-=======
         Route::get('/user/export/{format}', [ExportUserController::class, 'export']);
->>>>>>> adb3c2189d0ff32a52feeb9ed73a44abfdcb57d0
     });
    
