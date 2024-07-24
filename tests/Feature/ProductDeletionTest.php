@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Log;
 
 class ProductDeletionTest extends TestCase
 {
@@ -54,6 +55,7 @@ class ProductDeletionTest extends TestCase
         $product = \App\Models\Product::factory()->create();
 
         // Attempt to delete the product as the authenticated user
+        Log::info($product->product_id);
         $deleteProduct = $this->deleteJson('/api/v1/products/' . $product->product_id, [], [
             'Authorization' => "Bearer $token"
         ]);
@@ -94,7 +96,7 @@ class ProductDeletionTest extends TestCase
         $this->assertNotEmpty($token);
 
         // Attempt to delete a non-existent product as the authenticated user
-        $deleteProduct = $this->deleteJson('/api/v1/products/huwyud-bsdhjsdhj-dsdsjdhjd', [], [
+        $deleteProduct = $this->deleteJson('/api/v1/products/9c983281-e897-4130-ac90-611cedd3b3b1', [], [
             'Authorization' => "Bearer $token"
         ]);
 
@@ -102,7 +104,7 @@ class ProductDeletionTest extends TestCase
         $deleteProduct->assertStatus(404);
         $deleteProduct->assertJson([
             'error' => 'Product not found',
-            'message' => 'The product with ID huwyud-bsdhjsdhj-dsdsjdhjd does not exist.'
+            'message' => 'The product with ID 9c983281-e897-4130-ac90-611cedd3b3b1 does not exist.'
         ]);
     }
 }
