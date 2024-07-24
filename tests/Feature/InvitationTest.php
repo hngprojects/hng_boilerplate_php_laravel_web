@@ -52,8 +52,7 @@ class InvitationTest extends TestCase
         // Generate an invitation
         $invitationResponse = $this->postJson('/api/v1/invitations/generate', [
             'org_id' => $this->organisationId,
-            'email' => 'test@example.com',
-            'expires_at' => '2024-12-31T23:59:59Z'
+            'email' => 'test@example.com'
         ]);
 
         $this->invitationLink = $invitationResponse['invitation']['link'];

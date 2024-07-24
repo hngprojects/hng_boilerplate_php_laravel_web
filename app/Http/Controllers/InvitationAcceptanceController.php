@@ -32,8 +32,7 @@ class InvitationAcceptanceController extends Controller
         // Validate that the request has the required fields
         $data = $request->validate([
             'org_id' => 'required|exists:organisations,org_id',
-            'email' => 'required|email',
-            'expires_at' => 'required|date|after:now'
+            'email' => 'required|email'
         ]);
 
         // Validate that the user with the provided email exists
@@ -67,12 +66,12 @@ class InvitationAcceptanceController extends Controller
         // Generate a unique token for the invitation
         $token = Str::random(32);
 
-        // Create the invitation
+        // Create the invitation with expires_at set to current time + 60 minutes
         $invitation = Invitation::create([
             'uuid' => (string) Str::uuid(),
             'org_id' => $data['org_id'],
             'link' => $token,
-            'expires_at' => Carbon::parse($data['expires_at']),
+            'expires_at' => Carbon::now()->addMinutes(60),
         ]);
 
         return response()->json([
@@ -120,7 +119,6 @@ class InvitationAcceptanceController extends Controller
             'status' => 200
         ], 200);
     }
-
 
     /**
      * Handle POST request to accept an invitation.
