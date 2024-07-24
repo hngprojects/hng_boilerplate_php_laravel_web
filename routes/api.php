@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\V1\Organisation\OrganisationRemoveUserController;
 use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Controllers\JobController;
 
+use App\Http\Controllers\Api\V1\JobController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -37,7 +38,11 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::post('/auth/register', [AuthController::class, 'store']);
+
     Route::post('/auth/login', [LoginController::class, 'login'])->name('login');
+
+    Route::post('/auth/logout', [LoginController::class, 'logout'])->middleware('auth:api');
+
     Route::post('/roles', [RoleController::class, 'store']);
 
     Route::apiResource('/users', UserController::class);
@@ -75,9 +80,5 @@ Route::prefix('v1')->group(function () {
 
     Route::middleware('auth:api')->group(function () {
         Route::post('/testimonials', [TestimonialController::class, 'store']);
-        Route::post('v1/jobs', [JobController::class, 'create']);
     });
-
 });
-
-

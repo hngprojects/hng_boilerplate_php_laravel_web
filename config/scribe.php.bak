@@ -54,6 +54,8 @@ return [
         // Source Markdown will still be in resources/docs.
         'output_path' => 'resources/docs',
     ],
+    
+'custom_yaml_file' => base_path('custom_endpoints.yaml'),
 
     'laravel' => [
         // Whether to automatically create a docs endpoint for you to view your generated docs.
@@ -158,7 +160,7 @@ INTRO
         'enabled' => true,
 
         'overrides' => [
-            'info.version' => '3.0.0',
+            // 'info.version' => '2.0.0',
         ],
     ],
 
