@@ -5,11 +5,12 @@ use App\Models\User;
 use App\Models\Testimonial;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class TestimonialTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase,WithFaker;
 
     public function testUnauthenticatedUserCannotCreateTestimonial()
     {
@@ -122,6 +123,64 @@ class TestimonialTest extends TestCase
             'status' => 'Not Found',
             'message' => 'Testimonial not found.',
             'status_code' => 404,
+        ]);
+    }
+
+
+    public function testUnauthenticatedUserCannotDeleteTestimonial()
+    {
+        $response = $this->deleteJson('api/v1/testimonials/1');
+
+        $response->assertStatus(401)
+                 ->assertJson([
+                    'message' => 'Unauthenticated.',
+                 ]);
+    }
+
+    public function testNonAdminUserCannotDeleteTestimonial()
+    {
+        $user = User::factory()->create(['role' => 'user']);
+
+        $response = $this->actingAs($user)->deleteJson('api/v1/testimonials/1');
+
+        $response->assertStatus(403)
+                 ->assertJson([
+                     'status' => 'Forbidden',
+                     'message' => 'You do not have the required permissions to perform this action.',
+                     'status_code' => 403,
+                 ]);
+    }
+
+    public function testAdminUserCannotDeleteNonExistingTestimonial()
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        $response = $this->actingAs($admin)->deleteJson('api/v1/testimonials/1');
+
+        $response->assertStatus(404)
+                 ->assertJson([
+                     'status' => 'Not Found',
+                     'message' => 'Testimonial not found.',
+                     'status_code' => 404,
+                 ]);
+    }
+
+    public function testAdminUserCanDeleteTestimonial()
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        $testimonial = Testimonial::factory()->create();
+
+        $response = $this->actingAs($admin)->deleteJson("api/v1/testimonials/{$testimonial->id}");
+
+        $response->assertStatus(200)
+                 ->assertJson([
+                     'status' => 'success',
+                     'message' => 'Testimonial deleted successfully',
+                     'status_code' => 200,
+                 ]);
+
+        $this->assertDatabaseMissing('testimonials', [
+            'id' => $testimonial->id,
         ]);
     }
 

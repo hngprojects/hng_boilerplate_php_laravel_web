@@ -100,10 +100,12 @@ Route::prefix('v1')->group(function () {
         // Testimonials
         Route::post('/testimonials', [TestimonialController::class, 'store']);
         Route::get('/testimonials/{testimonial_id}', [TestimonialController::class, 'show']);
-
+        Route::delete('/testimonials/{testimonial}', [TestimonialController::class, 'destroy']);
+      
         // Jobs
         Route::get('/jobs', [JobController::class, 'index']);
         Route::get('/user/export/{format}', [ExportUserController::class, 'export']);
+
     });
 
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
