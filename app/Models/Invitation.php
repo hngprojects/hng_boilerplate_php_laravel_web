@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 use Carbon\Carbon;
 
 class Invitation extends Model
@@ -48,6 +47,7 @@ class Invitation extends Model
     protected $fillable = [
         'uuid',
         'org_id',
+        'email', // Added to match with the User model
         'link',
         'expires_at',
     ];
@@ -66,7 +66,7 @@ class Invitation extends Model
      */
     public function organization()
     {
-        return $this->belongsTo(Organisation::class, 'org_id', 'org_id');
+        return $this->belongsTo(Organisation::class, 'org_id', 'org_id'); // Ensure the key matches
     }
 
     /**
