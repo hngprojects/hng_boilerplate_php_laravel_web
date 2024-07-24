@@ -40,15 +40,19 @@ class ProductControllerTest extends TestCase
 
         $response = $this->putJson("/api/v1/products/{$this->product->product_id}", $updatedData);
 
-        $response->assertStatus(200);
+        $response->assertStatus(201);
         $response->assertJson([
-            'id' => $this->product->product_id,
-            'name' => 'Updated Product Name',
-            'price' => 500,
-            'description' => 'Updated Product Description',
-            'tag' => 'New Tag',
-            'created_at' => $this->product->created_at->toISOString(),
-            'updated_at' => $this->product->updated_at->toISOString()
+            'message' => 'Product updated successfully',
+            'status_code' => 201,
+            'data' => [
+                'id' => $this->product->product_id,
+                'name' => 'Updated Product Name',
+                'price' => 500,
+                'description' => 'Updated Product Description',
+                'tag' => 'New Tag',
+                'created_at' => $this->product->created_at->toISOString(),
+                'updated_at' => $this->product->updated_at->toISOString()
+            ]
         ]);
 
         // Verify the product has been updated in the database
@@ -111,15 +115,20 @@ class ProductControllerTest extends TestCase
             'tags' => 'New Tag'
         ]);
 
-        $response->assertStatus(200);
+        $response->assertStatus(201);
         $response->assertJson([
-            'id' => $this->product->product_id,
-            'name' => $this->product->name, // Unchanged
-            'description' => $this->product->description, // Unchanged
-            'price' => (float) $this->product->price, // Unchanged
-            'tag' => 'New Tag',
-            'created_at' => $this->product->created_at->toISOString(),
-            'updated_at' => $this->product->updated_at->toISOString()
+            'message' => 'Product updated successfully',
+            'status_code' => 201,
+            'data' => [
+                'id' => $this->product->product_id,
+                'name' => $this->product->name, // Unchanged
+                'description' => $this->product->description, // Unchanged
+                'price' => (float) $this->product->price, // Unchanged
+                'tag' => 'New Tag',
+                'created_at' => $this->product->created_at->toISOString(),
+                'updated_at' => $this->product->updated_at->toISOString()
+            ]
+
         ]);
     }
 

@@ -51,7 +51,6 @@ class ProductController extends Controller
                 ],
                 'status_code' => 200,
             ], 200);
-
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
                 'status' => 'bad request',
@@ -156,14 +155,19 @@ class ProductController extends Controller
 
         // Return response with updated product details
         return response()->json([
-            'id' => $product->product_id,
-            'name' => $product->name,
-            'price' => $product->price,
-            'description' => $product->description,
-            'tag' => $product->tags,
-            'created_at' => $product->created_at,
-            'updated_at' => $product->updated_at,
-        ], 200);
+            'message' => 'Product updated successfully',
+            'status_code' => 201,
+            'data' => [
+                'id' => $product->product_id,
+                'name' => $product->name,
+                'price' => $product->price,
+                'description' => $product->description,
+                'tag' => $product->tags,
+                'created_at' => $product->created_at,
+                'updated_at' => $product->updated_at,
+            ]
+
+        ], 201);
     }
 
 
