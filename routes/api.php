@@ -26,8 +26,6 @@ use App\Http\Controllers\Api\V1\JobController;
 use App\Http\Controllers\Api\V1\BlogSearchController;
 use App\Http\Controllers\Api\V1\User\ExportUserController;
 
-use App\Http\Controllers\Api\V1\User\ExportUserController;
-
 use App\Http\Controllers\Api\V1\Organisation\OrganizationMemberController;
 
 
