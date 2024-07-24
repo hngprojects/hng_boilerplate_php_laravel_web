@@ -21,24 +21,24 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    // public function store(CreateProductRequest $request)
-    // {
-    //     $request->validated();
+    public function store(CreateProductRequest $request)
+    {
+        $request->validated();
 
-    //     $user = auth()->user();
+        $user = auth()->user();
 
-    //     $product = $user->products()->create($request->all());
+        $product = $user->products()->create($request->all());
 
-    //     return response()->json([
-    //         'message' => 'Product created successfully',
-    //         'status_code' => 201,
-    //         'data' => [
-    //             'product_id' => $product->product_id,
-    //             'name' => $product->name,
-    //             'description' => $product->description,
-    //         ]
-    //     ], 201);
-    // }
+        return response()->json([
+            'message' => 'Product created successfully',
+            'status_code' => 201,
+            'data' => [
+                'product_id' => $product->product_id,
+                'name' => $product->name,
+                'description' => $product->description,
+            ]
+        ], 201);
+    }
 
     /**
      * Display the specified resource.
