@@ -23,7 +23,7 @@ class JobController extends Controller
             $jobs = Job::paginate($size, ['id', 'title', 'description', 'location', 'salary', 'job_type'], 'page', $page);
 
             return response()->json([
-                'message' => 'Job listings retrieved successfully.',
+                'message' => 'Job listings retrieved successfully!',
                 'data' => $jobs->items(),
                 'pagination' => [
                     'current_page' => $jobs->currentPage(),
@@ -75,7 +75,7 @@ class JobController extends Controller
         $job = Job::find($id);
         if (!$job->users->contains(auth()->id())) {
             return response()->json([
-                'message' => 'Invalid job post id',
+                'message' => 'Invalid job post id!',
             ], Response::HTTP_NOT_FOUND);
         }
 
@@ -85,7 +85,7 @@ class JobController extends Controller
             $job->users()->attach(auth()->id());
 
             return response()->json([
-                'message' => 'Job details updated successfully',
+                'message' => 'Job details updated successfully!!!',
                 'status_code' => Response::HTTP_OK,
                 'data' =>
                 [

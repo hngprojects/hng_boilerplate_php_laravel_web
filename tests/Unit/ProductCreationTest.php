@@ -24,7 +24,7 @@ class ProductCreationTest extends TestCase
         $response = $this->postJson('/api/v1/auth/register', $user);
 
         // Ensure registration was successful
-        $response->assertStatus(201); 
+        $response->assertStatus(201);
 
         // Retrieve the JWT token from the registration response
         $token = $response->json('data.accessToken');
