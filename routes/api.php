@@ -82,4 +82,5 @@ Route::prefix('v1')->group(function () {
     Route::middleware(['auth:api', 'admin'])->get('/content/about', [AboutPageController::class, 'show']);
 
     Route::post('/waitlist', [WaitlistController::class, 'store']);
+    Route::middleware(['auth:api', 'admin'])->get('/waitlist-users', [WaitlistController::class, 'index']);
 });

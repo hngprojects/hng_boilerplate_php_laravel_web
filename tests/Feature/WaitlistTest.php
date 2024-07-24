@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Mail;
+use App\Models\User;
 use App\Mail\WaitlistConfirmation;
 use Database\Seeders\WaitlistUserSeeder;
 use App\Models\WaitlistUser;
@@ -65,6 +66,38 @@ class WaitlistTest extends TestCase
         // Assert the database contains the expected number of users
         $this->assertGreaterThan(0, WaitlistUser::count());
     }
+
+     /** @test */
+     public function only_admins_can_access_waitlist_users()
+     {
+         $admin = User::factory()->create(['role' => 'admin']);
+         $nonAdmin = User::factory()->create(['role' => 'user']);
+ 
+         $this->actingAs($nonAdmin, 'api')
+             ->getJson('/api/v1/waitlist-users')
+             ->assertStatus(403);
+ 
+         $this->actingAs($admin, 'api')
+             ->getJson('/api/v1/waitlist-users')
+             ->assertStatus(200);
+     }
+ 
+     /** @test */
+     public function it_returns_paginated_waitlist_users()
+     {
+         $admin = User::factory()->create(['role' => 'admin']);
+         WaitlistUser::factory()->count(15)->create();
+ 
+         $this->actingAs($admin, 'api')
+             ->getJson('/api/v1/waitlist-users?page=1&limit=10')
+             ->assertJson([
+                 'page' => 1,
+                 'limit' => 10,
+                 'total_users' => 15,
+                 'status_code' => 200,
+                 'message' => 'Retrieved waitlist users successfully'
+             ]);
+     }
 
 }
 

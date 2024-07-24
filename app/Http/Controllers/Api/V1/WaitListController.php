@@ -12,11 +12,36 @@ use Illuminate\Support\Facades\Log;
 class WaitlistController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a paginated list of waitlist users.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        try {
+            $this->authorize('viewAny', WaitlistUser::class);
+
+            $page = $request->query('page', 1);
+            $limit = $request->query('limit', 10);
+    
+            $waitlistUsers = WaitlistUser::paginate($limit, ['*'], 'page', $page);
+    
+            return response()->json([
+                'users' => $waitlistUsers->items(),
+                'page' => $waitlistUsers->currentPage(),
+                'limit' => $waitlistUsers->perPage(),
+                'total_users' => $waitlistUsers->total(),
+                'status_code' => 200,
+                'message' => 'Retrieved waitlist users successfully'
+            ], 200);
+        } catch(\Exception $e) {
+            return response()->json([
+                'message' => 'Not found',
+                'status_code' => 404,
+            ], 404);
+        }
+
     }
 
 
