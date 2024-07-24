@@ -171,6 +171,6 @@ public function show($id)
      */
     public function destroy(Testimonial $testimonial)
     {
-        //
+        
     }
 }
