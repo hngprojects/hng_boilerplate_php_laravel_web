@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateProductRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class ProductController extends Controller
@@ -20,7 +21,7 @@ class ProductController extends Controller
             'minPrice' => 'nullable|numeric|min:0',
             'maxPrice' => 'nullable|numeric|min:0',
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
@@ -28,35 +29,28 @@ class ProductController extends Controller
                 'statusCode' => 422
             ], 422);
         }
-    
+
         $query = Product::query();
-    
+
         $query->where('name', 'LIKE', '%' . $request->name . '%');
-    
+
+        // Add category filter if provided
         if ($request->filled('category')) {
             $query->whereHas('categories', function ($q) use ($request) {
                 $q->where('name', $request->category);
             });
         }
-    
+
         if ($request->filled('minPrice')) {
             $query->where('price', '>=', $request->minPrice);
         }
-    
+
         if ($request->filled('maxPrice')) {
             $query->where('price', '<=', $request->maxPrice);
         }
-    
+
         $products = $query->get();
-    
-        if (!$products) {
-            return response()->json([
-                'success' => true,
-                'products' => [],
-                'statusCode' => 204
-            ], 204);
-        }
-    
+
         return response()->json([
             'success' => true,
             'products' => $products,

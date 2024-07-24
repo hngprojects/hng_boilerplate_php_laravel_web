@@ -25,14 +25,20 @@ class ProductControllerTest extends TestCase
 
     public function test_search_products_by_category()
     {
-        $category = Category::factory()->create(['name' => 'Test Category']);
-        $product = Product::factory()->create();
+        $product = Product::factory()->create([
+            'name' => 'Test Product'
+        ]);
+
+        $category = Category::factory()->create([
+            'name' => 'Test Category'
+        ]);
+
         $product->categories()->attach($category->id);
 
-        $response = $this->get('/api/v1/products/search?name=Product&category=Test Category');
+        $response = $this->get('/api/v1/products/search?name=Test&category=Test Category');
 
         $response->assertStatus(200);
-        $response->assertJsonFragment(['name' => 'Test Category']);
+        $response->assertJsonFragment(['name' => 'Test Product']);
     }
 
     public function test_search_products_by_price_range()
@@ -49,7 +55,12 @@ class ProductControllerTest extends TestCase
     {
         $response = $this->get('/api/v1/products/search?name=Nonexistent');
 
-        $response->assertStatus(204);
+        $response->assertStatus(200);
+        $response->assertJson([
+            'success' => true,
+            'products' => [],
+            'statusCode' => 200
+        ]);
     }
 
     public function test_search_validation_error()
@@ -57,6 +68,12 @@ class ProductControllerTest extends TestCase
         $response = $this->get('/api/v1/products/search');
 
         $response->assertStatus(422);
-        $response->assertJsonFragment(['parameter' => 'name', 'message' => 'name is a required parameter']);
+        $response->assertJson([
+            'success' => false,
+            'errors' => [
+                'The name field is required.'
+            ],
+            'statusCode' => 422
+        ]);
     }
 }
