@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Feature;
 
 use App\Models\User;
@@ -19,7 +20,9 @@ class TestimonialTest extends TestCase
 
         $response->assertStatus(401);
         $response->assertJson([
-            'message' => 'Unauthenticated.',
+            "status" => "Unauthorized",
+            "message" => "Unauthorized. Please log in.",
+            "status_code" => 401
         ]);
     }
 
@@ -29,7 +32,7 @@ class TestimonialTest extends TestCase
         $user = User::factory()->create(['password' => bcrypt('password')]);
 
         // Attempt to log in the user and get a token
-//        $token = auth()->login($user);
+        //        $token = auth()->login($user);
         $token = JWTAuth::attempt(['email' => $user->email, 'password' => 'password']);
 
         // Make an authenticated request
@@ -38,7 +41,7 @@ class TestimonialTest extends TestCase
         ], [
             'Authorization' => 'Bearer ' . $token,
         ]);
-//        dump($response);
+        //        dump($response);
         $response->assertStatus(201);
         $response->assertJson([
             'status' => 'success',
@@ -76,10 +79,10 @@ class TestimonialTest extends TestCase
 
         $response->assertStatus(401);
         $response->assertJson([
-            // 'status' => 'Unauthenticated',
-            // 'message' => 'Unauthenticated. Please log in.',
-            // 'status_code' => 401,
-            'message' => 'Unauthenticated.',
+            'status' => 'Unauthorized',
+            'message' => 'Unauthorized. Please log in.',
+            'status_code' => 401
+            // 'message' => 'Unauthenticated.',
         ]);
     }
 
@@ -124,5 +127,4 @@ class TestimonialTest extends TestCase
             'status_code' => 404,
         ]);
     }
-
 }
