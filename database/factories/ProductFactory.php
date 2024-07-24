@@ -18,7 +18,7 @@ class ProductFactory extends Factory
      */
     public function definition(): array
     {
-        $newUser = User::factory()->make();
+        $newUser = User::factory()->create();
         $productName = $this->faker->word . "'s product";
         return [
             'user_id' => $newUser->id,
