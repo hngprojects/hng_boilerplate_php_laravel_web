@@ -25,9 +25,11 @@ use App\Http\Middleware\LoginAttempts;
 use App\Http\Controllers\Api\V1\JobController;
 use App\Http\Controllers\Api\V1\BlogSearchController;
 
+use App\Http\Controllers\Api\V1\User\ExportUserController;
+
+use App\Http\Controllers\Api\V1\Organisation\OrganizationMemberController;
 
 
-use App\Http\Controllers\InvitationAcceptanceController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -87,6 +89,7 @@ Route::prefix('v1')->group(function () {
         Route::post('/organisations', [OrganisationController::class, 'store']);
         Route::get('/organisations', [OrganisationController::class, 'index']);
         Route::delete('/organisations/{org_id}/users/{user_id}', [OrganisationController::class, 'removeUser']);
+        Route::get('/organisations/{organisation}/members', [OrganizationMemberController::class, 'index']);
 
 
         // Testimonials
@@ -95,6 +98,7 @@ Route::prefix('v1')->group(function () {
 
         // Jobs
         Route::get('/jobs', [JobController::class, 'index']);
+        Route::get('/user/export/{format}', [ExportUserController::class, 'export']);
     });
 
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
