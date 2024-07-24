@@ -9,6 +9,7 @@ use App\Models\Testimonial;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Response;
 
 class TestimonialController extends Controller
 {
@@ -100,54 +101,54 @@ class TestimonialController extends Controller
     //     ], 200);
     // }
 
-//     public function show(Testimonial $testimonial)
-// {
-//     $user = Auth::user();
+    //     public function show(Testimonial $testimonial)
+    // {
+    //     $user = Auth::user();
 
-//     if (!$user) {
-//         return response()->json([
-//             'status' => 'Unauthorized',
-//             'message' => 'Unauthorized. Please log in.',
-//             'status_code' => 401,
-//         ], 401);
-//     }
+    //     if (!$user) {
+    //         return response()->json([
+    //             'status' => 'Unauthorized',
+    //             'message' => 'Unauthorized. Please log in.',
+    //             'status_code' => 401,
+    //         ], 401);
+    //     }
 
-//     return response()->json([
-//         'status' => 'success',
-//         'message' => 'Testimonial fetched successfully',
-//         'data' => $testimonial,
-//     ], 200);
-// }
+    //     return response()->json([
+    //         'status' => 'success',
+    //         'message' => 'Testimonial fetched successfully',
+    //         'data' => $testimonial,
+    //     ], 200);
+    // }
 
 
-public function show($id)
-{
-    $user = Auth::user();
+    public function show($id)
+    {
+        $user = Auth::user();
 
-    if (!$user) {
+        if (!$user) {
+            return response()->json([
+                'status' => 'Unauthorized',
+                'message' => 'Unauthorized. Please log in.',
+                'status_code' => 401,
+            ], 401);
+        }
+
+        try {
+            $testimonial = Testimonial::findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'status' => 'Not Found',
+                'message' => 'Testimonial not found.',
+                'status_code' => 404,
+            ], 404);
+        }
+
         return response()->json([
-            'status' => 'Unauthorized',
-            'message' => 'Unauthorized. Please log in.',
-            'status_code' => 401,
-        ], 401);
+            'status' => 'success',
+            'message' => 'Testimonial fetched successfully',
+            'data' => $testimonial,
+        ], 200);
     }
-
-    try {
-        $testimonial = Testimonial::findOrFail($id);
-    } catch (ModelNotFoundException $e) {
-        return response()->json([
-            'status' => 'Not Found',
-            'message' => 'Testimonial not found.',
-            'status_code' => 404,
-        ], 404);
-    }
-
-    return response()->json([
-        'status' => 'success',
-        'message' => 'Testimonial fetched successfully',
-        'data' => $testimonial,
-    ], 200);
-}
 
 
     /**
@@ -169,8 +170,30 @@ public function show($id)
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Testimonial $testimonial)
+    public function destroy(string $testimonial_id)
     {
-        //
+        // Get the authenticated user
+        $user = Auth::user();
+        // Get testimonial
+        $testimonial = Testimonial::find($testimonial_id);
+        if (!$testimonial) {
+            return response()->json([
+                'message' => 'Not found',
+                'status_code' => Response::HTTP_NOT_FOUND,
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+        // Check if testimonial belongs to user
+        if ($testimonial->user_id !== $user->id) {
+            return response()->json([
+                'message' => 'Not authorized to perfom this action',
+                'status_code' => Response::HTTP_FORBIDDEN,
+            ], Response::HTTP_FORBIDDEN);
+        }
+
+        //  delete testimonial
+        $testimonial->delete();
+
+        return response()->json(null, Response::HTTP_NO_CONTENT);
     }
 }
