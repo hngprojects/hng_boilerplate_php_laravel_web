@@ -24,7 +24,6 @@ class ProductController extends Controller
                 'limit' => 'integer|min:1',
             ]);
 
-            // Get pagination parameters
             $page = $request->input('page', 1);
             $limit = $request->input('limit', 10);
 
