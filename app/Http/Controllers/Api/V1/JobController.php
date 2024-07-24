@@ -4,15 +4,16 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Requests\GetJobRequest;
+
 use App\Http\Resources\JobResource;
 use App\Models\Job;
-use App\Traits\ApiResponses;
+
 use Illuminate\Http\JsonResponse;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class JobController extends Controller
 {
-    use ApiResponses;
+
     /**
      * Display a listing of the resource.
      */
@@ -33,10 +34,19 @@ class JobController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(GetJobRequest $request, $id): JsonResponse
+    public function show(string $id): JsonResponse
     {
-        $job = Job::findOrFail($id);
-        return $this->successResponse(new JobResource($job));
+        $job = Job::find($id);
+
+        if (!$job) {
+            return response()->json([
+                'status_code' => 404,
+                'message' => 'Job not found',
+                'error' => 'Not Found'
+            ], 404);
+        }
+
+        return response()->json(new JobResource($job), 200);
     }
 
     /**
