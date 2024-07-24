@@ -2,97 +2,140 @@
 
 namespace Tests\Unit;
 
+use Illuminate\Http\Response;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Config;
 
 class LoginTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * Test login with valid credentials.
-     *
-     * @return void
-     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+        Config::set('auth.throttle.max_attempts', 3);
+        Config::set('auth.throttle.decay_minutes', 60);
+    }
+
     public function test_login_with_valid_credentials()
     {
-        // Create a test user
-        $user = User::create([
-            'name' => 'Tiamiyu Rasheed',
+        $user = User::factory()->create([
             'email' => 'test@gmail.com',
             'password' => Hash::make('password123'),
         ]);
 
-        // Attempt to login
         $response = $this->postJson('/api/v1/auth/login', [
             'email' => 'test@gmail.com',
             'password' => 'password123',
         ]);
 
-        // Assert successful login
         $response->assertStatus(200)
-                 ->assertJsonStructure([
-                     'message',
-                     'data' => [
-                         'user' => [
-                             'id',
-                             'email',
-                             'role',
-                             'signup_type',
-                             'is_active',
-                             'is_verified',
-                             'created_at',
-                             'updated_at',
-                         ],
-                         'access_token',
-                         'refresh_token',
-                     ],
-                 ]);
+            ->assertJsonStructure([
+                'message',
+                'data' => [
+                    'user' => [
+                        'id',
+                        'email',
+                        'role',
+                        'signup_type',
+                        'is_active',
+                        'is_verified',
+                        'created_at',
+                        'updated_at',
+                    ],
+                    'access_token',
+                    'refresh_token',
+                ],
+            ]);
     }
 
-    /**
-     * Test login with invalid credentials.
-     *
-     * @return void
-     */
     public function test_login_with_invalid_credentials()
     {
-        // Create a test user
-        $user = User::create([
-            'name' => 'Tiamiyu Rasheed',
+        User::factory()->create([
             'email' => 'test@gmail.com',
             'password' => Hash::make('password123'),
         ]);
 
-        // Attempt to login with invalid credentials
         $response = $this->postJson('/api/v1/auth/login', [
             'email' => 'test@gmail.com',
             'password' => 'wrongpassword',
         ]);
 
-        // Assert unsuccessful login
         $response->assertStatus(401)
-                 ->assertJson([
-                     'message' => 'Invalid credentials',
-                 ]);
+            ->assertJson([
+                'message' => 'Invalid credentials',
+            ]);
     }
 
-    /**
-     * Test login with missing fields.
-     *
-     * @return void
-     */
     public function test_login_with_missing_fields()
     {
-        // Attempt to login with missing fields
         $response = $this->postJson('/api/v1/auth/login', [
             'email' => 'test@gmail.com',
         ]);
 
-        // Assert validation error
         $response->assertStatus(422)
-                 ->assertJsonValidationErrors(['password']);
+            ->assertJsonValidationErrors(['password']);
+    }
+
+    public function test_login_attempt_limit()
+    {
+        User::factory()->create([
+            'email' => 'test@gmail.com',
+            'password' => Hash::make('password123'),
+        ]);
+
+        for ($i = 0; $i < 3; $i++) {
+            $this->postJson('/api/v1/auth/login', [
+                'email' => 'test@gmail.com',
+                'password' => 'wrongpassword',
+            ]);
+        }
+
+        $response = $this->postJson('/api/v1/auth/login', [
+            'email' => 'test@gmail.com',
+            'password' => 'wrongpassword',
+        ]);
+
+        $response->assertStatus(403)
+            ->assertJson([
+                'message' => 'Too Many login attempts. Please try again in one hour',
+                'error' => 'too_many_attempts',
+                'status_code' => 403
+            ]);
+    }
+
+    public function test_successful_login_after_rate_limit_expires()
+    {
+        User::factory()->create([
+            'email' => 'test@example.com',
+            'password' => Hash::make('password123'),
+        ]);
+
+        for ($i = 0; $i < 3; $i++) {
+            $this->postJson('/api/v1/auth/login', [
+                'email' => 'test@example.com',
+                'password' => 'wrongpassword',
+            ]);
+        }
+
+        $this->travel(61)->minutes();
+
+        $response = $this->postJson('/api/v1/auth/login', [
+            'email' => 'test@example.com',
+            'password' => 'password123',
+        ]);
+
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                'message',
+                'data' => [
+                    'user',
+                    'access_token',
+                    'refresh_token',
+                ],
+            ]);
     }
 }

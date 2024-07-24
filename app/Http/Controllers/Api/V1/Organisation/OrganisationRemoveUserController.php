@@ -16,7 +16,7 @@ class OrganisationRemoveUserController extends Controller
         $organization = Organisation::findOrFail($org_id);
 
         // Use $request->auth instead of Auth::user()
-        if (!$request->auth->can('removeUser', $organization)) {
+        if (!$request->user()->can('removeUser', $organization)) {
             return response()->json([
                 'status' => 'Forbidden',
                 'message' => 'Only admin can remove users',
