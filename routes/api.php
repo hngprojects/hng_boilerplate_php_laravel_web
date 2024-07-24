@@ -21,7 +21,10 @@ use App\Http\Controllers\Api\V1\Organisation\OrganisationRemoveUserController;
 use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Middleware\LoginAttempts;
 
+
+
 use App\Http\Controllers\Api\V1\JobController;
+use App\Http\Controllers\BlogDeleteController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -78,4 +81,15 @@ Route::prefix('v1')->group(function () {
         Route::get('/testimonials/{testimonial_id}', [TestimonialController::class, 'show']);
         Route::get('/jobs', [JobController::class, 'index']);
     });
+   
+
+    
 });
+
+Route::middleware(['jwt.auth'])->group(function () {
+    Route::delete('/blogs/{id}', [BlogDeleteController::class, 'destroy']);
+}); 
+
+
+
+
