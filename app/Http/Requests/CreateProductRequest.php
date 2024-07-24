@@ -26,7 +26,7 @@ class CreateProductRequest extends FormRequest
             'description' => ['required', 'string'],
            'price' => ['required', 'numeric'],
            'tags' => ['required', 'string'],
-           'imageUrl' => ['required', 'string'],
+           'imageUrl' => ['required', 'url, 'string'],
         ];
     }
 }
