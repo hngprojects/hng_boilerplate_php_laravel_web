@@ -24,7 +24,7 @@ class ProductFactory extends Factory
             'user_id' => $newUser->id,
             'name' => $productName,
             'price' => $this->faker->randomFloat(2, 0, 1000),
-            'slug' => Str::slug($productName),
+            'slug' => $this->faker->unique()->slug,
             'tags' => $this->faker->word,
             'imageUrl' => $this->faker->imageUrl(),
             'description' => $this->faker->text,
