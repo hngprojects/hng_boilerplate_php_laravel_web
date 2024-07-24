@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\V1\Admin\CustomerController;
 use App\Http\Controllers\Api\V1\Admin\Plan\FeatureController;
 use App\Http\Controllers\Api\V1\Admin\Plan\SubscriptionController;
 use App\Http\Controllers\Api\V1\Testimonial\TestimonialController;
+use App\Http\Controllers\Api\V1\AboutPageController;
 
 use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Controllers\Api\V1\Auth\ForgetPasswordRequestController;
@@ -118,6 +119,7 @@ Route::prefix('v1')->group(function () {
 
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
     Route::delete('/blogs/{id}', [BlogController::class, 'destroy'])->middleware(['auth:api', 'admin']);
+    Route::middleware(['auth:api', 'admin'])->get('/content/about', [AboutPageController::class, 'show']);
 });
 
 
