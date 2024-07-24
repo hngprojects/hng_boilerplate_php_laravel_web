@@ -8,7 +8,7 @@ return [
             /*
              * The path where the swagger file is served.
              */
-            'path' => 'docs',
+            'path' => 'documentation',
 
             /*
              * The versions of the swagger file. The key is the version name and the value is the path to the file.
