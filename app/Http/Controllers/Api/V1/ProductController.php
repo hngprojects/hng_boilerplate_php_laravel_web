@@ -16,9 +16,55 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        try {
+            // Validate pagination parameters
+            $request->validate([
+                'page' => 'integer|min:1',
+                'limit' => 'integer|min:1',
+            ]);
+
+            $page = $request->input('page', 1);
+            $limit = $request->input('limit', 10);
+
+            // Calculate offset
+            $offset = ($page - 1) * $limit;
+
+            $products = Product::select('name', 'price')
+                ->offset($offset)
+                ->limit($limit)
+                ->get();
+
+            // Get total product count
+            $totalItems = Product::count();
+            $totalPages = ceil($totalItems / $limit);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Products retrieved successfully',
+                'products' => $products,
+                'pagination' => [
+                    'totalItems' => $totalItems,
+                    'totalPages' => $totalPages,
+                    'currentPage' => $page,
+                ],
+                'status_code' => 200,
+            ], 200);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'status' => 'bad request',
+                'message' => 'Invalid query params passed',
+                'status_code' => 400,
+            ], 400);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Internal server error',
+                'status_code' => 500,
+            ], 500);
+        }
     }
 
     /**
