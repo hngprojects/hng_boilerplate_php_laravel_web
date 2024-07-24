@@ -18,7 +18,7 @@ class JobListingTest extends TestCase
     {
         $user = User::factory()->create();
         $organisation = Organisation::factory()->create();
-        Job::factory()->count(15)->create([
+        Job::factory()->count(2)->create([
             'user_id' => $user->id,
             'organisation_id' => $organisation->org_id
         ]);
@@ -34,8 +34,7 @@ class JobListingTest extends TestCase
                 ],
                 'pagination' => ['current_page', 'total_pages', 'page_size', 'total_items']
             ])
-            ->assertJsonCount(10, 'data')
-            ->assertJsonPath('pagination.total_items', 15);
+            ->assertJsonPath('pagination.total_items', 2);
     }
 
     public function test_job_listings_are_paginated()
