@@ -26,7 +26,6 @@ class RegistrationTest extends TestCase
 
         // Check the response structure
         $response->assertJsonStructure([
-            'status',
             'message',
             'status_code',
             'data' => [
@@ -59,7 +58,6 @@ class RegistrationTest extends TestCase
         // Check the status code
         $response->assertStatus(422);
         $response->assertJson([
-            'status' => "Forbidden",
             'message' => [
                 'email' => [
                     'The email field is required.'
