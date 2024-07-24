@@ -25,6 +25,8 @@ use App\Http\Middleware\LoginAttempts;
 use App\Http\Controllers\Api\V1\JobController;
 use App\Http\Controllers\Api\V1\BlogSearchController;
 
+use App\Http\Controllers\Api\V1\User\ExportUserController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -53,7 +55,7 @@ Route::prefix('v1')->group(function () {
     Route::middleware('throttle:10,1')->get('/topics/search', [ArticleController::class, 'search']);
 
 
-    Route::middleware('auth:api')->group(function() {
+    Route::middleware('auth:api')->group(function () {
         Route::get('/products', [ProductController::class, 'index']);
         Route::post('/products', [ProductController::class, 'store']);
         Route::delete('/products/{productId}', [ProductController::class, 'destroy']);
@@ -81,13 +83,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/organisations', [OrganisationController::class, 'index']);
         Route::delete('/organisations/{org_id}/users/{user_id}', [OrganisationController::class, 'removeUser']);
         Route::get('/jobs', [JobController::class, 'index']);
-
-
-    });
-
-    Route::middleware('auth.jwt')->group(function () {
-
-        // Jobs
+        Route::get('/user/export/{format}', [ExportUserController::class, 'export']);
     });
 
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
