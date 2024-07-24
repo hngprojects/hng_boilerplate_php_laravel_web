@@ -58,6 +58,12 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        if (!Auth::check()) {
+            return response()->json([
+                'error' => 'Unauthorized',
+                'message' => 'You must be authenticated to delete a product.'
+            ], 401);
+        }
         // Define validation rules
         $rules = [
             'name' => 'sometimes|string',
@@ -92,28 +98,9 @@ class ProductController extends Controller
             ], 404);
         }
 
-        // Update product attributes
-        if (isset($validate['name'])) {
-            $product->name = $validate['name'];
-        }
-        if (isset($validate['description'])) {
-            $product->description = $validate['description'];
-        }
-
-        if (isset($validate['price'])) {
-            $product->price = $validate['price'];
-        }
-
-        if (isset($validate['tags'])) {
-            $product->tags = $validate['tags'];
-        }
-
-        if (isset($validate['slug'])) {
-            $product->slug = $validate['slug'];
-        }
-
-        if (isset($validate['imageUrl'])) {
-            $product->imageUrl = $validate['imageUrl'];
+        // Update product attributes dynamically
+        foreach ($validate as $key => $value) {
+            $product->{$key} = $value;
         }
 
         $product->updated_at = now(); // Update timestamp
@@ -132,6 +119,7 @@ class ProductController extends Controller
             'updated_at' => $product->updated_at,
         ], 200);
     }
+
 
     /**
      * Remove the specified resource from storage.
