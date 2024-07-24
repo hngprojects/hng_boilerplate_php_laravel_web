@@ -15,7 +15,7 @@ return new class extends Migration
             $table->uuid()->primary();
             $table->foreignUuid('user_id')->constrained('users', 'id')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('model_name');
-            $table->string('content');
+            $table->text('content');
             $table->timestamps();
         });
     }
