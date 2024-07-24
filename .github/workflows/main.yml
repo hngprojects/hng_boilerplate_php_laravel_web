@@ -8,7 +8,21 @@ on:
 jobs:
   run-tests:
     runs-on: ubuntu-latest
-
+    services:
+      postgres:
+         image: postgres:latest
+         env:
+           POSTGRES_DB: postgres        
+           POSTGRES_PASSWORD: postgres
+           POSTGRES_USER: postgres
+         ports:
+           - 5432:5432
+       # Set health checks to wait until postgres has started
+         options: >-
+           --health-cmd pg_isready
+           --health-interval 10s
+           --health-timeout 5s
+           --health-retries 5
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -38,11 +52,11 @@ jobs:
           cp .env.example .env
           echo "APP_KEY=${{ secrets.APP_KEY }}" >> .env
           echo "DB_CONNECTION=pgsql" >> .env
-          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
-          echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
-          echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env
-          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
-          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+          echo "DB_HOST=localhost" >> .env
+          echo "DB_PORT=5432" >> .env
+          echo "DB_DATABASE=postgres" >> .env
+          echo "DB_USERNAME=postgres" >> .env
+          echo "DB_PASSWORD=postgres" >> .env
       - name: Run database migrations
         run: php artisan migrate --force
 
