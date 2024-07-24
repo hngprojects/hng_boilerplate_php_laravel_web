@@ -8,11 +8,3 @@ abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
 }
-
-protected function setUp(): void
-{
-    parent::setUp();
-    
-    // Disable authentication middleware for testing
-    $this->withoutMiddleware(\App\Http\Middleware\Authenticate::class);
-}
