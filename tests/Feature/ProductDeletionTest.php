@@ -94,7 +94,7 @@ class ProductDeletionTest extends TestCase
         $this->assertNotEmpty($token);
 
         // Attempt to delete a non-existent product as the authenticated user
-        $deleteProduct = $this->deleteJson('/api/v1/products/99999', [], [
+        $deleteProduct = $this->deleteJson('/api/v1/products/huwyud-bsdhjsdhj-dsdsjdhjd', [], [
             'Authorization' => "Bearer $token"
         ]);
 
@@ -102,7 +102,7 @@ class ProductDeletionTest extends TestCase
         $deleteProduct->assertStatus(404);
         $deleteProduct->assertJson([
             'error' => 'Product not found',
-            'message' => 'The product with ID 99999 does not exist.'
+            'message' => 'The product with ID huwyud-bsdhjsdhj-dsdsjdhjd does not exist.'
         ]);
     }
 }
