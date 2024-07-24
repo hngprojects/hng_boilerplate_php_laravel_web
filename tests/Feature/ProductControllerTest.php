@@ -116,7 +116,7 @@ class ProductControllerTest extends TestCase
             'id' => $this->product->product_id,
             'name' => $this->product->name, // Unchanged
             'description' => $this->product->description, // Unchanged
-            'price' => $this->product->price, // Unchanged
+            'price' => (float) $this->product->price, // Unchanged
             'tag' => 'New Tag',
             'created_at' => $this->product->created_at->toISOString(),
             'updated_at' => $this->product->updated_at->toISOString()
