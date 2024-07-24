@@ -27,6 +27,9 @@ use App\Http\Controllers\Api\V1\BlogSearchController;
 
 use App\Http\Controllers\Api\V1\User\ExportUserController;
 
+use App\Http\Controllers\Api\V1\Organisation\OrganizationMemberController;
+
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -80,6 +83,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/organisations', [OrganisationController::class, 'index']);
         Route::put('/organisations/{org_id}', [OrganisationController::class, 'update']);
         Route::delete('/organisations/{org_id}/users/{user_id}', [OrganisationController::class, 'removeUser']);
+        Route::get('/organisations/{organisation}/members', [OrganizationMemberController::class, 'index']);
 
 
         // Testimonials
