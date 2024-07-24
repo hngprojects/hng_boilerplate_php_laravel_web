@@ -48,7 +48,7 @@ class TestimonialController extends Controller
             $testimonial = Testimonial::create([
                 'user_id' => $user->id,
                 'name' => $user->name,
-                'content' => $request->content,
+                'content' => $request->get('content'),
             ]);
 
             return response()->json([
