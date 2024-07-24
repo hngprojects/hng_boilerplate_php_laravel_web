@@ -20,9 +20,7 @@ class BlogFactory extends Factory
     {
         return [
             'title' => $this->faker->sentence,
-            'content' => $this->faker->paragraphs(3, true), 
-            'imageUrl' => $this->faker->imageUrl(), 
-            'tags' => implode(', ', $this->faker->words(5)), 
+            'content' => $this->faker->paragraphs(3, true),
             'author' => $this->faker->name,
         ];
     }

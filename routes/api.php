@@ -52,7 +52,7 @@ Route::prefix('v1')->group(function () {
     Route::middleware('auth:api')->group(function() {
         Route::post('/products', [ProductController::class, 'store']);
     });
-      
+
     Route::middleware('throttle:10,1')->get('/help-center/topics/search', [ArticleController::class, 'search']);
     Route::post('/contact', [ContactController::class, 'sendInquiry']);
 
@@ -63,6 +63,7 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('/features', FeatureController::class);
         Route::apiResource('/plans', SubscriptionController::class);
         Route::post('/organisations', [OrganisationController::class, 'store']);
+        Route::post('/blogs', [BlogController::class, 'store']);
     });
 
     Route::middleware('auth.jwt')->group(function () {
