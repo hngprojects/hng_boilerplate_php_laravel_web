@@ -27,6 +27,7 @@ jobs:
             sudo apt-get update
             sudo apt-get install -y postgresql postgresql-contrib
             sudo service postgresql start
+
             # Create database and user
             sudo -u postgres psql -c "CREATE DATABASE mydatabase;"
             sudo -u postgres psql -c "CREATE USER myuser WITH ENCRYPTED PASSWORD 'mypassword';"
@@ -49,11 +50,6 @@ jobs:
         run: |
           sudo -u postgres psql -c "\l"  # List databases
           sudo -u postgres psql -c "\du"  # List users
-
-      - name: Reset PostgreSQL user password
-        run: |
-          echo "Resetting PostgreSQL user password..."
-          sudo -u postgres psql -c "ALTER USER myuser WITH PASSWORD 'mypassword';"
 
       - name: Get Composer cache directory
         id: composer-cache
