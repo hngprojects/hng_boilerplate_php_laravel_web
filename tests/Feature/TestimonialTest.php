@@ -116,7 +116,7 @@ class TestimonialTest extends TestCase
 
         $token = JWTAuth::attempt(['email' => $user->email, 'password' => 'password']);
 
-        $nonExistingTestimonialId = '00000000-0000-0000-0000-000000000000';
+        $nonExistingTestimonialId = 99999;
 
 
         $response = $this->getJson('/api/v1/testimonials/{$nonExistingTestimonialId}', [
