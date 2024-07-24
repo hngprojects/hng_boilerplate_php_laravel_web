@@ -172,7 +172,7 @@ class User extends Authenticatable  implements JWTSubject
             })->exists();
     }
 
-    public function preferences()
+    public function preferences(): HasMany
     {
         return $this->hasMany(Preference::class);
     }

@@ -32,7 +32,7 @@ class UpdatePreferenceRequest extends FormRequest
                 'unique:preferences,name,' . $id,
                 function ($attribute, $value, $fail) use ($user) {
                     if ($user->preferences()->where('name', $value)->doesntExist()) {
-                        $fail("The preference $attribute does not exists.");
+                        $fail("$attribute does not exists.");
                     }
                 },
             ],
