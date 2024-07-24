@@ -29,6 +29,9 @@ use App\Http\Controllers\Api\V1\User\ExportUserController;
 
 use App\Http\Controllers\Api\V1\Organisation\OrganizationMemberController;
 
+use App\Http\Controllers\InvitationAcceptanceController;
+
+
 
 /*
 |--------------------------------------------------------------------------
