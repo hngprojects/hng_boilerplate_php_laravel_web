@@ -66,6 +66,7 @@ Route::prefix('v1')->group(function () {
     Route::middleware('auth:api')->group(function () {
         Route::post('/testimonials', [TestimonialController::class, 'store']);
         Route::get('/testimonials/{testimonial_id}', [TestimonialController::class, 'show']);
+        Route::delete('/testimonials/{testimonial_id}', [TestimonialController::class, 'destroy']);
     });
 
 });
