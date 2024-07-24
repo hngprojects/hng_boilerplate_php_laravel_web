@@ -60,27 +60,25 @@ Route::prefix('v1')->group(function () {
 
     Route::post('/squeeze', [SqueezeController::class, 'store']);
     Route::middleware('auth:api')->group(function () {
+        // Products
+        Route::post('/products', [ProductController::class, 'store']);
+
+        // Subscriptions, Plans and Features
         Route::apiResource('/features', FeatureController::class);
         Route::apiResource('/plans', SubscriptionController::class);
-
         Route::post('/users/plans/{user_subscription}/cancel', [\App\Http\Controllers\Api\V1\User\SubscriptionController::class, 'destroy']);
-    });
-
-    Route::middleware('auth.jwt')->group(function () {
+        // Organisations
         Route::post('/organisations', [OrganisationController::class, 'store']);
-    });
-
-    Route::middleware('auth.jwt')->group(function () {
         Route::get('/organisations', [OrganisationController::class, 'index']);
         Route::delete('/organisations/{org_id}/users/{user_id}', [OrganisationRemoveUserController::class, 'removeUser']);
-    });
-    Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
 
-
-
-    Route::middleware('auth:api')->group(function () {
+        // Testimonials
         Route::post('/testimonials', [TestimonialController::class, 'store']);
         Route::get('/testimonials/{testimonial_id}', [TestimonialController::class, 'show']);
+
+        // Jobs
         Route::get('/jobs', [JobController::class, 'index']);
     });
+
+    Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
 });

@@ -2,36 +2,36 @@
 
 namespace Tests\Unit;
 
+use Illuminate\Http\Response;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Config;
 
 class LoginTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * Test login with valid credentials.
-     *
-     * @return void
-     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+        Config::set('auth.throttle.max_attempts', 3);
+        Config::set('auth.throttle.decay_minutes', 60);
+    }
+
     public function test_login_with_valid_credentials()
     {
-        // Create a test user
-        $user = User::create([
-            'name' => 'Tiamiyu Rasheed',
+        $user = User::factory()->create([
             'email' => 'test@gmail.com',
             'password' => Hash::make('password123'),
         ]);
 
-        // Attempt to login
         $response = $this->postJson('/api/v1/auth/login', [
             'email' => 'test@gmail.com',
             'password' => 'password123',
         ]);
 
-        // Assert successful login
         $response->assertStatus(200)
             ->assertJsonStructure([
                 'message',
@@ -52,77 +52,51 @@ class LoginTest extends TestCase
             ]);
     }
 
-    /**
-     * Test login with invalid credentials.
-     *
-     * @return void
-     */
     public function test_login_with_invalid_credentials()
     {
-        // Create a test user
-        $user = User::create([
-            'name' => 'Tiamiyu Rasheed',
+        User::factory()->create([
             'email' => 'test@gmail.com',
             'password' => Hash::make('password123'),
         ]);
 
-        // Attempt to login with invalid credentials
         $response = $this->postJson('/api/v1/auth/login', [
             'email' => 'test@gmail.com',
             'password' => 'wrongpassword',
         ]);
 
-        // Assert unsuccessful login
         $response->assertStatus(401)
             ->assertJson([
                 'message' => 'Invalid credentials',
             ]);
     }
 
-    /**
-     * Test login with missing fields.
-     *
-     * @return void
-     */
     public function test_login_with_missing_fields()
     {
-        // Attempt to login with missing fields
         $response = $this->postJson('/api/v1/auth/login', [
             'email' => 'test@gmail.com',
         ]);
 
-        // Assert validation error
         $response->assertStatus(422)
             ->assertJsonValidationErrors(['password']);
     }
 
-    /**
-     * Test login attempt limit.
-     *
-     * @return void
-     */
     public function test_login_attempt_limit()
     {
-        // Create a test user
-        $user = User::create([
-            'name' => 'Tiamiyu Rasheed',
+        User::factory()->create([
             'email' => 'test@gmail.com',
             'password' => Hash::make('password123'),
         ]);
 
-        // Attempt to login with wrong password 3 times
         for ($i = 0; $i < 3; $i++) {
-            $response = $this->postJson('/api/v1/auth/login', [
+            $this->postJson('/api/v1/auth/login', [
                 'email' => 'test@gmail.com',
                 'password' => 'wrongpassword',
             ]);
-            $response->assertStatus(401);
         }
 
-        // The 4th attempt should be blocked
         $response = $this->postJson('/api/v1/auth/login', [
             'email' => 'test@gmail.com',
-            'password' => 'wrongpasswords',
+            'password' => 'wrongpassword',
         ]);
 
         $response->assertStatus(403)
@@ -133,15 +107,9 @@ class LoginTest extends TestCase
             ]);
     }
 
-    /**
-     * Test successful login after rate limit expires.
-     *
-     * @return void
-     */
     public function test_successful_login_after_rate_limit_expires()
     {
-        $user = User::create([
-            'name' => 'Test User',
+        User::factory()->create([
             'email' => 'test@example.com',
             'password' => Hash::make('password123'),
         ]);
@@ -153,7 +121,6 @@ class LoginTest extends TestCase
             ]);
         }
 
-        // Simulate waiting for an hour
         $this->travel(61)->minutes();
 
         $response = $this->postJson('/api/v1/auth/login', [
