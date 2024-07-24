@@ -84,6 +84,8 @@ Route::prefix('v1')->group(function () {
     });
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
 
+        Route::delete('/organisations/{org_id}/users/{user_id}', [OrganisationController::class, 'removeUser']);
+
 
         // Testimonials
         Route::post('/testimonials', [TestimonialController::class, 'store']);
@@ -95,3 +97,6 @@ Route::prefix('v1')->group(function () {
         Route::get('/user/export/{format}', [ExportUserController::class, 'export']);
     });
 
+
+    Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
+});
