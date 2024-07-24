@@ -19,14 +19,20 @@ jobs:
           php-version: '8.2'
           extensions: pgsql, pdo_pgsql, zip, bcmath
 
-      - name: Install PostgreSQL
+      - name: Install PostgreSQL if not installed
         run: |
-          sudo apt-get update
-          sudo apt-get install -y postgresql postgresql-contrib
-          sudo service postgresql start
-          sudo -u postgres psql -c "CREATE DATABASE mydatabase;"
-          sudo -u postgres psql -c "CREATE USER myuser WITH ENCRYPTED PASSWORD 'mypassword';"
-          sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE mydatabase TO myuser;"
+          if ! command -v psql &> /dev/null
+          then
+            echo "PostgreSQL not found, installing..."
+            sudo apt-get update
+            sudo apt-get install -y postgresql postgresql-contrib
+            sudo service postgresql start
+            sudo -u postgres psql -c "CREATE DATABASE mydatabase;"
+            sudo -u postgres psql -c "CREATE USER myuser WITH ENCRYPTED PASSWORD 'mypassword';"
+            sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE mydatabase TO myuser;"
+          else
+            echo "PostgreSQL is already installed."
+          fi
 
       - name: Get Composer cache directory
         id: composer-cache
@@ -53,6 +59,9 @@ jobs:
           echo "DB_DATABASE=mydatabase" >> .env
           echo "DB_USERNAME=myuser" >> .env
           echo "DB_PASSWORD=mypassword" >> .env
+          # Uncomment the line below if you prefer to set DATABASE_URL instead of individual DB environment variables
+          # echo "DATABASE_URL=postgres://${{ secrets.DB_USERNAME }}:${{ secrets.DB_PASSWORD }}@${{ secrets.DB_HOST }}:${{ secrets.DB_PORT }}/${{ secrets.DB_DATABASE }}?sslmode=disable" >> .env
+
       - name: Run database migrations
         run: php artisan migrate --force
 
