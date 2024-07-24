@@ -67,19 +67,17 @@ class JobController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id, Request $request)
     {
         // Get the authenticated user
-        //$user = $request->user();
-
-        // Log the authenticated user
-       // \Log::info('Authenticated User:', ['user' => $user]);
+        if(!$user = $request->user()) {
+            return response()->json(['message' => 'Unauthorized', 'error' => 'Bad Request'], 400);
+        }
 
         // Get organization_id from the request
-        //$orgId = $request->organization_id;
-
-        // Log the organization_id
-        //\Log::info('Request Organization ID:', ['organization_id' => $orgId]);
+        if(!$orgId = $request->organization_id) {
+            return response()->json(['message' => 'Unauthorized', 'error' => 'Bad Request'], 400);
+        }
 
         //Find the post by Id
         $job = Job::find($id);
@@ -90,9 +88,9 @@ class JobController extends Controller
         }
 
         // Check if the authenticated user is the owner of the job or related to the job
-        if (!$job->users->contains(Auth::id())) {
-            return response()->json(['message' => 'Unauthorized', 'error' => 'Bad Request'], 400);
-        }
+        // if (!$job->users->contains(Auth::id())) {
+        //     return response()->json(['message' => 'Unauthorized', 'error' => 'Bad Request'], 400);
+        // }
 
         // Delete the post
         $job->delete();

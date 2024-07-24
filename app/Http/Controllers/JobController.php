@@ -71,20 +71,20 @@ class JobController extends Controller
         }
     }
 
-    public function delete(string $id, Request $request)
-    {
+   // public function delete(string $id, Request $request)
+    //{
         // Get the authenticated user
-        if(!$user = $request->user()) {
-            return response()->json(['message' => 'Unauthorized', 'error' => 'Bad Request'], 400);
-        }
+        // if(!$user = $request->user()) {
+        //     return response()->json(['message' => 'Unauthorized', 'error' => 'Bad Request'], 400);
+        // }
 
         //Find the post by Id
-        $job = Job::find($id);
+        //$job = Job::find($id);
 
         // Check if the job exists
-        if (!$job) {
-            return response()->json(['message' => 'Job not found', 'error' => 'Not Found'], 404);
-        }
+        // if (!$job) {
+        //     return response()->json(['message' => 'Job not found', 'error' => 'Not Found'], 404);
+        // }
 
         // Check if the authenticated user is the owner of the job or related to the job
         // if (!$job->users->contains(Auth::id())) {
@@ -92,9 +92,9 @@ class JobController extends Controller
         // }
 
         // Delete the post
-        $job->delete();
+        //$job->delete();
 
         // Return a response
-        return response()->json(['message' => 'Job deleted successfully'], 200);
-    }
+        //return response()->json(['message' => 'Job deleted successfully'], 200);
+    //}
 }
