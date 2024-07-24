@@ -11,6 +11,7 @@
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
+        "nextapps/laravel-swagger-ui": "^0.10.0",
         "predis/predis": "^2.2",
         "tymon/jwt-auth": "^2.1"
     },
