@@ -22,6 +22,8 @@ use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Middleware\LoginAttempts;
 
 use App\Http\Controllers\Api\V1\JobController;
+use App\Http\Controllers\Api\V1\BlogSearchController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -35,7 +37,7 @@ use App\Http\Controllers\Api\V1\JobController;
 
 Route::prefix('v1')->group(function () {
     Route::get('/', function () {
-        return 'api scaffold';
+        return 'language Learning Ai Game';
     });
     Route::post('/auth/register', [AuthController::class, 'store']);
     Route::post('/auth/login', [LoginController::class, 'login']);
@@ -58,6 +60,7 @@ Route::prefix('v1')->group(function () {
     Route::post('/contact', [ContactController::class, 'sendInquiry']);
 
     Route::get('/blogs/latest', [BlogController::class, 'latest']);
+    Route::get('/blogs/search', [BlogSearchController::class, 'search']);
 
     Route::post('/squeeze', [SqueezeController::class, 'store']);
     Route::middleware('auth:api')->group(function () {
