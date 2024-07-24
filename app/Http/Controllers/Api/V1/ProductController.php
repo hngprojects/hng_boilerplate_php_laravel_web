@@ -23,9 +23,19 @@ class ProductController extends Controller
         ]);
 
         if ($validator->fails()) {
+            $errors = [];
+            foreach ($validator->errors()->messages() as $field => $messages) {
+                foreach ($messages as $message) {
+                    $errors[] = [
+                        'parameter' => $field,
+                        'message' => $message,
+                    ];
+                }
+            }
+
             return response()->json([
                 'success' => false,
-                'errors' => $validator->errors()->all(),
+                'errors' => $errors,
                 'statusCode' => 422
             ], 422);
         }

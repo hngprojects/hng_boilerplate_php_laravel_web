@@ -12,7 +12,7 @@ use Tests\TestCase;
 class ProductControllerTest extends TestCase
 {
     use LazilyRefreshDatabase;
-    
+
     public function test_search_products_by_name()
     {
         $product = Product::factory()->create(['name' => 'Test Product']);
@@ -71,7 +71,10 @@ class ProductControllerTest extends TestCase
         $response->assertJson([
             'success' => false,
             'errors' => [
-                'The name field is required.'
+                [
+                    'parameter' => 'name',
+                    'message' => 'The name field is required.',
+                ]
             ],
             'statusCode' => 422
         ]);
