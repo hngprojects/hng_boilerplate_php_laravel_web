@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\Admin\CustomerController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\User\UserController;
 use App\Http\Controllers\Api\V1\CategoryController;
+use App\Http\Controllers\Api\V1\JobController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ContactController;
@@ -69,6 +70,9 @@ Route::prefix('v1')->group(function () {
         Route::post('/testimonials', [TestimonialController::class, 'store']);
     });
 
+    Route::middleware('auth:api')->group(function () {
+        Route::delete('/jobs/{id}', [JobController::class, 'destroy']);
+    });
 });
 
 
