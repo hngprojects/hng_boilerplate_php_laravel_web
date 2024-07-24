@@ -28,7 +28,7 @@ class ProductController extends Controller
 
         $user = auth()->user();
         $requestData['slug'] = Str::slug($request->name);
-        $product = $user->products()->create($request->all());
+        $product = $user->products()->create($requestData);
 
         return response()->json([
             'message' => 'Product created successfully',
