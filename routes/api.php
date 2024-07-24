@@ -86,9 +86,13 @@ Route::prefix('v1')->group(function () {
     
 });
 
-Route::middleware(['jwt.auth'])->group(function () {
-    Route::delete('/blogs/{id}', [BlogDeleteController::class, 'destroy']);
-}); 
+Route::middleware('auth:api')->group(function () {
+    Route::delete('/v1/blogs/{id}', [BlogDeleteController::class, 'destroy']);
+
+});
+
+    Route::delete('/v1/blogs/{id}', [BlogDeleteController::class, 'destroy']);
+    Route::match(['get', 'post', 'put', 'patch'], '/v1/blogs/{id}', [BlogDeleteController::class, 'methodNotAllowed']);
 
 
 

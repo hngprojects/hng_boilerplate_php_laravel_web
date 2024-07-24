@@ -22,10 +22,13 @@ class BlogDeleteControllerTest extends TestCase
     {
         $blog = Blog::factory()->create();
 
-        $response = $this->deleteJson('/api/blogs/' . $blog->id);
+        $response = $this->deleteJson('/api/v1/blogs/' . $blog->id);
 
-        $response->assertStatus(401)
-                 ->assertJson(['message' => 'Token not provided']);
+        $response->assertStatus(403)
+                 ->assertJson([
+                     'message' => 'You are not authorized to perform this action',
+                     'status_code' => 403
+                 ]);
     }
 
     public function test_authenticated_user_can_delete_blog_post()
@@ -36,10 +39,13 @@ class BlogDeleteControllerTest extends TestCase
         $token = JWTAuth::fromUser($user);
 
         $response = $this->withHeader('Authorization', 'Bearer ' . $token)
-                         ->deleteJson('/api/blogs/' . $blog->id);
+                         ->deleteJson('/api/v1/blogs/' . $blog->id);
 
-        $response->assertStatus(200)
-                 ->assertJson(['message' => 'Blog post deleted successfully']);
+        $response->assertStatus(202)
+                 ->assertJson([
+                     'message' => 'Blog successfully deleted',
+                     'status_code' => 202
+                 ]);
 
         // Check if the blog post is deleted from the database
         $this->assertDatabaseMissing('blogs', ['id' => $blog->id]);
@@ -51,9 +57,61 @@ class BlogDeleteControllerTest extends TestCase
         $token = JWTAuth::fromUser($user);
 
         $response = $this->withHeader('Authorization', 'Bearer ' . $token)
-                         ->deleteJson('/api/blogs/non-existent-id');
+                         ->deleteJson('/api/v1/blogs/non-existent-id');
 
         $response->assertStatus(404)
-                 ->assertJson(['error' => 'Blog post not found']);
+                 ->assertJson([
+                     'message' => 'Blog with the given Id does not exist',
+                     'status_code' => 404
+                 ]);
+    }
+
+    // public function test_internal_server_error()
+    // {
+    //     $user = User::factory()->create();
+    //     $token = JWTAuth::fromUser($user);
+
+    //     $this->mock(Blog::class, function ($mock) {
+    //         $mock->shouldReceive('findOrFail')->andThrow(new \Exception('Mock exception'));
+    //     });
+
+    //     $response = $this->withHeader('Authorization', 'Bearer ' . $token)
+    //                      ->deleteJson('/api/blogs/' . 'some-id');
+
+    //     $response->assertStatus(500)
+    //              ->assertJson([
+    //                  'message' => 'Internal server error.',
+    //                  'status_code' => 500
+    //              ]);
+    // }
+
+    // public function test_invalid_id_parameters()
+    // {
+    //     $user = User::factory()->create();
+    //     $token = JWTAuth::fromUser($user);
+
+    //     $response = $this->withHeader('Authorization', 'Bearer ' . $token)
+    //                      ->deleteJson('/api/blogs/' . 'invalid-id');
+
+    //     $response->assertStatus(400)
+    //              ->assertJson([
+    //                  'message' => 'An invalid request was sent.',
+    //                  'status_code' => 400
+    //              ]);
+    // }
+
+    public function test_invalid_method()
+    {
+        $user = User::factory()->create();
+        $token = JWTAuth::fromUser($user);
+
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)
+                         ->postJson('/api/v1/blogs/' . 'some-id');
+
+        $response->assertStatus(405)
+                 ->assertJson([
+                     'message' => 'This method is not allowed.',
+                     'status_code' => 405
+                 ]);
     }
 }
