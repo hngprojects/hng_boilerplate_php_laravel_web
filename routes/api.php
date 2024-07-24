@@ -17,10 +17,8 @@ use App\Http\Controllers\Api\V1\Admin\Plan\FeatureController;
 use App\Http\Controllers\Api\V1\Admin\Plan\SubscriptionController;
 use App\Http\Controllers\Api\V1\Testimonial\TestimonialController;
 
-use App\Http\Controllers\Api\V1\Organisation\OrganisationRemoveUserController;
 use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Controllers\Api\V1\Auth\ForgetPasswordRequestController;
-use App\Http\Middleware\LoginAttempts;
 
 use App\Http\Controllers\Api\V1\JobController;
 use App\Http\Controllers\Api\V1\BlogSearchController;
