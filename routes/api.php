@@ -80,5 +80,6 @@ Route::prefix('v1')->group(function () {
 
     Route::middleware('auth:api')->group(function () {
         Route::post('/testimonials', [TestimonialController::class, 'store']);
+        Route::post('v1/jobs', [JobController::class, 'create']);
     });
 });
