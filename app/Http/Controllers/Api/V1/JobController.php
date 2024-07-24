@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Job;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class JobController extends Controller
 {
@@ -60,7 +62,71 @@ class JobController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        // Validate the request data
+        $validator = Validator::make($request->all(), [
+            'title' => 'string|max:255',
+            'description' => 'string',
+            'location' => 'string|max:255',
+            'job_type' => 'string|max:255',
+            'company_name' => 'string|max:255',
+            'organisation_id' => 'string|exists:organisations,org_id', // Ensure org_id is referenced
+        ]);
+
+        if ($validator->fails()) {
+            Log::error('Validation errors:', ['errors' => $validator->errors()]);
+            return response()->json([
+                'message' => 'Invalid request data',
+                'errors' => $validator->errors(),
+                'status_code' => 400,
+            ], 400);
+        }
+
+        try {
+            // Get the authenticated user
+            $user = $request->user();
+
+            // Find the job by ID
+            $job = Job::find($id);
+
+            if (!$job) {
+                return response()->json([
+                    'message' => 'Job not found',
+                    'status_code' => 404,
+                ], 404);
+            }
+
+            // Check if the user has permission to update the job
+            // Assuming user has a `canUpdateJob` method to check permissions
+            if (!$user->canUpdateJob($job)) {
+                Log::error('User not authorized to update job:', ['user_id' => $user->id, 'job_id' => $id]);
+                return response()->json([
+                    'message' => 'User not authorized to update job',
+                    'status_code' => 403,
+                ], 403);
+            }
+
+            // Update the job listing
+            $job->update($request->only([
+                'title',
+                'description',
+                'location',
+                'job_type',
+                'company_name',
+                'organisation_id',
+            ]));
+
+            return response()->json([
+                'message' => 'Job listing updated successfully',
+                'status_code' => 200,
+                'data' => $job,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'An error occurred',
+                'status_code' => 500,
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     /**

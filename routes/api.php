@@ -77,5 +77,6 @@ Route::prefix('v1')->group(function () {
         Route::post('/testimonials', [TestimonialController::class, 'store']);
         Route::get('/testimonials/{testimonial_id}', [TestimonialController::class, 'show']);
         Route::get('/jobs', [JobController::class, 'index']);
+        Route::patch('/jobs/{id}', [JobController::class, 'update']);
     });
 });
