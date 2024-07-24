@@ -18,7 +18,8 @@
         "ext-zip": "*",
         "nextapps/laravel-swagger-ui": "^0.10.0",
         "predis/predis": "^2.2",
-        "tymon/jwt-auth": "^2.1"
+        "tymon/jwt-auth": "^2.1",
+        "phpoffice/phpspreadsheet": "^1.18"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
