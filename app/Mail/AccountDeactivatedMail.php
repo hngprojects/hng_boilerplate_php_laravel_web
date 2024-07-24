@@ -54,3 +54,5 @@ class AccountDeactivatedMail extends Mailable
         return [];
     }
 }
+
+?>

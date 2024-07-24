@@ -72,3 +72,5 @@ class DisableRoleTest extends TestCase
         $this->assertEquals(403, $response->status());
     }
 }
+
+?>

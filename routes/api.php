@@ -110,10 +110,11 @@ Route::prefix('v1')->group(function () {
         Route::get('/user/export/{format}', [ExportUserController::class, 'export']);
 
         // Accounts
-        Route::patch('/accounts/disable', [AccountController::class, 'deactivate']);
+        Route::patch('/accounts/deactivate', [AccountController::class, 'deactivate']);
 
-        // Roles-{Disabling}
+        // Roles
         Route::put('/organisations/{org_id/roles/{role_id}/disable', [RoleController::class, 'disableRole']);
+
     });
 
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
