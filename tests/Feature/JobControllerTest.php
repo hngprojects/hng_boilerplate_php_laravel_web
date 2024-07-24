@@ -26,6 +26,10 @@ class JobControllerTest extends TestCase
                 'title',
                 'description',
                 'location',
+<<<<<<< HEAD
+=======
+                'salary',
+>>>>>>> temp-branch
                 'job_type',
                 'company_name',
                 'created_at',

@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
                         $full_name = explode(" ", $user->name);
                         return ['first_name' => $full_name[0], 'last_name' => $full_name[1]];
                     })
-        )->hasProducts(2)->create();
+        )->hasProducts(2)->hasPreferences(5)->create();
 
         $user2 = User::factory()->has(
             Profile::factory()
@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
                         $full_name = explode(" ", $user->name);
                         return ['first_name' => $full_name[0], 'last_name' => $full_name[1]];
                     })
-        )->hasProducts(2)->create();
+        )->hasProducts(2)->hasPreferences(3)->create();
 
         $organisation1 = Organisation::factory()->create();
         $organisation2 = Organisation::factory()->create();

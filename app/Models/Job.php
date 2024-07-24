@@ -12,10 +12,12 @@ class Job extends Model
 
     protected $keyType = 'string';
     public $incrementing = false;
+
     protected $fillable = [
         'title',
         'description',
         'location',
+        'salary',
         'job_type',
         'company_name',
     ];
@@ -24,6 +26,4 @@ class Job extends Model
     {
         return $this->belongsToMany(User::class, 'job_user')->using(JobUser::class);
     }
-
-
 }
