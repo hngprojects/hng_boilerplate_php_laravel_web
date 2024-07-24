@@ -93,6 +93,29 @@
         ]
       }
     },
+    "/auth/forget-password": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Request password reset",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgetPasswordInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset request successful"
+          }
+        }
+      }
+    },
     "/users": {
       "get": {
         "tags": [
@@ -112,6 +135,24 @@
                 }
               }
             }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/users/export": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Export user data",
+        "responses": {
+          "200": {
+            "description": "User data exported successfully"
           }
         },
         "security": [
@@ -405,41 +446,6 @@
         ]
       }
     },
-    "/topics/search": {
-      "get": {
-        "tags": [
-          "Articles"
-        ],
-        "summary": "Search topics",
-        "parameters": [
-          {
-            "name": "q",
-            "in": "query",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Article"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/help-center/topics/search": {
       "get": {
         "tags": [
@@ -521,6 +527,41 @@
         }
       }
     },
+    "/blogs/search": {
+      "get": {
+        "tags": [
+          "Blogs"
+        ],
+        "summary": "Search blogs",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Blog"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/squeeze": {
       "post": {
         "tags": [
@@ -542,6 +583,114 @@
             "description": "Squeeze created successfully"
           }
         }
+      }
+    },
+    "/features": {
+      "get": {
+        "tags": [
+          "Features"
+        ],
+        "summary": "Get all features",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Feature"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Features"
+        ],
+        "summary": "Create a new feature",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeatureInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Feature created successfully"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/plans": {
+      "get": {
+        "tags": [
+          "Plans"
+        ],
+        "summary": "Get all plans",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Plan"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Plans"
+        ],
+        "summary": "Create a new plan",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlanInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Plan created successfully"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     }
   },
@@ -576,6 +725,15 @@
           }
         }
       },
+      "ForgetPasswordInput": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          }
+        }
+      },
       "AuthResponse": {
         "type": "object",
         "properties": {
@@ -603,9 +761,13 @@
           }
         }
       },
-      "OrganisationInput": {
+      "Organisation": {
         "type": "object",
         "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
           "name": {
             "type": "string"
           },
@@ -614,13 +776,9 @@
           }
         }
       },
-      "Organisation": {
+      "OrganisationInput": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
           "name": {
             "type": "string"
           },
@@ -667,9 +825,6 @@
           },
           "description": {
             "type": "string"
-          },
-          "salary": {
-            "type": "string"
           }
         }
       },
@@ -714,13 +869,6 @@
           },
           "description": {
             "type": "string"
-          },
-          "slug": {
-            "type": "string"
-          },
-          "parent_id": {
-            "type": "integer",
-            "nullable": true
           }
         }
       },
@@ -752,9 +900,6 @@
             "type": "string"
           },
           "content": {
-            "type": "string"
-          },
-          "author": {
             "type": "string"
           }
         }
@@ -801,6 +946,58 @@
           },
           "name": {
             "type": "string"
+          }
+        }
+      },
+      "Feature": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "FeatureInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "Plan": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          }
+        }
+      },
+      "PlanInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
           }
         }
       }

@@ -32,6 +32,9 @@ use App\Http\Controllers\Api\V1\User\AccountController;
 
 use App\Http\Controllers\Api\V1\Organisation\OrganizationMemberController;
 
+use App\Http\Controllers\InvitationAcceptanceController;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -74,6 +77,13 @@ Route::prefix('v1')->group(function () {
     Route::get('/blogs/search', [BlogSearchController::class, 'search']);
 
     Route::post('/squeeze', [SqueezeController::class, 'store']);
+
+
+    Route::post('/invitations/generate', [InvitationAcceptanceController::class, 'generateInvitation']);
+    Route::get('/invite/accept', [InvitationAcceptanceController::class, 'acceptInvitation']);
+    Route::post('/invite', [InvitationAcceptanceController::class, 'acceptInvitationPost']);
+
+
     Route::middleware('auth:api')->group(function () {
         // Products
         Route::post('/products', [ProductController::class, 'store']);
@@ -91,7 +101,8 @@ Route::prefix('v1')->group(function () {
         // Testimonials
         Route::post('/testimonials', [TestimonialController::class, 'store']);
         Route::get('/testimonials/{testimonial_id}', [TestimonialController::class, 'show']);
-
+        Route::delete('/testimonials/{testimonial}', [TestimonialController::class, 'destroy']);
+      
         // Jobs
         Route::get('/jobs', [JobController::class, 'index']);
         Route::get('/user/export/{format}', [ExportUserController::class, 'export']);
