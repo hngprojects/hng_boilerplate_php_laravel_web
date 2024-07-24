@@ -41,7 +41,7 @@ class CustomerController extends Controller
 
         } catch (\Exception $e) {
             Log::error('Error fetching customers: ' . $e->getMessage());
-            dd($e);
+
             return response()->json([
                 'error' => 'Bad Request',
                 "message" => "Internal server error",
