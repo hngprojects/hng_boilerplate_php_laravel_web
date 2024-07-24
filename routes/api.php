@@ -69,6 +69,7 @@ Route::prefix('v1')->group(function () {
 
         // Testimonials
         Route::post('/testimonials', [TestimonialController::class, 'store']);
+<<<<<<< HEAD
         Route::get('/testimonials/{testimonial_id}', [TestimonialController::class, 'show']);
 
         // Jobs
@@ -76,4 +77,10 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
+=======
+        Route::get('/jobs/{id}', [JobController::class, 'show']);
+    });
+
+
+>>>>>>> 0f1d53f (fixing-test)
 });
