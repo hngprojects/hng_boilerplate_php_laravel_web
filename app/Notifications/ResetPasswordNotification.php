@@ -16,7 +16,6 @@ class ResetPasswordNotification extends Notification implements ShouldQueue
      */
     public function __construct(public $url)
     {
-        $this->onConnection('redis');
     }
 
     /**
