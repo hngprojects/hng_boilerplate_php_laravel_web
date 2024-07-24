@@ -22,11 +22,6 @@ class LoginTest extends TestCase
 
     public function test_login_with_valid_credentials()
     {
-        $user = User::factory()->create([
-            'email' => 'test@gmail.com',
-            'password' => Hash::make('password123'),
-        ]);
-
         $response = $this->postJson('/api/v1/auth/login', [
             'email' => 'test@gmail.com',
             'password' => 'password123',
