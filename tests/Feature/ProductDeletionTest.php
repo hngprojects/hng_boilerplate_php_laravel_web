@@ -18,7 +18,7 @@ class ProductDeletionTest extends TestCase
         $product = \App\Models\Product::factory()->create();
 
         // Attempt to delete the product without authentication
-        $response = $this->deleteJson('/api/v1/products/' . $product->id);
+        $response = $this->deleteJson('/api/v1/products/' . $product->product_id);
 
         // Ensure the response status is 401 Unauthorized
         $response->assertStatus(401);
@@ -54,7 +54,7 @@ class ProductDeletionTest extends TestCase
         $product = \App\Models\Product::factory()->create();
 
         // Attempt to delete the product as the authenticated user
-        $deleteProduct = $this->deleteJson('/api/v1/products/' . $product->id, [], [
+        $deleteProduct = $this->deleteJson('/api/v1/products/' . $product->product_id, [], [
             'Authorization' => "Bearer $token"
         ]);
 
@@ -66,7 +66,7 @@ class ProductDeletionTest extends TestCase
 
         // Ensure the product was deleted from the database
         $this->assertDatabaseMissing('products', [
-            'id' => $product->id
+            'product_id' => $product->product_id
         ]);
     }
 
