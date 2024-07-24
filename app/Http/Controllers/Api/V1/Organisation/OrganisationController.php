@@ -113,6 +113,35 @@ class OrganisationController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+
+        if (!preg_match('/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/', $id)) {
+            return response()->json([
+                "message" => "Failed to delete organization",
+                "error" => "Invalid organization ID format",
+                "status_code" => 400
+            ]);
+        }
+        $org = Organisation::find($id);
+        if (!$org) {
+            return response()->json([
+                "message" => "Failed to delete organization",
+                "error" => "Invalid organization ID",
+                "status_code" => 404
+            ]);
+        }
+
+
+        $user = auth('api')->user();
+        if (!$user || !$org->users->contains($user->id)) {
+            return response()->json([
+                "message" => "Failed to delete organization",
+                "error" => "User not authorized to delete this organization",
+                "status_code" => 401
+            ], 401);
+        }
+
+        $org->delete();
+
+        return response()->noContent();
     }
 }

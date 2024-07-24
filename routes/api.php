@@ -68,6 +68,8 @@ Route::prefix('v1')->group(function () {
     Route::middleware('auth.jwt')->group(function () {
         Route::get('/organisations', [OrganisationController::class, 'index']);
         Route::delete('/organisations/{org_id}/users/{user_id}', [OrganisationRemoveUserController::class, 'removeUser']);
+
+        Route::delete('/organizations/{org_id}', [OrganisationController::class, 'destroy']);
     });
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
 
@@ -78,4 +80,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/testimonials/{testimonial_id}', [TestimonialController::class, 'show']);
         Route::get('/jobs', [JobController::class, 'index']);
     });
+
+    Route::apiResource('/users', UserController::class);
+   
 });
