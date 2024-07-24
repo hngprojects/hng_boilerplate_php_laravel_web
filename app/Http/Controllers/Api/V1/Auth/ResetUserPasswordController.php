@@ -24,6 +24,8 @@ class ResetUserPasswordController extends Controller
             'email' => 'required|email:rfc',
             'password' => 'required|string|confirmed|min:8',
         ]);
+        
+        $token = urldecode($token);
 
         if ($validator->fails()) {
             return $this->apiResponse(message: $validator->errors(), status_code: 400);

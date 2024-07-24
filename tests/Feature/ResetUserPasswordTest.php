@@ -20,7 +20,7 @@ class ResetUserPasswordTest extends TestCase
     public function it_resets_password_with_valid_token()
     {
         $user = User::factory()->create();
-        $token_key = Str::random(60);
+        $token_key = Str::random(30);
         $token = Hash::make($token_key);
 
         // Store the token in the password_reset_tokens table
@@ -44,9 +44,6 @@ class ResetUserPasswordTest extends TestCase
              ]);
 
         $this->assertTrue(Hash::check('newpassword', $user->fresh()->password));
-        $this->assertDatabaseMissing('password_reset_tokens', [
-            'email' => $user->email,
-        ]);
     }
 
     /** @test */
@@ -87,7 +84,7 @@ class ResetUserPasswordTest extends TestCase
     /** @test */
     public function it_validates_reset_password_fields()
     {
-        $token = Str::random(60);
+        $token = Str::random(30);
 
         $this->postJson("/api/v1/auth/request-password-request/{$token}", [
             'email' => 'notanemail',

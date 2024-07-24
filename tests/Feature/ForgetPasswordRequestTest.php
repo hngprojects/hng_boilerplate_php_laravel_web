@@ -113,7 +113,7 @@ class ForgetPasswordRequestTest extends TestCase
             'email' => 'test@example.com',
         ]);
 
-        $token_key = Str::random(60);
+        $token_key = Str::random(30);
         $token = Hash::make($token_key);
 
         $response = $this->postJson('/api/v1/auth/password-reset-email', [

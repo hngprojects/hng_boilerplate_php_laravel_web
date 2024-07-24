@@ -36,7 +36,7 @@ class ForgetPasswordRequestController extends Controller
         }
 
         // Create a new token
-        $token_key = Str::random(60);
+        $token_key = Str::random(30);
         $token = Hash::make($token_key);
 
         // Store the token in the password_reset_tokens table
@@ -54,6 +54,8 @@ class ForgetPasswordRequestController extends Controller
             Carbon::now()->addMinutes(config('auth.passwords.users.expire')),
             ['token' => $token, 'email' => $request->email]
         );
+        
+        // $url = env('APP_URL') . "/api/v1/auth/password-reset-email?email=" . urlencode($request->email) . "&token=" . urlencode($token) . "&expires=" . Carbon::now()->addMinutes(config('auth.passwords.users.expire'))->timestamp;
 
         $user->sendPasswordResetNotification($url);
 
