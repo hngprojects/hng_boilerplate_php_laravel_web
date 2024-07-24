@@ -24,6 +24,7 @@ use App\Http\Middleware\LoginAttempts;
 
 use App\Http\Controllers\Api\V1\JobController;
 use App\Http\Controllers\Api\V1\BlogSearchController;
+use App\Http\Controllers\Api\V1\User\ExportUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -83,6 +84,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/jobs', [JobController::class, 'index']);
 
 
+        Route::get('/user/export/{format}', [ExportUserController::class, 'export']);
     });
 
     Route::middleware('auth.jwt')->group(function () {
@@ -92,3 +94,5 @@ Route::prefix('v1')->group(function () {
 
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
 });
+
+
