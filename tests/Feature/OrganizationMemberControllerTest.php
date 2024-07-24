@@ -49,7 +49,7 @@ class OrganizationMemberControllerTest extends TestCase
         $organisation = $response->json('data.org_id');
 
         // Fetch members with valid organization ID
-        $response = $this->getJson("/api/v1/organization/{$organisation}/members?page=1&page_size=10", [
+        $response = $this->getJson("/api/v1/organisations/{$organisation}/members?page=1&page_size=10", [
             'Authorization' => 'Bearer ' . $token
         ]);
 
@@ -73,8 +73,7 @@ class OrganizationMemberControllerTest extends TestCase
                         'totalItems'
                     ]
                 ],
-                'statusCode'
+                'status_code'
             ]);
     }
 }
-// Added line for pushing

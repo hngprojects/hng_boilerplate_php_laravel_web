@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api\V1\Organisation;
 
 use App\Http\Controllers\Controller;
 use App\Models\OrganisationUser;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,7 +18,7 @@ class OrganizationMemberController extends Controller
             return response()->json([
                 'status' => 'fail',
                 'message' => 'Invalid organization ID',
-                'statusCode' => 400,
+                'status_code' => 400,
             ], 400);
         }
 
@@ -32,7 +31,7 @@ class OrganizationMemberController extends Controller
             return response()->json([
                 'status' => 'fail',
                 'message' => 'Unauthorized access',
-                'statusCode' => 400,
+                'status_code' => 400,
             ], 400);
         }
 
@@ -57,7 +56,7 @@ class OrganizationMemberController extends Controller
                     'totalItems' => $members->total(),
                 ],
             ],
-            'statusCode' => 200,
+            'status_code' => 200,
         ], 200);
     }
 }

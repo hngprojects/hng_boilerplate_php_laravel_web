@@ -22,6 +22,8 @@ use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Middleware\LoginAttempts;
 
 use App\Http\Controllers\Api\V1\JobController;
+
+use App\Http\Controllers\Api\V1\Organisation\OrganizationMemberController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -66,6 +68,8 @@ Route::prefix('v1')->group(function () {
         Route::post('/organisations', [OrganisationController::class, 'store']);
         Route::get('/organisations', [OrganisationController::class, 'index']);
         Route::delete('/organisations/{org_id}/users/{user_id}', [OrganisationRemoveUserController::class, 'removeUser']);
+        Route::get('organisations/{organisation}/members', [OrganizationMemberController::class, 'index']);
+
 
         // Testimonials
         Route::post('/testimonials', [TestimonialController::class, 'store']);
