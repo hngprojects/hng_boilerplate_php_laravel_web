@@ -5,10 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class CategoryProduct extends Model
+class CategoryProduct extends Pivot
 {
     use HasFactory, HasUuids;
+
+    protected $primaryKey = 'category_product_id';
 
     /**
      * Indicates if the model's ID is auto-incrementing.
