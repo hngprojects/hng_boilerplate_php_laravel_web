@@ -61,13 +61,14 @@ class JobListingTest extends TestCase
     protected function authenticateUser($user)
     {
         $token = JWTAuth::fromUser($user);
-        $this->withHeader('Authorisation', 'Bearer ' . $token);
+        $this->withHeader('Authorization', 'Bearer ' . $token);
     }
 
     public function testUpdateJobWithValidData()
     {
         $user = User::factory()->create();
         $job = Job::factory()->create(['user_id' => $user->id]);
+        $organisation = Organisation::factory()->create();
 
         $this->authenticateUser($user);
 
@@ -77,7 +78,7 @@ class JobListingTest extends TestCase
             'location' => 'Updated Location',
             'job_type' => 'Updated Type',
             'company_name' => 'Updated Company',
-            'organisation_id' => $job->organisation_id,
+            'organisation_id' => $organisation->org_id,
         ]);
 
         $response->assertStatus(200)

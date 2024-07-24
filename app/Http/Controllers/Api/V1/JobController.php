@@ -65,7 +65,6 @@ class JobController extends Controller
         // Validate the request data
         $validator = Validator::make($request->all(), [
             'title' => 'string|max:255',
-            'description' => 'string',
             'location' => 'string|max:255',
             'job_type' => 'string|max:255',
             'company_name' => 'string|max:255',
@@ -95,15 +94,6 @@ class JobController extends Controller
                 ], 404);
             }
 
-            // Check if the user has permission to update the job
-            // Assuming user has a `canUpdateJob` method to check permissions
-            if (!$user->canUpdateJob($job)) {
-                Log::error('User not authorized to update job:', ['user_id' => $user->id, 'job_id' => $id]);
-                return response()->json([
-                    'message' => 'User not authorized to update job',
-                    'status_code' => 403,
-                ], 403);
-            }
 
             // Update the job listing
             $job->update($request->only([
@@ -121,6 +111,7 @@ class JobController extends Controller
                 'data' => $job,
             ], 200);
         } catch (\Exception $e) {
+            Log::error($e->getMessage());
             return response()->json([
                 'message' => 'An error occurred',
                 'status_code' => 500,

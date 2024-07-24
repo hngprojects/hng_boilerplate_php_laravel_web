@@ -30,7 +30,7 @@ class JobFactory extends Factory
             'job_type' => $this->faker->randomElement(['Full-time', 'Part-time', 'Contract']),
             'company_name' => $this->faker->company,
             'user_id' => User::factory(),
-            'organisation_id' => User::factory()->create()->organisation_id,
+            'organisation_id' => $organisation->org_id,
         ];
     }
 }
