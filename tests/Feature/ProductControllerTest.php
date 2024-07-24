@@ -19,7 +19,7 @@ class ProductControllerTest extends TestCase
 
         // Create a user for authentication
         $this->user = User::factory()->create();
-        $this->actingAs($this->user, 'api');
+
 
         // Create a product to update
         $this->product = Product::factory()->create();
@@ -28,6 +28,7 @@ class ProductControllerTest extends TestCase
     /** @test */
     public function test_updates_a_product_with_valid_data()
     {
+        $this->actingAs($this->user, 'api');
         $updatedData = [
             'name' => 'Updated Product Name',
             'price' => 500,
@@ -65,6 +66,7 @@ class ProductControllerTest extends TestCase
     /** @test */
     public function test_returns_404_if_product_not_found()
     {
+        $this->actingAs($this->user, 'api');
         $this->product->delete();
         $response = $this->putJson("/api/v1/products/{$this->product->product_id}", [
             'name' => 'Updated Product Name',
@@ -84,6 +86,7 @@ class ProductControllerTest extends TestCase
     // /** @test */
     public function test_returns_422_if_validation_fails()
     {
+        $this->actingAs($this->user, 'api');
         $response = $this->putJson("/api/v1/products/{$this->product->product_id}", [
             'name' => '',
             'description' => '',
@@ -103,6 +106,7 @@ class ProductControllerTest extends TestCase
     // /** @test */
     public function test_updates_only_provided_fields()
     {
+        $this->actingAs($this->user, 'api');
         $response = $this->putJson("/api/v1/products/{$this->product->product_id}", [
             'tags' => 'New Tag'
         ]);
@@ -117,5 +121,19 @@ class ProductControllerTest extends TestCase
             'created_at' => $this->product->created_at->toISOString(),
             'updated_at' => $this->product->updated_at->toISOString()
         ]);
+    }
+
+    /** @test */
+    public function test_requires_authentication_to_update_product()
+    {
+        $product = Product::factory()->create();
+        $response = $this->putJson("/api/v1/products/{$product->product_id}", [
+            'name' => 'Updated Product Name',
+            'description' => 'Updated Product Description',
+            'price' => 500,
+            'tag' => 'New Tag'
+        ]);
+
+        $response->assertStatus(401);
     }
 }
