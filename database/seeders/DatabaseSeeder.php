@@ -42,7 +42,7 @@ class DatabaseSeeder extends Seeder
         $organisation3->users()->attach($user2->id);
 
         $this->call(CategoriesTableSeeder::class);
-        $this->call([ArticlesTableSeeder::class]);
+      //  $this->call([ArticlesTableSeeder::class]);
 
     }
 }
