@@ -29,7 +29,7 @@ use App\Http\Controllers\Api\V1\JobController;
 |
 | Here is where you can register API routes for your application. These
 | routes are loaded by the RouteServiceProvider and all of them will
-| be assignedd to the "api" middleware group. Make something great!
+| be assigned to the "api" middleware group. Make something great!
 |
 */
 
