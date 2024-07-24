@@ -2,84 +2,42 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Laravel Team Api Documentation",
-    "description": "Api Documentation for Laravel Team",
-    "contact": {
-      "email": "hng@a.com"
-    },
+    "description": "API documentation for the PHP Laravel HNG Team",
     "version": "1.0.0"
   },
   "servers": [
     {
-      "url": "https://virtserver.swaggerhub.com/bhimbho/SubPlanFeature/1.0.0",
-      "description": "Subscription Plan and Feature"
-    }
-  ],
-  "tags": [
-    {
-      "name": "features",
-      "description": "feature"
+      "url": "https://virtserver.swaggerhub.com/timiajayi/help-center-search/1.0.0",
+      "description": "SwaggerHub API Auto Mocking"
     },
     {
-      "name": "plans",
-      "description": "Plans"
+      "url": "https://deployment.api-php.boilerplate.hng.tech/"
     }
   ],
   "paths": {
-    "/features": {
+    "/auth/register": {
       "post": {
         "tags": [
-          "features"
+          "Authentication"
         ],
-        "summary": "creates a feature for reuse",
-        "description": "creates a feature for reuse",
-        "operationId": "addFeature",
+        "summary": "Register a new user",
         "requestBody": {
-          "description": "Inventory item to add",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/FeaturesInput"
+                "$ref": "#/components/schemas/RegisterInput"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "201": {
-            "description": "feature created successfully",
+            "description": "User registered successfully",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Features"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "feature creation failed",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_400"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthenticated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_401"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "validation error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_422"
+                  "$ref": "#/components/schemas/AuthResponse"
                 }
               }
             }
@@ -87,64 +45,501 @@
         }
       }
     },
-    "/plans": {
+    "/auth/login": {
       "post": {
         "tags": [
-          "plans"
+          "Authentication"
         ],
-        "summary": "creates a subscription plan",
-        "description": "Adds an item to the system",
-        "operationId": "addplan",
+        "summary": "Login user",
         "requestBody": {
-          "description": "Inventory item to add",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SubscriptionPlanInput"
+                "$ref": "#/components/schemas/LoginInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Logout user",
+        "responses": {
+          "200": {
+            "description": "Logout successful"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get all users",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
               }
             }
           }
         },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/organisations": {
+      "get": {
+        "tags": [
+          "Organisations"
+        ],
+        "summary": "Get all organisations",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Organisation"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Organisations"
+        ],
+        "summary": "Create a new organisation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrganisationInput"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "201": {
-            "description": "subscription plan created successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SubscriptionPlan"
-                }
+            "description": "Organisation created successfully"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/organisations/{org_id}/users/{user_id}": {
+      "delete": {
+        "tags": [
+          "Organisations"
+        ],
+        "summary": "Remove user from organisation",
+        "parameters": [
+          {
+            "name": "org_id",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User removed successfully"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/testimonials": {
+      "post": {
+        "tags": [
+          "Testimonials"
+        ],
+        "summary": "Create a new testimonial",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TestimonialInput"
               }
             }
           },
-          "400": {
-            "description": "creation of subscription plan failed",
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Testimonial created successfully"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/testimonials/{testimonial_id}": {
+      "get": {
+        "tags": [
+          "Testimonials"
+        ],
+        "summary": "Get a specific testimonial",
+        "parameters": [
+          {
+            "name": "testimonial_id",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/inline_response_400_1"
+                  "$ref": "#/components/schemas/Testimonial"
                 }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/jobs": {
+      "get": {
+        "tags": [
+          "Jobs"
+        ],
+        "summary": "Get all jobs",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Job"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/customers": {
+      "get": {
+        "tags": [
+          "Customers"
+        ],
+        "summary": "Get all customers",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Customer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/roles": {
+      "post": {
+        "tags": [
+          "Roles"
+        ],
+        "summary": "Create a new role",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoleInput"
               }
             }
           },
-          "401": {
-            "description": "Unauthenticated",
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Role created successfully"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/products/categories": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Get all product categories",
+        "responses": {
+          "200": {
+            "description": "Successful response",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/inline_response_401"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Category"
+                  }
                 }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products": {
+      "post": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Create a new product",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductInput"
               }
             }
           },
-          "422": {
-            "description": "validation error",
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Product created successfully"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/topics/search": {
+      "get": {
+        "tags": [
+          "Articles"
+        ],
+        "summary": "Search topics",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/inline_response_422"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Article"
+                  }
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/help-center/topics/search": {
+      "get": {
+        "tags": [
+          "Articles"
+        ],
+        "summary": "Search help center topics",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Article"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contact": {
+      "post": {
+        "tags": [
+          "Contact"
+        ],
+        "summary": "Send an inquiry",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContactInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Inquiry sent successfully"
+          }
+        }
+      }
+    },
+    "/blogs/latest": {
+      "get": {
+        "tags": [
+          "Blogs"
+        ],
+        "summary": "Get latest blogs",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Blog"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/squeeze": {
+      "post": {
+        "tags": [
+          "Squeeze"
+        ],
+        "summary": "Create a squeeze",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SqueezeInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Squeeze created successfully"
           }
         }
       }
@@ -152,188 +547,269 @@
   },
   "components": {
     "schemas": {
-      "SubscriptionPlan": {
-        "required": [
-          "description",
-          "duration",
-          "name",
-          "price"
-        ],
+      "RegisterInput": {
         "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid",
-            "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
-          },
-          "name": {
-            "type": "string",
-            "example": "basic"
-          },
-          "price": {
-            "type": "integer",
-            "example": 1000
-          },
-          "duration": {
-            "type": "string",
-            "example": "monthly"
-          },
-          "description": {
-            "type": "string",
-            "example": "this plan is valid for one month with extra 3days"
-          },
-          "features": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Features"
-            }
-          }
-        }
-      },
-      "Features": {
-        "required": [
-          "name",
-          "status"
-        ],
         "properties": {
           "name": {
-            "type": "string",
-            "example": "2TB space"
+            "type": "string"
           },
-          "description": {
+          "email": {
             "type": "string",
-            "format": "string",
-            "example": "xeoo"
+            "format": "email"
           },
-          "status": {
-            "type": "integer",
-            "description": "Status of the feature (can only be 1 or 0)",
-            "example": 1
-          },
-          "status_text": {
+          "password": {
             "type": "string",
-            "description": "Status text of the feature (can only be active or inactive)",
-            "example": "active"
+            "format": "password"
           }
         }
       },
-      "SubscriptionPlanInput": {
-        "required": [
-          "description",
-          "duration",
-          "name",
-          "price"
-        ],
+      "LoginInput": {
         "type": "object",
         "properties": {
-          "id": {
+          "email": {
             "type": "string",
-            "format": "uuid",
-            "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+            "format": "email"
           },
-          "name": {
+          "password": {
             "type": "string",
-            "example": "basic"
-          },
-          "price": {
-            "type": "integer",
-            "example": 1000
-          },
-          "duration": {
-            "type": "string",
-            "example": "monthly"
-          },
-          "description": {
-            "type": "string",
-            "example": "this plan is valid for one month with extra 3days"
-          },
-          "features": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/SubscriptionPlanInput_features"
-            }
+            "format": "password"
           }
         }
       },
-      "FeaturesInput": {
-        "required": [
-          "name",
-          "status"
-        ],
-        "properties": {
-          "name": {
-            "type": "string",
-            "example": "2TB space"
-          },
-          "description": {
-            "type": "string",
-            "format": "string",
-            "example": "xeoo"
-          }
-        }
-      },
-      "inline_response_401": {
+      "AuthResponse": {
         "type": "object",
         "properties": {
-          "message": {
-            "type": "string",
-            "example": "Unauthenticated"
-          }
-        }
-      },
-      "inline_response_422": {
-        "type": "object",
-        "properties": {
-          "message": {
-            "type": "string",
-            "example": "one or more validation errors"
+          "token": {
+            "type": "string"
           },
-          "errors": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/inline_response_422_errors"
-            }
+          "user": {
+            "$ref": "#/components/schemas/User"
           }
         }
       },
-      "inline_response_400": {
-        "type": "object",
-        "properties": {
-          "error": {
-            "type": "string",
-            "example": "feature creation failed"
-          }
-        }
-      },
-      "inline_response_400_1": {
-        "type": "object",
-        "properties": {
-          "error": {
-            "type": "string",
-            "example": "creation of subscription plan failed"
-          }
-        }
-      },
-      "SubscriptionPlanInput_features": {
+      "User": {
         "type": "object",
         "properties": {
           "id": {
             "type": "string",
             "format": "uuid"
           },
-          "status": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
             "type": "string",
-            "example": "1 for active 0 for inactive"
+            "format": "email"
           }
         }
       },
-      "inline_response_422_errors": {
+      "OrganisationInput": {
+        "type": "object",
         "properties": {
           "name": {
-            "type": "string",
-            "example": "name field required"
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
           }
         }
+      },
+      "Organisation": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "TestimonialInput": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string"
+          },
+          "author": {
+            "type": "string"
+          }
+        }
+      },
+      "Testimonial": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "content": {
+            "type": "string"
+          },
+          "author": {
+            "type": "string"
+          }
+        }
+      },
+      "Job": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "salary": {
+            "type": "string"
+          }
+        }
+      },
+      "Customer": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          }
+        }
+      },
+      "RoleInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Category": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "parent_id": {
+            "type": "integer",
+            "nullable": true
+          }
+        }
+      },
+      "ProductInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "category_id": {
+            "type": "integer"
+          }
+        }
+      },
+      "Article": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "author": {
+            "type": "string"
+          }
+        }
+      },
+      "ContactInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "Blog": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "author": {
+            "type": "string"
+          }
+        }
+      },
+      "SqueezeInput": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }
