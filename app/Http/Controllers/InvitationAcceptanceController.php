@@ -103,19 +103,7 @@ class InvitationAcceptanceController extends Controller
             ], 400);
         }
 
-        // Retrieve the user by email
-        $userEmail = $invitation->email;
-        $user = User::where('email', $userEmail)->first();
-
-        if (!$user) {
-            return response()->json([
-                'message' => 'User not found',
-                'errors' => ['User not found'],
-                'status_code' => 400
-            ], 400);
-        }
-
-        // Get the organization and attach the user
+        // Get the organization associated with the invitation
         $organization = $invitation->organization;
 
         if (!$organization) {
@@ -126,13 +114,13 @@ class InvitationAcceptanceController extends Controller
             ], 400);
         }
 
-        $organization->users()->attach($user->id);
-
+        // Success response
         return response()->json([
             'message' => 'Invitation accepted, you have been added to the organization',
             'status' => 200
         ], 200);
     }
+
 
     /**
      * Handle POST request to accept an invitation.
@@ -152,7 +140,7 @@ class InvitationAcceptanceController extends Controller
         }
 
         // Define required fields
-        $requiredFields = ['invitationLink'];
+        $requiredFields = ['invitation_link'];
 
         // Check if the required fields are present in the request
         $data = $request->only($requiredFields);
@@ -168,11 +156,11 @@ class InvitationAcceptanceController extends Controller
 
         // Validate the request data
         $data = $request->validate([
-            'invitationLink' => 'required|string'
+            'invitation_link' => 'required|string'
         ]);
 
         // Check if the invitation link exists
-        $invitationExists = Invitation::where('link', $data['invitationLink'])->exists();
+        $invitationExists = Invitation::where('link', $data['invitation_link'])->exists();
 
         if (!$invitationExists) {
             return response()->json([
