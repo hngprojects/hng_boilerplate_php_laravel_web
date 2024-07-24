@@ -4,23 +4,13 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-<<<<<<< HEAD
-use App\Models\Job;
-
-class JobController extends Controller
-{
-=======
-
 use App\Http\Resources\JobResource;
 use App\Models\Job;
-
 use Illuminate\Http\JsonResponse;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class JobController extends Controller
 {
-
->>>>>>> 0f1d53f (fixing-test)
     /**
      * Display a listing of the resource.
      */
@@ -29,9 +19,7 @@ class JobController extends Controller
         try {
             $page = $request->input('page', 1);
             $size = $request->input('size', 10);
-    
             $jobs = Job::paginate($size, ['id', 'title', 'description', 'location', 'salary', 'job_type'], 'page', $page);
-    
             return response()->json([
                 'message' => 'Job listings retrieved successfully.',
                 'data' => $jobs->items(),
@@ -51,7 +39,6 @@ class JobController extends Controller
         }
     }
 
-
     /**
      * Store a newly created resource in storage.
      */
@@ -63,15 +50,9 @@ class JobController extends Controller
     /**
      * Display the specified resource.
      */
-<<<<<<< HEAD
-    public function show(string $id)
-    {
-        //
-=======
     public function show(string $id): JsonResponse
     {
         $job = Job::find($id);
-
         if (!$job) {
             return response()->json([
                 'status_code' => 404,
@@ -79,9 +60,7 @@ class JobController extends Controller
                 'error' => 'Not Found'
             ], 404);
         }
-
         return response()->json(new JobResource($job), 200);
->>>>>>> 0f1d53f (fixing-test)
     }
 
     /**
