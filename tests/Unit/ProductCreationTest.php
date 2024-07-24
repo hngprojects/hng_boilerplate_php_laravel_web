@@ -53,8 +53,12 @@ class ProductCreationTest extends TestCase
 
         // // Assert that the product was created in the database
         $this->assertDatabaseHas('products', [
-            'name' => 'Test Product',
+            'name' => $name,
             'description' => 'Test description'
+'price' => 100.00,
+            'slug' => Str::slug($name),
+            'tags' => 'tag1, tag2',
+            'imageUrl' => 'https://lorempixel.com/640/480'
         ]);
     }
 }
