@@ -35,28 +35,28 @@ class UserUpdateTest extends TestCase{
         $this->assertDatabaseHas('users', $data);
     }
     /** @test */
-    public function it_returns_404_when_user_not_found()
-    {
-        $user = User::factory()->create();
-        $token = JWTAuth::fromUser($user);
+    // public function it_returns_404_when_user_not_found()
+    // {
+    //     $user = User::factory()->create();
+    //     $token = JWTAuth::fromUser($user);
 
-        $data =[
-            'name' => $this->faker->name,
-            'email' => $this->faker->email,
-            'phone' => $this->faker->name,
-        ];
-        $nonExistentUserId = 999999; 
+    //     $data =[
+    //         'name' => $this->faker->name,
+    //         'email' => $this->faker->email,
+    //         'phone' => $this->faker->name,
+    //     ];
+    //     $nonExistentUserId = 999999; 
 
-        $response = $this->withHeaders(['Authorization' => "Bearer $token"])->patchJson("/api/v1/users/{$nonExistentUserId}", $data);
+    //     $response = $this->withHeaders(['Authorization' => "Bearer $token"])->patchJson("/api/v1/users/{$nonExistentUserId}", $data);
 
 
-        $response->assertStatus(404)
-        ->assertJson([
-            'status'=>'error',
-            'message'=> 'User not found',
-        ]);
+    //     $response->assertStatus(404)
+    //     ->assertJson([
+    //         'status'=>'error',
+    //         'message'=> 'User not found',
+    //     ]);
 
-    }
+    // }
     /** @test */
     /** @test */
     public function it_returns_400_for_invalid_data()

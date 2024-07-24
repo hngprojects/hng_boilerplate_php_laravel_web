@@ -79,6 +79,8 @@ Route::prefix('v1')->group(function () {
         Route::post('/organisations', [OrganisationController::class, 'store']);
         Route::get('/organisations', [OrganisationController::class, 'index']);
         Route::delete('/organisations/{org_id}/users/{user_id}', [OrganisationRemoveUserController::class, 'removeUser']);
+
+        Route::delete('/organizations/{org_id}', [OrganisationController::class, 'destroy']);
     });
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
 
