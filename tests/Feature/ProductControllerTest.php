@@ -26,29 +26,47 @@ class ProductControllerTest extends TestCase
     }
 
     /** @test */
-    public function it_updates_a_product_with_valid_data()
+    public function test_updates_a_product_with_valid_data()
     {
-        $response = $this->putJson("/api/v1/products/{$this->product->id}", [
+        $updatedData = [
             'name' => 'Updated Product Name',
+            'price' => 500,
             'description' => 'Updated Product Description',
-            'price' => 500.0,
-            'tag' => 'New Tag'
-        ]);
+            'tags' => 'New Tag',
+            'slug' => 'updated-product-name',
+            'imageUrl' => 'https://example.com/image.png'
+        ];
+
+        $response = $this->putJson("/api/v1/products/{$this->product->product_id}", $updatedData);
 
         $response->assertStatus(200);
         $response->assertJson([
-            'id' => $this->product->id,
+            'id' => $this->product->product_id,
+            'name' => 'Updated Product Name',
+            'price' => 500,
+            'description' => 'Updated Product Description',
+            'tag' => 'New Tag',
+            'created_at' => $this->product->created_at->toISOString(),
+            'updated_at' => $this->product->updated_at->toISOString()
+        ]);
+
+        // Verify the product has been updated in the database
+        $this->assertDatabaseHas('products', [
+            'product_id' => $this->product->product_id,
             'name' => 'Updated Product Name',
             'description' => 'Updated Product Description',
-            'price' => 500.0,
-            'tag' => 'New Tag',
+            'price' => 500,
+            'tags' => 'New Tag',
+            'slug' => 'updated-product-name',
+            'imageUrl' => 'https://example.com/image.png'
         ]);
     }
 
     /** @test */
-    public function it_returns_404_if_product_not_found()
+    public function test_returns_404_if_product_not_found()
     {
-        $response = $this->putJson('/api/v1/products/999', [
+        $this->product->delete();
+        $response = $this->putJson("/api/v1/products/{$this->product->product_id}", [
             'name' => 'Updated Product Name',
             'description' => 'Updated Product Description',
             'price' => 500.0,
@@ -63,34 +81,41 @@ class ProductControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
-    public function it_returns_400_if_validation_fails()
+    // /** @test */
+    public function test_returns_422_if_validation_fails()
     {
-        $response = $this->putJson("/api/v1/products/{$this->product->id}", [
+        $response = $this->putJson("/api/v1/products/{$this->product->product_id}", [
             'name' => '',
             'description' => '',
             'price' => 'invalid',
             'tag' => ''
         ]);
 
-        $response->assertStatus(422); // Laravel returns 422 for validation errors
-        $response->assertJsonValidationErrors(['name', 'description', 'price', 'tag']);
+        $response->assertStatus(422)
+            ->assertJsonStructure([
+                'status_code',
+                'message',
+                'error'
+            ]);
     }
 
-    /** @test */
-    public function it_updates_only_provided_fields()
+
+    // /** @test */
+    public function test_updates_only_provided_fields()
     {
-        $response = $this->putJson("/api/v1/products/{$this->product->id}", [
-            'tag' => 'New Tag'
+        $response = $this->putJson("/api/v1/products/{$this->product->product_id}", [
+            'tags' => 'New Tag'
         ]);
 
         $response->assertStatus(200);
         $response->assertJson([
-            'id' => $this->product->id,
+            'id' => $this->product->product_id,
             'name' => $this->product->name, // Unchanged
             'description' => $this->product->description, // Unchanged
             'price' => $this->product->price, // Unchanged
             'tag' => 'New Tag',
+            'created_at' => $this->product->created_at->toISOString(),
+            'updated_at' => $this->product->updated_at->toISOString()
         ]);
     }
 }

@@ -7,6 +7,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateProductRequest;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class ProductController extends Controller
@@ -56,22 +57,31 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $validate = $request->validate([
+        // Define validation rules
+        $rules = [
             'name' => 'sometimes|string',
             'description' => 'sometimes|string',
             'price' => 'sometimes|numeric',
-            'tag' => 'sometimes|string'
-        ]);
+            'tags' => 'sometimes|string',
+            'imageUrl' => 'sometimes|string',
+            'slug' => 'sometimes|string'
+        ];
 
-        if (!$validate) {
+        // Validate the request data
+        $validator = Validator::make($request->all(), $rules);
+
+        // Check for validation errors
+        if ($validator->fails()) {
             return response()->json([
-                'status_code' => 400,
-                'message' => $validate,
-                'error' => 'Bad Request'
-            ], 400);
+                'status_code' => 422,
+                'message' => $validator->errors()->all(),
+                'error' => 'Validation fails'
+            ], 422);
         }
 
-        $product = Product::find($id);
+        $validate = $validator->validated();
+
+        $product = Product::where('product_id', $id)->first();
 
         if (!$product) {
             return response()->json([
@@ -90,13 +100,20 @@ class ProductController extends Controller
         }
 
         if (isset($validate['price'])) {
-            $product->description = $validate['price'];
+            $product->price = $validate['price'];
         }
 
-        if (isset($validate['tag'])) {
-            $product->description = $validate['tag'];
+        if (isset($validate['tags'])) {
+            $product->tags = $validate['tags'];
         }
 
+        if (isset($validate['slug'])) {
+            $product->slug = $validate['slug'];
+        }
+
+        if (isset($validate['imageUrl'])) {
+            $product->imageUrl = $validate['imageUrl'];
+        }
 
         $product->updated_at = now(); // Update timestamp
 
@@ -105,11 +122,11 @@ class ProductController extends Controller
 
         // Return response with updated product details
         return response()->json([
-            'id' => $product->id,
+            'id' => $product->product_id,
             'name' => $product->name,
             'price' => $product->price,
             'description' => $product->description,
-            'tag' => $product->tag,
+            'tag' => $product->tags,
             'created_at' => $product->created_at,
             'updated_at' => $product->updated_at,
         ], 200);
