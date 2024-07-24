@@ -8,6 +8,21 @@ on:
 jobs:
   run-tests:
     runs-on: ubuntu-latest
+    services:
+     postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: postgres        
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+        ports:
+          - 5432:5432
+      # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - name: Checkout code
@@ -18,15 +33,6 @@ jobs:
         with:
           php-version: '8.2'
           extensions: pgsql, pdo_pgsql, zip, bcmath
-
-      - name: Install PostgreSQL
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y postgresql postgresql-contrib
-          sudo service postgresql start
-          sudo -u postgres psql -c "CREATE DATABASE mydatabase;"
-          sudo -u postgres psql -c "CREATE USER myuser WITH ENCRYPTED PASSWORD 'mypassword';"
-          sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE mydatabase TO myuser;"
 
       - name: Get Composer cache directory
         id: composer-cache
@@ -50,9 +56,9 @@ jobs:
           echo "DB_CONNECTION=pgsql" >> .env
           echo "DB_HOST=localhost" >> .env
           echo "DB_PORT=5432" >> .env
-          echo "DB_DATABASE=mydatabase" >> .env
-          echo "DB_USERNAME=myuser" >> .env
-          echo "DB_PASSWORD=mypassword" >> .env
+          echo "DB_DATABASE=postgres" >> .env
+          echo "DB_USERNAME=postgres" >> .env
+          echo "DB_PASSWORD=postgres" >> .env
           # Uncomment the line below if you prefer to set DATABASE_URL instead of individual DB environment variables
           # echo "DATABASE_URL=postgres://${{ secrets.DB_USERNAME }}:${{ secrets.DB_PASSWORD }}@${{ secrets.DB_HOST }}:${{ secrets.DB_PORT }}/${{ secrets.DB_DATABASE }}?sslmode=disable" >> .env
 
