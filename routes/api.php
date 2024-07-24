@@ -83,6 +83,10 @@ Route::prefix('v1')->group(function () {
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
 
 
+        Route::delete('/organizations/{org_id}', [OrganisationController::class, 'destroy']);
+    });
+    Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
+
         // Testimonials
         Route::post('/testimonials', [TestimonialController::class, 'store']);
         Route::get('/testimonials/{testimonial_id}', [TestimonialController::class, 'show']);
@@ -90,6 +94,8 @@ Route::prefix('v1')->group(function () {
         // Jobs
         Route::get('/jobs', [JobController::class, 'index']);
         
+        
         Route::get('/user/export/{format}', [ExportUserController::class, 'export']);
     });
+   
 
