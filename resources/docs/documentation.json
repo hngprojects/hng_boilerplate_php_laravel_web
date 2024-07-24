@@ -1,10 +1,10 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Subscription Plan and Feature API",
-    "description": "Subscription Plan and Feature API",
+    "title": "Laravel Team Api Documentation",
+    "description": "Api Documentation for Laravel Team",
     "contact": {
-      "email": "soneyeabimbola@aol.com"
+      "email": "hng@a.com"
     },
     "version": "1.0.0"
   },
