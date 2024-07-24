@@ -19,8 +19,8 @@ use App\Http\Controllers\Api\V1\Testimonial\TestimonialController;
 use App\Http\Controllers\Api\V1\Organisation\OrganisationRemoveUserController;
 use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Controllers\JobController;
+// use App\Http\Controllers\Api\V1\JobController;
 
-use App\Http\Controllers\Api\V1\JobController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -80,6 +80,7 @@ Route::prefix('v1')->group(function () {
 
     Route::middleware('auth:api')->group(function () {
         Route::post('/testimonials', [TestimonialController::class, 'store']);
-        Route::post('v1/jobs', [JobController::class, 'create']);
+        Route::post('/jobs', [JobController::class, 'create']);
+        Route::delete('/jobs/{id}', [JobController::class, 'delete']);
     });
 });

@@ -27,4 +27,9 @@ class Job extends Model
         'user_id',
         'organisation_id',
     ];
+
+    // public function users()
+    // {
+    //     return $this->belongsToMany(User::class, 'job_user')->using(JobUser::class);
+    // }
 }

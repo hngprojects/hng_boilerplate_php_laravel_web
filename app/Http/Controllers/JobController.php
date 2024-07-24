@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Job;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class JobController extends Controller
 {
@@ -68,5 +69,32 @@ class JobController extends Controller
                 'error' => $e->getMessage(),
             ], 500);
         }
+    }
+
+    public function delete(string $id, Request $request)
+    {
+        // Get the authenticated user
+        if(!$user = $request->user()) {
+            return response()->json(['message' => 'Unauthorized', 'error' => 'Bad Request'], 400);
+        }
+
+        //Find the post by Id
+        $job = Job::find($id);
+
+        // Check if the job exists
+        if (!$job) {
+            return response()->json(['message' => 'Job not found', 'error' => 'Not Found'], 404);
+        }
+
+        // Check if the authenticated user is the owner of the job or related to the job
+        // if (!$job->users->contains(Auth::id())) {
+        //     return response()->json(['message' => 'Unauthorized', 'error' => 'Bad Request'], 400);
+        // }
+
+        // Delete the post
+        $job->delete();
+
+        // Return a response
+        return response()->json(['message' => 'Job deleted successfully'], 200);
     }
 }
