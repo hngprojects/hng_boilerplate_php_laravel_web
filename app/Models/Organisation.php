@@ -13,7 +13,7 @@ class Organisation extends Model
 
     protected $fillable = [
         "name",
-        // "user_id",
+        "user_id",
         "email",
         "description",
         "industry",
@@ -74,7 +74,7 @@ class Organisation extends Model
     {
         return $this->belongsToMany(User::class, 'organisation_user', 'org_id', 'user_id')->using(OrganisationUser::class);
     }
-    
+
     public function getPublicColumns()
     {
         $publicColumns = ['org_id', "user_id", "name", "slug", "description", "email", "industry", "type", "country", "address", "state" ];

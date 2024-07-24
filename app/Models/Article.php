@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 class Article extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUuids;
     protected static function booted()
     {
         static::creating(function ($article) {
@@ -16,9 +17,9 @@ class Article extends Model
         });
     }
     protected $primaryKey = 'article_id';
-    protected $keyType = 'string';    
+    protected $keyType = 'string';
     public $incrementing = false;
-    protected $fillable = ['user_id','title', 'content'];
+    protected $fillable = ['user_id', 'title', 'content'];
     public function author()
     {
         return $this->belongsTo(User::class, 'user_id');

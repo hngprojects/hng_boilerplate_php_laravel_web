@@ -38,6 +38,7 @@ class OrganisationFactory extends Factory
             'country' => $this->faker->country,
             'address' => $this->faker->address,
             'state' => $this->faker->state,
+            'user_id' => User::factory(),
         ];
     }
 }

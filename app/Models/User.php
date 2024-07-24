@@ -111,11 +111,6 @@ class User extends Authenticatable  implements JWTSubject
         return $this->hasMany(Product::class, 'user_id', 'id');
     }
 
-    // public function roles()
-    // {
-    //     return $this->belongsToMany(Role::class, 'users_roles');
-    // }
-
     public function isAdmin($org_id) 
     {
         return $this->roles()->where('org_id', $org_id)->where('is_admin', true)->exists();
@@ -188,6 +183,11 @@ class User extends Authenticatable  implements JWTSubject
             $this->roles()->whereHas('permissions', function ($query) use ($permissions) {
                 $query->whereIn('name', $permissions);
             })->exists();
+    }
+
+    public function preferences(): HasMany
+    {
+        return $this->hasMany(Preference::class);
     }
 
 }
