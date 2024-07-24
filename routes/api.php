@@ -41,7 +41,7 @@ Route::prefix('v1')->group(function () {
     Route::post('/auth/register', [AuthController::class, 'store']);
     Route::post('/auth/login', [LoginController::class, 'login']);
     Route::post('/auth/logout', [LoginController::class, 'logout'])->middleware('auth:api');
-    Route::post('/auth/password-reset-email', [ForgetPasswordRequestController::class])->name('password.reset');
+    Route::post('/auth/password-reset-email', ForgetPasswordRequestController::class)->name('password.reset');
     Route::post('/roles', [RoleController::class, 'store']);
 
     Route::apiResource('/users', UserController::class);

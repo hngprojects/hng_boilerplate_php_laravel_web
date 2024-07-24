@@ -21,8 +21,8 @@ class ForgetPasswordRequestTest extends TestCase
 
         $user = User::factory()->create();
         // $url = 'http://example.com/reset-password?token=abc123&email=test@example.com';
-        $token_key = Str::random(60); // Generate a token
-        $token = Hash::make($token_key); // Generate a token
+        $token_key = Str::random(60);
+        $token = Hash::make($token_key);
         $url = URL::temporarySignedRoute(
             'password.reset',
             now()->addMinutes(config('auth.passwords.users.expire')),
