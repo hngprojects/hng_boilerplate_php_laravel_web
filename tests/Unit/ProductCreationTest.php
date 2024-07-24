@@ -34,7 +34,11 @@ class ProductCreationTest extends TestCase
         // Create a product as the authenticated user
         $product = [
             'name' => 'Test Product',
-            'description' => 'Test description'
+            'description' => 'Test description' 
+            'price' => 100.00,
+            'slug' => Str::slug(),
+            'tags' => 'tag1, tag2',
+            'imageUrl' => 'https://lorempixel.com/640/480'
         ];
 
         $createProduct = $this->postJson('/api/v1/products', $product, [
