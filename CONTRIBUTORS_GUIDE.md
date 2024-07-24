@@ -19,6 +19,7 @@ name Nwanozie Promise
 6. **Review Feedback:** Be open to feedback and be ready to make additional changes to your PR based on the review.
 
 ---
+## Description
 
 # Pull Request Template
 
@@ -46,6 +47,7 @@ Fixes # (issue) [Tag the issue number here]
 - [ ] My changes generate no new warnings
 - [ ] I have added tests that prove my fix is effective or that my feature works
 - [ ] New and existing unit tests pass locally with my changes
+- [ ] Any dependent changes have been merged and published in downstream modules
 
 ## Screenshots (if appropriate)
 
