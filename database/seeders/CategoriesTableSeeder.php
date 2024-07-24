@@ -15,7 +15,7 @@ class CategoriesTableSeeder extends Seeder
     public function run()
     {
         // Truncate the table to remove existing records
-        Category::truncate();
+        // Category::truncate();
 
         $categories = [
             [

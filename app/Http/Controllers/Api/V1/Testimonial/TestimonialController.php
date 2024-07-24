@@ -169,8 +169,43 @@ public function show($id)
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Testimonial $testimonial)
+    public function destroy($id)
     {
-        //
+        $user = Auth::user();
+
+
+        if (!$user) {
+            return response()->json([
+                'status' => 'Unauthorized',
+                'message' => 'Unauthorized. Please log in.',
+                'status_code' => 401,
+            ], 401);
+        }
+
+        if ($user->role !== 'admin') {
+            return response()->json([
+                'status' => 'Forbidden',
+                'message' => 'You do not have the required permissions to perform this action.',
+                'status_code' => 403,
+            ], 403);
+        }
+
+        try {
+            $testimonial = Testimonial::findOrFail($id);
+            $testimonial->delete();
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'status' => 'Not Found',
+                'message' => 'Testimonial not found.',
+                'status_code' => 404,
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Testimonial deleted successfully',
+            'status_code' => 200,
+        ], 200);
     }
+
 }
