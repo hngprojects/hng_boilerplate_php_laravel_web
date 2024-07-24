@@ -7,6 +7,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateProductRequest;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -23,10 +24,10 @@ class ProductController extends Controller
      */
     public function store(CreateProductRequest $request)
     {
-        $request->validated();
+        $requestData = $request->validated();
 
         $user = auth()->user();
-
+        $requestData['slug'] = Str::slug($request->name);
         $product = $user->products()->create($request->all());
 
         return response()->json([
