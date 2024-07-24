@@ -49,10 +49,6 @@ Route::prefix('v1')->group(function () {
     Route::middleware('throttle:10,1')->get('/topics/search', [ArticleController::class, 'search']);
 
 
-    Route::middleware('auth:api')->group(function() {
-        Route::post('/products', [ProductController::class, 'store']);
-    });
-
     Route::middleware('throttle:10,1')->get('/help-center/topics/search', [ArticleController::class, 'search']);
     Route::post('/contact', [ContactController::class, 'sendInquiry']);
 
@@ -68,10 +64,6 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('/plans', SubscriptionController::class);
         // Organisations
         Route::post('/organisations', [OrganisationController::class, 'store']);
-        Route::apiResource('jobs', JobController::class);
-    });
-
-    Route::middleware('auth.jwt')->group(function () {
         Route::get('/organisations', [OrganisationController::class, 'index']);
         Route::delete('/organisations/{org_id}/users/{user_id}', [OrganisationRemoveUserController::class, 'removeUser']);
 
@@ -80,7 +72,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/testimonials/{testimonial_id}', [TestimonialController::class, 'show']);
 
         // Jobs
-        Route::get('/jobs', [JobController::class, 'index']);
+        Route::apiResource('jobs', JobController::class);
     });
 
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
