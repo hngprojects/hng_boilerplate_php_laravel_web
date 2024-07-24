@@ -30,7 +30,7 @@ jobs:
             # Create database and user
             sudo -u postgres psql -c "CREATE DATABASE mydatabase;"
             sudo -u postgres psql -c "CREATE USER myuser WITH ENCRYPTED PASSWORD 'mypassword';"
-            sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE testing TO myuser;"
+            sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE mydatabase TO myuser;"
           else
             echo "PostgreSQL is already installed."
           fi
@@ -49,6 +49,11 @@ jobs:
         run: |
           sudo -u postgres psql -c "\l"  # List databases
           sudo -u postgres psql -c "\du"  # List users
+
+      - name: Reset PostgreSQL user password
+        run: |
+          echo "Resetting PostgreSQL user password..."
+          sudo -u postgres psql -c "ALTER USER myuser WITH PASSWORD 'mypassword';"
 
       - name: Get Composer cache directory
         id: composer-cache
