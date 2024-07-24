@@ -7,63 +7,18 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateProductRequest;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Category;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Cache;
 
 class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
-        try {
-            // Validate pagination parameters
-            $request->validate([
-                'page' => 'integer|min:1',
-                'limit' => 'integer|min:1',
-            ]);
-
-            $page = $request->input('page', 1);
-            $limit = $request->input('limit', 10);
-
-            // Calculate offset
-            $offset = ($page - 1) * $limit;
-
-            $products = Product::select('name', 'price')
-                ->offset($offset)
-                ->limit($limit)
-                ->get();
-
-            // Get total product count
-            $totalItems = Product::count();
-            $totalPages = ceil($totalItems / $limit);
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Products retrieved successfully',
-                'products' => $products,
-                'pagination' => [
-                    'totalItems' => $totalItems,
-                    'totalPages' => $totalPages,
-                    'currentPage' => $page,
-                ],
-                'status_code' => 200,
-            ], 200);
-
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return response()->json([
-                'status' => 'bad request',
-                'message' => 'Invalid query params passed',
-                'status_code' => 400,
-            ], 400);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Internal server error',
-                'status_code' => 500,
-            ], 500);
-        }
+        //
     }
 
     /**
@@ -110,28 +65,59 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($productId)
+    public function destroy(string $id)
     {
-        if (!Auth::check()) {
+        //
+    }
+
+
+    // Implementation for the product listing categories API endpoint
+    public function categories(Request $request)
+
+    {
+
+        try {
+            // Validate query parameters
+            $this->validate($request, [
+                'limit' => 'nullable|integer|min:1',
+                'offset' => 'nullable|integer|min:0',
+                'parent_id' => 'nullable|integer',
+            ]);
+    
+            // Get query parameters
+            $limit = $request->input('limit', 10);
+            $offset = $request->input('offset', 0);
+            $parentId = $request->input('parent_id');
+    
+            // Implement efficient database querying
+            $categories = Category::when($parentId, function ($query) use ($parentId) {
+                $query->where('parent_id', $parentId);
+            })
+                ->offset($offset)
+                ->limit($limit)
+                ->get();
+    
+            // Implement caching mechanism
+            $cacheKey = 'categories_' . $offset . '_' . $limit . '_' . $parentId;
+            $categories = Cache::remember($cacheKey, 60, function () use ($categories) {
+                return $categories;
+            });
+    
+            // Return response
             return response()->json([
-                'error' => 'Unauthorized',
-                'message' => 'You must be authenticated to delete a product.'
-            ], 401);
-        }
-
-        $product = Product::find($productId);
-
-        if (!$product) {
+                'status_code' => 200,
+                'categories' => $categories,
+            ]);
+        } catch (\Exception $e) {
+            // Log the error
+            Log::error($e->getMessage());
+    
+            // Return a 500 error response
             return response()->json([
-                'error' => 'Product not found',
-                'message' => "The product with ID $productId does not exist."
-            ], 404);
-        }
+                'status_code' => 500,
+                'error' => 'Internal Server Error',
+            ], 500);
+        }        
 
-        $product->delete();
-
-        return response()->json([
-            'message' => 'Product deleted successfully.'
-        ], 200);
     }
 }
