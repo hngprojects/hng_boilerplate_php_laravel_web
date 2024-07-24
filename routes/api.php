@@ -90,5 +90,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/user/export/{format}', [ExportUserController::class, 'export']);
     });
 
+    Route::patch('/testimonials/{testimonial_id}', [TestimonialController::class, 'update'])->middleware('auth.jwt');
+
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
 });
