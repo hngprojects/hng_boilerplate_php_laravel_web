@@ -94,5 +94,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/user/export/{format}', [ExportUserController::class, 'export']);
     });
 
+    Route::delete('/testimonials/{testimonial_id}', [TestimonialController::class, 'destroy'])->middleware('auth.jwt');
+
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
 });
