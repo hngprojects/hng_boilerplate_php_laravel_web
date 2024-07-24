@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\Admin\CustomerController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\User\UserController;
 use App\Http\Controllers\Api\V1\CategoryController;
+use App\Http\Controllers\PreferenceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ContactController;
@@ -66,6 +67,14 @@ Route::prefix('v1')->group(function () {
     
     Route::middleware('auth:api')->group(function () {
         Route::post('/testimonials', [TestimonialController::class, 'store']);
+    });
+
+    Route::group(['middleware' => ['auth:api']], function () {
+        // Route::middleware('auth.jwt')->group(function () {
+        Route::post('/user/preferences', [PreferenceController::class, 'store']);
+        Route::put('/user/preferences/{id}', [PreferenceController::class, 'update']);
+        Route::get('/user/preferences', [PreferenceController::class, 'index']);
+        Route::delete('/user/preferences/{id}', [PreferenceController::class, 'delete']);
     });
 
 });
