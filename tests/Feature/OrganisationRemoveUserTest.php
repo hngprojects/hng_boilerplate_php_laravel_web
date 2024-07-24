@@ -24,7 +24,9 @@ class OrganisationRemoveUserTest extends TestCase
         ]);
         $response->assertStatus(401)
                  ->assertJson([
-                     'message' => 'Unauthenticated.',
+                     'status' => 'Unauthorized',
+                     'message' => 'User not authenticated',
+                     'status_code' => 401,
                      ]);
     }
 
