@@ -23,6 +23,8 @@ use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Middleware\LoginAttempts;
 
 use App\Http\Controllers\Api\V1\JobController;
+use App\Http\Controllers\Api\V1\WaitlistController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -78,4 +80,6 @@ Route::prefix('v1')->group(function () {
 
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
     Route::middleware(['auth:api', 'admin'])->get('/content/about', [AboutPageController::class, 'show']);
+
+    Route::post('/waitlist', [WaitlistController::class, 'store']);
 });
