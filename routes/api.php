@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\V1\Admin\CustomerController;
 use App\Http\Controllers\Api\V1\Admin\Plan\FeatureController;
 use App\Http\Controllers\Api\V1\Admin\Plan\SubscriptionController;
 use App\Http\Controllers\Api\V1\Testimonial\TestimonialController;
+use App\Http\Controllers\Api\V1\AboutPageController;
 
 use App\Http\Controllers\Api\V1\Organisation\OrganisationController;
 use App\Http\Controllers\Api\V1\Organisation\OrganisationRemoveUserController;
@@ -76,4 +77,5 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
+    Route::middleware(['auth:api', 'admin'])->get('/content/about', [AboutPageController::class, 'show']);
 });
