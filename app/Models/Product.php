@@ -11,7 +11,6 @@ class Product extends Model
     use HasFactory, HasUuids;
 
     protected $fillable = [
-        'product_id',
         'user_id',
         'name',
         'description',
