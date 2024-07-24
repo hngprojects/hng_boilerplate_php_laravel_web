@@ -34,7 +34,7 @@ class CustomerController extends Controller
                         'name' => $customer->name, 
                         'email' => $customer->email,
                         'phone' => $customer->phone,
-                        'organisations' => $customer->organisations->pluck('org_id')
+                        'organisations' => $customer->organisations->pluck('org_id'),
                     ];
                 })
             ]);
