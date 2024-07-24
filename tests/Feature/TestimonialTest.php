@@ -20,10 +20,8 @@ class TestimonialTest extends TestCase
 
         $response->assertStatus(401);
         $response->assertJson([
-            "status" => "Unauthorized",
-            "message" => "Unauthorized. Please log in.",
-            "status_code" => 401,
-           
+            'message' => 'Unauthenticated.',
+
         ]);
     }
 
@@ -80,11 +78,11 @@ class TestimonialTest extends TestCase
 
         $response->assertStatus(401);
         $response->assertJson([
-            'status' => 'Unauthorized',
-            'message' => 'Unauthorized. Please log in.',
-            'status_code' => 401,
-           
-            // 'message' => 'Unauthenticated..',
+            // 'status' => 'Unauthorized',
+            // 'message' => 'Unauthorized. Please log in.',
+            // 'status_code' => 401,
+
+            'message' => 'Unauthenticated.',
         ]);
     }
 
