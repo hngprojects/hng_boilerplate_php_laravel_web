@@ -27,11 +27,10 @@ jobs:
             sudo apt-get update
             sudo apt-get install -y postgresql postgresql-contrib
             sudo service postgresql start
-
             # Create database and user
             sudo -u postgres psql -c "CREATE DATABASE testing;"
             sudo -u postgres psql -c "CREATE USER myuser WITH ENCRYPTED PASSWORD 'password';"
-            sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE mydatabase TO sail;"
+            sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE testing TO myuser;"
           else
             echo "PostgreSQL is already installed."
           fi
@@ -71,10 +70,10 @@ jobs:
           cp .env.example .env
           echo "APP_KEY=${{ secrets.APP_KEY }}" >> .env
           echo "DB_CONNECTION=pgsql" >> .env
-          echo "DB_HOST=pgsql" >> .env
+          echo "DB_HOST=localhost" >> .env
           echo "DB_PORT=5432" >> .env
           echo "DB_DATABASE=testing" >> .env
-          echo "DB_USERNAME=sail" >> .env
+          echo "DB_USERNAME=myuser" >> .env
           echo "DB_PASSWORD=password" >> .env
 
       - name: Run database migrations
