@@ -55,7 +55,7 @@ class ProductDeletionTest extends TestCase
         $product = \App\Models\Product::factory()->create();
 
         // Attempt to delete the product as the authenticated user
-        Log::info($product->product_id);
+        Log::info($product);
         $deleteProduct = $this->deleteJson('/api/v1/products/' . $product->product_id, [], [
             'Authorization' => "Bearer $token"
         ]);
