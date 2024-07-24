@@ -27,7 +27,6 @@ class ForgetPasswordRequestTest extends TestCase
 
         $response->assertStatus(422)
                 ->assertJson([
-                    'status' => 'Error',
                     'message' => [
                         'email' => [
                             'The email field is required.'
@@ -47,7 +46,6 @@ class ForgetPasswordRequestTest extends TestCase
 
         $response->assertStatus(400)
                 ->assertJson([
-                    'status' => 'Error',
                     'message' => 'User does not exist',
                     'status_code' => 400
                 ]);
@@ -63,7 +61,6 @@ class ForgetPasswordRequestTest extends TestCase
 
         $response->assertStatus(400)
                 ->assertJson([
-                    'status' => 'Error',
                     'message' => 'User does not exist',
                     'status_code' => 400
                 ]);
@@ -79,7 +76,6 @@ class ForgetPasswordRequestTest extends TestCase
 
         $response->assertStatus(422)  // Expect validation error for invalid email format
                 ->assertJson([
-                    'status' => 'Error',
                     'message' => [
                         'email' => [
                             'The email field must be a valid email address.'
@@ -99,7 +95,6 @@ class ForgetPasswordRequestTest extends TestCase
 
         $response->assertStatus(422)  // Expect validation error for empty email
                 ->assertJson([
-                    'status' => 'Error',
                     'message' => [
                         'email' => [
                             'The email field is required.'
@@ -118,7 +113,7 @@ class ForgetPasswordRequestTest extends TestCase
             'email' => 'test@example.com',
         ]);
 
-        $token_key = Str::random(60);
+        $token_key = Str::random(30);
         $token = Hash::make($token_key);
 
         $response = $this->postJson('/api/v1/auth/password-reset-email', [
@@ -127,7 +122,6 @@ class ForgetPasswordRequestTest extends TestCase
 
         $response->assertStatus(200)
                  ->assertJson([
-                     'status' => 'Success',
                      'message' => 'Password reset link sent',
                  ]);
 

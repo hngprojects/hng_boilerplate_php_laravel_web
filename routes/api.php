@@ -49,11 +49,13 @@ Route::prefix('v1')->group(function () {
     Route::post('/auth/login', [LoginController::class, 'login']);
     Route::post('/auth/logout', [LoginController::class, 'logout'])->middleware('auth:api');
     Route::post('/auth/password-reset-email', ForgetPasswordRequestController::class)->name('password.reset');
+    Route::post('/auth/request-password-request/{token}', ResetUserPasswordController::class);
     Route::post('/roles', [RoleController::class, 'store']);
 
     Route::apiResource('/users', UserController::class);
 
     Route::get('/products/categories', [CategoryController::class, 'index']);
+    Route::get('/products/search', [ProductController::class, 'search']);
 
     Route::middleware('throttle:10,1')->get('/topics/search', [ArticleController::class, 'search']);
 
@@ -86,6 +88,7 @@ Route::prefix('v1')->group(function () {
         // Organisations
         Route::post('/organisations', [OrganisationController::class, 'store']);
         Route::get('/organisations', [OrganisationController::class, 'index']);
+        Route::delete('/organisations/{org_id}', [OrganisationController::class, 'destroy']);
         Route::delete('/organisations/{org_id}/users/{user_id}', [OrganisationController::class, 'removeUser']);
         Route::get('/organisations/{organisation}/members', [OrganizationMemberController::class, 'index']);
 
