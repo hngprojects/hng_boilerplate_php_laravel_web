@@ -50,7 +50,7 @@ class AuthController extends Controller
 
         // Check if validation fails
         if ($validator->fails()) {
-            return $this->apiResponse('Forbidden', $validator->errors(), 422);
+            return $this->apiResponse($validator->errors(), 422);
         }
 
         try {
@@ -71,12 +71,12 @@ class AuthController extends Controller
                 'accessToken' => $token,
                 'user' => $user,
             ]; 
-            return $this->apiResponse('Success', 'Registration successful', Response::HTTP_CREATED, $data);
+            return $this->apiResponse('Registration successful', Response::HTTP_CREATED, $data);
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Registration error: ' . $e->getMessage());
 
-            return $this->apiResponse('Forbidden', 'Registration unsuccessful', Response::HTTP_BAD_REQUEST);
+            return $this->apiResponse('Registration unsuccessful', Response::HTTP_BAD_REQUEST);
         }
     }
 
