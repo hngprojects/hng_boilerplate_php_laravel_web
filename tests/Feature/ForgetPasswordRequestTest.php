@@ -6,12 +6,11 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Notifications\ResetPasswordNotification;
+use Illuminate\Support\Facades\Password;
 
 class ForgetPasswordRequestTest extends TestCase
 {
@@ -113,8 +112,7 @@ class ForgetPasswordRequestTest extends TestCase
             'email' => 'test@example.com',
         ]);
 
-        $token_key = Str::random(30);
-        $token = Hash::make($token_key);
+        $token = Password::createToken($user);
 
         $response = $this->postJson('/api/v1/auth/password-reset-email', [
             'email' => 'test@example.com',
