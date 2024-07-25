@@ -105,7 +105,7 @@ Route::prefix('v1')->group(function () {
         Route::delete('/testimonials/{testimonial}', [TestimonialController::class, 'destroy']);
 
         // Jobs
-        Route::get('/jobs', [JobController::class, 'index']);
+        Route::apiResource('jobs', JobController::class);
 
         Route::get('/user/export/{format}', [ExportUserController::class, 'export']);
 
