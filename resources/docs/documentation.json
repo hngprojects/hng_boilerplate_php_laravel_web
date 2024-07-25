@@ -59,7 +59,7 @@
         }
     ],
     "paths": {
-        "/auth/register": {
+        "/api/v1/auth/register": {
             "post": {
                 "tags": [
                     "Authentication"
@@ -89,7 +89,7 @@
                 }
             }
         },
-        "/auth/login": {
+        "/api/v1/auth/login": {
             "post": {
                 "tags": [
                     "Authentication"
@@ -119,7 +119,7 @@
                 }
             }
         },
-        "/auth/logout": {
+        "/api/v1/auth/logout": {
             "post": {
                 "tags": [
                     "Authentication"
@@ -137,7 +137,7 @@
                 ]
             }
         },
-        "/auth/forget-password": {
+        "/api/v1/auth/forget-password": {
             "post": {
                 "tags": [
                     "Authentication"
@@ -160,7 +160,7 @@
                 }
             }
         },
-        "/users": {
+        "/api/v1/users": {
             "get": {
                 "tags": [
                     "Users"
@@ -188,7 +188,7 @@
                 ]
             }
         },
-        "/users/export": {
+        "/api/v1/users/export": {
             "post": {
                 "tags": [
                     "Users"
@@ -206,7 +206,7 @@
                 ]
             }
         },
-        "/organisations": {
+        "/api/v1/organisations": {
             "get": {
                 "tags": [
                     "Organisations"
@@ -260,7 +260,7 @@
                 ]
             }
         },
-        "/organisations/{org_id}/users/{user_id}": {
+        "/api/v1/organisations/{org_id}/users/{user_id}": {
             "delete": {
                 "tags": [
                     "Organisations"
@@ -296,7 +296,7 @@
                 ]
             }
         },
-        "/organisations/{org_id}/invite": {
+        "/api/v1/organisations/{org_id}/invite": {
             "post": {
                 "tags": [
                     "Organisations"
@@ -334,7 +334,7 @@
                 ]
             }
         },
-        "/testimonials": {
+        "/api/v1/testimonials": {
             "post": {
                 "tags": [
                     "Testimonials"
@@ -362,7 +362,7 @@
                 ]
             }
         },
-        "/testimonials/{testimonial_id}": {
+        "/api/v1/testimonials/{testimonial_id}": {
             "get": {
                 "tags": [
                     "Testimonials"
@@ -392,7 +392,7 @@
                 }
             }
         },
-        "/jobs": {
+        "/api/v1/jobs": {
             "get": {
                 "tags": [
                     "Jobs"
@@ -415,7 +415,7 @@
                 }
             }
         },
-        "/customers": {
+        "/api/v1/customers": {
             "get": {
                 "tags": [
                     "Customers"
@@ -443,7 +443,7 @@
                 ]
             }
         },
-        "/roles": {
+        "/api/v1/roles": {
             "post": {
                 "tags": [
                     "Roles"
@@ -471,7 +471,7 @@
                 ]
             }
         },
-        "/products/categories": {
+        "/api/v1/products/categories": {
             "get": {
                 "tags": [
                     "Products"
@@ -494,7 +494,7 @@
                 }
             }
         },
-        "/products": {
+        "/api/v1/products": {
             "post": {
                 "tags": [
                     "Products"
@@ -522,7 +522,7 @@
                 ]
             }
         },
-        "/help-center/topics/search": {
+        "/api/v1/help-center/topics/search": {
             "get": {
                 "tags": [
                     "Articles"
@@ -555,7 +555,7 @@
                 }
             }
         },
-        "/contact": {
+        "/api/v1/contact": {
             "post": {
                 "tags": [
                     "Contact"
@@ -578,7 +578,7 @@
                 }
             }
         },
-        "/blogs/latest": {
+        "/api/v1/blogs/latest": {
             "get": {
                 "tags": [
                     "Blogs"
@@ -601,7 +601,7 @@
                 }
             }
         },
-        "/blogs/search": {
+        "/api/v1/blogs/search": {
             "get": {
                 "tags": [
                     "Blogs"
@@ -634,7 +634,7 @@
                 }
             }
         },
-        "/squeeze": {
+        "/api/v1/squeeze": {
             "post": {
                 "tags": [
                     "Squeeze"
@@ -657,7 +657,7 @@
                 }
             }
         },
-        "/features": {
+        "/api/v1/features": {
             "get": {
                 "tags": [
                     "Features"
@@ -711,7 +711,7 @@
                 ]
             }
         },
-        "/plans": {
+        "/api/v1/plans": {
             "get": {
                 "tags": [
                     "Plans"
@@ -765,7 +765,7 @@
                 ]
             }
         },
-        "/blogs": {
+        "/api/v1/blogs": {
             "post": {
                 "tags": [
                     "Blogs"
@@ -879,7 +879,7 @@
                 }
             }
         },
-        "/users/plans/{user_subscription_id}/cancel": {
+        "/api/v1/users/plans/{user_subscription_id}/cancel": {
             "post": {
                 "tags": [
                     "Plans"
