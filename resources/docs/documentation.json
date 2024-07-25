@@ -188,6 +188,166 @@
                 ]
             }
         },
+        "/api/v1/user/preferences": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Save a user preferences",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Preference"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Preference created successfullye"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "get": {
+                "tags": [
+                  "Users"
+                ],
+                "summary": "Get a user preference",
+                "responses": {
+                  "200": {
+                    "description": "Successful response",
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Preference"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/user/preferences/{id}": {
+            "put": {
+                "tags": [
+                    "Users"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "summary": "Update a user preferences",
+                "responses": {
+                    "200": {
+                        "description": "Preference updated successfully."
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+
+            "delete": {
+                "tags": [
+                    "Users"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "summary": "Delete a user preferences",
+                "responses": {
+                    "200": {
+                        "description": "Preference deleted successfully."
+                    },
+                    "404": {
+                        "description": "Preference not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/accounts/deactivate": {
+              "patch": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Deactivate Users Account",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "confirmation": {
+                                        "type": "string",
+                                        "example": "Deactivation confirmation"
+                                    },
+                                    "reason": {
+                                      "type": "string",
+                                      "example": "Job Desciption"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Account Deactivated Successfully"
+                    }
+                }
+            },
+            "security": [
+                {
+                  "bearerAuth": []
+                }
+            ]
+        },
         "/api/v1/users/export": {
             "post": {
                 "tags": [
@@ -260,6 +420,36 @@
                 ]
             }
         },
+        "/api/v1/organisations/{org_id}": {
+            "delete": {
+                "tags": [
+                    "Organisations"
+                ],
+                "summary": "Delete Organization",
+                "parameters": [
+                    {
+                        "name": "org_id",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                          "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Organisation deleted successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/v1/organisations/{org_id}/users/{user_id}": {
             "delete": {
                 "tags": [
@@ -287,6 +477,41 @@
                 "responses": {
                     "200": {
                         "description": "User removed successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/organisations/{organisation}/members": {
+            "get": {
+                "tags": [
+                    "Organisations"
+                ],
+                "summary": "Get list of users in an organisation",
+                "parameters": [
+                    {
+                        "name": "organisation",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Organization members fetched successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Organisation"
+                                }
+                            }
+                        }
                     }
                 },
                 "security": [
@@ -325,6 +550,45 @@
                 "responses": {
                     "200": {
                         "description": "Invitation sent successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/organisations/{org_id}/roles/{role_id}/disable": {
+            "put": {
+                "tags": [
+                    "Organisations"
+                ],
+                "summary": "Disable role in an organization",
+                "parameters": [
+                    {
+                        "name": "org_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                      "name": "role_id",
+                      "in": "path",
+                      "required": true,
+                      "schema": {
+                          "type": "string"
+                      }
+                  }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Role disabled successfully"
+                    },
+                    "400": {
+                        "description": "Role disabling failed"
                     }
                 },
                 "security": [
@@ -392,6 +656,29 @@
                 }
             }
         },
+        "/api/v1/testimonials/{testimonial}": {
+            "delete": {
+                "tags": [
+                    "Testimonials"
+                ],
+                "summary": "Delete single testimonial",
+                "parameters": [
+                    {
+                        "name": "testimonial",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Testimonial deleted successfully"
+                    }
+                }
+            }
+        },
         "/api/v1/jobs": {
             "get": {
                 "tags": [
@@ -407,6 +694,122 @@
                                     "type": "array",
                                     "items": {
                                         "$ref": "#/components/schemas/Job"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/jobs/{id}": {
+            "patch": {
+                "tags": [
+                    "Jobs"
+                ],
+                "summary": "Update a job post details",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the job post to update",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": "Job Title"
+                                    },
+                                    "description": {
+                                      "type": "string",
+                                      "example": "Job Desciption"
+                                    },
+                                    "location": {
+                                      "type": "string",
+                                      "example": "Job Location"
+                                    },
+                                    "salary": {
+                                      "type": "string",
+                                      "example": "String"
+                                    },
+                                    "job_type": {
+                                      "type": "string",
+                                      "example": "String"
+                                    },
+                                    "company_name": {
+                                      "type": "string",
+                                      "example": "String"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Job details updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Job details updated successfully",
+                                            "status_code": {
+                                                "type": "integer",
+                                                "example": 200
+                                            },
+                                            "data": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "title": {
+                                                        "type": "string",
+                                                        "example": "Job Title"
+                                                    },
+                                                    "description": {
+                                                        "type": "string",
+                                                        "example": "Job Desciption"
+                                                    },
+                                                    "location": {
+                                                        "type": "string",
+                                                        "example": "Job Location"
+                                                    },
+                                                    "salary": {
+                                                        "type": "string",
+                                                        "example": "String"
+                                                    },
+                                                    "job_type": {
+                                                        "type": "string",
+                                                        "example": "String"
+                                                    },
+                                                    "company_name": {
+                                                        "type": "string",
+                                                        "example": "String"
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2024-0721T14:28:23Z"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2024-0721T14:28:23Z"
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -876,6 +1279,27 @@
                         }
                     },
                     "description": "Inventory item to add"
+                }
+            }
+        },
+        "/api/v1/blogs/{id}": {
+            "delete": {
+                "tags": [
+                    "Blogs"
+                ],
+                "summary": "Delete a blog by id",
+                "operationId": "deletBlog",
+                "description": "Delete from a blog",
+                "responses": {
+                    "204": {
+                        "description": "Blog post created successfully."
+                    },
+                    "404": {
+                        "description": "Blog with the given Id does not exist"
+                    },
+                    "500": {
+                        "description": "Internal server error."
+                    }
                 }
             }
         },
@@ -1372,6 +1796,16 @@
                     "cancellation_reason" : {
                         "type" : "string",
                         "example" : "I dont like the service again"
+                    }
+                }
+            },
+            "Preference": {
+                "properties" : {
+                    "name" : {
+                        "type" : "string"
+                    },
+                    "value" : {
+                        "type" : "string"
                     }
                 }
             }
