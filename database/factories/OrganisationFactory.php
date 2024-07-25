@@ -2,10 +2,7 @@
 
 namespace Database\Factories;
 
-<<<<<<< HEAD
-=======
 use App\Models\Organisation;
->>>>>>> 117d01c4b7c244b16d71069c6dd6868d27886a77
 use App\Models\User;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
