@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\ActivityLog\ActivityLogController;
 use App\Http\Controllers\Api\V1\Admin\Plan\FeatureController;
 use App\Http\Controllers\Api\V1\Admin\Plan\SubscriptionController;
 use App\Http\Controllers\Api\V1\Admin\BlogController;
@@ -52,17 +53,19 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('/features', FeatureController::class);
         Route::apiResource('/plans', SubscriptionController::class);
         Route::post('/organisations', [OrganisationController::class, 'store']);
+
+        // activity logs
+        Route::get('/organisations/{orgId}/users/{userId}/activity-logs', [ActivityLogController::class, 'getActivityLogs']);
     });
-    
+
     Route::middleware('auth.jwt')->group(function () {
         Route::delete('/organizations/{org_id}/users/{user_id}', [OrganisationRemoveUserController::class, 'removeUser']);
     });
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
 
 
-    
+
     Route::middleware('auth:api')->group(function () {
         Route::post('/testimonials', [TestimonialController::class, 'store']);
     });
-
 });
