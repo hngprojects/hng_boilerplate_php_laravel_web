@@ -133,7 +133,7 @@ class BlogControllerTest extends TestCase
         // Act as the superadmin user with the generated token
         $this->withHeaders(['Authorization' => 'Bearer ' . $token])
              ->deleteJson("/api/v1/blogs/{$blog->id}")
-             ->assertStatus(202)
+             ->assertStatus(204)
              ->assertJson(['message' => 'Blog successfully deleted']);
     }
 

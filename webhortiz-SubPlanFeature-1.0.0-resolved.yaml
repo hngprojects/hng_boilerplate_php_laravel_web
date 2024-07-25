@@ -142,7 +142,7 @@ paths:
       security:
         - bearerAuth: []
       responses:
-        '202':
+        '204':
           description: Blog successfully deleted
           content:
             application/json:
@@ -154,7 +154,7 @@ paths:
                     example: Blog successfully deleted
                   status_code:
                     type: integer
-                    example: 202
+                    example: 204
         '403':
           description: You are not authorized to perform this action
           content:
