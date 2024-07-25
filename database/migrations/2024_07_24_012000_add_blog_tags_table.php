@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('roles', function (Blueprint $table) {
-            $table->id();
+        Schema::create('blog_tags', function (Blueprint $table) {
+            $table->uuid('id')->primary();
             $table->string('name');
-            $table->foreignUuid('org_id')->references('org_id')->on('organisations')->constrained()->onDelete('cascade')->onUpdate('cascade');
-            $table->boolean('is_active')->default(true);
-            $table->boolean('is_default')->default(false);
+            $table->string('blog_id');
             $table->timestamps();
         });
     }
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('roles');
+        Schema::dropIfExists('blog_tags');
     }
 };

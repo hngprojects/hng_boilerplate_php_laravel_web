@@ -7,6 +7,8 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -32,7 +34,7 @@ class BlogControllerTest extends TestCase
                 'next',
                 'previous',
                 'results' => [
-                    '*' => ['title', 'content', 'imageUrl', 'tags', 'author', 'created_at'],
+                    '*' => ['title', 'content', 'images', 'tags', 'author', 'created_at'],
                 ],
             ]);
 
@@ -66,7 +68,7 @@ class BlogControllerTest extends TestCase
                 'next',
                 'previous',
                 'results' => [
-                    '*' => ['title', 'content', 'imageUrl', 'tags', 'author', 'created_at'],
+                    '*' => ['title', 'content', 'images', 'tags', 'author', 'created_at'],
                 ],
             ]);
 
@@ -151,5 +153,81 @@ class BlogControllerTest extends TestCase
             ->deleteJson("/api/v1/blogs/{$blog->id}")
             ->assertStatus(401); // Forbidden
     }
+    public function test_blog_creation_endpoint_is_protected()
+    {
+        $response = $this->postJson('/api/v1/blogs', [
 
+        ]);
+        $response->assertStatus(401);
+        $response->assertJson([
+            'message' => 'Unauthenticated.'
+        ]);
+    }
+
+    public function test_admin_can_create_blog_post()
+    {
+        Storage::fake('public');
+
+        $admin = User::factory()->create();
+        $this->actingAs($admin);
+
+        $image1 = UploadedFile::fake()->image('blog_image1.jpg');
+        $image2 = UploadedFile::fake()->image('blog_image2.jpg');
+
+        $response = $this->postJson('/api/v1/blogs', [
+            'title' => 'Test Blog Post',
+            'content' => 'This is a test blog post content.',
+            'author' => 'John Doe',
+            'images' => [$image1, $image2],
+            'tags' => [
+                ['name' => 'Technology'],
+                ['name' => 'Programming'],
+            ],
+        ]);
+
+        $response->assertStatus(201)
+            ->assertJson([
+                'message' => 'Blog post created successfully.',
+                'status_code' => 201,
+            ]);
+
+        $this->assertDatabaseHas('blogs', [
+            'title' => 'Test Blog Post',
+            'content' => 'This is a test blog post content.',
+            'author' => 'John Doe',
+        ]);
+
+        $this->assertDatabaseHas('blog_tags', [
+            'name' => 'Technology',
+        ]);
+
+        $this->assertDatabaseHas('blog_tags', [
+            'name' => 'Programming',
+        ]);
+
+        Storage::disk('public')->assertExists('blog_header/' . $image1->hashName());
+        Storage::disk('public')->assertExists('blog_header/' . $image2->hashName());
+    }
+
+    public function test_blog_create_request_validation()
+    {
+        Storage::fake('public');
+
+        $admin = User::factory()->create();
+        $this->actingAs($admin);
+
+        $invalidData = [
+            'title' => '',
+            'content' => '',
+            'author' => '',
+            'images' => ['not_an_image'],
+            'tags' => 'not_an_array',
+        ];
+
+        $response = $this->postJson('/api/v1/blogs', $invalidData);
+
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['title', 'content', 'author', 'images.0', 'tags']);
+
+    }
 }
