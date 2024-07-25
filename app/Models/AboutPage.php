@@ -9,6 +9,8 @@ class AboutPage extends Model
 {
     use HasFactory;
 
+    protected $table = "about_page";
+
     // Defining editable field
     protected $fillable = [
         'title', 

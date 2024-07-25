@@ -132,6 +132,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/user/preferences', [PreferenceController::class, 'index']);
         Route::delete('/user/preferences/{id}', [PreferenceController::class, 'delete']);
     });
+    Route::middleware(['auth:api', 'admin'])->get('/content/about', [AboutPageController::class, 'show']);
 });
 
 

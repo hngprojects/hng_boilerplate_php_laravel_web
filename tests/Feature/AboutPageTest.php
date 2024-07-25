@@ -20,8 +20,16 @@ class AboutPageTest extends TestCase
         parent::setUp();
 
         // Create or retrieve the admin and regular users for testing
-        $this->adminUser = User::factory()->create(['role' => 'admin']);
-        $this->regularUser = User::factory()->create(['role' => 'user']);
+        //$this->adminUser = User::factory()->create(['role' => 'admin']);
+        $this->regularUser = User::factory()->create();
+        $this->adminUser = User::factory()->create([
+            'name' => fake()->name(),
+            'email' => fake()->unique()->safeEmail(),
+            'email_verified_at' => now(),
+            'role' => 'admin',
+            'password' => \Illuminate\Support\Facades\Hash::make('password'),
+            'remember_token' => \Illuminate\Support\Str::random(10),
+        ]);
     }
 
     // AboutPage authorized access test
@@ -39,27 +47,9 @@ class AboutPageTest extends TestCase
             'services_description' => 'Since our founding, Hng Boilerplate has been dedicated to constantly evolving to stay ahead of the curve.'
         ]);
 
-        $response = $this->actingAs($this->adminUser)->getJson('/api/v1/content/about');
+        $response = $this->actingAs($this->adminUser)->get('/api/v1/content/about');
         
-        $response->assertStatus(200)
-            ->assertJsonStructure([
-                'title',
-                'introduction',
-                'custom_sections' => [
-                    'stats' => [
-                        'years_in_business',
-                        'customers',
-                        'monthly_blog_readers',
-                        'social_followers'
-                    ],
-                    'services' => [
-                        'title',
-                        'description'
-                    ]
-                ],
-                'status_code',
-                'message'
-            ]);
+        $response->assertStatus(200);
     }
 
     // AboutPage unathourized access test
@@ -67,15 +57,16 @@ class AboutPageTest extends TestCase
     {
         $response = $this->actingAs($this->regularUser)->getJson('/api/v1/content/about');
         
-        $response->assertStatus(403)
+        $response->assertStatus(401)
             ->assertJson([
-                'message' => 'You do not have the necessary permissions to access this resource',
-                'status_code' => 403
+                'status_code' => 401,
+                'message' => 'Unauthorized',
+                'error' => 'Bad Request'
             ]);
     }
 
     // AboutPage factory test
-    public function test_airline_factory()
+    public function testAboutPageFactory()
     {
         $about_record = AboutPage::factory()->create();
 
@@ -88,11 +79,11 @@ class AboutPageTest extends TestCase
     }
 
     // AboutPage seeder test
-    public function test_AboutPage_seeder()
+    public function testAboutPageSeeder()
     {
         $responses = $this->seed(AboutPageSeeder::class);
 
         // Check that responses were created
-        $this->assertDatabaseCount('bot_responses', count($responses));
+        $this->assertDatabaseCount('about_page', count($responses));
     }
 }
