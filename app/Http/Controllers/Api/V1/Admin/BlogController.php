@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BlogCreateRequest;
 use App\Models\Blog;
+use Exception;
 use App\Models\BlogImage;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -141,6 +142,24 @@ class BlogController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $blog = Blog::find($id);
+
+            if (!$blog) {
+                return response()->json([
+                    'message' => 'Blog with the given Id does not exist',
+                    'status_code' => 404
+                ], 404);
+            }
+
+            $blog->delete();
+
+            return response()->noContent();
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Internal server error.',
+                'status_code' => 500
+            ], 500);
+        }
     }
 }

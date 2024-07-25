@@ -106,7 +106,7 @@ class User extends Authenticatable  implements JWTSubject, CanResetPasswordContr
 
     public function jobs(): BelongsToMany
     {
-        return $this->belongsToMany(Job::class, 'job_user')->using(JobUser::class);
+        return $this->belongsToMany(Job::class, 'job_users', 'user_id', 'job_id')->using(JobUser::class);
     }
 
     public function products(): HasMany
