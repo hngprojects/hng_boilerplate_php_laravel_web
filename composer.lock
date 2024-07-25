@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "762f8620d5f7a2ec33165c5182808b1e",
+    "content-hash": "10769a251e6bf50257ec39ca70cd922c",
     "packages": [
         {
             "name": "brick/math",
@@ -3134,16 +3134,16 @@
         },
         {
             "name": "nextapps/laravel-swagger-ui",
-            "version": "0.10.0",
+            "version": "0.10.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nextapps-be/laravel-swagger-ui.git",
-                "reference": "ca531acba7fff98d01e2c8e13ac6d9d4b11ccb9a"
+                "reference": "a308e5e4553989ba372755f979d09f5135893bf8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nextapps-be/laravel-swagger-ui/zipball/ca531acba7fff98d01e2c8e13ac6d9d4b11ccb9a",
-                "reference": "ca531acba7fff98d01e2c8e13ac6d9d4b11ccb9a",
+                "url": "https://api.github.com/repos/nextapps-be/laravel-swagger-ui/zipball/a308e5e4553989ba372755f979d09f5135893bf8",
+                "reference": "a308e5e4553989ba372755f979d09f5135893bf8",
                 "shasum": ""
             },
             "require": {
@@ -3198,9 +3198,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nextapps-be/laravel-swagger-ui/issues",
-                "source": "https://github.com/nextapps-be/laravel-swagger-ui/tree/0.10.0"
+                "source": "https://github.com/nextapps-be/laravel-swagger-ui/tree/0.10.1"
             },
-            "time": "2024-07-09T14:38:11+00:00"
+            "time": "2024-07-25T13:21:36+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -9381,16 +9381,16 @@
         },
         {
             "name": "spatie/error-solutions",
-            "version": "1.1.0",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/error-solutions.git",
-                "reference": "a014da18f2675ea15af0ba97f7e9aee59e13964f"
+                "reference": "ae7393122eda72eed7cc4f176d1e96ea444f2d67"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/error-solutions/zipball/a014da18f2675ea15af0ba97f7e9aee59e13964f",
-                "reference": "a014da18f2675ea15af0ba97f7e9aee59e13964f",
+                "url": "https://api.github.com/repos/spatie/error-solutions/zipball/ae7393122eda72eed7cc4f176d1e96ea444f2d67",
+                "reference": "ae7393122eda72eed7cc4f176d1e96ea444f2d67",
                 "shasum": ""
             },
             "require": {
@@ -9443,7 +9443,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/error-solutions/issues",
-                "source": "https://github.com/spatie/error-solutions/tree/1.1.0"
+                "source": "https://github.com/spatie/error-solutions/tree/1.1.1"
             },
             "funding": [
                 {
@@ -9451,7 +9451,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-07-22T08:18:22+00:00"
+            "time": "2024-07-25T11:06:04+00:00"
         },
         {
             "name": "spatie/flare-client-php",
@@ -9904,5 +9904,5 @@
         "ext-zip": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }

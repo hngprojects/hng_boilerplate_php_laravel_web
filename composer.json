@@ -14,10 +14,9 @@
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
-        "maatwebsite/excel": "^3.1",
-        "ext-zip": "*",
         "nextapps/laravel-swagger-ui": "^0.10.0",
         "maatwebsite/excel": "^3.1",
+        "ext-zip": "*",
         "predis/predis": "^2.2",
         "tymon/jwt-auth": "^2.1",
         "phpoffice/phpspreadsheet": "^1.18"
