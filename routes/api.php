@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Auth\ResetUserPasswordController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\ContactController;
@@ -17,15 +18,11 @@ use App\Http\Controllers\Api\V1\Admin\Plan\FeatureController;
 use App\Http\Controllers\Api\V1\Admin\Plan\SubscriptionController;
 use App\Http\Controllers\Api\V1\Testimonial\TestimonialController;
 
-use App\Http\Controllers\Api\V1\Organisation\OrganisationRemoveUserController;
 use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Controllers\Api\V1\Auth\ForgetPasswordRequestController;
-use App\Http\Controllers\Api\V1\Auth\ResetUserPasswordController;
-use App\Http\Middleware\LoginAttempts;
 
 use App\Http\Controllers\Api\V1\JobController;
 use App\Http\Controllers\Api\V1\BlogSearchController;
-
 use App\Http\Controllers\Api\V1\User\ExportUserController;
 
 use App\Http\Controllers\Api\V1\Organisation\OrganizationMemberController;
@@ -85,8 +82,6 @@ Route::prefix('v1')->group(function () {
 
 
     Route::middleware('auth:api')->group(function () {
-        // Products
-        Route::post('/products', [ProductController::class, 'store']);
 
         // Subscriptions, Plans and Features
         Route::apiResource('/features', FeatureController::class);
@@ -98,17 +93,21 @@ Route::prefix('v1')->group(function () {
         Route::delete('/organisations/{org_id}/users/{user_id}', [OrganisationController::class, 'removeUser']);
         Route::get('/organisations/{organisation}/members', [OrganizationMemberController::class, 'index']);
 
+        Route::post('/blogs', [BlogController::class, 'store']);
 
         // Testimonials
         Route::post('/testimonials', [TestimonialController::class, 'store']);
         Route::get('/testimonials/{testimonial_id}', [TestimonialController::class, 'show']);
         Route::delete('/testimonials/{testimonial}', [TestimonialController::class, 'destroy']);
-      
+
         // Jobs
         Route::get('/jobs', [JobController::class, 'index']);
+
         Route::get('/user/export/{format}', [ExportUserController::class, 'export']);
 
     });
 
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
 });
+
+
