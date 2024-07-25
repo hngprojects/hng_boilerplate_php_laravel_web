@@ -3,9 +3,15 @@
 namespace App\Http\Controllers\Api\V1\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\BlogCreateRequest;
 use App\Models\Blog;
+use App\Models\BlogImage;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class BlogController extends Controller
 {
@@ -23,7 +29,8 @@ class BlogController extends Controller
 
             // Fetch the latest blog posts with pagination
             $blogPosts = Blog::orderBy('created_at', 'desc')
-                ->select('title', 'content', 'imageUrl', 'tags', 'author', 'created_at')
+                ->select('id', 'title', 'content', 'author', 'created_at')
+                ->with('tags', 'images')
                 ->paginate($pageSize, ['*'], 'page', $page);
 
             // Manually construct next and previous URLs with page_size parameter
@@ -69,9 +76,40 @@ class BlogController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(BlogCreateRequest $request)
     {
-        //
+        try {
+            DB::beginTransaction();
+            $blog = Blog::create([
+                'title' => $request->get('title'),
+                'content' => (string)$request->get('content'),
+                'author' => $request->get('author'),
+            ]);
+
+            foreach ($request->file('images') as $image) {
+                $saved = Storage::disk('public')->put('blog_header', $image);
+                if ($saved) {
+                    BlogImage::create([
+                        'image_url' => $saved,
+                        'blog_id' => $blog->id,
+                    ]);
+                } else {
+                    throw new \Exception('Error saving image');
+                }
+            }
+
+            $blog->tags()->createMany($request->get('tags'));
+
+            DB::commit();
+            return response()->json([
+                'message' => 'Blog post created successfully.',
+                'status_code' => Response::HTTP_CREATED,
+            ], Response::HTTP_CREATED);
+        } catch (\Exception $exception) {
+            Log::error('Error creating blog post: ' . $exception->getMessage());
+            DB::rollBack();
+            return response()->json(['error' => 'Internal server error.'], 500);
+        }
     }
 
     /**
