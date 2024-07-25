@@ -8,6 +8,7 @@ use App\Models\Job;
 use App\Models\Organisation;
 use App\Models\Profile;
 use App\Models\User;
+use App\Models\UserSubscription;
 use Illuminate\Database\Seeder;
 
 
@@ -51,6 +52,8 @@ class DatabaseSeeder extends Seeder
         $this->call(CategoriesTableSeeder::class);
         $this->call([ArticlesTableSeeder::class]);
         $this->call(UserJobSeeder::class);
+
+        UserSubscription::factory()->create();
 
     }
 }
