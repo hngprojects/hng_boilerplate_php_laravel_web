@@ -1361,7 +1361,10 @@
             },
             "password": {
               "type": "string",
-              "format": "password"
+              "format": "password",
+              "minLength": 8,
+              "pattern": "^[a-zA-Z0-9]*$",
+              "example": "P@ssw0rd123"
             }
           }
         },
