@@ -107,7 +107,7 @@ Route::prefix('v1')->group(function () {
         Route::delete('/testimonials/{testimonial}', [TestimonialController::class, 'destroy']);
 
         // Jobs
-        Route::get('/jobs', [JobController::class, 'index']);
+        Route::apiResource('jobs', JobController::class);
 
         Route::get('/user/export/{format}', [ExportUserController::class, 'export']);
 
@@ -120,6 +120,7 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
+    Route::delete('/blogs/{id}', [BlogController::class, 'destroy'])->middleware(['auth:api', 'admin']);
 
     Route::group(['middleware' => ['auth:api']], function () {
         Route::post('/user/preferences', [PreferenceController::class, 'store']);
