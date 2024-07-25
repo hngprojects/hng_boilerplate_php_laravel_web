@@ -7,7 +7,6 @@ use App\Http\Controllers\Api\V1\Admin\CustomerController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\User\UserController;
 use App\Http\Controllers\Api\V1\CategoryController;
-use App\Http\Controllers\Api\V1\JobController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ContactController;
@@ -20,6 +19,7 @@ use App\Http\Controllers\Api\V1\Testimonial\TestimonialController;
 use App\Http\Controllers\Api\V1\Organisation\OrganisationRemoveUserController;
 use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Middleware\LoginAttempts;
+use App\Http\Controllers\Api\V1\JobController;
 
 /*
 |--------------------------------------------------------------------------
@@ -73,6 +73,7 @@ Route::prefix('v1')->group(function () {
     Route::middleware('auth:api')->group(function () {
         Route::delete('/jobs/{id}', [JobController::class, 'destroy']);
     });
+
 });
 
 

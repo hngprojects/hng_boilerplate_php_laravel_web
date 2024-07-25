@@ -17,6 +17,7 @@ class JobController extends Controller
         //
     }
 
+
     /**
      * Store a newly created resource in storage.
      */
@@ -46,25 +47,67 @@ class JobController extends Controller
      */
     public function destroy(string $id)
     {
+        $user = auth('api')->user();
+        if (!$user) {
+            return response()->json([
+                'message' => 'Unauthorized',
+                'status-code' => 401
+            ], 401);
+        }
+        // $user = Auth::user();
+
+        // if (!$user) {
+        //     return response()->json([
+        //         'status' => 'Unauthorized',
+        //         'message' => 'Unauthorized.',
+        //         'status_code' => 401,
+        //     ], 401);
+        // }
+
+        // Get organization_id from the request
+        // if(!$orgId = $request->organization_id) {
+        //     return response()->json(['message' => 'Unauthorized', 'error' => 'Bad Request'], 400);
+        // }
+
         //Find the post by Id
         $job = Job::find($id);
-        // $job = Job::all();
-        // dd($job);
 
         // Check if the job exists
         if (!$job) {
             return response()->json(['message' => 'Job not found', 'error' => 'Not Found'], 404);
         }
 
-        // Check if the authenticated user is the owner of the job or related to the job
-        if (!$job->users->contains(Auth::id())) {
-            return response()->json(['message' => 'Unauthorized', 'error' => 'Bad Request'], 400);
-        }
-
-        // Delete the post
+        // Delete the job
         $job->delete();
 
         // Return a response
         return response()->json(['message' => 'Job deleted successfully'], 200);
     }
+
+    // public function destroy(string $id, Request $request)
+    // {
+    //     try {
+    //         \Log::info('Deleting job with ID:', ['id' => $id]);
+
+    //         // Find the job by Id
+    //         $job = Job::find($id);
+
+    //         // Check if the job exists
+    //         if (!$job) {
+    //             \Log::warning('Job not found:', ['id' => $id]);
+    //             return response()->json(['message' => 'Job not found', 'error' => 'Not Found'], 404);
+    //         }
+
+    //         // Delete the job
+    //         $job->delete();
+    //         \Log::info('Job deleted successfully:', ['id' => $id]);
+
+    //         // Return a response
+    //         return response()->json(['message' => 'Job deleted successfully'], 200);
+    //     } catch (\Exception $e) {
+    //         \Log::error('Error deleting job:', ['error' => $e->getMessage()]);
+    //         return response()->json(['message' => 'Internal Server Error', 'error' => $e->getMessage()], 500);
+    //     }
+    // }
+
 }
