@@ -49,6 +49,7 @@ class AboutPageTest extends TestCase
 
         $response = $this->actingAs($this->adminUser)->get('/api/v1/content/about');
         
+        $this->assertEquals('admin', $this->adminUser->role); // Assert that the admin user has the 'admin' role
         $response->assertStatus(200);
     }
 

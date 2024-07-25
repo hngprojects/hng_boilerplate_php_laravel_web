@@ -198,4 +198,9 @@ class User extends Authenticatable  implements JWTSubject, CanResetPasswordContr
         $this->notify(new \App\Notifications\ResetPasswordNotification($token));
     }
 
+
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
 }

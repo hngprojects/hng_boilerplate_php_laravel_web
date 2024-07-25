@@ -13,6 +13,14 @@ class AboutPageController extends Controller
     public function show(Request $request)
     {
         try {
+            // Check if the user is an admin
+            if (!$request->user() || !$request->user()->isAdmin()) {
+                return response()->json([
+                    'message' => 'Unauthorized',
+                    'status_code' => 401
+                ], 401);
+            }
+
             // Retrieve the About page content
             $aboutPage = AboutPage::first();
             
