@@ -8,7 +8,6 @@ use Tests\TestCase;
 use App\Models\User;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -20,8 +19,7 @@ class ResetUserPasswordTest extends TestCase
     public function it_resets_password_with_valid_token()
     {
         $user = User::factory()->create();
-        $token_key = Str::random(30);
-        $token = Hash::make($token_key);
+        $token = Password::createToken($user);
 
         // Store the token in the password_reset_tokens table
         DB::table('password_reset_tokens')->updateOrInsert(
@@ -36,13 +34,13 @@ class ResetUserPasswordTest extends TestCase
             'email' => $user->email,
             'password' => 'newpassword',
             'password_confirmation' => 'newpassword'
-        ]);
-        // $response->assertStatus(200);
+        ])->assertStatus(200)
+        ->assertJson(['message' => 'Password reset successfully']);
 
-        /* $this->assertTrue(Hash::check('newpassword', $user->fresh()->password));
+        $this->assertTrue(Hash::check('newpassword', $user->fresh()->password));
         $this->assertDatabaseMissing('password_reset_tokens', [
             'email' => $user->email,
-        ]); */
+        ]);
     }
 
     /** @test */
@@ -83,7 +81,7 @@ class ResetUserPasswordTest extends TestCase
     /** @test */
     public function it_validates_reset_password_fields()
     {
-        $token = Str::random(30);
+        $token = '6ttr5eefcdccsdfgjhhtgtr54eewxvbnjhgb';
 
         $this->postJson("/api/v1/auth/request-password-request/{$token}", [
             'email' => 'notanemail',

@@ -87,7 +87,11 @@ Route::prefix('v1')->group(function () {
         Route::get('/testimonials/{testimonial_id}', [TestimonialController::class, 'show']);
 
         // Jobs
+
         Route::get('/jobs', [JobController::class, 'index']);
+
+        Route::apiResource('jobs', JobController::class);
+
         Route::get('/user/export/{format}', [ExportUserController::class, 'export']);
     });
 
