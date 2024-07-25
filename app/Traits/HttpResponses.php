@@ -7,10 +7,9 @@ use Illuminate\Http\JsonResponse;
 trait HttpResponses
 {
 
-    protected function apiResponse($status = 'success', $message = '', $status_code = 200, $data = null): JsonResponse
+    protected function apiResponse($message = '', $status_code = 200, $data = null): JsonResponse
     {
         $response = [
-            'status' => $status,
             'message' => $message,
             'status_code' => $status_code,
         ];

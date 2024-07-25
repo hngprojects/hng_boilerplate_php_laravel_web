@@ -123,39 +123,22 @@ class OrganisationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($org_id)
     {
-
-        if (!preg_match('/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/', $id)) {
-            return response()->json([
-                "message" => "Failed to delete organization",
-                "error" => "Invalid organization ID format",
-                "status_code" => 400
-            ]);
-        }
-        $org = Organisation::find($id);
-        if (!$org) {
-            return response()->json([
-                "message" => "Failed to delete organization",
-                "error" => "Invalid organization ID",
-                "status_code" => 404
-            ]);
-        }
-
-
         $user = auth('api')->user();
-        if (!$user || !$org->users->contains($user->id)) {
-            return response()->json([
-                "message" => "Failed to delete organization",
-                "error" => "User not authorized to delete this organization",
-                "status_code" => 401
-            ], 401);
+        if(!$user) return ResponseHelper::response("Authentication failed", 401, null);
+        $organisation = Organisation::find($org_id);
+        if(!$organisation) return ResponseHelper::response("Organisation not found", 404, null);
+        if(!$organisation->users->contains($user->id)) return ResponseHelper::response("You are not authorised to perform this action", 403, null);
+        try {
+            // Soft delete the org
+            $organisation->delete();
+            return ResponseHelper::response("Organisation deleted successfully", 200, null);
+        }catch (\Exception $e) {
+            return ResponseHelper::response("Client error", 400, null);
         }
-
-        $org->delete();
-
-        return response()->noContent();
     }
+    
     public function removeUser(Request $request, $org_id, $user_id)
     {
         $organization = Organisation::findOrFail($org_id);

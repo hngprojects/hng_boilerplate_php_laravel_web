@@ -6,11 +6,12 @@ use App\Models\User;
 use App\Models\Testimonial;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class TestimonialTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithFaker;
 
     public function testUnauthenticatedUserCannotCreateTestimonial()
     {
@@ -21,7 +22,6 @@ class TestimonialTest extends TestCase
         $response->assertStatus(401);
         $response->assertJson([
             'message' => 'Unauthenticated.',
-
         ]);
     }
 
@@ -78,10 +78,6 @@ class TestimonialTest extends TestCase
 
         $response->assertStatus(401);
         $response->assertJson([
-            // 'status' => 'Unauthorized',
-            // 'message' => 'Unauthorized. Please log in.',
-            // 'status_code' => 401,
-
             'message' => 'Unauthenticated.',
         ]);
     }
@@ -110,22 +106,79 @@ class TestimonialTest extends TestCase
         ]);
     }
 
-    // public function testAuthenticatedUserCannotFetchNonExistingTestimonial()
-    // {
-    //     $user = User::factory()->create(['password' => bcrypt('password')]);
+    public function testAuthenticatedUserCannotFetchNonExistingTestimonial()
+    {
+        $user = User::factory()->create(['password' => bcrypt('password')]);
 
-    //     $token = JWTAuth::attempt(['email' => $user->email, 'password' => 'password']);
+        $token = JWTAuth::attempt(['email' => $user->email, 'password' => 'password']);
 
-    //     $nonExistingTestimonialId = 99999;
+        $response = $this->getJson('/api/v1/testimonials/99999', [
+            'Authorization' => 'Bearer ' . $token,
+        ]);
+
+        $response->assertStatus(404);
+        $response->assertJson([
+            'status' => 'Not Found',
+            'message' => 'Testimonial not found.',
+            'status_code' => 404,
+        ]);
+    }
 
 
-    //     $response = $this->getJson('/api/v1/testimonials/{$nonExistingTestimonialId}', [
-    //         'Authorization' => 'Bearer ' . $token,
-    //     ]);
+    public function testUnauthenticatedUserCannotDeleteTestimonial()
+    {
+        $response = $this->deleteJson('api/v1/testimonials/1');
 
-    //     $response->assertStatus(404);
-    //     $response->assertJson([
-    //         "message" => "Unauthenticated."
-    //     ]);
-    // }
+        $response->assertStatus(401)
+            ->assertJson([
+                'message' => 'Unauthenticated.',
+            ]);
+    }
+
+    public function testNonAdminUserCannotDeleteTestimonial()
+    {
+        $user = User::factory()->create(['role' => 'user']);
+
+        $response = $this->actingAs($user)->deleteJson('api/v1/testimonials/1');
+
+        $response->assertStatus(403)
+            ->assertJson([
+                'status' => 'Forbidden',
+                'message' => 'You do not have the required permissions to perform this action.',
+                'status_code' => 403,
+            ]);
+    }
+
+    public function testAdminUserCannotDeleteNonExistingTestimonial()
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        $response = $this->actingAs($admin)->deleteJson('api/v1/testimonials/1');
+
+        $response->assertStatus(404)
+            ->assertJson([
+                'status' => 'Not Found',
+                'message' => 'Testimonial not found.',
+                'status_code' => 404,
+            ]);
+    }
+
+    public function testAdminUserCanDeleteTestimonial()
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        $testimonial = Testimonial::factory()->create();
+
+        $response = $this->actingAs($admin)->deleteJson("api/v1/testimonials/{$testimonial->id}");
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'status' => 'success',
+                'message' => 'Testimonial deleted successfully',
+                'status_code' => 200,
+            ]);
+
+        $this->assertDatabaseMissing('testimonials', [
+            'id' => $testimonial->id,
+        ]);
+    }
 }
