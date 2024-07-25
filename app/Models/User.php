@@ -35,6 +35,14 @@ class User extends Authenticatable  implements JWTSubject, CanResetPasswordContr
         'remember_token',
     ];
 
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'status',
+        'deactivation_reason',
+    ];
+
     /**
      * The attributes that should be cast.
      *
