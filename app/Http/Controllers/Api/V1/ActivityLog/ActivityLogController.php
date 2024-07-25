@@ -7,14 +7,22 @@ use App\Models\ActivityLog;
 use App\Models\Organisation;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class ActivityLogController extends Controller
 {
     public function getActivityLogs($orgId, $userId)
     {
+        // check if the orgid and userid is not in uuid format it should return the 404 error
         $organization = Organisation::find($orgId);
         $targetUser = User::find($userId);
-
+        if (!Str::isUuid($orgId) || !Str::isUuid($userId)) {
+            return response()->json([
+                'status_code' => 404,
+                'message' => 'Organization or user not found',
+                'error' => 'Not Found'
+            ], 404);
+        }
         // Check if the organization and user exist
         if (!$organization || !$targetUser) {
             return response()->json([
