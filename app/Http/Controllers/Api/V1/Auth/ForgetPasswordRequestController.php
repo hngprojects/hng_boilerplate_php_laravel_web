@@ -7,11 +7,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\HttpResponses;
 use Carbon\Carbon;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Support\Facades\Password;
 
 class ForgetPasswordRequestController extends Controller
 {
@@ -36,8 +35,7 @@ class ForgetPasswordRequestController extends Controller
         }
 
         // Create a new token
-        $token_key = Str::random(30);
-        $token = Hash::make($token_key);
+        $token = Password::createToken($user);
 
         // Store the token in the password_reset_tokens table
         DB::table('password_reset_tokens')->updateOrInsert(
@@ -55,8 +53,6 @@ class ForgetPasswordRequestController extends Controller
             ['token' => $token, 'email' => $request->email]
         );
         
-        // $url = env('APP_URL') . "/api/v1/auth/password-reset-email?email=" . urlencode($request->email) . "&token=" . urlencode($token) . "&expires=" . Carbon::now()->addMinutes(config('auth.passwords.users.expire'))->timestamp;
-
         $user->sendPasswordResetNotification($url);
 
         return $this->apiResponse(message:  'Password reset link sent');

@@ -7,10 +7,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\HttpResponses;
 use Carbon\Carbon;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Support\Facades\Password;
 
 class ResetUserPasswordController extends Controller
 {
@@ -24,8 +24,6 @@ class ResetUserPasswordController extends Controller
             'email' => 'required|email:rfc',
             'password' => 'required|string|confirmed|min:8',
         ]);
-        
-        $token = urldecode($token);
 
         if ($validator->fails()) {
             return $this->apiResponse(message: $validator->errors(), status_code: 400);
