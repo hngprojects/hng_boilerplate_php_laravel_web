@@ -14,26 +14,36 @@ class UserUpdateTest extends TestCase{
 //php artisan test --filter UserUpdateTest
 
     /** @test */
-    public function it_updates_user_successfully_with_valid_data(){
+    public function it_updates_user_successfully_with_valid_data()
+    {
         $user = User::factory()->create();
         $token = JWTAuth::fromUser($user);
 
         $data = [
-            'name'=>$this->faker->name,
-            'email'=>$this->faker->email,
-            'phone'=>$this->faker->name,
+            'name' => $this->faker->name,
+            'email' => $this->faker->email,
+            'phone' => $this->faker->phoneNumber,
         ];
 
-        $response = $this->withHeaders(['Authorization' => "Bearer $token"])->patchJson("/api/v1/users/{$user->id}", $data);
+        $response = $this->withHeaders(['Authorization' => "Bearer $token"])
+        ->patchJson("/api/v1/users/{$user->id}", $data);
 
         $response->assertStatus(200)
-        ->assertJson([
-            "status" => "success",
-            'message'=> 'User Updated Successfully'
-        ]);
+            ->assertJson([
+                "status" => "success",
+                'message' => 'User Updated Successfully'
+            ]);
 
-        $this->assertDatabaseHas('users', $data);
+        // Check database for updated data
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'phone' => $data['phone'],
+        ]);
     }
+
+
     /** @test */
     // public function it_returns_404_when_user_not_found()
     // {

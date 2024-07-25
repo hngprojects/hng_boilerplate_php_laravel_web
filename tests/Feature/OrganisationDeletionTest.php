@@ -24,20 +24,18 @@ public function it_requires_authentication(){
 }
 
     /** @test */
-    public function it_requires_the_user_to_be_the_owner(){
-        $user = User::factory()->create();
-        $otherUser = User::factory()->create();
+  public function it_requires_the_user_to_be_the_owner(){
+    $user = User::factory()->create();
+    $owner = User::factory()->create();
 
-        $org = Organisation::factory()->create();
+    $org = Organisation::factory()->create(['user_id' => $owner->id]);
 
-        $org->users()->attach($otherUser->id);
+    $token = JWTAuth::fromUser($user);
+    $response = $this->withHeaders(['Authorization' => "Bearer $token"])
+    ->deleteJson('/api/v1/organizations/' . $org->org_id);
 
-        $token = JWTAuth::fromUser($user);
-        $response = $this->withHeaders(['Authorization' => "Bearer $token"])
-        ->deleteJson('/api/v1/organizations/' . $org->org_id);
-
-        $response->assertStatus(401);
-    }
+    $response->assertStatus(401);
+}
 
     /** @test */
     public function it_marks_the_organization_as_deleted()

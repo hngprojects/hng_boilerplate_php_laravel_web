@@ -71,6 +71,8 @@ class UserController extends Controller
         }, $data);
 
         $user->update($data);
+        
+
 
         return response()->json(
             [
