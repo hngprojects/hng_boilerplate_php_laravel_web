@@ -1,5 +1,7 @@
 <?php
 
+
+
 use App\Http\Controllers\Api\V1\Auth\ResetUserPasswordController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -10,6 +12,7 @@ use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Controllers\Api\V1\ProductController;
 use App\Http\Controllers\Api\V1\SqueezeController;
 use App\Http\Controllers\Api\V1\CategoryController;
+use App\Http\Controllers\Api\V1\PreferenceController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\User\UserController;
 use App\Http\Controllers\Api\V1\Admin\BlogController;
@@ -120,6 +123,13 @@ Route::prefix('v1')->group(function () {
 
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
     Route::delete('/blogs/{id}', [BlogController::class, 'destroy'])->middleware(['auth:api', 'admin']);
+
+    Route::group(['middleware' => ['auth:api']], function () {
+        Route::post('/user/preferences', [PreferenceController::class, 'store']);
+        Route::put('/user/preferences/{id}', [PreferenceController::class, 'update']);
+        Route::get('/user/preferences', [PreferenceController::class, 'index']);
+        Route::delete('/user/preferences/{id}', [PreferenceController::class, 'delete']);
+    });
 });
 
 
