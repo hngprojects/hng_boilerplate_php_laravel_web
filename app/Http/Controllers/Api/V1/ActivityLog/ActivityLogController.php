@@ -13,7 +13,6 @@ class ActivityLogController extends Controller
 {
     public function getActivityLogs($orgId, $userId)
     {
-        // Check if orgId and userId are valid UUIDs
         if (!Str::isUuid($orgId) || !Str::isUuid($userId)) {
             return response()->json([
                 'status_code' => 404,
@@ -22,12 +21,10 @@ class ActivityLogController extends Controller
             ], 404);
         }
 
-        // Find the organization and user
         $organization = Organisation::find($orgId);
-        $targetUser = User::find($userId);
+        $target_user = User::find($userId);
 
-        // Check if the organization and user exist
-        if (!$organization || !$targetUser) {
+        if (!$organization || !$target_user) {
             return response()->json([
                 'status_code' => 404,
                 'message' => 'Organization or user not found',
@@ -35,10 +32,8 @@ class ActivityLogController extends Controller
             ], 404);
         }
 
-
         $user = auth()->user();
 
-        // Check if the authenticated user belongs to the organization
         if (!$organization->users->contains($user->id)) {
             return response()->json([
                 'status_code' => 403,
@@ -47,13 +42,12 @@ class ActivityLogController extends Controller
             ], 403);
         }
 
-        $activityLogs = $targetUser->activityLogs()->get();
+        $activity_logs = $target_user->activityLogs()->get();
 
-        // Return the activity logs
         return response()->json([
             'status_code' => 200,
             'message' => 'Activity logs retrieved successfully',
-            'data' => $activityLogs
+            'data' => $activity_logs
         ], 200);
     }
 }
