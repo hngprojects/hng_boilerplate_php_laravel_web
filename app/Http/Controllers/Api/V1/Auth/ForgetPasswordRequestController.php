@@ -27,16 +27,16 @@ class ForgetPasswordRequestController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return $this->apiResponse(status: 'Error', message:  $validator->errors(), status_code: 422);
+            return $this->apiResponse(message:  $validator->errors(), status_code: 422);
         }
 
         $user = User::where('email', $request->email)->first();
         if (!$user) {
-            return $this->apiResponse(status: 'Error', message:  'User does not exist', status_code: 400);
+            return $this->apiResponse(message:  'User does not exist', status_code: 400);
         }
 
         // Create a new token
-        $token_key = Str::random(60);
+        $token_key = Str::random(30);
         $token = Hash::make($token_key);
 
         // Store the token in the password_reset_tokens table
@@ -54,10 +54,12 @@ class ForgetPasswordRequestController extends Controller
             Carbon::now()->addMinutes(config('auth.passwords.users.expire')),
             ['token' => $token, 'email' => $request->email]
         );
+        
+        // $url = env('APP_URL') . "/api/v1/auth/password-reset-email?email=" . urlencode($request->email) . "&token=" . urlencode($token) . "&expires=" . Carbon::now()->addMinutes(config('auth.passwords.users.expire'))->timestamp;
 
         $user->sendPasswordResetNotification($url);
 
-        return $this->apiResponse(status: 'Success', message:  'Password reset link sent');
+        return $this->apiResponse(message:  'Password reset link sent');
 
     }
 }

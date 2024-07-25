@@ -13,6 +13,60 @@ use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
+    public function search(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'category' => 'nullable|string|max:255',
+            'minPrice' => 'nullable|numeric|min:0',
+            'maxPrice' => 'nullable|numeric|min:0',
+        ]);
+
+        if ($validator->fails()) {
+            $errors = [];
+            foreach ($validator->errors()->messages() as $field => $messages) {
+                foreach ($messages as $message) {
+                    $errors[] = [
+                        'parameter' => $field,
+                        'message' => $message,
+                    ];
+                }
+            }
+
+            return response()->json([
+                'success' => false,
+                'errors' => $errors,
+                'statusCode' => 422
+            ], 422);
+        }
+
+        $query = Product::query();
+
+        $query->where('name', 'LIKE', '%' . $request->name . '%');
+
+        // Add category filter if provided
+        if ($request->filled('category')) {
+            $query->whereHas('categories', function ($q) use ($request) {
+                $q->where('name', $request->category);
+            });
+        }
+
+        if ($request->filled('minPrice')) {
+            $query->where('price', '>=', $request->minPrice);
+        }
+
+        if ($request->filled('maxPrice')) {
+            $query->where('price', '<=', $request->maxPrice);
+        }
+
+        $products = $query->get();
+
+        return response()->json([
+            'success' => true,
+            'products' => $products,
+            'statusCode' => 200
+        ], 200);
+    }
     /**
      * Display a listing of the resource.
      */
