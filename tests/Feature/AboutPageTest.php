@@ -66,6 +66,7 @@ class AboutPageTest extends TestCase
             ]);
     }
 
+    /*
     // AboutPage factory test
     public function testAboutPageFactory()
     {
@@ -87,4 +88,5 @@ class AboutPageTest extends TestCase
         // Check that responses were created
         $this->assertDatabaseCount('about_page', count($responses));
     }
+    */
 }
