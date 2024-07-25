@@ -51,21 +51,21 @@ class RoleController extends Controller
 
     public function disableRole(StoreRoleRequest $request, $org_id, $roleId)
     {
-        // check whether user is admin
+        // Check whether user has admin role
         $user = $request->user();
-        Log::info('Disabling role request by user:', ['user_id' => $user->id, 'org_id' => $org_id]);
 
-        if (!$user->isAdmin($org_id)) {
-            Log::warning('User does not have admin permissions.', ['user_id' => $user->id, 'org_id' => $org_id]);
+        // Check if the user has a specific role that grants admin privileges
+        $isAdmin = $user->roles()->where('org_id', $org_id)->where('name', 'Admin')->exists();
+
+        if (!$isAdmin) {
             return response()->json([
                 'message' => 'Insufficient permission.'
             ], 403);
         }
 
-        // check whether organisation & role exists
+        // Check whether organisation & role exist
         $organisation = Organisation::find($org_id);
         if (!$organisation) {
-            Log::warning('Organisation not found.', ['org_id' => $org_id]);
             return response()->json([
                 'message' => 'Organisation not found.'
             ], 404);
@@ -73,21 +73,20 @@ class RoleController extends Controller
 
         $role = Role::where('org_id', $org_id)->findOrFail($roleId);
         if (!$role) {
-            Log::warning('Role not found.', ['role_id' => $roleId]);
             return response()->json([
                 'message' => 'Role not found.'
             ], 404);
         }
 
-        // disable role
+        // Disable role
         try {
             DB::beginTransaction();
 
             $role->is_active = false;
             $role->save();
 
-            // move all users with disabled role to default role
-            $defaultRole = Role::where('organisation_id', $org_id)->where('is_default', true)->first();
+            // Move all users with the disabled role to the default role
+            $defaultRole = Role::where('org_id', $org_id)->where('is_default', true)->first();
             User::whereHas('roles', function ($query) use ($roleId) {
                 $query->where('role_id', $roleId);
             })->each(function ($user) use ($defaultRole, $role) {
@@ -96,20 +95,17 @@ class RoleController extends Controller
             });
 
             DB::commit();
-            
-            Log::info('Role disabled successfully.', ['role_id' => $roleId]);
+
             return response()->json([
                 'message' => "Role disabled successfully",
             ], 200);
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Role disabling error: ' . $e->getMessage());
             return response()->json([
-                'message' => "Role disabling failed - ".$e->getMessage(),
+                'message' => "Role disabling failed - " . $e->getMessage(),
             ], 400);
         }
     }
-
 }
 
 ?>

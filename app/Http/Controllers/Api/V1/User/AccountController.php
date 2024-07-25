@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\AccountDeactivatedMail;
-use App\Models\User;
 
 class AccountController extends Controller
 {
@@ -21,7 +20,7 @@ class AccountController extends Controller
         if (!$request->confirmation) {
             return response()->json([
                 'status_code' => 400,
-                'error' => 'Confimation needs to be true for deactivation'
+                'error' => 'Confirmation needs to be true for deactivation'
             ], 400);
         }
 
@@ -34,7 +33,7 @@ class AccountController extends Controller
             ], 401);
         }
 
-        if ($user->status == 'deactivated') {
+        if (!$user->is_active) {
             return response()->json([
                 'status_code' => 400,
                 'error' => 'User has been deactivated'
@@ -42,8 +41,7 @@ class AccountController extends Controller
         }
 
         // Deactivate user
-        $user->status = 'deactivated';
-        $user->deactivation_reason = $request->reason;
+        $user->is_active = false;
         $user->save();
 
         // Send mail
@@ -55,5 +53,3 @@ class AccountController extends Controller
         ], 200);
     }
 }
-
-?>

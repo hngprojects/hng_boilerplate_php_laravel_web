@@ -16,7 +16,7 @@ class DeactivateAccountTest extends TestCase
     {
         Mail::fake();
 
-        $user = User::factory()->create(['status' => 'active']);
+        $user = User::factory()->create(['is_active' => true]);
 
         $response = $this->actingAs($user, 'api')->patchJson('/api/v1/accounts/deactivate', [
             'confirmation' => true,
@@ -28,15 +28,13 @@ class DeactivateAccountTest extends TestCase
                      'status_code' => 200,
                      'message' => 'Account Deactivated Successfully'
                  ]);
-        
-        // Refresh user to get latest data from db
+
+        // Refresh user to get the latest data from db
         $user->refresh();
 
-        $this->assertDatabaseHas('users', [
-            'id' => $user->id,
-            'status' => 'deactivated'
-        ]);
+        $this->assertFalse($user->is_active);
 
+        // Ensure email was sent
         Mail::assertSent(AccountDeactivatedMail::class, function ($mail) use ($user) {
             return $mail->hasTo($user->email);
         });
@@ -44,7 +42,7 @@ class DeactivateAccountTest extends TestCase
 
     public function test_missing_confirmation_field()
     {
-        $user = User::factory()->create(['status' => 'active']);
+        $user = User::factory()->create(['is_active' => true]);
 
         $response = $this->actingAs($user, 'api')->patchJson('/api/v1/accounts/deactivate', [
             'reason' => 'No longer need the account'
@@ -58,7 +56,7 @@ class DeactivateAccountTest extends TestCase
     {
         Mail::fake();
 
-        $user = User::factory()->create(['status' => 'active']);
+        $user = User::factory()->create(['is_active' => true]);
 
         $this->actingAs($user, 'api')->patchJson('/api/v1/accounts/deactivate', [
             'confirmation' => true,
@@ -70,9 +68,22 @@ class DeactivateAccountTest extends TestCase
         });
     }
 
+    public function test_unauthorized_access()
+    {
+        $response = $this->patchJson('/api/v1/accounts/deactivate', [
+            'confirmation' => true,
+            'reason' => 'No longer need the account'
+        ]);
+
+        $response->assertStatus(401)
+                 ->assertJson([
+                     'message' => 'Unauthenticated.'
+                 ]);
+    }
+
     public function test_already_deactivated_user()
     {
-        $user = User::factory()->create(['status' => 'deactivated']);
+        $user = User::factory()->create(['is_active' => false]);
 
         $response = $this->actingAs($user, 'api')->patchJson('/api/v1/accounts/deactivate', [
             'confirmation' => true,
