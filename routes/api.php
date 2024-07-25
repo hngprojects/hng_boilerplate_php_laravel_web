@@ -98,9 +98,12 @@ Route::prefix('v1')->group(function () {
         // Organisations
         Route::post('/organisations', [OrganisationController::class, 'store']);
         Route::get('/organisations', [OrganisationController::class, 'index']);
+        Route::put('/organisations/{org_id}', [OrganisationController::class, 'update']);
         Route::delete('/organisations/{org_id}', [OrganisationController::class, 'destroy']);
         Route::delete('/organisations/{org_id}/users/{user_id}', [OrganisationController::class, 'removeUser']);
         Route::get('/organisations/{organisation}/members', [OrganizationMemberController::class, 'index']);
+
+        Route::delete('/organizations/{org_id}', [OrganisationController::class, 'destroy']);
 
         Route::post('/blogs', [BlogController::class, 'store']);
 
@@ -110,7 +113,7 @@ Route::prefix('v1')->group(function () {
         Route::delete('/testimonials/{testimonial}', [TestimonialController::class, 'destroy']);
 
         // Jobs
-        Route::apiResource('jobs', JobController::class);
+        Route::apiResource('/jobs', JobController::class);
 
         Route::get('/user/export/{format}', [ExportUserController::class, 'export']);
 
@@ -119,6 +122,7 @@ Route::prefix('v1')->group(function () {
 
         // Roles
         Route::put('/organisations/{org_id/roles/{role_id}/disable', [RoleController::class, 'disableRole']);
+        Route::put('/organisations/{org_id}/roles/{role_id}/disable', [RoleController::class, 'disableRole']);
     });
 
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
@@ -142,6 +146,5 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('/user/preferences', [PreferenceController::class, 'index']);
     Route::delete('/user/preferences/{id}', [PreferenceController::class, 'delete']);
 });
-
 
 

@@ -30,7 +30,7 @@ class UserFactory extends Factory
             'name' => $first_name . " " . $last_name,
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
+            'password' => static::$password ??= Hash::make('Asde!23@346yfhs'),
             'remember_token' => Str::random(10),
             'signup_type' => 'user',
         ];

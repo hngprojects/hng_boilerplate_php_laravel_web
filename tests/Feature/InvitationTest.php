@@ -24,13 +24,13 @@ class InvitationTest extends TestCase
         $this->postJson('/api/v1/auth/register', [
             'name' => 'test',
             'email' => 'test@example.com',
-            'password' => 'test1234',
+            'password' => 'Ed8M7s*)?e:hTb^#&;C!<y',
         ]);
 
         // Login the user
         $loginResponse = $this->postJson('/api/v1/auth/login', [
             'email' => 'test@example.com',
-            'password' => 'test1234',
+            'password' => 'Ed8M7s*)?e:hTb^#&;C!<y',
         ]);
 
         $this->accessToken = $loginResponse['data']['access_token'];
