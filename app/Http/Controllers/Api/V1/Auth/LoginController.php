@@ -83,4 +83,32 @@ class LoginController extends Controller
             ]
         ], 200);
     }
+
+    public function logout()
+    {
+        try {
+            JWTAuth::parseToken()->invalidate(true);
+            return response()->json([
+                'message' => 'Logout successful',
+                'status_code' => 200
+            ], 200);
+        } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+                'error' => $this->getErrorCode($e),
+                'status_code' => 401
+            ], 401);
+        }
+    }
+
+    private function getErrorCode($exception)
+    {
+        if ($exception instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException) {
+            return 'token_expired';
+        } elseif ($exception instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException) {
+            return 'token_invalid';
+        } else {
+            return 'token_absent';
+        }
+    }
 }

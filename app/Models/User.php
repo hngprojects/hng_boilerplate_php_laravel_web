@@ -11,17 +11,19 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
-class User extends Authenticatable  implements JWTSubject
+class User extends Authenticatable  implements JWTSubject, CanResetPasswordContract
 {
-    use HasApiTokens, HasFactory, Notifiable, HasUuids;
+    use HasApiTokens, HasFactory, Notifiable, HasUuids, CanResetPassword;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
-    protected $guarded  = [];
+    protected $guarded  = ['id'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -31,6 +33,14 @@ class User extends Authenticatable  implements JWTSubject
     protected $hidden = [
         'password',
         'remember_token',
+    ];
+
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'status',
+        'deactivation_reason',
     ];
 
     /**
@@ -95,7 +105,7 @@ class User extends Authenticatable  implements JWTSubject
 
     public function jobs(): BelongsToMany
     {
-        return $this->belongsToMany(Job::class, 'job_user')->using(JobUser::class);
+        return $this->belongsToMany(Job::class, 'job_users', 'user_id', 'job_id')->using(JobUser::class);
     }
 
     public function products(): HasMany
@@ -170,6 +180,22 @@ class User extends Authenticatable  implements JWTSubject
             $this->roles()->whereHas('permissions', function ($query) use ($permissions) {
                 $query->whereIn('name', $permissions);
             })->exists();
+    }
+
+    public function preferences(): HasMany
+    {
+        return $this->hasMany(Preference::class);
+    }
+
+    /**
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new \App\Notifications\ResetPasswordNotification($token));
     }
 
 }

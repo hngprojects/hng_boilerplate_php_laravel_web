@@ -10,6 +10,7 @@ class Job extends Model
 {
     use HasFactory, HasUuids;
 
+
     protected $fillable = [
         'id',
         'title',
@@ -22,8 +23,10 @@ class Job extends Model
         'organisation_id'
     ];
 
+    //protected $fillable = ['title', 'description', 'location', 'salary', 'job_type', 'company_name'];
+
     public function users()
     {
-        return $this->belongsToMany(User::class, 'job_user')->using(JobUser::class);
+        return $this->belongsToMany(User::class, 'job_users', 'job_id', 'user_id')->using(JobUser::class);
     }
 }

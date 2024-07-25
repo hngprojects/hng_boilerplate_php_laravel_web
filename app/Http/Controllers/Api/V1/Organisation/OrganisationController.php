@@ -6,6 +6,8 @@ use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreOrganisationRequest;
 use App\Models\Organisation;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -19,37 +21,44 @@ class OrganisationController extends Controller
      */
     public function index()
     {
-        // Get authenticated user
-        $user = auth('api')->user();
-        if (!$user) {
-            return response()->json([
-                'status' => 'Unauthorized',
-                'message' => 'Unauthorized. Please log in.',
-                'status-code' => 401
-            ], 401);
-        }
+        try {
+            $user = auth('api')->user();
+            if (!$user) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Unauthorized',
+                    'status_code' => 401
+                ], 401);
+            }
 
-        $organisations = $user->organisations;
+            $organisations = $user->organisations;
 
-        if ($organisations->isEmpty()) {
+            if ($organisations->isEmpty()) {
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'No organisations available',
+                    'data' => [
+                        'organisations' => []
+                    ]
+                ], 200);
+            }
+
             return response()->json([
                 'status' => 'success',
-                'message' => 'No organisations available',
+                'message' => 'Organizations retrieved successfully',
+                'status_code' => 200,
                 'data' => [
-                    'organisations' => []
+                    'organisations' => OrganisationResource::collection($organisations)
                 ]
-                ],200);
-        };
-
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Organizations retrieved successfully',
-            'status-code' => 200,
-            'data' => [
-                'organisations' => OrganisationResource::collection($organisations)
-            ]
-        ]);
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'An error occurred',
+                'status_code' => 500,
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
 
@@ -59,16 +68,19 @@ class OrganisationController extends Controller
     public function store(StoreOrganisationRequest $request)
     {
         if($validPayload = $request->validated()){
-            $user = auth('api')->user();
-            if(!$user) return ResponseHelper::response("Authentication failed", 401, null);
-            // $validPayload['user_id'] = (string)$user->id;
+            $user = auth()->user();
+            if(!$user){
+                return ResponseHelper::response("Authentication failed", 401, null);
+            }
+            $validPayload['user_id'] = $user->id;
             DB::beginTransaction();
             try {
                 $organisation = Organisation::create($validPayload);
-                $organisation->users()->attach((string)$user->id);
+                $organisation->users()->attach($user->id);
                 DB::commit();
                 return ResponseHelper::response("Organisation created successfully", 201, $organisation->getPublicColumns());
-            }catch (\Exception $e) {
+            } catch (\Exception $e) {
+                Log::error($e->getMessage());
                 DB::rollBack();
                 return ResponseHelper::response("Client error", 400, null);
             }
@@ -111,8 +123,49 @@ class OrganisationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($org_id)
     {
-        //
+        $user = auth('api')->user();
+        if(!$user) return ResponseHelper::response("Authentication failed", 401, null);
+        $organisation = Organisation::find($org_id);
+        if(!$organisation) return ResponseHelper::response("Organisation not found", 404, null);
+        if(!$organisation->users->contains($user->id)) return ResponseHelper::response("You are not authorised to perform this action", 403, null);
+        try {
+            // Soft delete the org
+            $organisation->delete();
+            return ResponseHelper::response("Organisation deleted successfully", 200, null);
+        }catch (\Exception $e) {
+            return ResponseHelper::response("Client error", 400, null);
+        }
+    }
+    
+    public function removeUser(Request $request, $org_id, $user_id)
+    {
+        $organization = Organisation::findOrFail($org_id);
+
+        // Use $request->auth instead of Auth::user()
+        if (!$request->user()->can('removeUser', $organization)) {
+            return response()->json([
+                'status' => 'Forbidden',
+                'message' => 'Only admin can remove users',
+                'status_code' => 403
+            ], 403);
+        }
+
+        $user = User::find($user_id);
+
+        if (!$user || !$organization->users()->detach($user)) {
+            return response()->json([
+                'status' => 'forbidden',
+                'message' => 'user not found',
+                'status_code' => 404
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'user deleted successfully',
+            'status_code' => 200
+        ], 200);
     }
 }

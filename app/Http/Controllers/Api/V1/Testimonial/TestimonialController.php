@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateTestimonialRequest;
 use App\Models\Testimonial;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class TestimonialController extends Controller
 {
@@ -47,7 +48,7 @@ class TestimonialController extends Controller
             $testimonial = Testimonial::create([
                 'user_id' => $user->id,
                 'name' => $user->name,
-                'content' => $request->content,
+                'content' => $request->get('content'),
             ]);
 
             return response()->json([
@@ -68,10 +69,86 @@ class TestimonialController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Testimonial $testimonial)
-    {
-        //
+
+
+    // public function show(Testimonial $testimonial_id)
+    // {
+    //     $user = Auth::user();
+
+    //     if (!$user) {
+    //         return response()->json([
+    //             'status' => 'Unauthorized',
+    //             'message' => 'Unauthorized. Please log in.',
+    //             'status_code' => 401,
+    //         ], 401);
+    //     }
+
+    //     $testimonial = Testimonial::find($testimonial_id);
+
+    //     if (!$testimonial) {
+    //         return response()->json([
+    //             'status' => 'Not Found',
+    //             'message' => 'Testimonial not found.',
+    //             'status_code' => 404,
+    //         ], 404);
+    //     }
+
+    //     return response()->json([
+    //         'status' => 'success',
+    //         'message' => 'Testimonial fetched successfully',
+    //         'data' => $testimonial,
+    //     ], 200);
+    // }
+
+//     public function show(Testimonial $testimonial)
+// {
+//     $user = Auth::user();
+
+//     if (!$user) {
+//         return response()->json([
+//             'status' => 'Unauthorized',
+//             'message' => 'Unauthorized. Please log in.',
+//             'status_code' => 401,
+//         ], 401);
+//     }
+
+//     return response()->json([
+//         'status' => 'success',
+//         'message' => 'Testimonial fetched successfully',
+//         'data' => $testimonial,
+//     ], 200);
+// }
+
+
+public function show($id)
+{
+    $user = Auth::user();
+
+    if (!$user) {
+        return response()->json([
+            'status' => 'Unauthorized',
+            'message' => 'Unauthorized. Please log in.',
+            'status_code' => 401,
+        ], 401);
     }
+
+    try {
+        $testimonial = Testimonial::findOrFail($id);
+    } catch (ModelNotFoundException $e) {
+        return response()->json([
+            'status' => 'Not Found',
+            'message' => 'Testimonial not found.',
+            'status_code' => 404,
+        ], 404);
+    }
+
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Testimonial fetched successfully',
+        'data' => $testimonial,
+    ], 200);
+}
+
 
     /**
      * Show the form for editing the specified resource.
@@ -92,8 +169,43 @@ class TestimonialController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Testimonial $testimonial)
+    public function destroy($id)
     {
-        //
+        $user = Auth::user();
+
+
+        if (!$user) {
+            return response()->json([
+                'status' => 'Unauthorized',
+                'message' => 'Unauthorized. Please log in.',
+                'status_code' => 401,
+            ], 401);
+        }
+
+        if ($user->role !== 'admin') {
+            return response()->json([
+                'status' => 'Forbidden',
+                'message' => 'You do not have the required permissions to perform this action.',
+                'status_code' => 403,
+            ], 403);
+        }
+
+        try {
+            $testimonial = Testimonial::findOrFail($id);
+            $testimonial->delete();
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'status' => 'Not Found',
+                'message' => 'Testimonial not found.',
+                'status_code' => 404,
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Testimonial deleted successfully',
+            'status_code' => 200,
+        ], 200);
     }
+
 }

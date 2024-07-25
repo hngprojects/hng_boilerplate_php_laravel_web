@@ -124,6 +124,76 @@ paths:
                   error:
                     type: string
                     example: creation of subscription plan failed
+                  
+  /blogs/{id}:
+    delete:
+      tags:
+        - blogs
+      summary: Delete a blog post
+      operationId: deleteBlog
+      description: Deletes a blog post by ID. Accessible only to super admins.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the blog post to delete
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Blog successfully deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Blog successfully deleted
+                  status_code:
+                    type: integer
+                    example: 204
+        '403':
+          description: You are not authorized to perform this action
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: You are not authorized to perform this action
+                  status_code:
+                    type: integer
+                    example: 403
+        '404':
+          description: Blog with the given Id does not exist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Blog with the given Id does not exist
+                  status_code:
+                    type: integer
+                    example: 404
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal server error.
+                  status_code:
+                    type: integer
+                    example: 500
 
       requestBody:
         content:
@@ -234,3 +304,9 @@ components:
           type: string
           format: string
           example: 'xeoo'
+          
+securitySchemes:
+  bearerAuth:
+    type: http
+    scheme: bearer
+    bearerFormat: JWT

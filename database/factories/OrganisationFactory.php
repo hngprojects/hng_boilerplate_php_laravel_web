@@ -1,6 +1,8 @@
 <?php
 
 namespace Database\Factories;
+
+use App\Models\Organisation;
 use App\Models\User;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -16,10 +18,14 @@ class OrganisationFactory extends Factory
      *
      * @return array<string, mixed>
      */
+
+    protected $model = Organisation::class;
+
     public function definition(): array
     {
         return [
             'name' => $this->faker->company,
+            'org_id' => $this->faker->uuid,
             'email' => $this->faker->companyEmail,
             'industry' => Str::ucfirst($this->faker->word()),
             'country' => $this->faker->country,
@@ -32,6 +38,7 @@ class OrganisationFactory extends Factory
             'country' => $this->faker->country,
             'address' => $this->faker->address,
             'state' => $this->faker->state,
+            'user_id' => User::factory(),
         ];
     }
 }

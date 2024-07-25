@@ -5,15 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
 class Organisation extends Model
 {
-    use HasFactory, HasUuids;
+    use HasFactory, HasUuids, SoftDeletes;
 
     protected $fillable = [
         "name",
-        // "user_id",
+        "user_id",
         "email",
         "description",
         "industry",
@@ -74,11 +75,15 @@ class Organisation extends Model
     {
         return $this->belongsToMany(User::class, 'organisation_user', 'org_id', 'user_id')->using(OrganisationUser::class);
     }
-    
+
     public function getPublicColumns()
     {
         $publicColumns = ['org_id', "user_id", "name", "slug", "description", "email", "industry", "type", "country", "address", "state" ];
         return $this->only($publicColumns);
     }
 
+    public function roles()
+    {
+        return $this->hasMany(Role::class, 'org_id');
+    }
 }
