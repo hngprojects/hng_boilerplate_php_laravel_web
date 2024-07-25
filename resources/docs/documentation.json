@@ -160,6 +160,41 @@
                 }
             }
         },
+        "/api/v1/auth/request-password-request/{token}": {
+            "post": {
+                "tags": [
+                  "Authentication"
+                ],
+                "summary": "Reset User Password",
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ResetUserPasswordInput"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Password reset successfully"
+                    }
+                }
+            }
+        },
         "/api/v1/users": {
             "get": {
                 "tags": [
@@ -287,44 +322,6 @@
                 "responses": {
                     "200": {
                         "description": "User removed successfully"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/v1/organisations/{org_id}/invite": {
-            "post": {
-                "tags": [
-                    "Organisations"
-                ],
-                "summary": "Invite a user to an organisation",
-                "parameters": [
-                    {
-                        "name": "org_id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/InvitationInput"
-                            }
-                        }
-                    },
-                    "required": true
-                },
-                "responses": {
-                    "200": {
-                        "description": "Invitation sent successfully"
                     }
                 },
                 "security": [
@@ -495,6 +492,33 @@
             }
         },
         "/api/v1/products": {
+            "get": {
+            "tags": [
+                "Products"
+            ],
+            "summary": "Retrieve a list of products",
+            "description": "Fetches a list of all products from the database.",
+            "responses": {
+                "200": {
+                  "description": "Successfully retrieved the list of products.",
+                  "content": {
+                      "application/json": {
+                          "schema": {
+                              "type": "array",
+                              "items": {
+                                  "$ref": "#/components/schemas/Product"
+                              }
+                          }
+                      }
+                  }
+                }
+            },
+            "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
             "post": {
                 "tags": [
                     "Products"
@@ -520,6 +544,73 @@
                         "bearerAuth": []
                     }
                 ]
+            }
+        },
+        "/api/v1/products/{productId}": {
+          "delete": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Delete Product",
+                "description": "Deletes a specific product by its ID.",
+                "parameters": [
+                    {
+                        "name": "productId",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string",
+                            "description": "The unique identifier of the product to be deleted."
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/products/search": {
+            "get": {
+                "tags": [
+                  "Products Search"
+                ],
+                "summary": "Search product",
+                "parameters": [
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "required": false,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                      "200": {
+                            "description": "Successful response",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "type": "array",
+                                        "items": {
+                                          "$ref": "#/components/schemas/Product"
+                                        }
+                                    }
+                                }
+                            }
+                      }
+                }
             }
         },
         "/api/v1/help-center/topics/search": {
@@ -979,6 +1070,99 @@
             }
         }
     },
+    "/api/v1/invitations/generate": {
+        "post": {
+            "tags": [
+              "Invitation"
+            ],
+            "summary": "Invitation Generation",
+            "requestBody": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/InvitationGenerationInput"
+                  }
+                }
+              },
+              "required": true
+            },
+            "responses": {
+                "200": {
+                    "description": "Successful response",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/inline_response_200"
+                            }
+                        }
+                    }
+                }
+            },
+            "security": [
+                {
+                  "bearerAuth": []
+                }
+            ]
+        }
+    },
+    "/api/v1/invite/accept": {
+        "get": {
+            "tags": [
+              "Invitation"
+            ],
+            "summary": "Accepting Invitation",
+            "parameters": [
+                {
+                    "name": "token",
+                    "in": "query",
+                    "required": true,
+                    "style": "form",
+                    "explode": true,
+                    "schema": {
+                      "type": "string"
+                    }
+                }
+            ],
+            "responses": {
+                "200": {
+                  "description": "Invitation successfully accepted"
+                }
+            },
+            "security": [
+                {
+                  "bearerAuth": []
+                }
+            ]
+        }
+    },
+    "/api/v1/invite": {
+        "post": {
+            "tags": [
+              "Invitation"
+            ],
+            "summary": "Accepting Invitation",
+            "requestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                          "$ref": "#/components/schemas/InvitationAcceptanceInput"
+                        }
+                    }
+                },
+                "required": true
+            },
+            "responses": {
+                "200": {
+                    "description": "Successful response"
+                }
+            },
+            "security": [
+                {
+                  "bearerAuth": []
+                }
+            ]
+        }
+    },
     "components": {
         "securitySchemes": {
             "bearerAuth": {
@@ -1023,6 +1207,18 @@
                     "email": {
                         "type": "string",
                         "format": "email"
+                    }
+                }
+            },
+            "ResetUserPasswordInput": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "token": {
+                        "type": "string"
                     }
                 }
             },
@@ -1164,6 +1360,23 @@
                     }
                 }
             },
+            "Product": {
+              "type": "object",
+              "properties": {
+                  "name": {
+                      "type": "string"
+                  },
+                  "category": {
+                      "type": "string"
+                  },
+                  "minPrice": {
+                      "type": "integer"
+                  },
+                  "maxPrice": {
+                      "type": "integer"
+                  }
+              }
+          },
             "ProductInput": {
                 "type": "object",
                 "properties": {
@@ -1372,6 +1585,45 @@
                     "cancellation_reason" : {
                         "type" : "string",
                         "example" : "I dont like the service again"
+                    }
+                }
+            },
+            "InvitationGenerationInput": {
+                "type": "object",
+                "properties": {
+                    "org_id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    }
+                }
+            },
+            "InvitationAcceptanceInput": {
+                "type": "object",
+                "properties": {
+                    "invitation_link": {
+                        "type": "string",
+                        "format": "url"
+                    }
+                }
+            },
+            "inline_response_200": {
+                "type": "object",
+                "properties": {
+                    "invitation": {
+                        "type": "string",
+                        "description": "Details of the generated invitation"
+                    },
+                    "message": {
+                        "type": "string",
+                        "description": "A message indicating the result"
+                    },
+                    "status_code": {
+                        "type": "integer",
+                        "description": "Status code of the response"
                     }
                 }
             }
