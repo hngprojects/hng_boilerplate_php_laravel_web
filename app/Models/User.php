@@ -118,9 +118,9 @@ class User extends Authenticatable  implements JWTSubject, CanResetPasswordContr
     public function hasPermissionTo($permission)
     {
         return $this->permissions()->where('name', $permission)->exists() ||
-               $this->roles()->whereHas('permissions', function ($query) use ($permission) {
-                   $query->where('name', $permission);
-               })->exists();
+            $this->roles()->whereHas('permissions', function ($query) use ($permission) {
+                $query->where('name', $permission);
+            })->exists();
     }
 
     public function hasRole($role)
@@ -190,4 +190,8 @@ class User extends Authenticatable  implements JWTSubject, CanResetPasswordContr
         $this->notify(new \App\Notifications\ResetPasswordNotification($token));
     }
 
+    public function activityLogs()
+    {
+        return $this->hasMany(ActivityLog::class, 'user_id');
+    }
 }
