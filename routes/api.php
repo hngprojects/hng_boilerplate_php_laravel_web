@@ -130,7 +130,10 @@ Route::prefix('v1')->group(function () {
         Route::get('/user/preferences', [PreferenceController::class, 'index']);
         Route::delete('/user/preferences/{id}', [PreferenceController::class, 'delete']);
     });
-});
+
+    // Notification settings
+    Route::patch('/notification-settings/{user_id}', [NotificationPreferenceController::class, 'update']);
+    });
 
 
 Route::group(['middleware' => ['auth:api']], function () {
@@ -141,7 +144,4 @@ Route::group(['middleware' => ['auth:api']], function () {
 });
 
 
-Route::middleware('auth:api')->group(function () {
-    // Notification settings
-    Route::patch('/notification-settings/{user_id}', [NotificationPreferenceController::class, 'update']);
-});
+

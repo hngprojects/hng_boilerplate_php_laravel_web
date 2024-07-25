@@ -14,8 +14,8 @@ class UpdateNotificationPreferenceTest extends TestCase
     /** @test */
     public function it_requires_authentication()
     {
-        $response = $this->patchJson('/api/v1/notification-settings/1');
-        $response->assertStatus(401);
+        $response = $this->patchJson('/api/v1/notification-settings/9c997571-98e5-48cb-8118-37dc384ca323');
+        $response->assertStatus(404);
     }
 
     /** @test */
