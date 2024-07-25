@@ -113,11 +113,6 @@ class User extends Authenticatable  implements JWTSubject, CanResetPasswordContr
         return $this->hasMany(Product::class, 'user_id', 'id');
     }
 
-    public function isAdmin($org_id) 
-    {
-        return $this->roles()->where('org_id', $org_id)->where('is_admin', true)->exists();
-    }
-
     public function permissions()
     {
         return $this->belongsToMany(Permission::class, 'users_permissions', 'user_id', 'permission_id');

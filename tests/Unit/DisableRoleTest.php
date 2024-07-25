@@ -10,7 +10,6 @@ use App\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Requests\StoreRoleRequest;
-use Illuminate\Support\Facades\Log;
 
 class DisableRoleTest extends TestCase
 {
@@ -44,7 +43,6 @@ class DisableRoleTest extends TestCase
             'name' => 'Test Role',
             'org_id' => $this->organisation->org_id,
             'is_active' => true,
-            'is_admin' => true,  // Ensure this role is marked as admin
         ]);
 
         $this->defaultRole = Role::create([
@@ -57,7 +55,6 @@ class DisableRoleTest extends TestCase
         $this->user->roles()->attach($this->role->id);
     }
 
-
     public function testDisableRoleUnauthorized()
     {
         $controller = new RoleController();
@@ -69,8 +66,7 @@ class DisableRoleTest extends TestCase
 
         $response = $controller->disableRole($request, $this->organisation->org_id, $this->role->id);
 
+        // Check if the user without admin privileges gets a 403 response
         $this->assertEquals(403, $response->status());
     }
 }
-
-?>
