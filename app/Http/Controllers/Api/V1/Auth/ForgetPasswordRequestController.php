@@ -7,11 +7,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\HttpResponses;
 use Carbon\Carbon;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Support\Facades\Password;
 
 class ForgetPasswordRequestController extends Controller
 {
@@ -27,17 +26,16 @@ class ForgetPasswordRequestController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return $this->apiResponse(status: 'Error', message:  $validator->errors(), status_code: 422);
+            return $this->apiResponse(message:  $validator->errors(), status_code: 422);
         }
 
         $user = User::where('email', $request->email)->first();
         if (!$user) {
-            return $this->apiResponse(status: 'Error', message:  'User does not exist', status_code: 400);
+            return $this->apiResponse(message:  'User does not exist', status_code: 400);
         }
 
         // Create a new token
-        $token_key = Str::random(60);
-        $token = Hash::make($token_key);
+        $token = Password::createToken($user);
 
         // Store the token in the password_reset_tokens table
         DB::table('password_reset_tokens')->updateOrInsert(
@@ -54,10 +52,10 @@ class ForgetPasswordRequestController extends Controller
             Carbon::now()->addMinutes(config('auth.passwords.users.expire')),
             ['token' => $token, 'email' => $request->email]
         );
-
+        
         $user->sendPasswordResetNotification($url);
 
-        return $this->apiResponse(status: 'Success', message:  'Password reset link sent');
+        return $this->apiResponse(message:  'Password reset link sent');
 
     }
 }

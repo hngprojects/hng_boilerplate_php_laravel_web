@@ -1,3 +1,5 @@
+
+
 <?php
 
 use Illuminate\Database\Migrations\Migration;
@@ -26,7 +28,7 @@ return new class extends Migration
         Schema::table('jobs', function (Blueprint $table) {
             $table->dropForeign(['user_id']);
             $table->dropForeign(['organisation_id']);
-            
+
             $table->dropColumn('salary');
             $table->dropColumn('user_id');
             $table->dropColumn('organisation_id');

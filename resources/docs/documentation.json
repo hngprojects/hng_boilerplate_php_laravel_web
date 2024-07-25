@@ -1,43 +1,67 @@
 {
-  "openapi": "3.0.0",
-  "info": {
-    "title": "Laravel Team Api Documentation",
-    "description": "API documentation for the PHP Laravel HNG Team",
-    "version": "1.0.0"
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "Laravel Team Api Documentation",
+    "description" : "API documentation for the PHP Laravel HNG Team",
+    "version" : "1.0.0"
   },
-  "servers": [
-    {
-      "url": "https://virtserver.swaggerhub.com/timiajayi/help-center-search/1.0.0",
-      "description": "SwaggerHub API Auto Mocking"
-    },
-    {
-      "url": "https://deployment.api-php.boilerplate.hng.tech/"
-    }
-  ],
-  "paths": {
-    "/auth/register": {
-      "post": {
-        "tags": [
-          "Authentication"
-        ],
-        "summary": "Register a new user",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RegisterInput"
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/timiajayi/help-center-search/1.0.0",
+    "description" : "SwaggerHub API Auto Mocking"
+  }, {
+    "url" : "https://deployment.api-php.boilerplate.hng.tech/"
+  } ],
+  "tags" : [ {
+    "name" : "Authentication"
+  }, {
+    "name" : "Users"
+  }, {
+    "name" : "Organisations"
+  }, {
+    "name" : "Testimonials"
+  }, {
+    "name" : "Jobs"
+  }, {
+    "name" : "Customers"
+  }, {
+    "name" : "Roles"
+  }, {
+    "name" : "Products"
+  }, {
+    "name" : "Articles"
+  }, {
+    "name" : "Contact"
+  }, {
+    "name" : "Blogs"
+  }, {
+    "name" : "Squeeze"
+  }, {
+    "name" : "Features"
+  }, {
+    "name" : "Plans"
+  } ],
+  "paths" : {
+    "/auth/register" : {
+      "post" : {
+        "tags" : [ "Authentication" ],
+        "summary" : "Register a new user",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RegisterInput"
               }
             }
           },
-          "required": true
+          "required" : true
         },
-        "responses": {
-          "201": {
-            "description": "User registered successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AuthResponse"
+        "responses" : {
+          "201" : {
+            "description" : "User registered successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AuthResponse"
                 }
               }
             }
@@ -45,29 +69,27 @@
         }
       }
     },
-    "/auth/login": {
-      "post": {
-        "tags": [
-          "Authentication"
-        ],
-        "summary": "Login user",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/LoginInput"
+    "/auth/login" : {
+      "post" : {
+        "tags" : [ "Authentication" ],
+        "summary" : "Login user",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/LoginInput"
               }
             }
           },
-          "required": true
+          "required" : true
         },
-        "responses": {
-          "200": {
-            "description": "Login successful",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AuthResponse"
+        "responses" : {
+          "200" : {
+            "description" : "Login successful",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AuthResponse"
                 }
               }
             }
@@ -75,199 +97,229 @@
         }
       }
     },
-    "/auth/logout": {
-      "post": {
-        "tags": [
-          "Authentication"
-        ],
-        "summary": "Logout user",
-        "responses": {
-          "200": {
-            "description": "Logout successful"
+    "/auth/logout" : {
+      "post" : {
+        "tags" : [ "Authentication" ],
+        "summary" : "Logout user",
+        "responses" : {
+          "200" : {
+            "description" : "Logout successful"
           }
         },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
       }
     },
-    "/users": {
-      "get": {
-        "tags": [
-          "Users"
-        ],
-        "summary": "Get all users",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/User"
+    "/auth/forget-password" : {
+      "post" : {
+        "tags" : [ "Authentication" ],
+        "summary" : "Request password reset",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ForgetPasswordInput"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Password reset request successful"
+          }
+        }
+      }
+    },
+    "/users" : {
+      "get" : {
+        "tags" : [ "Users" ],
+        "summary" : "Get all users",
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/User"
                   }
                 }
               }
             }
           }
         },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
       }
     },
-    "/organisations": {
-      "get": {
-        "tags": [
-          "Organisations"
-        ],
-        "summary": "Get all organisations",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Organisation"
+    "/users/export" : {
+      "post" : {
+        "tags" : [ "Users" ],
+        "summary" : "Export user data",
+        "responses" : {
+          "200" : {
+            "description" : "User data exported successfully"
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/organisations" : {
+      "get" : {
+        "tags" : [ "Organisations" ],
+        "summary" : "Get all organisations",
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Organisation"
                   }
                 }
               }
             }
           }
         },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
       },
-      "post": {
-        "tags": [
-          "Organisations"
-        ],
-        "summary": "Create a new organisation",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/OrganisationInput"
+      "post" : {
+        "tags" : [ "Organisations" ],
+        "summary" : "Create a new organisation",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/OrganisationInput"
               }
             }
           },
-          "required": true
+          "required" : true
         },
-        "responses": {
-          "201": {
-            "description": "Organisation created successfully"
+        "responses" : {
+          "201" : {
+            "description" : "Organisation created successfully"
           }
         },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
       }
     },
-    "/organisations/{org_id}/users/{user_id}": {
-      "delete": {
-        "tags": [
-          "Organisations"
-        ],
-        "summary": "Remove user from organisation",
-        "parameters": [
-          {
-            "name": "org_id",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "user_id",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "type": "string"
-            }
+    "/organisations/{org_id}/users/{user_id}" : {
+      "delete" : {
+        "tags" : [ "Organisations" ],
+        "summary" : "Remove user from organisation",
+        "parameters" : [ {
+          "name" : "org_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
           }
-        ],
-        "responses": {
-          "200": {
-            "description": "User removed successfully"
+        }, {
+          "name" : "user_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "User removed successfully"
           }
         },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
       }
     },
-    "/testimonials": {
-      "post": {
-        "tags": [
-          "Testimonials"
-        ],
-        "summary": "Create a new testimonial",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TestimonialInput"
+    "/organisations/{org_id}/invite" : {
+      "post" : {
+        "tags" : [ "Organisations" ],
+        "summary" : "Invite a user to an organisation",
+        "parameters" : [ {
+          "name" : "org_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/InvitationInput"
               }
             }
           },
-          "required": true
+          "required" : true
         },
-        "responses": {
-          "201": {
-            "description": "Testimonial created successfully"
+        "responses" : {
+          "200" : {
+            "description" : "Invitation sent successfully"
           }
         },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
       }
     },
-    "/testimonials/{testimonial_id}": {
-      "get": {
-        "tags": [
-          "Testimonials"
-        ],
-        "summary": "Get a specific testimonial",
-        "parameters": [
-          {
-            "name": "testimonial_id",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "type": "string"
+    "/testimonials" : {
+      "post" : {
+        "tags" : [ "Testimonials" ],
+        "summary" : "Create a new testimonial",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/TestimonialInput"
+              }
             }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Testimonial created successfully"
           }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Testimonial"
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/testimonials/{testimonial_id}" : {
+      "get" : {
+        "tags" : [ "Testimonials" ],
+        "summary" : "Get a specific testimonial",
+        "parameters" : [ {
+          "name" : "testimonial_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Testimonial"
                 }
               }
             }
@@ -275,21 +327,19 @@
         }
       }
     },
-    "/jobs": {
-      "get": {
-        "tags": [
-          "Jobs"
-        ],
-        "summary": "Get all jobs",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Job"
+    "/jobs" : {
+      "get" : {
+        "tags" : [ "Jobs" ],
+        "summary" : "Get all jobs",
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Job"
                   }
                 }
               }
@@ -298,77 +348,67 @@
         }
       }
     },
-    "/customers": {
-      "get": {
-        "tags": [
-          "Customers"
-        ],
-        "summary": "Get all customers",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Customer"
+    "/customers" : {
+      "get" : {
+        "tags" : [ "Customers" ],
+        "summary" : "Get all customers",
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Customer"
                   }
                 }
               }
             }
           }
         },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
       }
     },
-    "/roles": {
-      "post": {
-        "tags": [
-          "Roles"
-        ],
-        "summary": "Create a new role",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RoleInput"
+    "/roles" : {
+      "post" : {
+        "tags" : [ "Roles" ],
+        "summary" : "Create a new role",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RoleInput"
               }
             }
           },
-          "required": true
+          "required" : true
         },
-        "responses": {
-          "201": {
-            "description": "Role created successfully"
+        "responses" : {
+          "201" : {
+            "description" : "Role created successfully"
           }
         },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
       }
     },
-    "/products/categories": {
-      "get": {
-        "tags": [
-          "Products"
-        ],
-        "summary": "Get all product categories",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Category"
+    "/products/categories" : {
+      "get" : {
+        "tags" : [ "Products" ],
+        "summary" : "Get all product categories",
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Category"
                   }
                 }
               }
@@ -377,61 +417,51 @@
         }
       }
     },
-    "/products": {
-      "post": {
-        "tags": [
-          "Products"
-        ],
-        "summary": "Create a new product",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ProductInput"
+    "/products" : {
+      "post" : {
+        "tags" : [ "Products" ],
+        "summary" : "Create a new product",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ProductInput"
               }
             }
           },
-          "required": true
+          "required" : true
         },
-        "responses": {
-          "201": {
-            "description": "Product created successfully"
+        "responses" : {
+          "201" : {
+            "description" : "Product created successfully"
           }
         },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
       }
     },
-    "/topics/search": {
-      "get": {
-        "tags": [
-          "Articles"
-        ],
-        "summary": "Search topics",
-        "parameters": [
-          {
-            "name": "q",
-            "in": "query",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "type": "string"
-            }
+    "/help-center/topics/search" : {
+      "get" : {
+        "tags" : [ "Articles" ],
+        "summary" : "Search help center topics",
+        "parameters" : [ {
+          "name" : "q",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
           }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Article"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Article"
                   }
                 }
               }
@@ -440,79 +470,40 @@
         }
       }
     },
-    "/help-center/topics/search": {
-      "get": {
-        "tags": [
-          "Articles"
-        ],
-        "summary": "Search help center topics",
-        "parameters": [
-          {
-            "name": "q",
-            "in": "query",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Article"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/contact": {
-      "post": {
-        "tags": [
-          "Contact"
-        ],
-        "summary": "Send an inquiry",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ContactInput"
+    "/contact" : {
+      "post" : {
+        "tags" : [ "Contact" ],
+        "summary" : "Send an inquiry",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ContactInput"
               }
             }
           },
-          "required": true
+          "required" : true
         },
-        "responses": {
-          "200": {
-            "description": "Inquiry sent successfully"
+        "responses" : {
+          "200" : {
+            "description" : "Inquiry sent successfully"
           }
         }
       }
     },
-    "/blogs/latest": {
-      "get": {
-        "tags": [
-          "Blogs"
-        ],
-        "summary": "Get latest blogs",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Blog"
+    "/blogs/latest" : {
+      "get" : {
+        "tags" : [ "Blogs" ],
+        "summary" : "Get latest blogs",
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Blog"
                   }
                 }
               }
@@ -521,295 +512,462 @@
         }
       }
     },
-    "/squeeze": {
-      "post": {
-        "tags": [
-          "Squeeze"
-        ],
-        "summary": "Create a squeeze",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SqueezeInput"
+    "/blogs/search" : {
+      "get" : {
+        "tags" : [ "Blogs" ],
+        "summary" : "Search blogs",
+        "parameters" : [ {
+          "name" : "q",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Blog"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/squeeze" : {
+      "post" : {
+        "tags" : [ "Squeeze" ],
+        "summary" : "Create a squeeze",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/SqueezeInput"
               }
             }
           },
-          "required": true
+          "required" : true
         },
-        "responses": {
-          "201": {
-            "description": "Squeeze created successfully"
+        "responses" : {
+          "201" : {
+            "description" : "Squeeze created successfully"
           }
         }
+      }
+    },
+    "/features" : {
+      "get" : {
+        "tags" : [ "Features" ],
+        "summary" : "Get all features",
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Feature"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      },
+      "post" : {
+        "tags" : [ "Features" ],
+        "summary" : "Create a new feature",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/FeatureInput"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Feature created successfully"
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/plans" : {
+      "get" : {
+        "tags" : [ "Plans" ],
+        "summary" : "Get all plans",
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Plan"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      },
+      "post" : {
+        "tags" : [ "Plans" ],
+        "summary" : "Create a new plan",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PlanInput"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Plan created successfully"
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
       }
     }
   },
-  "components": {
-    "schemas": {
-      "RegisterInput": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
+  "components" : {
+    "securitySchemes" : {
+      "bearerAuth" : {
+        "type" : "http",
+        "scheme" : "bearer",
+        "bearerFormat" : "JWT"
+      }
+    },
+    "schemas" : {
+      "RegisterInput" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string"
           },
-          "email": {
-            "type": "string",
-            "format": "email"
+          "email" : {
+            "type" : "string",
+            "format" : "email"
           },
-          "password": {
-            "type": "string",
-            "format": "password"
+          "password" : {
+            "type" : "string",
+            "format" : "password"
           }
         }
       },
-      "LoginInput": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string",
-            "format": "email"
+      "LoginInput" : {
+        "type" : "object",
+        "properties" : {
+          "email" : {
+            "type" : "string",
+            "format" : "email"
           },
-          "password": {
-            "type": "string",
-            "format": "password"
+          "password" : {
+            "type" : "string",
+            "format" : "password"
           }
         }
       },
-      "AuthResponse": {
-        "type": "object",
-        "properties": {
-          "token": {
-            "type": "string"
-          },
-          "user": {
-            "$ref": "#/components/schemas/User"
+      "ForgetPasswordInput" : {
+        "type" : "object",
+        "properties" : {
+          "email" : {
+            "type" : "string",
+            "format" : "email"
           }
         }
       },
-      "User": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
+      "AuthResponse" : {
+        "type" : "object",
+        "properties" : {
+          "token" : {
+            "type" : "string"
           },
-          "name": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string",
-            "format": "email"
+          "user" : {
+            "$ref" : "#/components/schemas/User"
           }
         }
       },
-      "OrganisationInput": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
+      "User" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
           },
-          "description": {
-            "type": "string"
+          "name" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string",
+            "format" : "email"
           }
         }
       },
-      "Organisation": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
+      "Organisation" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
           },
-          "name": {
-            "type": "string"
+          "name" : {
+            "type" : "string"
           },
-          "description": {
-            "type": "string"
+          "description" : {
+            "type" : "string"
           }
         }
       },
-      "TestimonialInput": {
-        "type": "object",
-        "properties": {
-          "content": {
-            "type": "string"
+      "OrganisationInput" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string"
           },
-          "author": {
-            "type": "string"
+          "description" : {
+            "type" : "string"
           }
         }
       },
-      "Testimonial": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
+      "TestimonialInput" : {
+        "type" : "object",
+        "properties" : {
+          "content" : {
+            "type" : "string"
           },
-          "content": {
-            "type": "string"
-          },
-          "author": {
-            "type": "string"
+          "author" : {
+            "type" : "string"
           }
         }
       },
-      "Job": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
+      "Testimonial" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
           },
-          "title": {
-            "type": "string"
+          "content" : {
+            "type" : "string"
           },
-          "description": {
-            "type": "string"
-          },
-          "salary": {
-            "type": "string"
+          "author" : {
+            "type" : "string"
           }
         }
       },
-      "Customer": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
+      "Job" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
           },
-          "name": {
-            "type": "string"
+          "title" : {
+            "type" : "string"
           },
-          "email": {
-            "type": "string",
-            "format": "email"
+          "description" : {
+            "type" : "string"
           }
         }
       },
-      "RoleInput": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
+      "Customer" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
           },
-          "permissions": {
-            "type": "array",
-            "items": {
-              "type": "string"
+          "name" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string",
+            "format" : "email"
+          }
+        }
+      },
+      "RoleInput" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          },
+          "permissions" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
             }
           }
         }
       },
-      "Category": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer"
+      "Category" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer"
           },
-          "name": {
-            "type": "string"
+          "name" : {
+            "type" : "string"
           },
-          "description": {
-            "type": "string"
-          },
-          "slug": {
-            "type": "string"
-          },
-          "parent_id": {
-            "type": "integer",
-            "nullable": true
+          "description" : {
+            "type" : "string"
           }
         }
       },
-      "ProductInput": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
+      "ProductInput" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string"
           },
-          "description": {
-            "type": "string"
+          "description" : {
+            "type" : "string"
           },
-          "price": {
-            "type": "number"
+          "price" : {
+            "type" : "number"
           },
-          "category_id": {
-            "type": "integer"
+          "category_id" : {
+            "type" : "integer"
           }
         }
       },
-      "Article": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
+      "Article" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
           },
-          "title": {
-            "type": "string"
+          "title" : {
+            "type" : "string"
           },
-          "content": {
-            "type": "string"
-          },
-          "author": {
-            "type": "string"
+          "content" : {
+            "type" : "string"
           }
         }
       },
-      "ContactInput": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
+      "ContactInput" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string"
           },
-          "email": {
-            "type": "string",
-            "format": "email"
+          "email" : {
+            "type" : "string",
+            "format" : "email"
           },
-          "message": {
-            "type": "string"
+          "message" : {
+            "type" : "string"
           }
         }
       },
-      "Blog": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
+      "Blog" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
           },
-          "title": {
-            "type": "string"
+          "title" : {
+            "type" : "string"
           },
-          "content": {
-            "type": "string"
+          "content" : {
+            "type" : "string"
           },
-          "author": {
-            "type": "string"
+          "author" : {
+            "type" : "string"
           }
         }
       },
-      "SqueezeInput": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string",
-            "format": "email"
+      "SqueezeInput" : {
+        "type" : "object",
+        "properties" : {
+          "email" : {
+            "type" : "string",
+            "format" : "email"
           },
-          "name": {
-            "type": "string"
+          "name" : {
+            "type" : "string"
           }
         }
-      }
-    },
-    "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT"
+      },
+      "Feature" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          }
+        }
+      },
+      "FeatureInput" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          }
+        }
+      },
+      "Plan" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "price" : {
+            "type" : "number"
+          }
+        }
+      },
+      "PlanInput" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          },
+          "price" : {
+            "type" : "number"
+          }
+        }
       }
     }
   }
