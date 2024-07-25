@@ -21,10 +21,12 @@ use App\Http\Controllers\Api\V1\Testimonial\TestimonialController;
 use App\Http\Controllers\Api\V1\Organisation\OrganisationRemoveUserController;
 use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Controllers\Api\V1\Auth\ResetUserPasswordController;
+use App\Http\Controllers\Api\V1\BlogSearchController;
 use App\Http\Middleware\LoginAttempts;
 
 use App\Http\Controllers\Api\V1\JobController;
 use App\Http\Controllers\Api\V1\Organisation\OrganizationMemberController;
+use App\Http\Controllers\Api\V1\User\AccountController;
 use App\Http\Controllers\Api\V1\User\ExportUserController;
 
 /*
@@ -67,6 +69,7 @@ Route::prefix('v1')->group(function () {
     Route::post('/contact', [ContactController::class, 'sendInquiry']);
 
     Route::get('/blogs/latest', [BlogController::class, 'latest']);
+    Route::get('/blogs/search', [BlogSearchController::class, 'search']);
 
     Route::post('/squeeze', [SqueezeController::class, 'store']);
     Route::middleware('auth:api')->group(function () {
@@ -85,6 +88,7 @@ Route::prefix('v1')->group(function () {
         // Testimonials
         Route::post('/testimonials', [TestimonialController::class, 'store']);
         Route::get('/testimonials/{testimonial_id}', [TestimonialController::class, 'show']);
+        Route::delete('/testimonials/{testimonial}', [TestimonialController::class, 'destroy']);
 
         // Jobs
 
@@ -93,6 +97,9 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('jobs', JobController::class);
 
         Route::get('/user/export/{format}', [ExportUserController::class, 'export']);
+
+        // Accounts
+        Route::patch('/accounts/deactivate', [AccountController::class, 'deactivate']);
     });
 
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
