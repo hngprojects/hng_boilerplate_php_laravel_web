@@ -2,6 +2,10 @@
 
 namespace Database\Factories;
 
+<<<<<<< HEAD
+=======
+use App\Models\Organisation;
+>>>>>>> 117d01c4b7c244b16d71069c6dd6868d27886a77
 use App\Models\User;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -17,10 +21,14 @@ class OrganisationFactory extends Factory
      *
      * @return array<string, mixed>
      */
+
+    protected $model = Organisation::class;
+
     public function definition(): array
     {
         return [
             'name' => $this->faker->company,
+            'org_id' => $this->faker->uuid,
             'email' => $this->faker->companyEmail,
             'industry' => Str::ucfirst($this->faker->word()),
             'country' => $this->faker->country,
