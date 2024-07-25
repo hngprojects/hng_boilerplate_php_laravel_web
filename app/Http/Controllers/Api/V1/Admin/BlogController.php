@@ -154,10 +154,7 @@ class BlogController extends Controller
 
             $blog->delete();
 
-            return response()->json([
-                'message' => 'Blog successfully deleted',
-                'status_code' => 204
-            ], 204);
+            return response()->noContent();
         } catch (Exception $e) {
             return response()->json([
                 'message' => 'Internal server error.',
