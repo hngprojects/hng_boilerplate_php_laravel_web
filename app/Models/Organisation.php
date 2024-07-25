@@ -82,4 +82,8 @@ class Organisation extends Model
         return $this->only($publicColumns);
     }
 
+    public function roles()
+    {
+        return $this->hasMany(Role::class, 'org_id');
+    }
 }

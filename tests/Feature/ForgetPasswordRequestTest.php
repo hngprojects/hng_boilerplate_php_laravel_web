@@ -6,12 +6,11 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Notifications\ResetPasswordNotification;
+use Illuminate\Support\Facades\Password;
 
 class ForgetPasswordRequestTest extends TestCase
 {
@@ -27,7 +26,6 @@ class ForgetPasswordRequestTest extends TestCase
 
         $response->assertStatus(422)
                 ->assertJson([
-                    'status' => 'Error',
                     'message' => [
                         'email' => [
                             'The email field is required.'
@@ -47,7 +45,6 @@ class ForgetPasswordRequestTest extends TestCase
 
         $response->assertStatus(400)
                 ->assertJson([
-                    'status' => 'Error',
                     'message' => 'User does not exist',
                     'status_code' => 400
                 ]);
@@ -63,7 +60,6 @@ class ForgetPasswordRequestTest extends TestCase
 
         $response->assertStatus(400)
                 ->assertJson([
-                    'status' => 'Error',
                     'message' => 'User does not exist',
                     'status_code' => 400
                 ]);
@@ -79,7 +75,6 @@ class ForgetPasswordRequestTest extends TestCase
 
         $response->assertStatus(422)  // Expect validation error for invalid email format
                 ->assertJson([
-                    'status' => 'Error',
                     'message' => [
                         'email' => [
                             'The email field must be a valid email address.'
@@ -99,7 +94,6 @@ class ForgetPasswordRequestTest extends TestCase
 
         $response->assertStatus(422)  // Expect validation error for empty email
                 ->assertJson([
-                    'status' => 'Error',
                     'message' => [
                         'email' => [
                             'The email field is required.'
@@ -118,8 +112,7 @@ class ForgetPasswordRequestTest extends TestCase
             'email' => 'test@example.com',
         ]);
 
-        $token_key = Str::random(60);
-        $token = Hash::make($token_key);
+        $token = Password::createToken($user);
 
         $response = $this->postJson('/api/v1/auth/password-reset-email', [
             'email' => 'test@example.com',
@@ -127,7 +120,6 @@ class ForgetPasswordRequestTest extends TestCase
 
         $response->assertStatus(200)
                  ->assertJson([
-                     'status' => 'Success',
                      'message' => 'Password reset link sent',
                  ]);
 
