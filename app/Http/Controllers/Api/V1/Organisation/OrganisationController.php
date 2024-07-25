@@ -123,10 +123,22 @@ class OrganisationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($org_id)
     {
-        //
+        $user = auth('api')->user();
+        if(!$user) return ResponseHelper::response("Authentication failed", 401, null);
+        $organisation = Organisation::find($org_id);
+        if(!$organisation) return ResponseHelper::response("Organisation not found", 404, null);
+        if(!$organisation->users->contains($user->id)) return ResponseHelper::response("You are not authorised to perform this action", 403, null);
+        try {
+            // Soft delete the org
+            $organisation->delete();
+            return ResponseHelper::response("Organisation deleted successfully", 200, null);
+        }catch (\Exception $e) {
+            return ResponseHelper::response("Client error", 400, null);
+        }
     }
+    
     public function removeUser(Request $request, $org_id, $user_id)
     {
         $organization = Organisation::findOrFail($org_id);
