@@ -25,6 +25,9 @@ use App\Http\Controllers\Api\V1\JobController;
 use App\Http\Controllers\Api\V1\BlogSearchController;
 use App\Http\Controllers\Api\V1\User\ExportUserController;
 
+
+use App\Http\Controllers\Api\V1\User\AccountController;
+
 use App\Http\Controllers\Api\V1\Organisation\OrganizationMemberController;
 
 use App\Http\Controllers\InvitationAcceptanceController;
@@ -104,6 +107,12 @@ Route::prefix('v1')->group(function () {
         Route::get('/jobs', [JobController::class, 'index']);
 
         Route::get('/user/export/{format}', [ExportUserController::class, 'export']);
+
+        // Accounts
+        Route::patch('/accounts/deactivate', [AccountController::class, 'deactivate']);
+
+        // Roles
+        Route::put('/organisations/{org_id/roles/{role_id}/disable', [RoleController::class, 'disableRole']);
 
     });
 

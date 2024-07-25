@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->foreignUuid('org_id')->references('org_id')->on('organisations')->constrained()->onDelete('cascade')->onUpdate('cascade');
+            $table->boolean('is_active')->default(true);
+            $table->boolean('is_default')->default(false);
             $table->timestamps();
         });
     }
