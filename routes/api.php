@@ -119,10 +119,6 @@ Route::prefix('v1')->group(function () {
 
         // Roles
         Route::put('/organisations/{org_id/roles/{role_id}/disable', [RoleController::class, 'disableRole']);
-
-        // Notification settings
-        Route::patch('/notification-settings/{user_id}', [NotificationPreferenceController::class, 'update']);
-
     });
 
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
@@ -145,4 +141,7 @@ Route::group(['middleware' => ['auth:api']], function () {
 });
 
 
-
+Route::middleware('auth:api')->group(function () {
+    // Notification settings
+    Route::patch('/notification-settings/{user_id}', [NotificationPreferenceController::class, 'update']);
+});
