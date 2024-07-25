@@ -27,6 +27,7 @@ class RoleCreationTest extends TestCase
 
         $this->test_org = Organisation::create([
             "name" => 'Test organisation',
+            "user_id" => $this->test_user->id,
             "email" => "test email",
             "description" => "test description",
             "industry" => "test industry",
