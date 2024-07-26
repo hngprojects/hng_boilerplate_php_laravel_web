@@ -58,6 +58,7 @@ Route::prefix('v1')->group(function () {
     Route::post('/auth/password-reset-email', ForgetPasswordRequestController::class)->name('password.reset');
     Route::post('/auth/request-password-request/{token}', ResetUserPasswordController::class);
     Route::post('/roles', [RoleController::class, 'store']);
+    Route::post('/contact', [ContactController::class, 'sendInquiry']);
 
     Route::apiResource('/users', UserController::class);
 
@@ -74,7 +75,7 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::middleware('throttle:10,1')->get('/help-center/topics/search', [ArticleController::class, 'search']);
-    Route::post('/contact', [ContactController::class, 'sendInquiry']);
+    
 
     Route::get('/blogs/latest', [BlogController::class, 'latest']);
     Route::get('/blogs/search', [BlogSearchController::class, 'search']);
