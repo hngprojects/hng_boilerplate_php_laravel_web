@@ -2,38 +2,39 @@
 
 
 
-use App\Http\Controllers\Api\V1\Auth\ResetUserPasswordController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\V1\ContactController;
-use App\Http\Controllers\Api\V1\ArticleController;
-use App\Http\Controllers\Api\V1\Organisation\OrganisationController;
+use App\Http\Controllers\Api\V1\JobController;
 use App\Http\Controllers\Api\V1\RoleController;
+use App\Http\Controllers\Api\V1\ArticleController;
+use App\Http\Controllers\Api\V1\ContactController;
 use App\Http\Controllers\Api\V1\ProductController;
 use App\Http\Controllers\Api\V1\SqueezeController;
 use App\Http\Controllers\Api\V1\CategoryController;
-use App\Http\Controllers\Api\V1\PreferenceController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\User\UserController;
 use App\Http\Controllers\Api\V1\Admin\BlogController;
+use App\Http\Controllers\Api\V1\Auth\LoginController;
+use App\Http\Controllers\Api\V1\BlogSearchController;
+use App\Http\Controllers\Api\V1\PreferenceController;
+use App\Http\Controllers\Api\V1\User\AccountController;
+use App\Http\Controllers\InvitationAcceptanceController;
 use App\Http\Controllers\Api\V1\Admin\CustomerController;
+
+use App\Http\Controllers\Api\V1\User\ExportUserController;
+use App\Http\Controllers\Api\V1\NotificationPreferenceController;
+
 use App\Http\Controllers\Api\V1\Admin\Plan\FeatureController;
+use App\Http\Controllers\Api\V1\Auth\ResetUserPasswordController;
 use App\Http\Controllers\Api\V1\Admin\Plan\SubscriptionController;
+
+
 use App\Http\Controllers\Api\V1\Testimonial\TestimonialController;
 
-use App\Http\Controllers\Api\V1\Auth\LoginController;
+use App\Http\Controllers\Api\V1\Organisation\OrganisationController;
+
 use App\Http\Controllers\Api\V1\Auth\ForgetPasswordRequestController;
-
-use App\Http\Controllers\Api\V1\JobController;
-use App\Http\Controllers\Api\V1\BlogSearchController;
-use App\Http\Controllers\Api\V1\User\ExportUserController;
-
-
-use App\Http\Controllers\Api\V1\User\AccountController;
-
 use App\Http\Controllers\Api\V1\Organisation\OrganizationMemberController;
-
-use App\Http\Controllers\InvitationAcceptanceController;
 
 
 
@@ -120,8 +121,8 @@ Route::prefix('v1')->group(function () {
         Route::patch('/accounts/deactivate', [AccountController::class, 'deactivate']);
 
         // Roles
+        Route::put('/organisations/{org_id/roles/{role_id}/disable', [RoleController::class, 'disableRole']);
         Route::put('/organisations/{org_id}/roles/{role_id}/disable', [RoleController::class, 'disableRole']);
-
     });
 
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
@@ -133,5 +134,17 @@ Route::prefix('v1')->group(function () {
         Route::get('/user/preferences', [PreferenceController::class, 'index']);
         Route::delete('/user/preferences/{id}', [PreferenceController::class, 'delete']);
     });
+
+    // Notification settings
+    Route::patch('/notification-settings/{user_id}', [NotificationPreferenceController::class, 'update']);
+    });
+
+
+Route::group(['middleware' => ['auth:api']], function () {
+    Route::post('/user/preferences', [PreferenceController::class, 'store']);
+    Route::put('/user/preferences/{id}', [PreferenceController::class, 'update']);
+    Route::get('/user/preferences', [PreferenceController::class, 'index']);
+    Route::delete('/user/preferences/{id}', [PreferenceController::class, 'delete']);
 });
+
 
