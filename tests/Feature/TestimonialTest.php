@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Feature;
 
 use App\Models\User;
@@ -10,7 +11,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class TestimonialTest extends TestCase
 {
-    use RefreshDatabase,WithFaker;
+    use RefreshDatabase, WithFaker;
 
     public function testUnauthenticatedUserCannotCreateTestimonial()
     {
@@ -30,7 +31,7 @@ class TestimonialTest extends TestCase
         $user = User::factory()->create(['password' => bcrypt('password')]);
 
         // Attempt to log in the user and get a token
-//        $token = auth()->login($user);
+        //        $token = auth()->login($user);
         $token = JWTAuth::attempt(['email' => $user->email, 'password' => 'password']);
 
         // Make an authenticated request
@@ -39,7 +40,7 @@ class TestimonialTest extends TestCase
         ], [
             'Authorization' => 'Bearer ' . $token,
         ]);
-//        dump($response);
+        //        dump($response);
         $response->assertStatus(201);
         $response->assertJson([
             'status' => 'success',
@@ -129,9 +130,9 @@ class TestimonialTest extends TestCase
         $response = $this->deleteJson('api/v1/testimonials/1');
 
         $response->assertStatus(401)
-                 ->assertJson([
-                    'message' => 'Unauthenticated.',
-                 ]);
+            ->assertJson([
+                'message' => 'Unauthenticated.',
+            ]);
     }
 
     public function testNonAdminUserCannotDeleteTestimonial()
@@ -141,11 +142,11 @@ class TestimonialTest extends TestCase
         $response = $this->actingAs($user)->deleteJson('api/v1/testimonials/1');
 
         $response->assertStatus(403)
-                 ->assertJson([
-                     'status' => 'Forbidden',
-                     'message' => 'You do not have the required permissions to perform this action.',
-                     'status_code' => 403,
-                 ]);
+            ->assertJson([
+                'status' => 'Forbidden',
+                'message' => 'You do not have the required permissions to perform this action.',
+                'status_code' => 403,
+            ]);
     }
 
     public function testAdminUserCannotDeleteNonExistingTestimonial()
@@ -155,11 +156,11 @@ class TestimonialTest extends TestCase
         $response = $this->actingAs($admin)->deleteJson('api/v1/testimonials/1');
 
         $response->assertStatus(404)
-                 ->assertJson([
-                     'status' => 'Not Found',
-                     'message' => 'Testimonial not found.',
-                     'status_code' => 404,
-                 ]);
+            ->assertJson([
+                'status' => 'Not Found',
+                'message' => 'Testimonial not found.',
+                'status_code' => 404,
+            ]);
     }
 
     public function testAdminUserCanDeleteTestimonial()
@@ -170,15 +171,14 @@ class TestimonialTest extends TestCase
         $response = $this->actingAs($admin)->deleteJson("api/v1/testimonials/{$testimonial->id}");
 
         $response->assertStatus(200)
-                 ->assertJson([
-                     'status' => 'success',
-                     'message' => 'Testimonial deleted successfully',
-                     'status_code' => 200,
-                 ]);
+            ->assertJson([
+                'status' => 'success',
+                'message' => 'Testimonial deleted successfully',
+                'status_code' => 200,
+            ]);
 
         $this->assertDatabaseMissing('testimonials', [
             'id' => $testimonial->id,
         ]);
     }
-
 }

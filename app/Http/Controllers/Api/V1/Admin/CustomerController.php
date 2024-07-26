@@ -34,14 +34,14 @@ class CustomerController extends Controller
                         'name' => $customer->name, 
                         'email' => $customer->email,
                         'phone' => $customer->phone,
-                        'organisations' => $customer->organisations->pluck('org_id')
+                        'organisations' => $customer->organisations->pluck('org_id'),
                     ];
                 })
             ]);
 
         } catch (\Exception $e) {
             Log::error('Error fetching customers: ' . $e->getMessage());
-            dd($e);
+
             return response()->json([
                 'error' => 'Bad Request',
                 "message" => "Internal server error",

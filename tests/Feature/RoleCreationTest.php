@@ -22,7 +22,7 @@ class RoleCreationTest extends TestCase
         $this->test_user = User::create([
             'name' => 'Test User',
             'email' => 'testuser@example.com',
-            'password' => 'password',
+            'password' => 'Ed8M7s*)?e:hTb^#&;C!<y',
         ]);
 
         $this->test_org = Organisation::create([

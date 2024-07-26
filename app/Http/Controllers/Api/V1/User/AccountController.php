@@ -44,6 +44,8 @@ class AccountController extends Controller
         $user->is_active = false;
         $user->save();
 
+       
+
         // Send mail
         Mail::to($user->email)->send(new AccountDeactivatedMail($user));
 

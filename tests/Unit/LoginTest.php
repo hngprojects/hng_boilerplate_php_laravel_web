@@ -24,12 +24,12 @@ class LoginTest extends TestCase
     {
         $user = User::factory()->create([
             'email' => 'test@gmail.com',
-            'password' => Hash::make('password123'),
+            'password' => Hash::make('Ed8M7s*)?e:hTb^#&;C!<y'),
         ]);
 
         $response = $this->postJson('/api/v1/auth/login', [
             'email' => 'test@gmail.com',
-            'password' => 'password123',
+            'password' => 'Ed8M7s*)?e:hTb^#&;C!<y',
         ]);
 
         $response->assertStatus(200)
@@ -56,7 +56,7 @@ class LoginTest extends TestCase
     {
         User::factory()->create([
             'email' => 'test@gmail.com',
-            'password' => Hash::make('password123'),
+            'password' => Hash::make('Ed8M7s*)?e:hTb^#&;C!<y'),
         ]);
 
         $response = $this->postJson('/api/v1/auth/login', [
@@ -84,19 +84,19 @@ class LoginTest extends TestCase
     {
         User::factory()->create([
             'email' => 'test@gmail.com',
-            'password' => Hash::make('password123'),
+            'password' => Hash::make('Ed8M7s*)?e:hTb^#&;C!<ysderrwr'),
         ]);
 
         for ($i = 0; $i < 3; $i++) {
             $this->postJson('/api/v1/auth/login', [
                 'email' => 'test@gmail.com',
-                'password' => 'wrongpassword',
+                'password' => 'Ed8M7s*)?e:hTb^#&;C!<y',
             ]);
         }
 
         $response = $this->postJson('/api/v1/auth/login', [
             'email' => 'test@gmail.com',
-            'password' => 'wrongpassword',
+            'password' => "Ed8M7s*)?e:hTb^#&;C!<y",
         ]);
 
         $response->assertStatus(403)
@@ -111,13 +111,13 @@ class LoginTest extends TestCase
     {
         User::factory()->create([
             'email' => 'test@example.com',
-            'password' => Hash::make('password123'),
+            'password' => Hash::make('Ed8M7s*)?e:hTb^#&;C!<y'),
         ]);
 
         for ($i = 0; $i < 3; $i++) {
             $this->postJson('/api/v1/auth/login', [
                 'email' => 'test@example.com',
-                'password' => 'wrongpassword',
+                'password' => 'Ed8M7s*)?e:hTb^#&;C!<ydf2334',
             ]);
         }
 
@@ -125,7 +125,7 @@ class LoginTest extends TestCase
 
         $response = $this->postJson('/api/v1/auth/login', [
             'email' => 'test@example.com',
-            'password' => 'password123',
+            'password' => 'Ed8M7s*)?e:hTb^#&;C!<y',
         ]);
 
         $response->assertStatus(200)

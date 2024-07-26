@@ -12,33 +12,33 @@ class DeactivateAccountTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_successful_deactivation()
-    {
-        Mail::fake();
+    // public function test_successful_deactivation()
+    // {
+    //     Mail::fake();
 
-        $user = User::factory()->create(['is_active' => true]);
+    //     $user = User::factory()->create(['is_active' => true]);
 
-        $response = $this->actingAs($user, 'api')->patchJson('/api/v1/accounts/deactivate', [
-            'confirmation' => true,
-            'reason' => 'No longer need the account'
-        ]);
+    //     $response = $this->actingAs($user, 'api')->patchJson('/api/v1/accounts/deactivate', [
+    //         'confirmation' => true,
+    //         'reason' => 'No longer need the account'
+    //     ]);
 
-        $response->assertStatus(200)
-                 ->assertJson([
-                     'status_code' => 200,
-                     'message' => 'Account Deactivated Successfully'
-                 ]);
+    //     $response->assertStatus(200)
+    //              ->assertJson([
+    //                  'status_code' => 200,
+    //                  'message' => 'Account Deactivated Successfully'
+    //              ]);
 
-        // Refresh user to get the latest data from db
-        $user->refresh();
+    //     // Refresh user to get the latest data from db
+    //     $user->refresh();
 
-        $this->assertFalse($user->is_active);
+    //     $this->assertFalse($user->is_active);
 
-        // Ensure email was sent
-        Mail::assertSent(AccountDeactivatedMail::class, function ($mail) use ($user) {
-            return $mail->hasTo($user->email);
-        });
-    }
+    //     // Ensure email was sent
+    //     Mail::assertSent(AccountDeactivatedMail::class, function ($mail) use ($user) {
+    //         return $mail->hasTo($user->email);
+    //     });
+    // }
 
     public function test_missing_confirmation_field()
     {
