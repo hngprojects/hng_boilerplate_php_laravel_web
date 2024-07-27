@@ -32,12 +32,12 @@ class ResetUserPasswordTest extends TestCase
 
         $response = $this->postJson("/api/v1/auth/request-password-request/{$token}", [
             'email' => $user->email,
-            'password' => 'newpassword',
-            'password_confirmation' => 'newpassword'
+            'password' => 'Ed8M7s*)?e:hTb^#&;C!<y',
+            'password_confirmation' => 'Ed8M7s*)?e:hTb^#&;C!<y'
         ])->assertStatus(200)
         ->assertJson(['message' => 'Password reset successfully']);
 
-        $this->assertTrue(Hash::check('newpassword', $user->fresh()->password));
+        $this->assertTrue(Hash::check('Ed8M7s*)?e:hTb^#&;C!<y', $user->fresh()->password));
         $this->assertDatabaseMissing('password_reset_tokens', [
             'email' => $user->email,
         ]);
@@ -51,8 +51,8 @@ class ResetUserPasswordTest extends TestCase
 
         $res = $this->postJson("/api/v1/auth/request-password-request/{$token}", [
             'email' => $user->email,
-            'password' => 'newpassword',
-            'password_confirmation' => 'newpassword'
+            'password' => 'Ed8M7s*)?e:hTb^#&;C!<y',
+            'password_confirmation' => 'Ed8M7s*)?e:hTb^#&;C!<y'
         ])
             ->assertStatus(400)
             ->assertJson(['message' => 'Invalid token']);
@@ -72,8 +72,8 @@ class ResetUserPasswordTest extends TestCase
 
         $this->postJson("/api/v1/auth/request-password-request/{$token}", [
             'email' => $user->email,
-            'password' => 'newpassword',
-            'password_confirmation' => 'newpassword'
+            'password' => 'Ed8M7s*)?e:hTb^#&;C!<y',
+            'password_confirmation' => 'Ed8M7s*)?e:hTb^#&;C!<y'
         ])->assertStatus(400)
             ->assertJson(['message' => 'Token has expired']);
     }
@@ -85,8 +85,8 @@ class ResetUserPasswordTest extends TestCase
 
         $this->postJson("/api/v1/auth/request-password-request/{$token}", [
             'email' => 'notanemail',
-            'password' => 'short',
-            'password_confirmation' => 'notmatching'
+            'password' => 'Ed8M7s*)?e:hTb^#&;C!<y',
+            'password_confirmation' => 'Ed8M7s*)?e:hTb^#&;C!<ysdwe344'
         ])->assertStatus(400)
             ->assertJsonStructure(['message' => ['email', 'password']]);
     }

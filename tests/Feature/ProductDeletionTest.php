@@ -37,8 +37,8 @@ class ProductDeletionTest extends TestCase
         $user = [
             'name' => 'Test User',
             'email' => 'testuser@example.com',
-            'password' => 'password',
-            'password_confirmation' => 'password',
+            'password' => 'Ed8M7s*)?e:hTb^#&;C!<y',
+            'password_confirmation' => 'Ed8M7s*)?e:hTb^#&;C!<y',
         ];
 
         $response = $this->postJson('/api/v1/auth/register', $user);
@@ -81,8 +81,8 @@ class ProductDeletionTest extends TestCase
         $user = [
             'name' => 'Test User',
             'email' => 'testuser@example.com',
-            'password' => 'password',
-            'password_confirmation' => 'password',
+            'password' => 'Ed8M7s*)?e:hTb^#&;C!<y',
+            'password_confirmation' => 'Ed8M7s*)?e:hTb^#&;C!<y',
         ];
 
         $response = $this->postJson('/api/v1/auth/register', $user);

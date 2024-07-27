@@ -129,11 +129,11 @@ class OrganisationController extends Controller
         if(!$user) return ResponseHelper::response("Authentication failed", 401, null);
         $organisation = Organisation::find($org_id);
         if(!$organisation) return ResponseHelper::response("Organisation not found", 404, null);
-        if(!$organisation->users->contains($user->id)) return ResponseHelper::response("You are not authorised to perform this action", 403, null);
+        if(!$organisation->users->contains($user->id)) return ResponseHelper::response("You are not authorised to perform this action", 401, null);
         try {
             // Soft delete the org
             $organisation->delete();
-            return ResponseHelper::response("Organisation deleted successfully", 200, null);
+            return ResponseHelper::response("Organisation deleted successfully", 204, null);
         }catch (\Exception $e) {
             return ResponseHelper::response("Client error", 400, null);
         }
