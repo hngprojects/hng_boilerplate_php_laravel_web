@@ -2,11 +2,12 @@
 
 namespace App\Exceptions;
 
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Http\Request;
-use Throwable;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Illuminate\Support\Facades\App;
+use Prometheus\CollectorRegistry;
+use Prometheus\Storage\InMemory;
+use Prometheus\Storage\Redis;
+use Throwable;
 
 class Handler extends ExceptionHandler
 {
@@ -26,8 +27,25 @@ class Handler extends ExceptionHandler
      */
     public function register(): void
     {
-        $this->reportable(function (Throwable $e) {
-            //
+    
+
+        
+
+        
+        $this->reportable(function (Throwable $e){
+            $request = request(); // Get the current request instance
+            $registry = App::make(CollectorRegistry::class);
+            $counter = $registry->getOrRegisterCounter(
+                'app', 
+                'errors_total', 
+                'Total number of errors', 
+                ['type', 'endpoint']
+            );
+            $counter->inc([get_class($e), $request->path()]);
+            // Optionally log the error
+            logger()->error($e);
+
+            throw $e;
         });
     }
 }
