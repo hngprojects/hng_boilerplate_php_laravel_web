@@ -134,7 +134,52 @@ class BlogController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            DB::beginTransaction();
+
+            $blog = Blog::findOrFail($id);
+
+            if(!$blog){
+                return response()->json(['error' => 'Blog not found.'], 404);
+            }
+
+            $blog->update([
+                'title' => $request->get('title'),
+                'content' => (string)$request->get('content'),
+                'author' => $request->get('author'),
+            ]);
+
+            if ($request->hasFile('images')) {
+                // Delete old images
+                foreach ($blog->images as $image) {
+                    Storage::disk('public')->delete($image->image_url);
+                    $image->delete();
+                }
+
+                // Upload new images
+                foreach ($request->file('images') as $image) {
+                    $saved = Storage::disk('public')->put('blog_header', $image);
+                    if ($saved) {
+                        BlogImage::create([
+                            'image_url' => $saved,
+                            'blog_id' => $blog->id,
+                        ]);
+                    } else {
+                        throw new \Exception('Error saving image');
+                    }
+                }
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'message' => 'Blog post updated successfully.',
+                'status_code' => Response::HTTP_OK,
+            ], Response::HTTP_OK);
+        } catch (Exception $exception) {
+            DB::rollBack();
+            return response()->json(['error' => 'Internal server error.'], 500);
+        }
     }
 
     /**

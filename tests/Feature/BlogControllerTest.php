@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Blog;
+use App\Models\BlogImage;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -231,5 +232,97 @@ class BlogControllerTest extends TestCase
         $response->assertStatus(422)
             ->assertJsonValidationErrors(['title', 'content', 'author', 'images.0', 'tags']);
 
+    }
+
+    public function test_admin_can_update_blog()
+    {
+        // Create a user with admin role
+        $admin = User::factory()->create([
+            'role' => 'admin',
+        ]);
+        
+        $token = JWTAuth::fromUser($admin);
+        // Create a blog post to update
+        $blog = Blog::factory()->create();
+
+        // Fake the storage to test image uploads
+        Storage::fake('public');
+
+        // New images for the blog
+        $images = [
+            UploadedFile::fake()->image('image1.jpg'),
+            UploadedFile::fake()->image('image2.jpg')
+        ];
+
+        // Data to update the blog post
+        $data = [
+            'title' => 'Updated Title',
+            'content' => 'Updated Content',
+            'author' => 'Updated Author',
+            'images' => $images,
+        ];
+
+        // Send a request to update the blog post
+        $response = $this->withHeaders(['Authorization' => "Bearer $token"])
+                            ->json('PATCH', route('admin.blogs.update', ['id' => $blog->id]), $data);
+
+        // Assert the response status
+        $response->assertStatus(200);
+
+        // Assert the blog post was updated
+        $this->assertDatabaseHas('blogs', [
+            'id' => $blog->id,
+            'title' => 'Updated Title',
+            'content' => 'Updated Content',
+            'author' => 'Updated Author',
+        ]);
+
+        // Assert the images were uploaded and associated with the blog post
+        $uploadedImages = BlogImage::where('blog_id', $blog->id)->get();
+        $this->assertCount(2, $uploadedImages);
+        foreach ($uploadedImages as $uploadedImage) {
+            Storage::disk('public')->assertExists($uploadedImage->image_url);
+        }
+    }
+
+    /**
+     * Test that a non-admin user cannot update the blog.
+     */
+    public function test_non_admin_cannot_update_blog()
+    {
+        // Create a user without admin role
+        $user = User::factory()->create([
+            'role' => 'user',
+        ]);
+
+        // Log in the user
+        $token = auth()->login($user);
+
+        // Create a blog post to update
+        $blog = Blog::factory()->create();
+
+        // Data to update the blog post
+        $data = [
+            'title' => 'Updated Title',
+            'content' => 'Updated Content',
+            'author' => 'Updated Author',
+            'tags' => [['name' => 'Tag 1']],
+            'images' => [UploadedFile::fake()->image('image1.jpg')],
+        ];
+
+        // Send a request to update the blog post
+        $response = $this->withHeaders(['Authorization' => "Bearer $token"])
+                        ->json('PATCH', route('admin.blogs.update', ['id' => $blog->id]), $data);
+
+        // Assert the response status
+        $response->assertStatus(401);
+
+        // Assert the blog post was not updated
+        $this->assertDatabaseMissing('blogs', [
+            'id' => $blog->id,
+            'title' => 'Updated Title',
+            'content' => 'Updated Content',
+            'author' => 'Updated Author',
+        ]);
     }
 }

@@ -126,6 +126,7 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
+    Route::patch('/blogs/edit/{id}', [BlogController::class, 'update'])->name('admin.blogs.update')->middleware(['auth:api', 'admin']);
     Route::delete('/blogs/{id}', [BlogController::class, 'destroy'])->middleware(['auth:api', 'admin']);
 
     Route::group(['middleware' => ['auth:api']], function () {

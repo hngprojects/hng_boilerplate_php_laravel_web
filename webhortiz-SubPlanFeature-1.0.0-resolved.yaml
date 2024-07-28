@@ -194,6 +194,113 @@ paths:
                   status_code:
                     type: integer
                     example: 500
+/blogs/edit/{id}:
+  patch:
+    tags:
+      - blogs
+    summary: Update a blog post
+    operationId: updateBlog
+    description: Updates a blog post by ID. Accessible only to admins.
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID of the blog post to update
+        schema:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+                description: Title of the blog post
+                example: "Updated Blog Title"
+              content:
+                type: string
+                description: Content of the blog post
+                example: "Updated blog content."
+              author:
+                type: string
+                description: Author of the blog post
+                example: "Author Name"
+              blog_category_id:
+                type: string
+                format: uuid
+                example: d290f1ee-6c54-4b01-90e6-d701748f0851
+    security:
+      - bearerAuth: []
+    responses:
+      '200':
+        description: Blog successfully updated
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: Blog successfully updated
+                status_code:
+                  type: integer
+                  example: 200
+      '400':
+        description: Invalid input
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: Invalid input
+                status_code:
+                  type: integer
+                  example: 400
+      '401':
+        description: You are not authorized to perform this action
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: You are not authorized to perform this action
+                status_code:
+                  type: integer
+                  example: 401
+      '404':
+        description: Blog with the given Id does not exist
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: Blog with the given Id does not exist
+                status_code:
+                  type: integer
+                  example: 404
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: Internal server error
+                status_code:
+                  type: integer
+                  example: 500
 
       requestBody:
         content:
