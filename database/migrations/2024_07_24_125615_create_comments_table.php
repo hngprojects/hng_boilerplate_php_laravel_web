@@ -14,8 +14,11 @@ return new class extends Migration
         Schema::create('comments', function (Blueprint $table) {
             $table->uuid()->primary();
             $table->foreignUuid('user_id')->constrained('users', 'id')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->string('model_name');
+            $table->foreignUuid('blog_id')->constrained('blogs', 'id')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->string('name');
             $table->text('content');
+            $table->integer('likes');
+            $table->integer('dislikes');
             $table->timestamps();
         });
     }

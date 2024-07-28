@@ -25,11 +25,11 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->dropForeign(['category_id']);
+        Schema::table('blogs', function (Blueprint $table) {
+            $table->dropForeign(['blog_category_id']);
 
             // Drop the foreign UUID column
-            $table->dropColumn('category_id');
+            $table->dropColumn('blog_category_id');
         });
     }
 };
