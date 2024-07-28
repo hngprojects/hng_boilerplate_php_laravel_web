@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name'); //basic or premium
             $table->decimal('price'); //stored as kobo
             $table->string('duration'); //monthly or yearly
-            $table->text('features');
+            $table->text('features')->nullable();
             $table->text('description');
             $table->timestamps();
         });

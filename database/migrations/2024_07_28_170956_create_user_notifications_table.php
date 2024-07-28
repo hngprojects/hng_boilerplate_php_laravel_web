@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('user_notifications', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('user_id')->constrained('users', 'id')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignUuid('notification_id')->constrained('notification', 'id')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignUuid('notification_id')->constrained('notifications', 'id')->cascadeOnDelete()->cascadeOnUpdate();
             $table->enum('status', ['sent', 'read', 'unread']);
             $table->timestamps();
         });

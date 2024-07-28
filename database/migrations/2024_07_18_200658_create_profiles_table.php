@@ -17,9 +17,10 @@ return new class extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('phone');
-            $table->string('job_title');
-            $table->string('pronoun');
-            $table->string('bio');
+            $table->string('job_title')->nullable();
+            $table->string('pronoun')->nullable();
+            $table->string('bio')->nullable();
+            $table->string('avatar_url')->nullable();
             $table->string('display_image')->nullable();
             $table->timestamps();
         });

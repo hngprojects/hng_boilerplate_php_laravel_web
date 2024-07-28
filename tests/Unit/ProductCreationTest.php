@@ -39,6 +39,7 @@ class ProductCreationTest extends TestCase
             'description' => 'Test description',
             'price' => 10000,
             'tags' => 'Test, Product',
+            'status' => 'draft',
         ];
 
         $createProduct = $this->postJson('/api/v1/products', $product);

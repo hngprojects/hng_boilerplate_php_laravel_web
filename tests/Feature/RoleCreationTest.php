@@ -38,7 +38,7 @@ class RoleCreationTest extends TestCase
         ]);
 
         $this->test_permission = Permission::create([
-            'name' => 'test permission 1'
+            'name' => 'test permission 1',
         ]);
 
         $this->assertDatabaseHas('users', ['name'=>'Test User']);

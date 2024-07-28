@@ -9,6 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Tests\TestCase;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -123,13 +124,13 @@ class BlogControllerTest extends TestCase
     {
         // Create a superadmin user
         $superAdmin = User::factory()->create(['role' => 'admin']);
-    
+
         // Create a blog post
         $blog = Blog::factory()->create();
-    
+
         // Generate a JWT token for the superadmin user
         $token = \Tymon\JWTAuth\Facades\JWTAuth::fromUser($superAdmin);
-    
+
         // Act as the superadmin user with the generated token
         $this->withHeaders(['Authorization' => 'Bearer ' . $token])
                         ->deleteJson("/api/v1/blogs/{$blog->id}")
@@ -140,7 +141,7 @@ class BlogControllerTest extends TestCase
     {
         // Create a normal user
         $user = User::factory()->create(['role' => 'user']);
-        
+
           // Authenticate the user with a valid JWT token
         $token = auth()->login($user);
 
@@ -173,10 +174,12 @@ class BlogControllerTest extends TestCase
         $image1 = UploadedFile::fake()->image('blog_image1.jpg');
         $image2 = UploadedFile::fake()->image('blog_image2.jpg');
 
+        $author = Str::uuid();
+
         $response = $this->postJson('/api/v1/blogs', [
             'title' => 'Test Blog Post',
             'content' => 'This is a test blog post content.',
-            'author' => 'John Doe',
+            'author' => $author,
             'images' => [$image1, $image2],
             'tags' => [
                 ['name' => 'Technology'],
@@ -193,7 +196,7 @@ class BlogControllerTest extends TestCase
         $this->assertDatabaseHas('blogs', [
             'title' => 'Test Blog Post',
             'content' => 'This is a test blog post content.',
-            'author' => 'John Doe',
+            'author' => $author,
         ]);
 
         $this->assertDatabaseHas('blog_tags', [

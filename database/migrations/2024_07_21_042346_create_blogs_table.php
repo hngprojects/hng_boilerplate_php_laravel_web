@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('blogs', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->text('content');
-            $table->string('image');
+            $table->string('imageUrl');
             $table->string('tags');
-            $table->foreignUuid('author')->constrained('users', 'id')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->string('author');
             $table->timestamps();
         });
     }

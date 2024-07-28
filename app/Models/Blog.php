@@ -14,6 +14,20 @@ class Blog extends Model
 
     protected $fillable = ['title', 'content', 'author'];
 
+    /**
+     * Indicates if the model's ID is auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = false;
+
+    /**
+     * The data type of the primary key ID.
+     *
+     * @var string
+     */
+    protected $keyType = 'string';
+
     public function tags(): HasMany
     {
         return $this->hasMany(BlogTag::class);
