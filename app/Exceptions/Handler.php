@@ -27,25 +27,27 @@ class Handler extends ExceptionHandler
      */
     public function register(): void
     {
-    
 
-        
 
-        
-        $this->reportable(function (Throwable $e){
-            $request = request(); // Get the current request instance
-            $registry = App::make(CollectorRegistry::class);
-            $counter = $registry->getOrRegisterCounter(
-                'app', 
-                'errors_total', 
-                'Total number of errors', 
-                ['type', 'endpoint']
-            );
-            $counter->inc([get_class($e), $request->path()]);
-            // Optionally log the error
-            logger()->error($e);
 
-            throw $e;
+
+
+        $this->reportable(function (Throwable $e) {
+            if (env('APP_ENV') == 'production') {
+                $request = request(); // Get the current request instance
+                $registry = App::make(CollectorRegistry::class);
+                $counter = $registry->getOrRegisterCounter(
+                    'app',
+                    'errors_total',
+                    'Total number of errors',
+                    ['type', 'endpoint']
+                );
+                $counter->inc([get_class($e), $request->path()]);
+                // Optionally log the error
+                logger()->error($e);
+
+                throw $e;
+            }
         });
     }
 }

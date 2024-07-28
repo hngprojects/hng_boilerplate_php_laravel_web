@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Prometheus\Redis ;
+use App\Prometheus\Redis;
 use Illuminate\Support\Arr;
 use Illuminate\Support\ServiceProvider;
 use Prometheus\CollectorRegistry;
@@ -17,13 +17,14 @@ class PrometheusServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register (): void
+    public function register(): void
     {
-
-        $this->app->singleton(CollectorRegistry::class, function () {
-            $adapter =  new APC();
-            return new CollectorRegistry($adapter);
-        });
+        if (env('APP_ENV') == 'production') {
+            $this->app->singleton(CollectorRegistry::class, function () {
+                $adapter =  new APC();
+                return new CollectorRegistry($adapter);
+            });
+        }
     }
 
     /**
