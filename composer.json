@@ -19,6 +19,7 @@
         "nextapps/laravel-swagger-ui": "^0.10.0",
         "phpoffice/phpspreadsheet": "^1.18",
         "predis/predis": "^2.2",
+        "promphp/prometheus_client_php": "^2.10",
         "tymon/jwt-auth": "^2.1"
     },
     "require-dev": {
