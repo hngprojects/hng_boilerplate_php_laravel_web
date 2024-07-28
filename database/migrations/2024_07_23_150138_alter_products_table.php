@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->string('tags');
             $table->string('imageUrl');
+            $table->enum('status', ['active', 'draft']);
+            $table->integer('quantity');
         });
     }
 
@@ -29,6 +31,8 @@ return new class extends Migration
             $table->dropColumn('slug')->unique();
             $table->dropColumn('tags');
             $table->dropColumn('imageUrl');
+            $table->dropColumn('status', ['active', 'draft']);
+            $table->dropColumn('quantity');
         });
     }
 };

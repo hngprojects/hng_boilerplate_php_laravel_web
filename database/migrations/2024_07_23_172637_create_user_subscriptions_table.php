@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('user_subscriptions', function (Blueprint $table) {
             $table->uuid('id');
-            $table->foreignUuid('user_id')->constrained();
-            $table->foreignUuid('subscription_plan_id')->constrained()->cascadeOnDelete();
+            $table->foreignUuid('user_id')->constrained('users', 'id')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignUuid('subscription_plan_id')->constrained('subscription_plans', 'id')->cascadeOnDelete()->cascadeOnUpdate();
             $table->text('cancellation_reason')->nullable();
             $table->timestamp('cancelled_at')->nullable();
             $table->timestamp('expires_at')->nullable();
