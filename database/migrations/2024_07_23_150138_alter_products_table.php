@@ -30,7 +30,7 @@ return new class extends Migration
             $table->dropColumn('price');
             $table->dropColumn('slug')->unique();
             $table->dropColumn('tags');
-            $table->dropColumn('imageUrl');
+            $table->dropColumn('image');
             $table->dropColumn('status', ['active', 'draft']);
             $table->dropColumn('quantity');
         });
