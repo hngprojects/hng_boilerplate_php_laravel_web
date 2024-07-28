@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignUuid('user_id')->constrained('users', 'id')->cascadeOnDelete()->cascadeOnUpdate();
             $table->decimal('amount');
             $table->timestamp('payment_date');
+            $table->string('stripe_payment_id');
             $table->string('payment_method');
             $table->string('status');
             $table->timestamps();
