@@ -36,6 +36,7 @@ use App\Http\Controllers\Api\V1\Organisation\OrganisationController;
 use App\Http\Controllers\Api\V1\Auth\ForgetPasswordRequestController;
 use App\Http\Controllers\Api\V1\Organisation\OrganizationMemberController;
 
+use App\Http\Controllers\Api\V1\HelpArticleController;
 
 
 /*
@@ -81,6 +82,14 @@ Route::prefix('v1')->group(function () {
     Route::get('/blogs/search', [BlogSearchController::class, 'search']);
 
     Route::post('/squeeze', [SqueezeController::class, 'store']);
+
+
+
+    // Help Articles
+    Route::get('/help-center/topics', [HelpArticleController::class, 'index']);
+
+
+
 
 
     Route::post('/invitations/generate', [InvitationAcceptanceController::class, 'generateInvitation']);
@@ -137,7 +146,7 @@ Route::prefix('v1')->group(function () {
 
     // Notification settings
     Route::patch('/notification-settings/{user_id}', [NotificationPreferenceController::class, 'update']);
-    });
+});
 
 
 Route::group(['middleware' => ['auth:api']], function () {
@@ -146,5 +155,3 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('/user/preferences', [PreferenceController::class, 'index']);
     Route::delete('/user/preferences/{id}', [PreferenceController::class, 'delete']);
 });
-
-
