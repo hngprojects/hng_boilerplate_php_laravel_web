@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('invitations', function (Blueprint $table) {
             $table->uuid()->primary();
             $table->foreignUuid('org_id')->constrained('organisations', 'org_id')->cascadeOnDelete();
+            $table->string('email')->nullable();
             $table->string('link')->unique();
             $table->timestamp('expires_at');
             $table->timestamps();

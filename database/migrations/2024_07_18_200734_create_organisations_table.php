@@ -16,13 +16,13 @@ return new class extends Migration
             $table->foreignUuid('user_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->string('name');
             $table->string('email')->unique();
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->string('industry');
             $table->string('type')->nullable();
             $table->string('country');
             $table->string('address');
             $table->string('state');
-          
+
             $table->timestamps();
         });
     }

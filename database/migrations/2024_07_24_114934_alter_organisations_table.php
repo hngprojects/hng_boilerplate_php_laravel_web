@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::table('organisations', function (Blueprint $table) {
             $table->boolean('deleted')->default(false);
+            $table->boolean('is_archived')->default(false);
+            $table->boolean('is_activated')->default(true);
+            $table->boolean('is_deactivated')->default(false);
             $table->softDeletes();
         });
     }
@@ -24,6 +27,9 @@ return new class extends Migration
     {
         Schema::table('organisations', function (Blueprint $table) {
             $table->dropColumn('deleted');
+            $table->dropColumn('is_archived');
+            $table->dropColumn('is_activated');
+            $table->dropColumn('is_deactivated');
             $table->dropSoftDeletes();
         });
     }

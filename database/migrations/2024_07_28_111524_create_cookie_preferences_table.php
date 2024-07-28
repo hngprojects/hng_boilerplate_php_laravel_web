@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_subscriptions', function (Blueprint $table) {
-            $table->uuid('id');
+        Schema::create('cookie_preferences', function (Blueprint $table) {
+            $table->uuid('id')->primary();
             $table->foreignUuid('user_id')->constrained('users', 'id')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignUuid('subscription_plan_id')->constrained('subscription_plans', 'id')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->text('cancellation_reason')->nullable();
-            $table->timestamp('cancelled_at')->nullable();
-            $table->timestamp('expires_at')->nullable();
+            $table->json('preferences');
             $table->timestamps();
         });
     }
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_subscriptions');
+        Schema::dropIfExists('cookie_preferences');
     }
 };

@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_subscriptions', function (Blueprint $table) {
-            $table->uuid('id');
+        Schema::create('user_notifications', function (Blueprint $table) {
+            $table->uuid('id')->primary();
             $table->foreignUuid('user_id')->constrained('users', 'id')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignUuid('subscription_plan_id')->constrained('subscription_plans', 'id')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->text('cancellation_reason')->nullable();
-            $table->timestamp('cancelled_at')->nullable();
-            $table->timestamp('expires_at')->nullable();
+            $table->foreignUuid('notification_id')->constrained('notifications', 'id')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->enum('status', ['sent', 'read', 'unread']);
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_subscriptions');
+        Schema::dropIfExists('user_notifications');
     }
 };

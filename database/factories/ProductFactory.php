@@ -27,6 +27,8 @@ class ProductFactory extends Factory
             'slug' => $this->faker->unique()->slug,
             'tags' => $this->faker->word,
             'imageUrl' => $this->faker->imageUrl(),
+            'status' => 'draft',
+            'quantity' => $this->faker->randomDigitNotZero(),
             'description' => $this->faker->text,
         ];
     }
