@@ -15,7 +15,7 @@ return new class extends Migration
             $table->decimal('price');
             $table->string('slug')->unique();
             $table->string('tags');
-            $table->string('imageUrl');
+            $table->string('image');
             $table->enum('status', ['active', 'draft']);
             $table->integer('quantity');
         });
@@ -30,7 +30,7 @@ return new class extends Migration
             $table->dropColumn('price');
             $table->dropColumn('slug')->unique();
             $table->dropColumn('tags');
-            $table->dropColumn('imageUrl');
+            $table->dropColumn('image');
             $table->dropColumn('status', ['active', 'draft']);
             $table->dropColumn('quantity');
         });
