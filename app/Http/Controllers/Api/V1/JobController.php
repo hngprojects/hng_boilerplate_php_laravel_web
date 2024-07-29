@@ -18,7 +18,7 @@ class JobController extends Controller
             'location' => 'nullable|string',
             'job_type' => 'nullable|string',
             'work_mode' => 'nullable|string',
-            'company_name' => 'required|string',
+            'company_name' => 'nullable|string',
         ]);
 
         if ($validator->fails()) {
