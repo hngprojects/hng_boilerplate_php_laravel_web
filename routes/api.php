@@ -38,6 +38,8 @@ use App\Http\Controllers\Api\V1\Auth\ForgetPasswordRequestController;
 use App\Http\Controllers\Api\V1\Organisation\OrganizationMemberController;
 
 use App\Http\Controllers\Api\V1\HelpArticleController;
+use App\Http\Controllers\Api\V1\CookiePreferencesController;
+
 
 
 /*
@@ -85,6 +87,10 @@ Route::prefix('v1')->group(function () {
     Route::get('/blogs/search', [BlogSearchController::class, 'search']);
 
     Route::post('/squeeze', [SqueezeController::class, 'store']);
+
+    //Cookies Preference
+    Route::post('/cookies/preferences', [CookiePreferencesController::class, 'update']);
+
 
 
 
