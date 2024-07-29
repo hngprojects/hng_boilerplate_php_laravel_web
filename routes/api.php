@@ -102,6 +102,7 @@ Route::prefix('v1')->group(function () {
         Route::delete('/organisations/{org_id}', [OrganisationController::class, 'destroy']);
         Route::delete('/organisations/{org_id}/users/{user_id}', [OrganisationController::class, 'removeUser']);
         Route::get('/organisations/{organisation}/members', [OrganizationMemberController::class, 'index']);
+        Route::get('/organisations/{org_id}/members/export', [OrganizationMemberController::class, 'download']);
 
         Route::delete('/organizations/{org_id}', [OrganisationController::class, 'destroy']);
 
@@ -137,7 +138,7 @@ Route::prefix('v1')->group(function () {
 
     // Notification settings
     Route::patch('/notification-settings/{user_id}', [NotificationPreferenceController::class, 'update']);
-    });
+});
 
 
 Route::group(['middleware' => ['auth:api']], function () {
@@ -146,5 +147,3 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('/user/preferences', [PreferenceController::class, 'index']);
     Route::delete('/user/preferences/{id}', [PreferenceController::class, 'delete']);
 });
-
-
