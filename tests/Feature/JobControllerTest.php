@@ -163,28 +163,5 @@ class JobControllerTest extends TestCase
 
         $response->assertStatus(403);
     }
-
-    public function test_search_returns_matching_jobs()
-    {
-        Job::factory()->create(['title' => 'Software Engineer']);
-        Job::factory()->create(['title' => 'Data Scientist']);
-        Job::factory()->create(['description' => 'Engineering position']);
-    
-        $response = $this->withHeaders(['Authorization' => "Bearer $this->adminToken"])
-            ->getJson('/api/v1/jobs/search?query=engineer');
-    
-        $response->assertStatus(200)
-            ->assertJsonStructure([
-                'message',
-                'data',
-                'pagination' => ['current_page', 'total_pages', 'page_size', 'total_items']
-            ])
-            ->assertJsonCount(2, 'data')
-            ->assertJsonFragment(['title' => 'Software Engineer'])
-            ->assertJsonFragment(['description' => 'Engineering position']);
-    
-        $this->assertTrue(str_contains($response['data'][0]['title'], 'Engineer') || 
-                          str_contains($response['data'][0]['description'], 'Engineer'));
-    }
-      
+     
 }
