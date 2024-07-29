@@ -16,12 +16,12 @@ class ProductCreationTest extends TestCase
     {
         // Register a user
         $user = [
-            'name' => 'Test User',
+            'first_name' => 'Test',
+            'last_name' => 'User',
             'email' => 'testuser@example.com',
             'password' => 'Ed8M7s*)?e:hTb^#&;C!<y',
             'password_confirmation' => 'Ed8M7s*)?e:hTb^#&;C!<y',
-            'first_name' => 'Test',
-            'last_name' => 'User',
+
         ];
 
         $response = $this->postJson('/api/v1/auth/register', $user);
@@ -30,7 +30,7 @@ class ProductCreationTest extends TestCase
         $response->assertStatus(201);
 
         // Retrieve the JWT token from the registration response
-        $token = $response->json('data.accessToken');
+        $token = $response->json('access_token');
 
         $this->assertNotEmpty($token);
 
