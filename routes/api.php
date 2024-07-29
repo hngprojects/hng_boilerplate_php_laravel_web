@@ -36,6 +36,7 @@ use App\Http\Controllers\Api\V1\Organisation\OrganisationController;
 use App\Http\Controllers\Api\V1\Auth\ForgetPasswordRequestController;
 use App\Http\Controllers\Api\V1\Organisation\OrganizationMemberController;
 
+use App\Http\Controllers\Api\V1\HelpArticleController;
 
 
 /*
@@ -85,6 +86,19 @@ Route::prefix('v1')->group(function () {
     Route::post('/squeeze', [SqueezeController::class, 'store']);
 
 
+
+    // Help Articles
+    Route::post('/help-center/topics', [HelpArticleController::class, 'store']);
+    Route::patch('/help-center/topics/{articleId}', [HelpArticleController::class, 'update']);
+    Route::delete('/help-center/topics/{articleId}', [HelpArticleController::class, 'destroy']);
+    Route::get('/help-center/topics', [HelpArticleController::class, 'getArticles']);
+    Route::get('/help-center/topics/search', [HelpArticleController::class, 'search']);
+
+
+
+
+
+
     Route::post('/invitations/generate', [InvitationAcceptanceController::class, 'generateInvitation']);
     Route::get('/invite/accept', [InvitationAcceptanceController::class, 'acceptInvitation']);
     Route::post('/invite', [InvitationAcceptanceController::class, 'acceptInvitationPost']);
@@ -121,7 +135,7 @@ Route::prefix('v1')->group(function () {
         Route::patch('/accounts/deactivate', [AccountController::class, 'deactivate']);
 
         // Roles
-        Route::put('/organisations/{org_id/roles/{role_id}/disable', [RoleController::class, 'disableRole']);
+        Route::put('/organisations/{org_id}/roles/{role_id}', [RoleController::class, 'update']);
         Route::put('/organisations/{org_id}/roles/{role_id}/disable', [RoleController::class, 'disableRole']);
     });
 
@@ -163,5 +177,3 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('/user/preferences', [PreferenceController::class, 'index']);
     Route::delete('/user/preferences/{id}', [PreferenceController::class, 'delete']);
 });
-
-
