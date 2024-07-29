@@ -30,16 +30,16 @@ class ContactController extends Controller
 
         try {
             $data = $request->only(['name', 'email', 'message']);
-            
+
 
             Mail::to('amowogbajegideon@gmail.com')->queue(new ContactInquiryMail($data));
             return response()->json([
                 'message' => 'Inquiry successfully sent',
                 'status_code' => 200,
-                
+
             ], 200);
         } catch (\Exception $e) {
-            Log::error('Error sending inquiry: '.$e->getMessage());
+            Log::error('Error sending inquiry: ' . $e->getMessage());
             return response()->json([
                 'message' => 'A server error occurred',
                 'status_code' => 500,
@@ -47,4 +47,3 @@ class ContactController extends Controller
         }
     }
 }
-
