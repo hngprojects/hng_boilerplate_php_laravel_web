@@ -77,17 +77,20 @@ class RegistrationTest extends TestCase
     }
 
     /** @test */
-    /* public function google_login_creates_or_updates_user_and_profile()
+    public function google_login_creates_or_updates_user_and_profile()
     {
         // Mock Google user response
         $googleUser = (object) [
-            'getEmail' => 'john.doe@example.com',
-            'getId' => 'google-id-12345',
+            'email' => 'john.doe@example.com',
+            'id' => 'google-id-12345',
             'user' => [
                 'given_name' => 'John',
                 'family_name' => 'Doe',
                 'picture' => 'https://lh3.googleusercontent.com/a-/AOh14Gh2G_YHMAI' // Added picture URL
             ],
+            'attributes' => [
+                'avatar_original' => 'https://lh3.googleusercontent.com/a-/AOh14Gh2G_YHMAI'
+            ]
         ];
 
         // Mock Socialite to return the mocked Google user
@@ -116,5 +119,5 @@ class RegistrationTest extends TestCase
         $this->assertNotNull($profile);
         $this->assertEquals('John', $profile->first_name);
         $this->assertEquals('Doe', $profile->last_name);
-    } */
+    }
 }
