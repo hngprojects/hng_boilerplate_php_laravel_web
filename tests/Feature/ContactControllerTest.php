@@ -5,11 +5,11 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
+use App\Mail\ContactInquiryMail;
 
 class ContactControllerTest extends TestCase
 {
     use RefreshDatabase;
-
 
     public function testSendInquiryValidationError()
     {
@@ -33,8 +33,9 @@ class ContactControllerTest extends TestCase
 
     public function testSendInquiryServerError()
     {
-        // Use mocking to simulate a server error
-        Mail::shouldReceive('to->send')->andThrow(new \Exception('Simulated server error'));
+        // Mock the mail sending to throw an exception
+        Mail::fake();
+        Mail::shouldReceive('to->queue')->andThrow(new \Exception('Simulated server error'));
 
         $response = $this->postJson('/api/v1/contact', [
             'name' => 'John Doe',
@@ -51,6 +52,9 @@ class ContactControllerTest extends TestCase
 
     public function testSendInquirySuccess()
     {
+        // Mock the mail sending
+        Mail::fake();
+
         $response = $this->postJson('/api/v1/contact', [
             'name' => 'John Doe',
             'email' => 'john@example.com',
@@ -62,5 +66,10 @@ class ContactControllerTest extends TestCase
                 'message' => 'Inquiry successfully sent',
                 'status_code' => 200,
             ]);
+
+        // Verify that an email was queued
+        Mail::assertQueued(ContactInquiryMail::class, function ($mail) {
+            return $mail->hasTo('amowogbajegideon@gmail.com');
+        });
     }
 }
