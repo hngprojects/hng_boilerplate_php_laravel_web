@@ -25,6 +25,8 @@ class InvitationTest extends TestCase
             'name' => 'test',
             'email' => 'test@example.com',
             'password' => 'Ed8M7s*)?e:hTb^#&;C!<y',
+            'first_name' => 'Test',
+            'last_name' => 'User',
         ]);
 
         // Login the user

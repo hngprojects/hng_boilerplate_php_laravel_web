@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignUuid('user_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->string('first_name');
             $table->string('last_name');
-            $table->string('phone');
             $table->string('job_title')->nullable();
             $table->string('pronoun')->nullable();
             $table->string('bio')->nullable();

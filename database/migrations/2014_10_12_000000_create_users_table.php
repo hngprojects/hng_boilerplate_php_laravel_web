@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('name');
+            $table->string('name')->nullable();
             $table->string('email')->unique();
             $table->string('phone')->nullable();
             $table->string('role')->default('user');
@@ -22,6 +22,7 @@ return new class extends Migration
             $table->boolean('is_active')->default(1);
             $table->boolean('is_verified')->default(0);
             $table->string('signup_type')->default('Token');
+            $table->string('social_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
