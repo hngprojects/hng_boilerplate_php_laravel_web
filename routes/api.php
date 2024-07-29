@@ -1,7 +1,6 @@
 <?php
 
-
-
+use App\Http\Controllers\Api\V1\Admin\BlogCategoriesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\JobController;
@@ -60,7 +59,7 @@ Route::prefix('v1')->group(function () {
     Route::post('/auth/password-reset-email', ForgetPasswordRequestController::class)->name('password.reset');
     Route::post('/auth/request-password-request/{token}', ResetUserPasswordController::class);
     Route::post('/roles', [RoleController::class, 'store']);
-    Route::get('/auth/google', [SocialAuthController::class, 'redirectToGoogle']);
+    Route::get('/auth/social/google', [SocialAuthController::class, 'redirectToGoogle']);
     Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
 
     Route::apiResource('/users', UserController::class);
@@ -122,8 +121,6 @@ Route::prefix('v1')->group(function () {
 
         Route::delete('/organizations/{org_id}', [OrganisationController::class, 'destroy']);
 
-        Route::post('/blogs', [BlogController::class, 'store']);
-
         // Testimonials
         Route::post('/testimonials', [TestimonialController::class, 'store']);
         Route::get('/testimonials/{testimonial_id}', [TestimonialController::class, 'show']);
@@ -143,7 +140,17 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
-    Route::delete('/blogs/{id}', [BlogController::class, 'destroy'])->middleware(['auth:api', 'admin']);
+
+    //Blogs
+    Route::group(['middleware' => ['auth.jwt', 'admin']], function () {
+        Route::post('/blogs', [BlogController::class, 'store']);
+        Route::patch('/blogs/edit/{id}', [BlogController::class, 'update'])->name('admin.blogs.update');
+        Route::delete('/blogs/{id}', [BlogController::class, 'destroy']);
+        Route::post('/blogs/categories', [BlogCategoriesController::class, 'store'])->name('admin.blog-category.create');
+    });
+    
+    Route::get('/blogs/{id}', [BlogController::class, 'show']);
+    Route::get('/blogs', [BlogController::class, 'index']);
 
     Route::group(['middleware' => ['auth:api']], function () {
         Route::post('/user/preferences', [PreferenceController::class, 'store']);
