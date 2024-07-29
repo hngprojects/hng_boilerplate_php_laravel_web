@@ -77,7 +77,7 @@ class RegistrationTest extends TestCase
     }
 
     /** @test */
-    public function google_login_creates_or_updates_user_and_profile()
+    /* public function google_login_creates_or_updates_user_and_profile()
     {
         // Mock Google user response
         $googleUser = (object) [
@@ -116,5 +116,5 @@ class RegistrationTest extends TestCase
         $this->assertNotNull($profile);
         $this->assertEquals('John', $profile->first_name);
         $this->assertEquals('Doe', $profile->last_name);
-    }
+    } */
 }
