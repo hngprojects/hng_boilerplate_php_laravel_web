@@ -91,6 +91,7 @@ Route::prefix('v1')->group(function () {
     // Help Articles
     Route::get('/help-center/topics', [HelpArticleController::class, 'index']);
     Route::post('/help-center/topics', [HelpArticleController::class, 'store']);
+    Route::patch('/help-center/topics/{articleId}', [HelpArticleController::class, 'update']);
 
 
 

@@ -119,4 +119,75 @@ class HelpArticleController extends Controller
             ], 500);
         }
     }
+
+    public function update(Request $request, $articleId)
+    {
+        // Ensure the user is authenticated
+        if (!Auth::check()) {
+            return response()->json([
+                'status_code' => 401,
+                'success' => false,
+                'message' => 'Authentication failed'
+            ], 401);
+        }
+
+        // Validate the input
+        $validator = Validator::make($request->all(), [
+            'title' => 'nullable|string|max:255',
+            'content' => 'nullable|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status_code' => 400,
+                'success' => false,
+                'message' => 'Invalid input data.',
+                'errors' => $validator->errors()
+            ], 400);
+        }
+
+        try {
+            $article = HelpArticle::find($articleId);
+
+            if (!$article) {
+                return response()->json([
+                    'status_code' => 404,
+                    'success' => false,
+                    'message' => 'Help article not found.'
+                ], 404);
+            }
+
+            // Check if the authenticated user is the author of the article
+            if (Auth::id() !== $article->user_id) {
+                return response()->json([
+                    'status_code' => 403,
+                    'success' => false,
+                    'message' => 'You do not have permission to update this article.'
+                ], 403);
+            }
+
+            $article->update($request->only(['title', 'content']));
+
+            return response()->json([
+                'status_code' => 200,
+                'success' => true,
+                'message' => 'Help article updated successfully.',
+                'data' => $article
+            ]);
+        } catch (QueryException $e) {
+            return response()->json([
+                'status_code' => 500,
+                'success' => false,
+                'message' => 'Failed to update help article. Please try again later.',
+                'error' => $e->getMessage() // Include error message
+            ], 500);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status_code' => 500,
+                'success' => false,
+                'message' => 'Failed to update help article. Please try again later.',
+                'error' => $e->getMessage() // Include error message
+            ], 500);
+        }
+    }
 }
