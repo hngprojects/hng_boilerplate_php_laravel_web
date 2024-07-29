@@ -38,6 +38,7 @@ use App\Http\Controllers\Api\V1\Organisation\OrganizationMemberController;
 
 use App\Http\Controllers\Api\V1\HelpArticleController;
 
+use App\Http\Controllers\EmailTemplateController;
 
 /*
 |--------------------------------------------------------------------------
@@ -97,6 +98,9 @@ Route::prefix('v1')->group(function () {
 
 
 
+    Route::middleware(['auth:api', 'admin'])->group(function () {
+        Route::get('/email-templates', [EmailTemplateController::class, 'index']);
+    });
 
 
     Route::post('/invitations/generate', [InvitationAcceptanceController::class, 'generateInvitation']);
@@ -148,7 +152,7 @@ Route::prefix('v1')->group(function () {
         Route::delete('/blogs/{id}', [BlogController::class, 'destroy']);
         Route::post('/blogs/categories', [BlogCategoriesController::class, 'store'])->name('admin.blog-category.create');
     });
-    
+
     Route::get('/blogs/{id}', [BlogController::class, 'show']);
     Route::get('/blogs', [BlogController::class, 'index']);
 
