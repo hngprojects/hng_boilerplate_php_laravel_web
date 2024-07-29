@@ -19,7 +19,6 @@ class RegistrationTest extends TestCase
     public function test_registration_returns_jwt_token()
     {
         $registrationData = [
-            'name' => 'Test User',
             'first_name' => 'Test',
             'last_name' => 'User',
             'email' => 'testuser@gmail.com',
@@ -33,14 +32,15 @@ class RegistrationTest extends TestCase
 
         // Check the response structure
         $response->assertJsonStructure([
-            'message',
             'status_code',
+            'message',
+            'access_token',
             'data' => [
-                'accessToken',
                 'user' => [
-                    'name',
-                    'email',
                     'id',
+                    'email',
+                    'first_name',
+                    'last_name',
                     'updated_at',
                     'created_at',
                 ]
@@ -48,14 +48,13 @@ class RegistrationTest extends TestCase
         ]);
 
         // Optionally, decode and verify the token
-        $token = $response->json('data.accessToken');
+        $token = $response->json('access_token');
         $this->assertNotEmpty($token);
     }
 
     public function test_fails_if_email_is_not_passed()
     {
         $registrationData = [
-            'name' => 'Test User',
             'email' => '',
             'password' => 'Ed8M7s*)?e:hTb^#&;C!<y',
             'password_confirmation' => 'Ed8M7s*)?e:hTb^#&;C!<y',

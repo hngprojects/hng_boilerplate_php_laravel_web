@@ -34,39 +34,42 @@ class SocialAuthController extends Controller
             ]
         );
 
-        // dd($user->profile);
         // If profile is a separate model, ensure it is created or updated accordingly
         if ($user->profile) {
             $user->profile->update([
-                'first_name' => $googleUser->name,
-                'last_name' => $googleUser->name,
-                // 'avatar_url' => $googleUser->user['picture'],
+                'first_name' => $googleUser->user->first_name,
+                'last_name' => $googleUser->user->last_name,
+                'avatar_url' => $googleUser->avatar,
             ]);
         } else {
             // Create a profile if it does not exist
             $user->profile()->create([
-                'first_name' => $googleUser->name,
-                'last_name' => $googleUser->name,
-                // 'avatar_url' => $googleUser->user['picture'],
+                'first_name' => $googleUser->user->first_name,
+                'last_name' => $googleUser->user->last_name,
+                'avatar_url' => $googleUser->avatar,
             ]);
         }
 
         // Generate JWT token
         $token = JWTAuth::fromUser($user);
 
-        // Prepare the response data
+        // Response data
         $response = [
-            'status' => 'success',
+            'status_code' => 201,
             'message' => 'User successfully authenticated',
             'access_token' => $token,
             'data' => [
+                'user' => [
                 'id' => $user->id,
                 'email' => $user->email,
-                'name' => $googleUser->name,
-                'google' => $googleUser
+                'first_name' => $googleUser->user->first_name,
+                'last_name' => $googleUser->user->last_name,
+                'updated_at' => $user->updated_at,
+                'created_at' => $user->created_at,
+                ],
             ]
         ];
 
-        return response()->json($response);
+        return response()->json($response, 201);
     }
 }
