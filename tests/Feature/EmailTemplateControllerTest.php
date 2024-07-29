@@ -9,60 +9,93 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Str;
 use Tests\TestCase;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class EmailTemplateControllerTest extends TestCase
 {
     use LazilyRefreshDatabase;
 
+    private function getAuthenticatedUser(string $role)
+    {
+        $user = User::factory()->create([
+            'role' => $role,
+            'is_active' => true
+        ]);
+
+        $token = JWTAuth::fromUser($user);
+
+        return [$user, $token];
+    }
+
     public function testAdminCanRetrieveTemplate()
     {
-        $admin = User::factory()->create([
-            'signup_type' => 'admin',
-        ]);
+        // Create an admin user
+        [$admin, $token] = $this->getAuthenticatedUser('admin');
+
+        // Create a sample email template
         $template = EmailTemplate::factory()->create(['id' => Str::uuid()]);
 
-        $response = $this->actingAs($admin, 'api')->getJson('/api/v1/email-templates/' . $template->id);
+        // Send a GET request to the API endpoint
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer $token",
+        ])->getJson('/api/v1/email-templates/' . $template->id);
 
+        // Assert the response status and content
         $response->assertStatus(200)
             ->assertJson([
                 'id' => $template->id,
-                'name' => $template->name,
-                'subject' => $template->subject,
-                'content' => $template->content,
+                'title' => $template->title,
+                'template' => $template->template,
+                'status' => $template->status,
             ]);
     }
 
     public function testInvalidTemplateIdFormat()
     {
-        $admin = User::factory()->create([
-            'signup_type' => 'admin',
-        ]);
+        // Create an admin user
+        [$admin, $token] = $this->getAuthenticatedUser('admin');
 
-        $response = $this->actingAs($admin, 'api')->getJson('/api/v1/email-templates/invalid-uuid');
+        // Send a GET request with an invalid UUID format
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer $token",
+        ])->getJson('/api/v1/email-templates/invalid-uuid');
 
+        // Assert the response status and content
         $response->assertStatus(400)
             ->assertJson(['error' => 'Invalid template ID format']);
     }
 
     public function testTemplateNotFound()
     {
-        $admin = User::factory()->create([
-            'signup_type' => 'admin',
-        ]);
+        // Create an admin user
+        [$admin, $token] = $this->getAuthenticatedUser('admin');
 
-        $response = $this->actingAs($admin, 'api')->getJson('/api/v1/email-templates/' . Str::uuid());
+        // Send a GET request for a non-existing template
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer $token",
+        ])->getJson('/api/v1/email-templates/' . Str::uuid());
 
+        // Assert the response status and content
         $response->assertStatus(404)
             ->assertJson(['error' => 'Template not found']);
     }
 
     public function testUnauthorizedAccess()
     {
-        $user = User::factory()->create(['role' => 'user']);
+        // Create a regular user
+        [$user, $token] = $this->getAuthenticatedUser('user');
 
-        $response = $this->actingAs($user)->getJson('/api/v1/email-templates/' . Str::uuid());
+        // Send a GET request to the endpoint
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer $token",
+        ])->getJson('/api/v1/email-templates/' . Str::uuid());
 
-        $response->assertStatus(403)
-            ->assertJson(['error' => 'Unauthorized access']);
+        // Assert the response status and content
+        $response->assertStatus(401)
+        ->assertJson([
+            'status_code' => 401,
+            'message' => 'Unauthorized',
+            'error' => 'Bad Request'
+        ]);
     }
 }
