@@ -106,6 +106,13 @@ class RoleController extends Controller
             ], 400);
         }
     }
+
+    public function updatePermissions(){
+      $permissionIds = $request->input('permissions', []);
+    $role->permissions()->sync($permissionIds);
+
+    return response()->json(['message' => 'Permissions updated']);
+    }
 }
 
 ?>

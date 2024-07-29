@@ -126,6 +126,7 @@ Route::prefix('v1')->group(function () {
         // Roles
         Route::put('/organisations/{org_id/roles/{role_id}/disable', [RoleController::class, 'disableRole']);
         Route::put('/organisations/{org_id}/roles/{role_id}/disable', [RoleController::class, 'disableRole']);
+        Route::patch('/organisations/{org_id}/roles/permissions', [RoleController::class, 'updatePermissions']);
     });
 
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
