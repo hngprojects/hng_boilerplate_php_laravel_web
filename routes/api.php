@@ -90,7 +90,7 @@ Route::prefix('v1')->group(function () {
 
     // Help Articles
     Route::get('/help-center/topics', [HelpArticleController::class, 'index']);
-    Route::post('/help-center/articles', [HelpArticleController::class, 'store']);
+    Route::post('/help-center/topics', [HelpArticleController::class, 'store']);
 
 
 

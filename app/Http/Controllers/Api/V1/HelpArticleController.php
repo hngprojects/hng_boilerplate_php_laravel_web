@@ -7,6 +7,7 @@ use App\Models\HelpArticle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\QueryException;
 
 class HelpArticleController extends Controller
 {
@@ -94,6 +95,21 @@ class HelpArticleController extends Controller
                 'message' => 'Help article created successfully.',
                 'data' => $article
             ], 201);
+        } catch (QueryException $e) {
+            if ($e->getCode() === '23505') { // Unique violation error code
+                return response()->json([
+                    'status_code' => 409,
+                    'success' => false,
+                    'message' => 'An article with this title already exists.'
+                ], 409);
+            }
+
+            return response()->json([
+                'status_code' => 500,
+                'success' => false,
+                'message' => 'Failed to create help article. Please try again later.',
+                'error' => $e->getMessage() // Include error message
+            ], 500);
         } catch (\Exception $e) {
             return response()->json([
                 'status_code' => 500,
