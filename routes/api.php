@@ -35,8 +35,8 @@ use App\Http\Controllers\Api\V1\Testimonial\TestimonialController;
 use App\Http\Controllers\Api\V1\Organisation\OrganisationController;
 
 use App\Http\Controllers\Api\V1\Auth\ForgetPasswordRequestController;
+use App\Http\Controllers\Api\V1\CommentController;
 use App\Http\Controllers\Api\V1\Organisation\OrganizationMemberController;
-
 
 
 /*
@@ -75,6 +75,20 @@ Route::prefix('v1')->group(function () {
         Route::get('/products', [ProductController::class, 'index']);
         Route::post('/products', [ProductController::class, 'store']);
         Route::delete('/products/{productId}', [ProductController::class, 'destroy']);
+    });
+
+
+
+
+    //commet
+    Route::middleware('auth:api')->group(function () {
+        Route::post('/blogs/{blogId}/comments', [CommentController::class, 'createComment']);
+        Route::post('/comments/{commentId}/reply', [CommentController::class, 'replyComment']);
+        Route::post('/comments/{commentId}/like', [CommentController::class, 'likeComment']);
+        Route::post('/comments/{commentId}/dislike', [CommentController::class, 'dislikeComment']);
+        Route::patch('/comments/edit/{commentId}', [CommentController::class, 'editComment']);
+        Route::delete('/comments/{commentId}', [CommentController::class, 'deleteComment']);
+        Route::get('/blogs/{blogId}/comments', [CommentController::class, 'getBlogComments']);
     });
 
     Route::middleware('throttle:10,1')->get('/help-center/topics/search', [ArticleController::class, 'search']);
