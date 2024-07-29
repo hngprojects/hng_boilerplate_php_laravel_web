@@ -8,53 +8,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\RateLimiter;
+use App\Models\User;
 
 class HelpArticleController extends Controller
 {
-    public function index(Request $request)
-    {
-        $validated = $request->validate([
-            'page' => 'nullable|integer|min:1',
-            'size' => 'nullable|integer|min:1|max:100',
-            'search' => 'nullable|string|min:3'
-        ]);
 
-        try {
-            $query = HelpArticle::query();
-
-            if ($request->has('search')) {
-                $query->where(function ($query) use ($request) {
-                    $query->where('title', 'like', '%' . $request->search . '%')
-                        ->orWhere('content', 'like', '%' . $request->search . '%');
-                });
-            }
-
-            $page = $request->get('page', 1);
-            $size = $request->get('size', 10);
-            $articles = $query->paginate($size, ['*'], 'page', $page);
-
-            return response()->json([
-                'status_code' => 200,
-                'success' => true,
-                'data' => [
-                    'articles' => $articles->items(),
-                    'pagination' => [
-                        'page' => $articles->currentPage(),
-                        'size' => $articles->perPage(),
-                        'total_pages' => $articles->lastPage(),
-                        'total_items' => $articles->total()
-                    ]
-                ]
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status_code' => 500,
-                'success' => false,
-                'message' => 'Failed to retrieve help articles. Please try again later.',
-                'error' => $e->getMessage() // Include error message
-            ], 500);
-        }
-    }
 
     public function store(Request $request)
     {
@@ -236,6 +195,120 @@ class HelpArticleController extends Controller
                 'success' => false,
                 'message' => 'Failed to delete help article. Please try again later.',
                 'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+    public function getArticles(Request $request)
+    {
+        // Validate query parameters
+        $validated = $request->validate([
+            'page' => 'nullable|integer|min:1',
+            'size' => 'nullable|integer|min:1|max:100',
+            'category' => 'nullable|integer',
+            'search' => 'nullable|string|min:3'
+        ]);
+
+        try {
+            // Build the query
+            $query = HelpArticle::query();
+
+            // Apply search filter if provided
+            if ($request->has('search')) {
+                $query->where(function ($query) use ($request) {
+                    $query->where('title', 'like', '%' . $request->search . '%')
+                        ->orWhere('content', 'like', '%' . $request->search . '%');
+                });
+            }
+
+            // Apply category filter if provided
+            if ($request->has('category')) {
+                $query->where('category', $request->category);
+            }
+
+            // Pagination
+            $page = $request->get('page', 1);
+            $size = $request->get('size', 10);
+            $articles = $query->paginate($size, ['*'], 'page', $page);
+
+            return response()->json([
+                'status_code' => 200,
+                'success' => true,
+                'message' => 'Articles retrieved successfully.',
+                'data' => [
+                    'topics' => $articles->items(),
+                    'pagination' => [
+                        'page' => $articles->currentPage(),
+                        'size' => $articles->perPage(),
+                        'total_pages' => $articles->lastPage(),
+                        'total_items' => $articles->total()
+                    ]
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status_code' => 500,
+                'success' => false,
+                'message' => 'Failed to retrieve help articles. Please try again later.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+    public function search(Request $request)
+    {
+        // Rate limiting
+        $this->middleware('throttle:search,10'); // Allows 10 requests per minute, adjust as needed
+
+        $title = $request->query('title');
+
+        // Validate input
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|min:3'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid input data.',
+                'status_code' => 400,
+                'errors' => $validator->errors()
+            ], 400);
+        }
+
+        try {
+            // Use article_id as defined in your schema
+            $articles = HelpArticle::where('title', 'like', "%{$title}%")
+                ->get(['article_id', 'title', 'content', 'user_id']);
+
+            if ($articles->isEmpty()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No articles found.',
+                    'status_code' => 404
+                ], 404);
+            }
+
+            // Fetch author names
+            $articles->transform(function ($article) {
+                $user = User::find($article->user_id); // Ensure you have a User model
+                $article->author = $user ? $user->first_name . ' ' . $user->last_name : 'Unknown';
+                return $article;
+            });
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Articles retrieved successfully.',
+                'status_code' => 200,
+                'topics' => $articles
+            ], 200);
+        } catch (\Exception $e) {
+            // Log the error for debugging
+
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to retrieve articles. Please try again later.',
+                'status_code' => 500,
+                'error' => $e->getMessage() // Include exception message in the response
             ], 500);
         }
     }

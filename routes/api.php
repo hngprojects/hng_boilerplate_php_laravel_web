@@ -89,10 +89,12 @@ Route::prefix('v1')->group(function () {
 
 
     // Help Articles
-    Route::get('/help-center/topics', [HelpArticleController::class, 'index']);
     Route::post('/help-center/topics', [HelpArticleController::class, 'store']);
     Route::patch('/help-center/topics/{articleId}', [HelpArticleController::class, 'update']);
     Route::delete('/help-center/topics/{articleId}', [HelpArticleController::class, 'destroy']);
+    Route::get('/help-center/topics', [HelpArticleController::class, 'getArticles']);
+    Route::get('/help-center/topics/search', [HelpArticleController::class, 'search']);
+
 
 
 
