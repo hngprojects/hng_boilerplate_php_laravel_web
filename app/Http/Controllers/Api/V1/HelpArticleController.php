@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Models\HelpArticle;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class HelpArticleController extends Controller
 {
@@ -14,16 +15,11 @@ class HelpArticleController extends Controller
         $validated = $request->validate([
             'page' => 'nullable|integer|min:1',
             'size' => 'nullable|integer|min:1|max:100',
-            'category' => 'nullable|integer',
             'search' => 'nullable|string|min:3'
         ]);
 
         try {
             $query = HelpArticle::query();
-
-            if ($request->has('category')) {
-                $query->where('category', $request->category);
-            }
 
             if ($request->has('search')) {
                 $query->where(function ($query) use ($request) {
@@ -53,7 +49,57 @@ class HelpArticleController extends Controller
             return response()->json([
                 'status_code' => 500,
                 'success' => false,
-                'message' => 'Failed to retrieve help articles. Please try again later.'
+                'message' => 'Failed to retrieve help articles. Please try again later.',
+                'error' => $e->getMessage() // Include error message
+            ], 500);
+        }
+    }
+
+    public function store(Request $request)
+    {
+        // Ensure the user is authenticated
+        if (!Auth::check()) {
+            return response()->json([
+                'status_code' => 401,
+                'success' => false,
+                'message' => 'Authentication failed'
+            ], 401);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required|uuid|exists:users,id',
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status_code' => 422,
+                'success' => false,
+                'message' => 'Invalid input data.',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        try {
+            $article = HelpArticle::create([
+                'user_id' => $request->user_id,
+                'title' => $request->title,
+                'content' => $request->content,
+            ]);
+
+            return response()->json([
+                'status_code' => 201,
+                'success' => true,
+                'message' => 'Help article created successfully.',
+                'data' => $article
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status_code' => 500,
+                'success' => false,
+                'message' => 'Failed to create help article. Please try again later.',
+                'error' => $e->getMessage() // Include error message
             ], 500);
         }
     }
