@@ -53,7 +53,9 @@ class DatabaseSeeder extends Seeder
         $this->call([ArticlesTableSeeder::class]);
         $this->call(UserJobSeeder::class);
 
+
         UserSubscription::factory()->create();
 
+        $this->call(BillingPlanSeeder::class);
     }
 }

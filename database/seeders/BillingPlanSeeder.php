@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\BillingPlan;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class BillingPlanSeeder extends Seeder
 {
@@ -12,6 +14,21 @@ class BillingPlanSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        BillingPlan::insert([
+            [
+                'id' => Str::uuid(),
+                'name' => 'Free',
+                'price' => 0.00,
+                'features' => json_encode(['Stage 1', 'Stage 2', 'Stage 3']),
+                'description' => 'Free plan with basic features.'
+            ],
+            [
+                'id' => Str::uuid(),
+                'name' => 'Premium',
+                'price' => 300,
+                'features' => json_encode(['Premium HNG', 'Premium Gen-z']),
+                'description' => 'Premium plan with advanced features.'
+            ]
+        ]);
     }
 }

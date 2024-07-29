@@ -97,6 +97,8 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('/features', FeatureController::class);
         Route::apiResource('/plans', SubscriptionController::class);
         Route::post('/users/plans/{user_subscription}/cancel', [\App\Http\Controllers\Api\V1\User\SubscriptionController::class, 'destroy']);
+        Route::apiResource('/billing-plans', SubscriptionController::class);
+
 
         // Organisations
         Route::post('/organisations', [OrganisationController::class, 'store']);
