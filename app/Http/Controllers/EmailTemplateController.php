@@ -38,4 +38,33 @@ class EmailTemplateController extends Controller
             'limit' => $templates->perPage(),
         ], 200);
     }
+    public function update(Request $request, $id)
+    {
+        // Validate the request data
+        $validator = Validator::make($request->all(), [
+            'title' => 'string|max:255',
+            'template' => 'string',
+            'status' => 'boolean',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => 'Invalid input data', 'message' => $validator->errors()], 400);
+        }
+
+        // Find the email template by id
+        $template = EmailTemplate::find($id);
+
+        if (!$template) {
+            return response()->json(['error' => 'Template not found', 'message' => 'The email template does not exist'], 404);
+        }
+
+        // Update the email template
+        $template->update($request->only('title', 'template', 'status'));
+
+        return response()->json([
+            'status_code' => 200,
+            'message' => 'Email template updated successfully',
+            'data' => $template
+        ], 200);
+    }
 }
