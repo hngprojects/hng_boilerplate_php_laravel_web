@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreRoleRequest;
+use App\Http\Requests\UpdateRoleRequest;
 use App\Models\User;
 use App\Models\Organisation;
 use App\Models\Role;
@@ -105,5 +107,18 @@ class RoleController extends Controller
                 'message' => "Role disabling failed - " . $e->getMessage(),
             ], 400);
         }
+    }
+
+    public function update(UpdateRoleRequest $request, $org_id, $role_id)
+    {
+        $user = auth('api')->user();
+        if(!$user) return ResponseHelper::response("Authentication failed", 401, null);
+        if($organisation = Organisation::find($org_id)){
+          if(!$organisation->users->contains($user->id)) return ResponseHelper::response("You are not authorised to perform this action", 401, null);
+          if($role = Role::find($role_id)){
+              $role->update($request->only('name', 'description'));
+              return ResponseHelper::response("Role updated successfully", 200, $role);
+          } else return ResponseHelper::response("Role not found", 404, null);
+        } else return ResponseHelper::response("Organisation not found", 404, null);
     }
 }
