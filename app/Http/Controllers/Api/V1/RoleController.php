@@ -23,7 +23,7 @@ class RoleController extends Controller
         try {
             DB::beginTransaction();
 
-            // creating the role 
+            // creating the role
             $role = Role::create([
                 'name' => $request->role_name,
                 'org_id' => $request->organisation_id,
@@ -43,7 +43,7 @@ class RoleController extends Controller
             Log::error('Role creation error: ' . $e->getMessage());
             $code = Response::HTTP_BAD_REQUEST;
             return response()->json([
-                'message' => "Role creation failed - ".$e->getMessage(),
+                'message' => "Role creation failed - " . $e->getMessage(),
                 'status_code' => $code,
             ], $code);
         }
@@ -107,5 +107,3 @@ class RoleController extends Controller
         }
     }
 }
-
-?>
