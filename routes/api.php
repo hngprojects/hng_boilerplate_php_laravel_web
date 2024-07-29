@@ -38,6 +38,8 @@ use App\Http\Controllers\Api\V1\Organisation\OrganizationMemberController;
 
 use App\Http\Controllers\Api\V1\HelpArticleController;
 
+use App\Http\Controllers\Api\V1\WaitListController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -147,8 +149,15 @@ Route::prefix('v1')->group(function () {
         Route::patch('/blogs/edit/{id}', [BlogController::class, 'update'])->name('admin.blogs.update');
         Route::delete('/blogs/{id}', [BlogController::class, 'destroy']);
         Route::post('/blogs/categories', [BlogCategoriesController::class, 'store'])->name('admin.blog-category.create');
+
+        Route::get('/waitlists', [WaitListController::class, 'index']);
+
     });
-    
+
+
+
+    Route::post('/waitlists', [WaitListController::class, 'store']);
+
     Route::get('/blogs/{id}', [BlogController::class, 'show']);
     Route::get('/blogs', [BlogController::class, 'index']);
 
