@@ -113,7 +113,6 @@ class OrganizationMemberControllerTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJson([
-                'status' => 'success',
                 'message' => 'Users retrieved successfully',
                 'status_code' => 200,
                 'data' => [

@@ -99,7 +99,6 @@ class OrganizationMemberController extends Controller
             ->get();
 
         return response()->json([
-            'status' => 'success',
             'message' => 'Users retrieved successfully',
             'status_code' => 200,
             'data' => $users
