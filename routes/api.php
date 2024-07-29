@@ -21,7 +21,7 @@ use App\Http\Controllers\Api\V1\PreferenceController;
 use App\Http\Controllers\Api\V1\User\AccountController;
 use App\Http\Controllers\InvitationAcceptanceController;
 use App\Http\Controllers\Api\V1\Admin\CustomerController;
-
+use App\Http\Controllers\Api\V1\Admin\EmailTemplateController;
 use App\Http\Controllers\Api\V1\User\ExportUserController;
 use App\Http\Controllers\Api\V1\NotificationPreferenceController;
 
@@ -140,7 +140,14 @@ Route::prefix('v1')->group(function () {
 
     // Notification settings
     Route::patch('/notification-settings/{user_id}', [NotificationPreferenceController::class, 'update']);
+
+
+    Route::middleware(['auth:api', 'admin'])->group(function () {
+        //Email Template
+        Route::apiResource('email-templates', EmailTemplateController::class);
     });
+
+});
 
 
 Route::group(['middleware' => ['auth:api']], function () {
