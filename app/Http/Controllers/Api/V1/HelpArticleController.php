@@ -190,4 +190,53 @@ class HelpArticleController extends Controller
             ], 500);
         }
     }
+    public function destroy($articleId)
+    {
+        // Ensure the user is authenticated
+        if (!Auth::check()) {
+            return response()->json([
+                'status_code' => 401,
+                'success' => false,
+                'message' => 'Authentication failed'
+            ], 401);
+        }
+
+        try {
+            // Find the article by ID
+            $article = HelpArticle::find($articleId);
+
+            if (!$article) {
+                return response()->json([
+                    'status_code' => 404,
+                    'success' => false,
+                    'message' => 'Help article not found.'
+                ], 404);
+            }
+
+            // Ensure only the authenticated user can delete the article
+            if ($article->user_id !== Auth::id()) {
+                return response()->json([
+                    'status_code' => 403,
+                    'success' => false,
+                    'message' => 'You do not have permission to access this resource.'
+                ], 403);
+            }
+
+            // Delete the article
+            $article->delete();
+
+            return response()->json([
+                'status_code' => 200,
+                'success' => true,
+                'message' => 'Help article deleted successfully.'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status_code' => 500,
+                'success' => false,
+                'message' => 'Failed to delete help article. Please try again later.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 }
