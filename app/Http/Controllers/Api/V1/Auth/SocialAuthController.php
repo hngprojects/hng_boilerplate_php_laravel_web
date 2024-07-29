@@ -38,16 +38,16 @@ class SocialAuthController extends Controller
         // If profile is a separate model, ensure it is created or updated accordingly
         if ($user->profile) {
             $user->profile->update([
-                'first_name' => $googleUser->name,
-                'last_name' => $googleUser->name,
-                // 'avatar_url' => $googleUser->user['picture'],
+                'first_name' => $googleUser->user['given_name'],
+                'last_name' => $googleUser->user['family_name'],
+                'avatar_url' => $googleUser->attributes['avatar_original'],
             ]);
         } else {
             // Create a profile if it does not exist
             $user->profile()->create([
-                'first_name' => $googleUser->name,
-                'last_name' => $googleUser->name,
-                // 'avatar_url' => $googleUser->user['picture'],
+                'first_name' => $googleUser->user['given_name'],
+                'last_name' => $googleUser->user['family_name'],
+                'avatar_url' => $googleUser->attributes['avatar_original'],
             ]);
         }
 
@@ -62,8 +62,8 @@ class SocialAuthController extends Controller
             'data' => [
                 'id' => $user->id,
                 'email' => $user->email,
-                'name' => $googleUser->name,
-                'google' => $googleUser
+                'first_name' => $googleUser->user['given_name'],
+                'last_name' => $googleUser->user['family_name']
             ]
         ];
 
