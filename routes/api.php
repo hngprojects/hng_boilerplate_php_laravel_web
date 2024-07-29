@@ -121,7 +121,9 @@ Route::prefix('v1')->group(function () {
         Route::put('/jobs/{id}', [JobController::class, 'update']);
         Route::delete('/jobs/{id}', [JobController::class, 'destroy']);
         Route::get('/jobs/{id}', [JobController::class, 'show']);
+        Route::get('/jobs/search', [JobController::class, 'search']);
 
+        
         Route::get('/user/export/{format}', [ExportUserController::class, 'export']);
 
         // Accounts

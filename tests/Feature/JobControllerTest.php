@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\Job;
 use App\Models\User;
-use App\Models\Organisation;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -13,86 +12,106 @@ class JobControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected $user;
-    protected $token;
-    protected $organisation;
+    protected $adminUser;
+    protected $regularUser;
+    protected $adminToken;
+    protected $regularToken;
 
     public function setUp(): void
     {
         parent::setUp();
         
-        $this->user = User::factory()->create();
-        $this->organisation = Organisation::factory()->create();
-        $this->user->organisations()->attach($this->organisation);
-        $this->token = JWTAuth::fromUser($this->user);
+        $this->adminUser = User::factory()->create(['role' => 'admin']);
+        $this->regularUser = User::factory()->create(['role' => 'user']);
+        $this->adminToken = JWTAuth::fromUser($this->adminUser);
+        $this->regularToken = JWTAuth::fromUser($this->regularUser);
     }
 
     public function test_index_returns_paginated_jobs()
     {
-        Job::factory()->count(15)->create(['organisation_id' => $this->organisation->org_id]);
+        Job::factory()->count(20)->create();
 
-        $response = $this->withHeaders(['Authorization' => "Bearer $this->token"])
-            ->getJson('/api/v1/jobs');
+        $response = $this->withHeaders(['Authorization' => "Bearer $this->adminToken"])
+    ->getJson('/api/v1/jobs?page=1&size=15');
 
         $response->assertStatus(200)
             ->assertJsonStructure([
-                'success',
-                'data',
-                'pagination' => ['current_page', 'per_page', 'total_pages', 'total_items']
+                'message',
+                'data' => [
+                    '*' => ['title', 'description', 'location', 'salary']
+                ],
+                'pagination' => ['current_page', 'total_pages', 'page_size', 'total_items']
             ])
             ->assertJsonCount(15, 'data');
     }
 
-    public function test_store_creates_new_job()
+    public function test_store_creates_new_job_as_admin()
     {
         $jobData = [
             'title' => 'Software Engineer',
             'description' => 'Develop amazing software',
             'location' => 'New York',
             'salary' => '100000',
-            'deadline' => '2023-12-31',
-            'work_mode' => 'Remote',
             'job_type' => 'Full-time',
-            'experience_level' => 'Mid-level'
+            'experience_level' => 'Mid-level',
+            'work_mode' => 'Remote',
+            'benefits' => 'Health insurance, 401k',
+            'deadline' => '2023-12-31',
+            'key_responsibilities' => 'Develop and maintain software',
+            'qualifications' => 'Bachelor\'s degree in Computer Science'
         ];
 
-        $response = $this->withHeaders(['Authorization' => "Bearer $this->token"])
+        $response = $this->withHeaders(['Authorization' => "Bearer $this->adminToken"])
             ->postJson('/api/v1/jobs', $jobData);
 
         $response->assertStatus(201)
             ->assertJsonStructure([
                 'success',
                 'message',
-                'data' => ['id', 'title', 'description', 'location', 'salary', 'deadline', 'company_name', 'work_mode', 'job_type', 'experience_level', 'user_id', 'organisation_id']
+                'data' => ['id', 'title', 'description', 'location', 'salary', 'job_type', 'experience_level', 'work_mode', 'benefits', 'deadline', 'key_responsibilities', 'qualifications', 'user_id', 'created_at', 'updated_at']
             ]);
 
-        $this->assertDatabaseHas('jobs', array_merge($jobData, ['company_name' => $this->organisation->name]));
+        $this->assertDatabaseHas('jobs', $jobData);
+    }
+
+    public function test_store_fails_for_non_admin_user()
+    {
+        $jobData = [
+            'title' => 'Software Engineer',
+            'description' => 'Develop amazing software',
+            'location' => 'New York',
+            'job_type' => 'Full-time',
+        ];
+
+        $response = $this->withHeaders(['Authorization' => "Bearer $this->regularToken"])
+            ->postJson('/api/v1/jobs', $jobData);
+
+        $response->assertStatus(403);
     }
 
     public function test_show_returns_job_details()
     {
-        $job = Job::factory()->create(['organisation_id' => $this->organisation->org_id]);
+        $job = Job::factory()->create();
 
-        $response = $this->withHeaders(['Authorization' => "Bearer $this->token"])
-            ->getJson("/api/v1/jobs/{$job->id}");
+        $response = $this->withHeaders(['Authorization' => "Bearer $this->adminToken"])
+    ->getJson("/api/v1/jobs/{$job->id}");
+
 
         $response->assertStatus(200)
             ->assertJsonStructure([
-                'success',
-                'data' => ['id', 'title', 'description', 'location', 'salary', 'deadline', 'company_name', 'work_mode', 'job_type', 'experience_level', 'user_id', 'organisation_id']
+                'id', 'title', 'description', 'location', 'salary', 'job_type', 'experience_level', 'work_mode', 'benefits', 'deadline', 'key_responsibilities', 'qualifications', 'created_at', 'updated_at'
             ]);
     }
 
-    public function test_update_modifies_job_details()
+    public function test_update_modifies_job_details_as_admin()
     {
-        $job = Job::factory()->create(['organisation_id' => $this->organisation->org_id]);
-
+        $job = Job::factory()->create();
         $updatedData = [
             'title' => 'Updated Job Title',
             'description' => 'Updated job description'
         ];
 
-        $response = $this->withHeaders(['Authorization' => "Bearer $this->token"])
+        $response = $this->withHeaders(['Authorization' => "Bearer $this->adminToken"])
             ->putJson("/api/v1/jobs/{$job->id}", $updatedData);
 
         $response->assertStatus(200)
@@ -105,11 +124,25 @@ class JobControllerTest extends TestCase
         $this->assertDatabaseHas('jobs', $updatedData);
     }
 
-    public function test_destroy_deletes_job()
+    public function test_update_fails_for_non_admin_user()
     {
-        $job = Job::factory()->create(['organisation_id' => $this->organisation->org_id]);
+        $job = Job::factory()->create();
+        $updatedData = [
+            'title' => 'Updated Job Title',
+            'description' => 'Updated job description'
+        ];
 
-        $response = $this->withHeaders(['Authorization' => "Bearer $this->token"])
+        $response = $this->withHeaders(['Authorization' => "Bearer $this->regularToken"])
+            ->putJson("/api/v1/jobs/{$job->id}", $updatedData);
+
+        $response->assertStatus(403);
+    }
+
+    public function test_destroy_deletes_job_as_admin()
+    {
+        $job = Job::factory()->create();
+
+        $response = $this->withHeaders(['Authorization' => "Bearer $this->adminToken"])
             ->deleteJson("/api/v1/jobs/{$job->id}");
 
         $response->assertStatus(200)
@@ -120,4 +153,38 @@ class JobControllerTest extends TestCase
 
         $this->assertDatabaseMissing('jobs', ['id' => $job->id]);
     }
+
+    public function test_destroy_fails_for_non_admin_user()
+    {
+        $job = Job::factory()->create();
+
+        $response = $this->withHeaders(['Authorization' => "Bearer $this->regularToken"])
+            ->deleteJson("/api/v1/jobs/{$job->id}");
+
+        $response->assertStatus(403);
+    }
+
+    public function test_search_returns_matching_jobs()
+    {
+        Job::factory()->create(['title' => 'Software Engineer']);
+        Job::factory()->create(['title' => 'Data Scientist']);
+        Job::factory()->create(['description' => 'Engineering position']);
+    
+        $response = $this->withHeaders(['Authorization' => "Bearer $this->adminToken"])
+            ->getJson('/api/v1/jobs/search?query=engineer');
+    
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                'message',
+                'data',
+                'pagination' => ['current_page', 'total_pages', 'page_size', 'total_items']
+            ])
+            ->assertJsonCount(2, 'data')
+            ->assertJsonFragment(['title' => 'Software Engineer'])
+            ->assertJsonFragment(['description' => 'Engineering position']);
+    
+        $this->assertTrue(str_contains($response['data'][0]['title'], 'Engineer') || 
+                          str_contains($response['data'][0]['description'], 'Engineer'));
+    }
+      
 }
