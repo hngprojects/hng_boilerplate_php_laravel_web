@@ -81,13 +81,16 @@ class RegistrationTest extends TestCase
     {
         // Mock Google user response
         $googleUser = (object) [
-            'getEmail' => 'john.doe@example.com',
-            'getId' => 'google-id-12345',
+            'email' => 'john.doe@example.com',
+            'id' => 'google-id-12345',
             'user' => [
                 'given_name' => 'John',
                 'family_name' => 'Doe',
                 'picture' => 'https://lh3.googleusercontent.com/a-/AOh14Gh2G_YHMAI' // Added picture URL
             ],
+            'attributes' => [
+                'avatar_original' => 'https://lh3.googleusercontent.com/a-/AOh14Gh2G_YHMAI'
+            ]
         ];
 
         // Mock Socialite to return the mocked Google user
