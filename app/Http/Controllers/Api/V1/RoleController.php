@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Organisation;
 use App\Models\Role;
 use App\Traits\HttpResponses;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -105,6 +106,21 @@ class RoleController extends Controller
                 'message' => "Role disabling failed - " . $e->getMessage(),
             ], 400);
         }
+    }
+
+    public function assignRole(Request $request, $org_id, $user_id) {
+        $user = User::find($user_id);
+        $request->validate([
+            'role' => 'required|string|exists:roles,name',
+        ]);
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+        if($user->assignRole(Role::where('org_id', $org_id)->where('name', $request->role)->pluck('id')))
+            return response()->json(['message' => 'Roles updated']);
+        else 
+            return response()->json(['message' => 'Role update failed'], 400);
+      
     }
 }
 
