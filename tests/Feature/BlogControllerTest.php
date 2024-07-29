@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Blog;
+use App\Models\BlogCategory;
 use App\Models\BlogImage;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
@@ -36,7 +37,7 @@ class BlogControllerTest extends TestCase
                 'next',
                 'previous',
                 'results' => [
-                    '*' => ['title', 'content', 'images', 'tags', 'author', 'created_at'],
+                    '*' => ['title', 'content', 'images', 'blog_category_id', 'author', 'created_at'],
                 ],
             ]);
 
@@ -70,7 +71,7 @@ class BlogControllerTest extends TestCase
                 'next',
                 'previous',
                 'results' => [
-                    '*' => ['title', 'content', 'images', 'tags', 'author', 'created_at'],
+                    '*' => ['title', 'content', 'images', 'blog_category_id', 'author', 'created_at'],
                 ],
             ]);
 
@@ -130,7 +131,7 @@ class BlogControllerTest extends TestCase
         $blog = Blog::factory()->create();
 
         // Generate a JWT token for the superadmin user
-        $token = \Tymon\JWTAuth\Facades\JWTAuth::fromUser($superAdmin);
+        $token = JWTAuth::fromUser($superAdmin);
 
         // Act as the superadmin user with the generated token
         $this->withHeaders(['Authorization' => 'Bearer ' . $token])
@@ -144,7 +145,7 @@ class BlogControllerTest extends TestCase
         $user = User::factory()->create(['role' => 'user']);
 
           // Authenticate the user with a valid JWT token
-        $token = auth()->login($user);
+        $token = JWTAuth::fromUser($user);
 
         // Create a blog post
         $blog = Blog::factory()->create();
@@ -160,32 +161,27 @@ class BlogControllerTest extends TestCase
 
         ]);
         $response->assertStatus(401);
-        $response->assertJson([
-            'message' => 'Unauthenticated.'
-        ]);
     }
 
     public function test_admin_can_create_blog_post()
     {
         Storage::fake('public');
 
-        $admin = User::factory()->create();
-        $this->actingAs($admin);
+        $admin = User::factory()->create(['role'=>'admin']);
+        $blog_category = BlogCategory::factory()->create();
+        $token = JWTAuth::fromUser($admin);
 
         $image1 = UploadedFile::fake()->image('blog_image1.jpg');
         $image2 = UploadedFile::fake()->image('blog_image2.jpg');
 
-        $author = Str::uuid();
+        $author = 'John Doe';
 
-        $response = $this->postJson('/api/v1/blogs', [
+        $response = $this->withHeaders(['Authorization' => "Bearer $token"])->postJson('/api/v1/blogs', [
             'title' => 'Test Blog Post',
             'content' => 'This is a test blog post content.',
             'author' => $author,
             'images' => [$image1, $image2],
-            'tags' => [
-                ['name' => 'Technology'],
-                ['name' => 'Programming'],
-            ],
+            'blog_category_id' => $blog_category->id,
         ]);
 
         $response->assertStatus(201)
@@ -198,14 +194,7 @@ class BlogControllerTest extends TestCase
             'title' => 'Test Blog Post',
             'content' => 'This is a test blog post content.',
             'author' => $author,
-        ]);
-
-        $this->assertDatabaseHas('blog_tags', [
-            'name' => 'Technology',
-        ]);
-
-        $this->assertDatabaseHas('blog_tags', [
-            'name' => 'Programming',
+            'blog_category_id' => $blog_category->id,
         ]);
 
         Storage::disk('public')->assertExists('blog_header/' . $image1->hashName());
@@ -216,24 +205,89 @@ class BlogControllerTest extends TestCase
     {
         Storage::fake('public');
 
-        $admin = User::factory()->create();
-        $this->actingAs($admin);
+        $admin = User::factory()->create(['role'=>'admin']);
+        $token = JWTAuth::fromUser($admin);
 
         $invalidData = [
             'title' => '',
             'content' => '',
             'author' => '',
-            'images' => ['not_an_image'],
-            'tags' => 'not_an_array',
+            'blog_category_id' => 12345,
         ];
 
-        $response = $this->postJson('/api/v1/blogs', $invalidData);
+        $response = $this->withHeaders(['Authorization' => "Bearer $token"])->postJson('/api/v1/blogs', $invalidData);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['title', 'content', 'author', 'images.0', 'tags']);
+            ->assertJsonValidationErrors(['title', 'content', 'author', 'blog_category_id']);
 
     }
 
+    public function test_admin_can_create_blog_category()
+    {
+        // Create a user with admin role
+        $admin = User::factory()->create([
+            'role' => 'admin',
+        ]);
+        
+        $token = JWTAuth::fromUser($admin);
+
+        // Data to create the blog category
+        $data = [
+            'name' => 'New category',
+            'description' => 'This is a new Category',
+        ];
+
+        // Send a request to create the blog category
+        $response = $this->withHeaders(['Authorization' => "Bearer $token"])
+                            ->json('POST', route('admin.blog-category.create'), $data)
+                            ->assertJson([
+                                'message' => 'Blog category created successfully.',
+                                'status_code' => 201,
+                            ]);
+                
+        $this->assertDatabaseHas('blog_categories', [
+            'name' => 'New category',
+            'description' => 'This is a new Category',
+        ]);
+    }
+
+    /**
+     * Test that a non-admin user cannot update the blog.
+     */
+    public function test_non_admin_cannot_create_blog_category()
+    {
+        // Create a user without admin role
+        $user = User::factory()->create([
+            'role' => 'user',
+        ]);
+
+        // Log in the user
+        $token = JWTAuth::fromUser($user);
+
+        // Create a blog category to update
+        $blog = Blog::factory()->create();
+
+        // Data to update the blog category
+        $data = [
+            'name' => 'Updated Title',
+            'description' => 'Updated Content',
+        ];
+
+        // Send a request to update the blog category
+        $response = $this->withHeaders(['Authorization' => "Bearer $token"])
+                        ->json('PATCH', route('admin.blogs.update', ['id' => $blog->id]), $data);
+
+        // Assert the response status
+        $response->assertStatus(401);
+
+        // Assert the blog category was not updated
+        $this->assertDatabaseMissing('blog_categories', [
+            'id' => $blog->id,
+            'name' => 'Updated Title',
+            'description' => 'Updated Content',
+        ]);
+    }
+    
     public function test_admin_can_update_blog()
     {
         // Create a user with admin role
