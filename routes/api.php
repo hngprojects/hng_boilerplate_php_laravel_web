@@ -36,8 +36,9 @@ use App\Http\Controllers\Api\V1\Organisation\OrganisationController;
 
 use App\Http\Controllers\Api\V1\Auth\ForgetPasswordRequestController;
 use App\Http\Controllers\Api\V1\Organisation\OrganizationMemberController;
-
-
+use App\Models\Permission;
+use App\Models\Role;
+use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -127,6 +128,50 @@ Route::prefix('v1')->group(function () {
         Route::put('/organisations/{org_id/roles/{role_id}/disable', [RoleController::class, 'disableRole']);
         Route::put('/organisations/{org_id}/roles/{role_id}/disable', [RoleController::class, 'disableRole']);
         Route::patch('/organisations/{org_id}/roles/permissions', [RoleController::class, 'updatePermissions']);
+        
+  
+    });
+    Route::get('/organisations/{org_id}/roles', function ($org_id) {
+      $roles = Role::where('org_id', $org_id)->with('permissions')->get();
+  
+      return $roles->map(function ($role) {
+          return [
+              'id' => $role->id,
+              'name' => $role->name,
+              'description' => $role->description,
+              'permissions' => Permission::all()->map(function ($permission) use ($role) {
+                  return [
+                      'id' => $permission->id,
+                      'name' => $permission->name,
+                      'assigned' => $role->permissions->contains($permission->id),
+                  ];
+              }),
+          ];
+      });
+    });
+    Route::put('/organisations/{org_id}/roles/permissions', function (Request $request) {
+      $rolesWithPermissions = $request->input('roles', []);
+  
+      foreach ($rolesWithPermissions as $roleWithPermissions) {
+          $role = Role::find($roleWithPermissions['role_id']);
+          if ($role) {
+              $role->permissions()->sync($roleWithPermissions['permissions']);
+          }
+      }
+    
+        return response()->json(['message' => 'Permissions updated']);
+    });
+    Route::put('/organisations/{org_id}/users/{user_id}/roles', function (Request $request, $org_id, $user_id) {
+      $user = User::find($user_id);
+      $request->validate([
+          'role' => 'required|string|exists:roles,name',
+      ]);
+      if (!$user) {
+          return response()->json(['message' => 'User not found'], 404);
+      }
+      $user->roles()->attach(Role::where('org_id', $org_id)->where('name', $request->role)->pluck('id'));
+  
+      return response()->json(['message' => 'Roles updated']);
     });
 
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
