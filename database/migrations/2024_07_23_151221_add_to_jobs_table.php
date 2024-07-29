@@ -15,6 +15,9 @@ return new class extends Migration
     {
         Schema::table('jobs', function (Blueprint $table) {
             $table->string('salary')->nullable();
+            $table->date('deadline')->nullable();
+            $table->string('work_mode')->nullable();
+            $table->string('experience_level')->nullable();
             $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
             $table->foreignUuid('organisation_id')->references('org_id')->on('organisations')->onDelete('cascade');
         });
@@ -28,8 +31,11 @@ return new class extends Migration
         Schema::table('jobs', function (Blueprint $table) {
             $table->dropForeign(['user_id']);
             $table->dropForeign(['organisation_id']);
-
+    
             $table->dropColumn('salary');
+            $table->dropColumn('deadline');
+            $table->dropColumn('work_mode');
+            $table->dropColumn('experience_level');
             $table->dropColumn('user_id');
             $table->dropColumn('organisation_id');
         });

@@ -113,7 +113,11 @@ Route::prefix('v1')->group(function () {
         Route::delete('/testimonials/{testimonial}', [TestimonialController::class, 'destroy']);
 
         // Jobs
-        Route::apiResource('/jobs', JobController::class);
+        Route::post('/jobs', [JobController::class, 'store']);
+        Route::get('/jobs', [JobController::class, 'index']);
+        Route::put('/jobs/{id}', [JobController::class, 'update']);
+        Route::delete('/jobs/{id}', [JobController::class, 'destroy']);
+        Route::get('/jobs/{id}', [JobController::class, 'show']);
 
         Route::get('/user/export/{format}', [ExportUserController::class, 'export']);
 
