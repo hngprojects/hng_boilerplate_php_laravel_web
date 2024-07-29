@@ -90,6 +90,7 @@ Route::prefix('v1')->group(function () {
 
     //Cookies Preference
     Route::post('/cookies/preferences', [CookiePreferencesController::class, 'update']);
+    Route::get('/cookies/preferences', [CookiePreferencesController::class, 'getPreferences']);
 
 
 
