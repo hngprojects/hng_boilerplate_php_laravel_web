@@ -22,7 +22,12 @@ class ResetUserPasswordController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email:rfc',
-            'password' => 'required|string|confirmed|min:8',
+            'password' => ['required', 'string', Password::min(8)
+            ->letters()
+            ->mixedCase()
+            ->numbers()
+            ->symbols()
+            ->uncompromised()],
         ]);
 
         if ($validator->fails()) {
