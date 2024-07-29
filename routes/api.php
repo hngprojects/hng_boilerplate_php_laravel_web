@@ -93,7 +93,6 @@ Route::prefix('v1')->group(function () {
 
 
 
-
     // Help Articles
     Route::get('/help-center/topics', [HelpArticleController::class, 'index']);
 
