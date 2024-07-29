@@ -60,7 +60,7 @@ Route::prefix('v1')->group(function () {
     Route::post('/auth/password-reset-email', ForgetPasswordRequestController::class)->name('password.reset');
     Route::post('/auth/request-password-request/{token}', ResetUserPasswordController::class);
     Route::post('/roles', [RoleController::class, 'store']);
-    Route::get('/auth/google', [SocialAuthController::class, 'redirectToGoogle']);
+    Route::get('/auth/social/google', [SocialAuthController::class, 'redirectToGoogle']);
     Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
 
     Route::apiResource('/users', UserController::class);

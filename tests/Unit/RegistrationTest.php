@@ -76,44 +76,47 @@ class RegistrationTest extends TestCase
     }
 
     /** @test */
-    /* public function google_login_creates_or_updates_user_and_profile()
-    {
+    // public function google_login_creates_or_updates_user_and_profile()
+    // {
         // Mock Google user response
-        $googleUser = (object) [
-            'getEmail' => 'john.doe@example.com',
-            'getId' => 'google-id-12345',
-            'user' => [
-                'given_name' => 'John',
-                'family_name' => 'Doe',
-                'picture' => 'https://lh3.googleusercontent.com/a-/AOh14Gh2G_YHMAI' // Added picture URL
-            ],
-        ];
+        // $googleUser = (object) [
+        //     'email' => 'john.doe@example.com',
+        //     'id' => 'google-id-12345',
+        //     'user' => [
+        //         'given_name' => 'John',
+        //         'family_name' => 'Doe',
+        //         'picture' => 'https://lh3.googleusercontent.com/a-/AOh14Gh2G_YHMAI' // Added picture URL
+        //     ],
+        //     'attributes' => [
+        //         'avatar_original' => 'https://lh3.googleusercontent.com/a-/AOh14Gh2G_YHMAI'
+        //     ]
+        // ];
 
-        // Mock Socialite to return the mocked Google user
-        Socialite::shouldReceive('driver->stateless->user')
-            ->once()
-            ->andReturn($googleUser);
+        // // Mock Socialite to return the mocked Google user
+        // Socialite::shouldReceive('driver->stateless->user')
+        //     ->once()
+        //     ->andReturn($googleUser);
 
-        // Simulate the Google login
-        $response = $this->get('/api/v1/auth/google/callback');
+        // // Simulate the Google login
+        // $response = $this->get('/api/v1/auth/google/callback');
 
-        // Check for success response
-        $response->assertStatus(200)
-                 ->assertJson([
-                     'status' => 'success',
-                     'message' => 'User successfully authenticated',
-                 ]);
+        // // Check for success response
+        // $response->assertStatus(200)
+        //          ->assertJson([
+        //              'status' => 'success',
+        //              'message' => 'User successfully authenticated',
+        //          ]);
 
-        // Assert user creation or update
-        $user = User::where('email', 'john.doe@example.com')->first();
-        // dd($user);
-        $this->assertNotNull($user);
+        // // Assert user creation or update
+        // $user = User::where('email', 'john.doe@example.com')->first();
+        // // dd($user);
+        // $this->assertNotNull($user);
         // $this->assertEquals('google-id-12345', $user->social_id); // Adjusted field name
 
         // Assert profile creation or update (if using a separate profile model)
-        $profile = $user->profile; // Ensure you have a profile relationship
-        $this->assertNotNull($profile);
-        $this->assertEquals('John', $profile->first_name);
-        $this->assertEquals('Doe', $profile->last_name);
-    } */
+        // $profile = $user->profile; // Ensure you have a profile relationship
+        // $this->assertNotNull($profile);
+        // $this->assertEquals('John', $profile->first_name);
+        // $this->assertEquals('Doe', $profile->last_name);
+    // }
 }
