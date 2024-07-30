@@ -95,10 +95,6 @@ Route::prefix('v1')->group(function () {
     Route::get('/help-center/topics/search', [HelpArticleController::class, 'search']);
 
 
-
-
-
-
     Route::post('/invitations/generate', [InvitationAcceptanceController::class, 'generateInvitation']);
     Route::get('/invite/accept', [InvitationAcceptanceController::class, 'acceptInvitation']);
     Route::post('/invite', [InvitationAcceptanceController::class, 'acceptInvitationPost']);
