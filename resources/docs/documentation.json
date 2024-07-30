@@ -24,7 +24,7 @@
     }
   ],
   "paths": {
-    "/auth/register": {
+    "/api/v1/auth/register": {
       "post": {
         "tags": [
           "Authentication"
@@ -69,7 +69,7 @@
         }
       }
     },
-    "/auth/login": {
+    "/api/v1/auth/login": {
       "post": {
         "tags": [
           "Authentication"
@@ -112,7 +112,7 @@
         }
       }
     },
-    "/auth/logout": {
+    "/api/v1/auth/logout": {
       "post": {
         "tags": [
           "Authentication"
@@ -140,7 +140,7 @@
         ]
       }
     },
-    "/auth/password-reset-email": {
+    "/api/v1/auth/password-reset-email": {
       "post": {
         "tags": [
           "Authentication"
@@ -176,7 +176,7 @@
         }
       }
     },
-    "/auth/request-password-request/{token}": {
+    "/api/v1/auth/request-password-request/{token}": {
       "post": {
         "tags": [
           "Authentication"
@@ -225,7 +225,7 @@
         }
       }
     },
-    "/roles": {
+    "/api/v1/roles": {
       "post": {
         "tags": [
           "Roles"
@@ -262,7 +262,7 @@
         }
       }
     },
-    "/auth/login-google": {
+    "/api/v1/auth/login-google": {
       "get": {
         "tags": [
           "Authentication"
@@ -275,7 +275,7 @@
         }
       }
     },
-    "/auth/google/callback": {
+    "/api/v1/auth/google/callback": {
       "get": {
         "tags": [
           "Authentication"
@@ -304,7 +304,7 @@
         }
       }
     },
-    "/users": {
+    "/api/v1/users": {
       "get": {
         "tags": [
           "Users"
@@ -391,7 +391,7 @@
         ]
       }
     },
-    "/products/categories": {
+    "/api/v1/products/categories": {
       "get": {
         "tags": [
           "Products"
@@ -424,7 +424,7 @@
         }
       }
     },
-    "/products/search": {
+    "/api/v1/products/search": {
       "get": {
         "tags": [
           "Products"
@@ -468,7 +468,7 @@
         }
       }
     },
-    "/topics/search": {
+    "/api/v1/topics/search": {
       "get": {
         "tags": [
           "Topics"
@@ -510,7 +510,7 @@
         }
       }
     },
-    "/products": {
+    "/api/v1/products": {
       "get": {
         "tags": [
           "Products"
@@ -600,7 +600,7 @@
         ]
       }
     },
-    "/products/{productId}": {
+    "/api/v1/products/{productId}": {
       "delete": {
         "tags": [
           "Products"
@@ -640,7 +640,7 @@
         ]
       }
     },
-    "/help-center/topics/search": {
+    "/api/v1/help-center/topics/search": {
       "get": {
         "tags": [
           "Help Center"
@@ -683,7 +683,7 @@
         }
       }
     },
-    "/contact": {
+    "/api/v1/contact": {
       "post": {
         "tags": [
           "Contact"
@@ -721,7 +721,7 @@
         }
       }
     },
-    "/blogs/latest": {
+    "/api/v1/blogs/latest": {
       "get": {
         "tags": [
           "Blogs"
@@ -753,7 +753,7 @@
         }
       }
     },
-    "/blogs/search": {
+    "/api/v1/blogs/search": {
       "get": {
         "tags": [
           "Blogs"
@@ -797,7 +797,7 @@
         }
       }
     },
-    "/squeeze": {
+    "/api/v1/squeeze": {
       "post": {
         "tags": [
           "Squeeze"
@@ -834,7 +834,7 @@
         }
       }
     },
-    "/help-center/topics": {
+    "/api/v1/help-center/topics": {
       "get": {
         "tags": [
           "Help Center"
@@ -915,7 +915,7 @@
         ]
       }
     },
-    "/help-center/topics/{articleId}": {
+    "/api/v1/help-center/topics/{articleId}": {
       "delete": {
         "tags": [
           "Help Center"
@@ -1011,7 +1011,7 @@
         ]
       }
     },
-    "/invitations/generate": {
+    "/api/v1/invitations/generate": {
       "post": {
         "tags": [
           "Invitations"
@@ -1054,7 +1054,7 @@
         ]
       }
     },
-    "/invite/accept": {
+    "/api/v1/invite/accept": {
       "get": {
         "tags": [
           "Invitations"
@@ -1079,7 +1079,7 @@
         }
       }
     },
-    "/invite": {
+    "/api/v1/invite": {
       "post": {
         "tags": [
           "Invitations"
@@ -1124,7 +1124,7 @@
         }
       }
     },
-    "/features": {
+    "/api/v1/features": {
       "get": {
         "tags": [
           "Features"
@@ -1206,7 +1206,7 @@
         ]
       }
     },
-    "/features/{feature}": {
+    "/api/v1/features/{feature}": {
       "get": {
         "tags": [
           "Features"
@@ -1340,7 +1340,7 @@
         ]
       }
     },
-    "/plans": {
+    "/api/v1/plans": {
       "get": {
         "tags": [
           "Plans"
@@ -1457,7 +1457,7 @@
         ]
       }
     },
-    "/plans/{plan}": {
+    "/api/v1/plans/{plan}": {
       "get": {
         "tags": [
           "Plans"
@@ -1611,7 +1611,7 @@
         ]
       }
     },
-    "/users/plans/{user_subscription}/cancel": {
+    "/api/v1/users/plans/{user_subscription}/cancel": {
       "post": {
         "tags": [
           "Subscriptions"
@@ -1651,7 +1651,7 @@
         ]
       }
     },
-    "/organisations": {
+    "/api/v1/organisations": {
       "get": {
         "tags": [
           "Organisations"
@@ -1733,7 +1733,7 @@
         ]
       }
     },
-    "/organisations/{org_id}": {
+    "/api/v1/organisations/{org_id}": {
       "put": {
         "tags": [
           "Organisations"
@@ -1827,7 +1827,7 @@
         ]
       }
     },
-    "/organisations/{org_id}/users/{user_id}": {
+    "/api/v1/organisations/{org_id}/users/{user_id}": {
       "delete": {
         "tags": [
           "Organisations"
@@ -1877,7 +1877,7 @@
         ]
       }
     },
-    "/organisations/{organisation}/members": {
+    "/api/v1/organisations/{organisation}/members": {
       "get": {
         "tags": [
           "Organisations"
@@ -1931,7 +1931,7 @@
         ]
       }
     },
-    "/testimonials": {
+    "/api/v1/testimonials": {
       "post": {
         "tags": [
           "Testimonials"
@@ -1976,7 +1976,7 @@
         ]
       }
     },
-    "/testimonials/{testimonial_id}": {
+    "/api/v1/testimonials/{testimonial_id}": {
       "get": {
         "tags": [
           "Testimonials"
@@ -2057,7 +2057,7 @@
         ]
       }
     },
-    "/jobs": {
+    "/api/v1/jobs": {
       "get": {
         "tags": [
           "Jobs"
@@ -2147,7 +2147,7 @@
         ]
       }
     },
-    "/jobs/{id}": {
+    "/api/v1/jobs/{id}": {
       "get": {
         "tags": [
           "Jobs"
@@ -2287,7 +2287,7 @@
         ]
       }
     },
-    "/jobs/search": {
+    "/api/v1/jobs/search": {
       "get": {
         "tags": [
           "Jobs"
@@ -2336,7 +2336,7 @@
         ]
       }
     },
-    "/user/export/{format}": {
+    "/api/v1/user/export/{format}": {
       "get": {
         "tags": [
           "Users"
@@ -2378,7 +2378,7 @@
         ]
       }
     },
-    "/accounts/deactivate": {
+    "/api/v1/accounts/deactivate": {
       "patch": {
         "tags": [
           "Accounts"
@@ -2406,7 +2406,7 @@
         ]
       }
     },
-    "/organisations/{org_id}/roles/{role_id}": {
+    "/api/v1/organisations/{org_id}/roles/{role_id}": {
       "put": {
         "tags": [
           "Roles"
@@ -2470,7 +2470,7 @@
         ]
       }
     },
-    "/organisations/{org_id}/roles/{role_id}/disable": {
+    "/api/v1/organisations/{org_id}/roles/{role_id}/disable": {
       "put": {
         "tags": [
           "Roles"
@@ -2520,7 +2520,7 @@
         ]
       }
     },
-    "/customers": {
+    "/api/v1/customers": {
       "get": {
         "tags": [
           "Customers"
@@ -2562,7 +2562,7 @@
         ]
       }
     },
-    "/blogs": {
+    "/api/v1/blogs": {
       "get": {
         "tags": [
           "Blogs"
@@ -2649,7 +2649,7 @@
         ]
       }
     },
-    "/blogs/edit/{id}": {
+    "/api/v1/blogs/edit/{id}": {
       "patch": {
         "tags": [
           "Blogs"
@@ -2710,7 +2710,7 @@
         ]
       }
     },
-    "/blogs/{id}": {
+    "/api/v1/blogs/{id}": {
       "get": {
         "tags": [
           "Blogs"
@@ -2789,7 +2789,7 @@
         ]
       }
     },
-    "/blogs/categories": {
+    "/api/v1/blogs/categories": {
       "post": {
         "tags": [
           "Blogs"
@@ -2831,7 +2831,7 @@
         ]
       }
     },
-    "/user/preferences": {
+    "/api/v1/user/preferences": {
       "get": {
         "tags": [
           "User Preferences"
@@ -2916,7 +2916,7 @@
         ]
       }
     },
-    "/user/preferences/{id}": {
+    "/api/v1/user/preferences/{id}": {
       "put": {
         "tags": [
           "User Preferences"
@@ -3011,7 +3011,7 @@
         ]
       }
     },
-    "/notification-settings/{user_id}": {
+    "/api/v1/notification-settings/{user_id}": {
       "patch": {
         "tags": [
           "Notification Settings"
@@ -3066,6 +3066,60 @@
             "bearerAuth": []
           }
         ]
+      }
+    },
+    "/api/v1/faq": {
+      "post": {
+        "tags": ["FAQ"],
+        "summary": "Create a new FAQ",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FAQInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "FAQ created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FAQ"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/faqs": {
+      "get": {
+        "tags": ["FAQ"],
+        "summary": "Get all FAQs",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FAQ"
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   },
@@ -3683,6 +3737,32 @@
       "SuccessResponse": {
         "type": "object",
         "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "FAQInput": {
+        "type": "object",
+        "required": ["title", "message"],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "FAQ": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
           "message": {
             "type": "string"
           }
