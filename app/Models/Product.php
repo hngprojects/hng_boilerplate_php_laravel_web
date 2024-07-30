@@ -11,7 +11,15 @@ class Product extends Model
 {
     use HasFactory, HasUuids;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'user_id',
+        'name',
+        'description',
+        'price',
+        'slug',
+        'imageUrl',
+        'tags',
+    ];
 
     /**
      * The primary key associated with the table.
