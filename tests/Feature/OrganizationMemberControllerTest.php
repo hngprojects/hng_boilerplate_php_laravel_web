@@ -7,10 +7,26 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Models\Organisation;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class OrganizationMemberControllerTest extends TestCase
 {
     use LazilyRefreshDatabase;
+
+    protected $user;
+    protected $organization;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // Create a user and log them in
+        $this->user = User::factory()->create();
+        $this->actingAs($this->user);
+
+        // Create an organization
+        $this->organization = Organisation::factory()->create();
+    }
 
     /** @test */
     public function it_validates_the_organization_id_and_returns_paginated_members()
@@ -74,6 +90,65 @@ class OrganizationMemberControllerTest extends TestCase
                     ]
                 ],
                 'status_code'
+            ]);
+    }
+
+    public function test_it_returns_users_when_searching_with_valid_organization_id()
+    {
+        // Create users belonging to the organization
+        $user1 = $this->organization->users()->create([
+            'name' => 'John Doe',
+            'email' => 'john@example.com',
+            'password' => bcrypt('password'),
+        ]);
+
+        $user2 = $this->organization->users()->create([
+            'name' => 'Jane Smith',
+            'email' => 'jane@example.com',
+            'password' => bcrypt('password'),
+        ]);
+
+        // Search for users in the organization
+        $response = $this->getJson('/api/v1/members/' . $this->organization->org_id . '/search?search=Jane');
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'message' => 'Users retrieved successfully',
+                'status_code' => 200,
+                'data' => [
+                    [
+                        'name' => 'Jane Smith',
+                        'email' => 'jane@example.com',
+                    ]
+                ]
+            ]);
+    }
+
+    public function test_it_returns_an_error_when_organization_id_is_invalid()
+    {
+        // Pass an invalid organization ID
+        $invalidOrgId = Str::random(10);
+
+        $response = $this->getJson('/api/v1/members/' . $invalidOrgId . '/search');
+
+        $response->assertStatus(400)
+            ->assertJson([
+                'message' => 'Invalid organization ID',
+                'status_code' => 400,
+            ]);
+    }
+
+    public function test_it_returns_an_error_when_organization_does_not_exist()
+    {
+        // Create a non-existing organization ID
+        $nonExistingOrgId = Str::uuid()->toString();
+
+        $response = $this->getJson('/api/v1/members/' . $nonExistingOrgId . '/search');
+
+        $response->assertStatus(404)
+            ->assertJson([
+                'message' => 'Organization does not exist',
+                'status_code' => 404,
             ]);
     }
 }
