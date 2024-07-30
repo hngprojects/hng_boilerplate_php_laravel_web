@@ -37,33 +37,4 @@ class ArticleTest extends TestCase
             ])
             ->assertJsonCount(2, 'topics');
     }
-
-    /* public function test_search_without_title_parameter()
-    {
-        $response = $this->get('/api/v1/help-center/topics/search');
-
-        $response->assertStatus(400)
-            ->assertJson([
-                'success' => false,
-                'message' => 'Invalid input data.',
-                'status_code' => 400,
-                'errors' => [
-                    'title' => [
-                        'The title field is required.'
-                    ]
-                ]
-            ]);
-    }
-
-    public function test_search_with_no_results()
-    {
-        $response = $this->get('/api/v1/help-center/topics/search?title=NonexistentArticle');
-
-        $response->assertStatus(404)
-            ->assertJson([
-                'success' => false,
-                'message' => 'No articles found.',
-                'status_code' => 404
-            ]);
-    } */
 }
