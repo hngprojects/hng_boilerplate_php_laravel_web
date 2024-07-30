@@ -10,6 +10,7 @@ use App\Models\UserNotification;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -85,6 +86,54 @@ class UserNotificationController extends Controller
     public function show(string $id)
     {
         //
+
+    }
+
+    public function getByUser(Request $request)
+    {
+        $user = Auth::user();
+
+        // Get status from query parameters if provided
+        $isRead = $request->query('is_read');
+
+        // Retrieve notifications based on the is_read filter
+        $user = User::with(['notifications' => function ($query) use ($isRead) {
+            if ($isRead) {
+                if ($isRead === 'false') {
+                    return $query->wherePivot('status', '<>', 'read');
+                }
+                return $query->wherePivot('status', $isRead);
+            }
+        }])->find($user->id);
+
+        // Count all notifications and unread notifications
+        $totalNotificationsCount = $user->notifications()->count();
+        $unreadNotificationsCount = $user->notifications()->where('status', 'unread')->count();
+
+        // Map notifications into desired output
+        $notifications = $user->notifications->map(function ($notification) {
+            $isRead = $notification->pivot->status === 'read';
+            return [
+                'id' => $notification->id,
+                'message' => $notification->message,
+                'is_read' => $isRead,
+                'created_at' => $notification->created_at,
+            ];
+        });
+
+        //
+        $status = $isRead === 'false' ? 'Unread ' : '';
+
+        return response()->json([
+            'status' => 'success',
+            'message' => "{$status}Notifications retrieved successfully",
+            'status_code' => Response::HTTP_OK,
+            'data' => [
+                'total_notification_count' => $totalNotificationsCount,
+                'total_unread_notification_count' => $unreadNotificationsCount,
+                'notifications' => $notifications
+            ]
+        ], Response::HTTP_OK);
     }
 
     /**
