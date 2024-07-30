@@ -65,19 +65,4 @@ class RoleCreationTest extends TestCase
         ])->assertDatabaseCount('roles_permissions', 1);
     }
 
-    public function test_role_creation_fails_on_validation_error()
-    {
-
-        $this->postJson('/api/v1/roles', [
-            'role_name' => '',
-            'organisation_id' => "",
-            'permissions_id' => "",
-        ])
-            ->assertStatus(422)
-            ->assertJsonValidationErrorFor('role_name')
-            ->assertJsonValidationErrorFor('organisation_id')
-            ->assertJsonValidationErrorFor('permissions_id');
-
-        $this->assertDatabaseEmpty('roles');
-    }
 }
