@@ -7,6 +7,7 @@ use App\Models\EmailTemplate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Validator;
 
 class EmailTemplateController extends Controller
 {
@@ -33,11 +34,7 @@ class EmailTemplateController extends Controller
 
         return response()->json($template, Response::HTTP_OK);
     }
-}
-use Illuminate\Support\Facades\Validator;
-
-class EmailTemplateController extends Controller
-{
+    
     /**
      * Display a paginated list of email templates.
      *
