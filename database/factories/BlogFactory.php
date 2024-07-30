@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Blog;
+use App\Models\BlogCategory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -19,11 +20,13 @@ class BlogFactory extends Factory
      */
     public function definition(): array
     {
+        $blog_category = BlogCategory::factory()->create();
         return [
             'id' => Str::uuid(),
             'title' => $this->faker->sentence,
             'content' => $this->faker->paragraphs(3, true),
             'author' => $this->faker->name,
+            'blog_category_id' => $blog_category->id,
         ];
     }
 }

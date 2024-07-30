@@ -15,6 +15,7 @@ class RoleFactory extends Factory
         return [
             'name' => $this->faker->jobTitle,
             'org_id' => Organisation::factory(),
+            'description' => $this->faker->sentence,
             'is_active' => true,
             'is_default' => false,
         ];
