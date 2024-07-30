@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-
+use App\Models\Blog;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -19,11 +19,11 @@ class CommentController extends Controller
             $request->validate([
                 'content' => 'required|string',
             ]);
-
+            $blog = Blog::findOrFail($blogId);
             $comment = Comment::create([
                 'id' => (string) Str::uuid(),
                 'user_id' => $user->id,
-                'blog_id' => $blogId,
+                'blog_id' => $blog->id,
                 'name' => $user->name,
                 'content' => $request->content,
                 'likes' => 0,
@@ -36,6 +36,8 @@ class CommentController extends Controller
                 'data' => $comment
             ], 201);
         } catch (\Exception $e) {
+            Log::error('Error creating reply comment:', ['exception' => $e->getMessage()]);
+       
             return response()->json([
                 'status' => 500,
                 'message' => 'Failed to create comment',
@@ -75,6 +77,8 @@ class CommentController extends Controller
         } catch (
             \Exception  $e
         ) {
+            Log::error('Error creating reply comment:', ['exception' => $e->getMessage()]);
+       
             return response()->json([
                 'status' => 500,
                 'message' => 'Failed to create reply',
