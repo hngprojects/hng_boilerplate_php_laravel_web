@@ -38,6 +38,7 @@ use App\Http\Controllers\Api\V1\Auth\ForgetPasswordRequestController;
 use App\Http\Controllers\Api\V1\Organisation\OrganizationMemberController;
 
 use App\Http\Controllers\Api\V1\HelpArticleController;
+use App\Http\Controllers\BillingPlanController;
 
 use App\Http\Controllers\Api\V1\User\ProfileController;
 use App\Http\Controllers\Api\V1\JobSearchController;
@@ -73,6 +74,9 @@ Route::prefix('v1')->group(function () {
 
     Route::get('/products/categories', [CategoryController::class, 'index']);
     Route::get('/products/search', [ProductController::class, 'search']);
+    Route::get('/billing-plans', [BillingPlanController::class, 'index']);
+    Route::get('/billing-plans/{id}', [BillingPlanController::class, 'getBillingPlan']);
+
 
     Route::middleware('throttle:10,1')->get('/topics/search', [ArticleController::class, 'search']);
 
@@ -113,6 +117,7 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('/plans', SubscriptionController::class);
         Route::post('/users/plans/{user_subscription}/cancel', [\App\Http\Controllers\Api\V1\User\SubscriptionController::class, 'destroy']);
 
+
         // Organisations
         Route::post('/organisations', [OrganisationController::class, 'store']);
         Route::get('/organisations', [OrganisationController::class, 'index']);
@@ -135,6 +140,7 @@ Route::prefix('v1')->group(function () {
         Route::delete('/jobs/{id}', [JobController::class, 'destroy']);
         Route::get('/jobs/{id}', [JobController::class, 'show']);
         Route::get('/jobs/search', [JobController::class, 'search']);
+
 
 
         Route::get('/user/export/{format}', [ExportUserController::class, 'export']);
@@ -168,6 +174,7 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::apiResource('faqs', FaqController::class);
+
 
     Route::get('/blogs/{id}', [BlogController::class, 'show']);
     Route::get('/blogs', [BlogController::class, 'index']);
