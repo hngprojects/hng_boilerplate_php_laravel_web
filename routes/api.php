@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\Admin\BlogCategoriesController;
+use App\Http\Controllers\Api\V1\Admin\FaqController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\JobController;
@@ -34,9 +35,14 @@ use App\Http\Controllers\Api\V1\Testimonial\TestimonialController;
 use App\Http\Controllers\Api\V1\Organisation\OrganisationController;
 
 use App\Http\Controllers\Api\V1\Auth\ForgetPasswordRequestController;
+use App\Http\Controllers\Api\V1\CommentController;
 use App\Http\Controllers\Api\V1\Organisation\OrganizationMemberController;
 
 use App\Http\Controllers\Api\V1\HelpArticleController;
+use App\Http\Controllers\BillingPlanController;
+
+use App\Http\Controllers\Api\V1\User\ProfileController;
+use App\Http\Controllers\Api\V1\JobSearchController;
 
 
 /*
@@ -61,12 +67,17 @@ Route::prefix('v1')->group(function () {
     Route::post('/auth/request-password-request/{token}', ResetUserPasswordController::class);
     Route::post('/roles', [RoleController::class, 'store']);
     Route::get('/auth/google', [SocialAuthController::class, 'redirectToGoogle']);
+    Route::get('/auth/login-google', [SocialAuthController::class, 'redirectToGoogle']);
     Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
 
     Route::apiResource('/users', UserController::class);
 
+
     Route::get('/products/categories', [CategoryController::class, 'index']);
     Route::get('/products/search', [ProductController::class, 'search']);
+    Route::get('/billing-plans', [BillingPlanController::class, 'index']);
+    Route::get('/billing-plans/{id}', [BillingPlanController::class, 'getBillingPlan']);
+
 
     Route::middleware('throttle:10,1')->get('/topics/search', [ArticleController::class, 'search']);
     Route::get('/products/{product_id}', [ProductController::class, 'show']);
@@ -77,6 +88,20 @@ Route::prefix('v1')->group(function () {
         Route::post('/products', [ProductController::class, 'store']);
 
         Route::delete('/products/{productId}', [ProductController::class, 'destroy']);
+    });
+
+
+
+
+    //comment
+    Route::middleware('auth:api')->group(function () {
+        Route::post('/blogs/{blogId}/comments', [CommentController::class, 'createComment']);
+        Route::post('/comments/{commentId}/reply', [CommentController::class, 'replyComment']);
+        Route::post('/comments/{commentId}/like', [CommentController::class, 'likeComment']);
+        Route::post('/comments/{commentId}/dislike', [CommentController::class, 'dislikeComment']);
+        Route::patch('/comments/edit/{commentId}', [CommentController::class, 'editComment']);
+        Route::delete('/comments/{commentId}', [CommentController::class, 'deleteComment']);
+        Route::get('/blogs/{blogId}/comments', [CommentController::class, 'getBlogComments']);
     });
 
     Route::middleware('throttle:10,1')->get('/help-center/topics/search', [ArticleController::class, 'search']);
@@ -96,8 +121,10 @@ Route::prefix('v1')->group(function () {
     Route::get('/help-center/topics', [HelpArticleController::class, 'getArticles']);
     Route::get('/help-center/topics/search', [HelpArticleController::class, 'search']);
 
-
-
+    //jobs
+    Route::get('/jobs', [JobController::class, 'index']);
+    Route::get('/jobs/search', [JobSearchController::class, 'search']);
+    Route::get('/jobs/{id}', [JobController::class, 'show']);
 
 
 
@@ -113,6 +140,7 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('/plans', SubscriptionController::class);
         Route::post('/users/plans/{user_subscription}/cancel', [\App\Http\Controllers\Api\V1\User\SubscriptionController::class, 'destroy']);
 
+
         // Organisations
         Route::post('/organisations', [OrganisationController::class, 'store']);
         Route::get('/organisations', [OrganisationController::class, 'index']);
@@ -120,6 +148,9 @@ Route::prefix('v1')->group(function () {
         Route::delete('/organisations/{org_id}', [OrganisationController::class, 'destroy']);
         Route::delete('/organisations/{org_id}/users/{user_id}', [OrganisationController::class, 'removeUser']);
         Route::get('/organisations/{organisation}/members', [OrganizationMemberController::class, 'index']);
+
+        // members
+        Route::get('/members/{org_id}/search', [OrganizationMemberController::class, 'searchMembers']);
 
         Route::delete('/organizations/{org_id}', [OrganisationController::class, 'destroy']);
 
@@ -129,7 +160,11 @@ Route::prefix('v1')->group(function () {
         Route::delete('/testimonials/{testimonial}', [TestimonialController::class, 'destroy']);
 
         // Jobs
-        Route::apiResource('/jobs', JobController::class);
+        Route::post('/jobs', [JobController::class, 'store']);
+        Route::put('/jobs/{id}', [JobController::class, 'update']);
+        Route::delete('/jobs/{id}', [JobController::class, 'destroy']);
+
+
 
         Route::get('/user/export/{format}', [ExportUserController::class, 'export']);
 
@@ -139,6 +174,14 @@ Route::prefix('v1')->group(function () {
         // Roles
         Route::put('/organisations/{org_id}/roles/{role_id}', [RoleController::class, 'update']);
         Route::put('/organisations/{org_id}/roles/{role_id}/disable', [RoleController::class, 'disableRole']);
+
+
+
+        //Update Password
+        Route::post('/password-update', [ProfileController::class, 'updatePassword']);
+        //profile Update
+        Route::patch('/profile', [ProfileController::class, 'update']);
+        Route::post('/profile/upload-image', [ProfileController::class, 'uploadImage']);
     });
 
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
@@ -150,6 +193,9 @@ Route::prefix('v1')->group(function () {
         Route::delete('/blogs/{id}', [BlogController::class, 'destroy']);
         Route::post('/blogs/categories', [BlogCategoriesController::class, 'store'])->name('admin.blog-category.create');
     });
+
+    Route::apiResource('faqs', FaqController::class);
+
 
     Route::get('/blogs/{id}', [BlogController::class, 'show']);
     Route::get('/blogs', [BlogController::class, 'index']);

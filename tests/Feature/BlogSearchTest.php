@@ -27,8 +27,9 @@ class BlogSearchTest extends TestCase
                         'title',
                         'content',
                         'author',
-                        'created_date',
-                        'tags',
+                        'created_at',
+                        'blog_category', // Ensure your JSON response includes the structure of blog_category
+                        'images', // Ensure your JSON response includes the structure of images
                     ]
                 ],
                 'meta' => [

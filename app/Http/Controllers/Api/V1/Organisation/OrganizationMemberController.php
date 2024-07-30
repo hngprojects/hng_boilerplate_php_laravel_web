@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api\V1\Organisation;
 
 use App\Http\Controllers\Controller;
+use App\Models\Organisation;
 use App\Models\OrganisationUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class OrganizationMemberController extends Controller
 {
@@ -58,5 +60,48 @@ class OrganizationMemberController extends Controller
             ],
             'status_code' => 200,
         ], 200);
+    }
+
+    public function searchMembers($org_id, Request $request)
+    {
+        // Validate the organization ID format
+        $validator = Validator::make(['org_id' => $org_id], [
+            'org_id' => 'required|uuid'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Invalid organization ID',
+                'status_code' => 400,
+            ], 400);
+        }
+
+        $user = Auth::user();
+
+        // Fetch the organization
+        $organization = Organisation::where('org_id', $org_id)->first();
+        if (!$organization) {
+            return response()->json([
+                'message' => 'Organization does not exist',
+                'status_code' => 404
+            ], 404);
+        }
+
+        // Get the search term from the request
+        $searchTerm = $request->input('search', '');
+
+        // Query users belonging to the organization and matching the search term
+        $users = $organization->users()
+            ->where(function ($query) use ($searchTerm) {
+                $query->where('name', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('email', 'LIKE', '%' . $searchTerm . '%');
+            })
+            ->get();
+
+        return response()->json([
+            'message' => 'Users retrieved successfully',
+            'status_code' => 200,
+            'data' => $users
+        ]);
     }
 }
