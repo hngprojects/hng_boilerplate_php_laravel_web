@@ -124,7 +124,7 @@ class RoleController extends Controller
       if (!$user) return ResponseHelper::response("User not found", 404, null);
       if($organisation = Organisation::find($org_id)){
         if(!$organisation->users->contains($user->id))
-          return ResponseHelper::response("You are not authorised to perform this action", 401, null);
+          return ResponseHelper::response("You are not authorised to perform this action", 409, null);
 
         $role_id = Role::where('org_id', $org_id)->where('name', $request->role)->pluck('id');
         if($result = $user->roles()->syncWithoutDetaching($role_id))
