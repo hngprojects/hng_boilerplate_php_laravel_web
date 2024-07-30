@@ -6,7 +6,6 @@ use App\Models\Blog;
 use App\Models\BlogCategory;
 use App\Models\BlogImage;
 use App\Models\User;
-use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
@@ -17,8 +16,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class BlogControllerTest extends TestCase
 {
-
-    use LazilyRefreshDatabase;
+    use RefreshDatabase;
 
     /** @test */
     public function it_fetches_paginated_latest_blog_posts_without_parameters()
@@ -360,7 +358,6 @@ class BlogControllerTest extends TestCase
             'title' => 'Updated Title',
             'content' => 'Updated Content',
             'author' => 'Updated Author',
-            'tags' => [['name' => 'Tag 1']],
             'images' => [UploadedFile::fake()->image('image1.jpg')],
         ];
 

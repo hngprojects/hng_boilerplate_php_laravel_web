@@ -4,7 +4,9 @@ namespace Database\Factories;
 
 use App\Models\Blog;
 use App\Models\BlogCategory;
+use App\Models\BlogImage;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
 
 /**
@@ -21,12 +23,13 @@ class BlogFactory extends Factory
     public function definition(): array
     {
         $blog_category = BlogCategory::factory()->create();
+        $blog_id = Str::uuid();
         return [
-            'id' => Str::uuid(),
+            'id' => $blog_id,
             'title' => $this->faker->sentence,
             'content' => $this->faker->paragraphs(3, true),
             'author' => $this->faker->name,
-            'blog_category_id' => $blog_category->id,
+            'blog_category_id' => $blog_category->id
         ];
     }
 }
