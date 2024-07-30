@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\Admin\EmailTemplateController;
 use App\Http\Controllers\Api\V1\Admin\Plan\FeatureController;
 use App\Http\Controllers\Api\V1\Admin\Plan\SubscriptionController;
 use App\Http\Controllers\Api\V1\Admin\FaqController;
+use App\Http\Controllers\UserNotificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\JobController;
@@ -208,6 +209,11 @@ Route::prefix('v1')->group(function () {
 
     // Notification settings
     Route::patch('/notification-settings/{user_id}', [NotificationPreferenceController::class, 'update']);
+
+    // User Notification
+    Route::patch('/notifications/{notification}', [UserNotificationController::class, 'update']);
+    Route::delete('/notifications', [UserNotificationController::class, 'destroy']);
+
 });
 
 
