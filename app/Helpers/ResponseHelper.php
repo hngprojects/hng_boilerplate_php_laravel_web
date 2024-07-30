@@ -21,10 +21,11 @@ class ResponseHelper
     }
     public static function response($message, $statusCode, $data = [])
     {
+      $successCodes = [200, 201, 202, 204];
         return response()->json([
-            'status' => $statusCode == 200 ? 'success' : 'error',
+            'status' => in_array($statusCode, $successCodes) ? 'success' : 'error',
             'message' => $message,
-            'status-code' => $statusCode,
+            'status_code' => $statusCode,
             'data' => $data
         ], $statusCode);
     }
