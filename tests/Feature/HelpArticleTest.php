@@ -11,7 +11,7 @@ class HelpArticleTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    /* public function it_should_register_login_create_update_and_delete_help_article()
+    public function it_should_register_login_create_update_and_delete_help_article()
     {
         // Step 1: Register a new user
         $registerResponse = $this->postJson('/api/v1/auth/register', [
@@ -86,5 +86,5 @@ class HelpArticleTest extends TestCase
                 'success' => true,
                 'message' => 'Help article deleted successfully.',
             ]);
-    } */
+    }
 }
