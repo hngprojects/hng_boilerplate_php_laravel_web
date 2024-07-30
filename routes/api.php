@@ -152,12 +152,9 @@ Route::prefix('v1')->group(function () {
         Route::delete('/blogs/{id}', [BlogController::class, 'destroy']);
         Route::post('/blogs/categories', [BlogCategoriesController::class, 'store'])->name('admin.blog-category.create');
 
-        // Route::apiResource('faqs', FaqController::class);
-
     });
 
     Route::apiResource('faqs', FaqController::class);
-
 
     Route::get('/blogs/{id}', [BlogController::class, 'show']);
     Route::get('/blogs', [BlogController::class, 'index']);
