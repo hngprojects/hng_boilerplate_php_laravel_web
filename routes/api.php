@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\Admin\BlogCategoriesController;
+use App\Http\Controllers\Api\V1\Admin\FaqController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\JobController;
@@ -141,6 +142,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/jobs/search', [JobController::class, 'search']);
 
 
+
         Route::get('/user/export/{format}', [ExportUserController::class, 'export']);
 
         // Accounts
@@ -168,7 +170,11 @@ Route::prefix('v1')->group(function () {
         Route::patch('/blogs/edit/{id}', [BlogController::class, 'update'])->name('admin.blogs.update');
         Route::delete('/blogs/{id}', [BlogController::class, 'destroy']);
         Route::post('/blogs/categories', [BlogCategoriesController::class, 'store'])->name('admin.blog-category.create');
+
     });
+
+    Route::apiResource('faqs', FaqController::class);
+
 
     Route::get('/blogs/{id}', [BlogController::class, 'show']);
     Route::get('/blogs', [BlogController::class, 'index']);
@@ -178,6 +184,7 @@ Route::prefix('v1')->group(function () {
         Route::put('/user/preferences/{id}', [PreferenceController::class, 'update']);
         Route::get('/user/preferences', [PreferenceController::class, 'index']);
         Route::delete('/user/preferences/{id}', [PreferenceController::class, 'delete']);
+
     });
 
     // Notification settings
