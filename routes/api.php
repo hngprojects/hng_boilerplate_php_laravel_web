@@ -60,7 +60,7 @@ Route::prefix('v1')->group(function () {
     Route::post('/auth/password-reset-email', ForgetPasswordRequestController::class)->name('password.reset');
     Route::post('/auth/request-password-request/{token}', ResetUserPasswordController::class);
     Route::post('/roles', [RoleController::class, 'store']);
-    Route::get('/auth/google', [SocialAuthController::class, 'redirectToGoogle']);
+    Route::get('/auth/login-google', [SocialAuthController::class, 'redirectToGoogle']);
     Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
 
     Route::apiResource('/users', UserController::class);
@@ -148,7 +148,7 @@ Route::prefix('v1')->group(function () {
         Route::delete('/blogs/{id}', [BlogController::class, 'destroy']);
         Route::post('/blogs/categories', [BlogCategoriesController::class, 'store'])->name('admin.blog-category.create');
     });
-    
+
     Route::get('/blogs/{id}', [BlogController::class, 'show']);
     Route::get('/blogs', [BlogController::class, 'index']);
 
