@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Notification;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +19,9 @@ class UserNotificationFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'user_id' => User::factory(),
+            'notification_id' => Notification::factory(),
+            'status' => $this->faker->randomElement(['unread']),
         ];
     }
 }
