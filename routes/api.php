@@ -120,7 +120,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/help-center/topics', [HelpArticleController::class, 'getArticles']);
     Route::get('/help-center/topics/search', [HelpArticleController::class, 'search']);
 
-    
+
     Route::middleware(['auth:api', 'admin'])->group(function () {
         Route::get('/email-templates', [EmailTemplateController::class, 'index']);
         Route::patch('/email-templates/{id}', [EmailTemplateController::class, 'update']);
@@ -181,7 +181,6 @@ Route::prefix('v1')->group(function () {
         //profile Update
         Route::patch('/profile', [ProfileController::class, 'update']);
         Route::post('/profile/upload-image', [ProfileController::class, 'uploadImage']);
-
     });
 
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
@@ -192,7 +191,6 @@ Route::prefix('v1')->group(function () {
         Route::patch('/blogs/edit/{id}', [BlogController::class, 'update'])->name('admin.blogs.update');
         Route::delete('/blogs/{id}', [BlogController::class, 'destroy']);
         Route::post('/blogs/categories', [BlogCategoriesController::class, 'store'])->name('admin.blog-category.create');
-
     });
 
 
@@ -204,7 +202,6 @@ Route::prefix('v1')->group(function () {
         Route::put('/user/preferences/{id}', [PreferenceController::class, 'update']);
         Route::get('/user/preferences', [PreferenceController::class, 'index']);
         Route::delete('/user/preferences/{id}', [PreferenceController::class, 'delete']);
-
     });
 
     // Notification settings
@@ -213,9 +210,10 @@ Route::prefix('v1')->group(function () {
     // User Notification
     Route::patch('/notifications/{notification}', [UserNotificationController::class, 'update']);
     Route::delete('/notifications', [UserNotificationController::class, 'destroy']);
-
 });
 
+// Notifications using JWT middleware
+Route::post('/notifications', [UserNotificationController::class, 'create'])->middleware('auth.jwt');
 
 Route::group(['middleware' => ['auth:api']], function () {
     Route::post('/user/preferences', [PreferenceController::class, 'store']);
