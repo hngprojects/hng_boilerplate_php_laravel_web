@@ -214,6 +214,7 @@ Route::prefix('v1')->group(function () {
 
 // Notifications using JWT middleware
 Route::post('/notifications', [UserNotificationController::class, 'create'])->middleware('auth.jwt');
+Route::get('/notifications', [UserNotificationController::class, 'getByUser'])->middleware('auth.jwt');
 
 Route::group(['middleware' => ['auth:api']], function () {
     Route::post('/user/preferences', [PreferenceController::class, 'store']);
