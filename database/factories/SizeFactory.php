@@ -1,26 +1,28 @@
 <?php
 
 namespace Database\Factories;
-
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
+use App\Models\Size;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\BlogCategory>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Product>
  */
-class BlogCategoryFactory extends Factory
+class SizeFactory extends Factory
 {
+    protected $model = Size::class;
+    
     /**
      * Define the model's default state.
      *
      * @return array<string, mixed>
      */
+
     public function definition(): array
     {
         return [
             'id' => Str::uuid(),
-            'name' => $this->faker->word,
-            'description' => $this->faker->text
+            'size' => $this->faker->randomElement(['small', 'standard', 'large']),
         ];
     }
 }
