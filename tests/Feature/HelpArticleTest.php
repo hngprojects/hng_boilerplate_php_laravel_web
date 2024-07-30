@@ -9,7 +9,6 @@ use Tests\TestCase;
 class HelpArticleTest extends TestCase
 {
     use RefreshDatabase;
-
     /** @test */
     /* public function it_should_register_login_create_update_and_delete_help_article()
     {
