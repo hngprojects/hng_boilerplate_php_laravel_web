@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 class EmailTemplateFactory extends Factory
 {
     /**
-     * Define the model's default state
+     * Define the model's default state.
      *
      * @return array<string, mixed>
      */
