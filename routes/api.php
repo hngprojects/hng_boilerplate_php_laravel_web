@@ -32,7 +32,6 @@ use App\Http\Controllers\InvitationAcceptanceController;
 use Illuminate\Support\Facades\Route;
 
 
-use App\Http\Controllers\Api\V1\HelpArticleController;
 use App\Http\Controllers\Api\V1\JobSearchController;
 
 /*
