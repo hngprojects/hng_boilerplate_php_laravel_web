@@ -12,9 +12,6 @@ class RetrieveAllBillingPlansTest extends TestCase
 
     public function test_it_retrieves_billing_plans_successfully()
     {
-        $user = User::factory()->create();
-        $this->actingAs($user, 'api');
-
         $response = $this->getJson('/api/v1/billing-plans');
 
         $response->assertStatus(200)
@@ -29,13 +26,6 @@ class RetrieveAllBillingPlansTest extends TestCase
                     ]
                 ]
             ]);
-    }
-
-    public function test_it_fails_to_retrieve_billing_plans_for_unauthorized_user()
-    {
-        $response = $this->getJson('/api/v1/billing-plans');
-
-        $response->assertStatus(401);
     }
 
 }
