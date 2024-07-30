@@ -379,5 +379,4 @@ class BlogControllerTest extends TestCase
             'author' => 'Updated Author',
         ]);
     } */
-   
 }
