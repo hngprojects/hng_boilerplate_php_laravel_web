@@ -47,4 +47,8 @@ class Product extends Model
     {
         return $this->hasMany(ProductVariant::class);
     }
+    public function organisation()
+    {
+        return $this->belongsTo(Organisation::class);
+    }
 }

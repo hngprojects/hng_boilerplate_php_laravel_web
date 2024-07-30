@@ -69,11 +69,13 @@ Route::prefix('v1')->group(function () {
     Route::get('/products/search', [ProductController::class, 'search']);
 
     Route::middleware('throttle:10,1')->get('/topics/search', [ArticleController::class, 'search']);
+    Route::get('/products/{product_id}', [ProductController::class, 'show']);
 
 
     Route::middleware('auth:api')->group(function () {
         Route::get('/products', [ProductController::class, 'index']);
         Route::post('/products', [ProductController::class, 'store']);
+
         Route::delete('/products/{productId}', [ProductController::class, 'destroy']);
     });
 
@@ -148,7 +150,7 @@ Route::prefix('v1')->group(function () {
         Route::delete('/blogs/{id}', [BlogController::class, 'destroy']);
         Route::post('/blogs/categories', [BlogCategoriesController::class, 'store'])->name('admin.blog-category.create');
     });
-    
+
     Route::get('/blogs/{id}', [BlogController::class, 'show']);
     Route::get('/blogs', [BlogController::class, 'index']);
 
