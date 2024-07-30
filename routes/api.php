@@ -96,8 +96,11 @@ Route::prefix('v1')->group(function () {
     Route::get('/help-center/topics', [HelpArticleController::class, 'getArticles']);
     Route::get('/help-center/topics/search', [HelpArticleController::class, 'search']);
 
-
-
+    //jobs
+    Route::get('/jobs', [JobController::class, 'index']);
+    Route::get('/jobs/search', [JobSearchController::class, 'search']);
+    Route::get('/jobs/{id}', [JobController::class, 'show']);
+    // Route::get('/jobs/Search', [JobController::class, 'index']);
 
 
 
@@ -130,12 +133,9 @@ Route::prefix('v1')->group(function () {
 
         // Jobs
         Route::post('/jobs', [JobController::class, 'store']);
-        Route::get('/jobs', [JobController::class, 'index']);
         Route::put('/jobs/{id}', [JobController::class, 'update']);
         Route::delete('/jobs/{id}', [JobController::class, 'destroy']);
-        Route::get('/jobs/{id}', [JobController::class, 'show']);
-        Route::get('/jobs/search', [JobController::class, 'search']);
-
+        
         
         Route::get('/user/export/{format}', [ExportUserController::class, 'export']);
 
