@@ -65,7 +65,11 @@ Route::prefix('v1')->group(function () {
     Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
 
     Route::apiResource('/users', UserController::class);
-
+    
+    //jobs
+    Route::get('/jobs', [JobController::class, 'index']);
+    Route::get('/jobs/search', [JobSearchController::class, 'search']);
+    Route::get('/jobs/{id}', [JobController::class, 'show']);
 
     Route::get('/products/categories', [CategoryController::class, 'index']);
     Route::get('/products/search', [ProductController::class, 'search']);
@@ -112,11 +116,6 @@ Route::prefix('v1')->group(function () {
     Route::delete('/help-center/topics/{articleId}', [HelpArticleController::class, 'destroy']);
     Route::get('/help-center/topics', [HelpArticleController::class, 'getArticles']);
     Route::get('/help-center/topics/search', [HelpArticleController::class, 'search']);
-
-    //jobs
-    Route::get('/jobs', [JobController::class, 'index']);
-    Route::get('/jobs/search', [JobSearchController::class, 'search']);
-    Route::get('/jobs/{id}', [JobController::class, 'show']);
 
     Route::middleware(['auth:api', 'admin'])->group(function () {
         Route::get('/email-templates', [EmailTemplateController::class, 'index']);
