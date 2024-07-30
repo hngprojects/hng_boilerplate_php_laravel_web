@@ -25,7 +25,6 @@ class ProfileFactory extends Factory
             'user_id' => $newUser->id,
             'first_name' => $first_name,
             'last_name' => $last_name,
-            // 'phone' => $this->faker->phoneNumber,
             'avatar_url' => $this->faker->imageUrl(),
         ];
     }
