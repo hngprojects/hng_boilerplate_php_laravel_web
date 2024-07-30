@@ -3246,7 +3246,7 @@
           }
       }
     },
-    "/api/v1/notifitions": {
+    "/api/v1/notifications": {
         "delete": {
             "tags": ["User Notifications"],
             "summary": "Clear All notification",
@@ -3327,9 +3327,7 @@
             }
         },
         "get": {
-            "tags": [
-              "notification"
-            ],
+            "tags": ["User Notifications"],
             "description": "Retrieves users notification, optionally can query for unread and read notifications with the `?is_read={boolean}`",
             "parameters": [
               {
@@ -3377,9 +3375,7 @@
             ]
         },
         "post": {
-            "tags": [
-              "notification"
-            ],
+            "tags": ["User Notifications"],
             "description": "Create a new notification",
             "requestBody": {
               "content": {
