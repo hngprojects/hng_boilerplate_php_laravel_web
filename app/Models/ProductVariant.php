@@ -21,10 +21,16 @@ class ProductVariant extends Model
 
     public function products()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Product::class, 'product_id', 'product_id');
     }
+    
     public function size()
     {
         return $this->belongsTo(Size::class);
+    }
+
+    public function productVariantsSize(): BelongsToMany
+    {
+        return $this->belongsToMany(Size::class, 'product_variants_size', 'product_variant_id', 'size_id');
     }
 }

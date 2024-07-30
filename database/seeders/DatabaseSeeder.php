@@ -57,5 +57,13 @@ class DatabaseSeeder extends Seeder
 
         UserSubscription::factory()->create();
 
+        // Call individual seeders here
+        $this->call([
+            SizeSeeder::class,
+            ProductSeeder::class,
+            ProductVariantSeeder::class,
+            ProductVariantSizeSeeder::class,
+        ]);
+
     }
 }

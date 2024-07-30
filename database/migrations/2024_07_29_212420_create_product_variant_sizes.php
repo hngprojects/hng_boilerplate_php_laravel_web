@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('product_variants_size', function (Blueprint $table) {
+        Schema::create('product_variant_sizes', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('size_id')->references('id')->on('sizes')->constrained()->onDelete('cascade')->onUpdate('cascade');
-            $table->foreignUuid('product_variant_id')->references('id')->constrained('product_variants')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignUuid('product_variant_id')->references('id')->on('product_variants')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
         Schema::table('product_variants', function (Blueprint $table) {
-            $table->foreignUuid('product_id')->references('id')->on('products')->constrained()->onDelete('cascade')->onUpdate('cascade')->nullable();
+            $table->foreignUuid('product_id')->references('product_id')->on('products')->constrained()->onDelete('cascade')->onUpdate('cascade')->nullable();
         });
     }
 
