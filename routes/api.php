@@ -1,7 +1,6 @@
 <?php
 
-
-
+use App\Http\Controllers\Api\V1\Admin\BlogCategoriesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\JobController;
@@ -37,7 +36,8 @@ use App\Http\Controllers\Api\V1\Organisation\OrganisationController;
 use App\Http\Controllers\Api\V1\Auth\ForgetPasswordRequestController;
 use App\Http\Controllers\Api\V1\Organisation\OrganizationMemberController;
 
-
+use App\Http\Controllers\Api\V1\HelpArticleController;
+use App\Http\Controllers\Api\V1\JobSearchController;
 
 /*
 |--------------------------------------------------------------------------
@@ -60,7 +60,8 @@ Route::prefix('v1')->group(function () {
     Route::post('/auth/password-reset-email', ForgetPasswordRequestController::class)->name('password.reset');
     Route::post('/auth/request-password-request/{token}', ResetUserPasswordController::class);
     Route::post('/roles', [RoleController::class, 'store']);
-    Route::get('/auth/social/google', [SocialAuthController::class, 'redirectToGoogle']);
+    Route::get('/auth/google', [SocialAuthController::class, 'redirectToGoogle']);
+    Route::get('/auth/login-google', [SocialAuthController::class, 'redirectToGoogle']);
     Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
 
     Route::apiResource('/users', UserController::class);
@@ -86,6 +87,19 @@ Route::prefix('v1')->group(function () {
     Route::post('/squeeze', [SqueezeController::class, 'store']);
 
 
+
+    // Help Articles
+    Route::post('/help-center/topics', [HelpArticleController::class, 'store']);
+    Route::patch('/help-center/topics/{articleId}', [HelpArticleController::class, 'update']);
+    Route::delete('/help-center/topics/{articleId}', [HelpArticleController::class, 'destroy']);
+    Route::get('/help-center/topics', [HelpArticleController::class, 'getArticles']);
+    Route::get('/help-center/topics/search', [HelpArticleController::class, 'search']);
+
+
+
+
+
+
     Route::post('/invitations/generate', [InvitationAcceptanceController::class, 'generateInvitation']);
     Route::get('/invite/accept', [InvitationAcceptanceController::class, 'acceptInvitation']);
     Route::post('/invite', [InvitationAcceptanceController::class, 'acceptInvitationPost']);
@@ -108,28 +122,42 @@ Route::prefix('v1')->group(function () {
 
         Route::delete('/organizations/{org_id}', [OrganisationController::class, 'destroy']);
 
-        Route::post('/blogs', [BlogController::class, 'store']);
-
         // Testimonials
         Route::post('/testimonials', [TestimonialController::class, 'store']);
         Route::get('/testimonials/{testimonial_id}', [TestimonialController::class, 'show']);
         Route::delete('/testimonials/{testimonial}', [TestimonialController::class, 'destroy']);
 
         // Jobs
-        Route::apiResource('/jobs', JobController::class);
+        Route::post('/jobs', [JobController::class, 'store']);
+        Route::get('/jobs', [JobController::class, 'index']);
+        Route::put('/jobs/{id}', [JobController::class, 'update']);
+        Route::delete('/jobs/{id}', [JobController::class, 'destroy']);
+        Route::get('/jobs/{id}', [JobController::class, 'show']);
+        Route::get('/jobs/search', [JobController::class, 'search']);
 
+        
         Route::get('/user/export/{format}', [ExportUserController::class, 'export']);
 
         // Accounts
         Route::patch('/accounts/deactivate', [AccountController::class, 'deactivate']);
 
         // Roles
-        Route::put('/organisations/{org_id/roles/{role_id}/disable', [RoleController::class, 'disableRole']);
+        Route::put('/organisations/{org_id}/roles/{role_id}', [RoleController::class, 'update']);
         Route::put('/organisations/{org_id}/roles/{role_id}/disable', [RoleController::class, 'disableRole']);
     });
 
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
-    Route::delete('/blogs/{id}', [BlogController::class, 'destroy'])->middleware(['auth:api', 'admin']);
+
+    //Blogs
+    Route::group(['middleware' => ['auth.jwt', 'admin']], function () {
+        Route::post('/blogs', [BlogController::class, 'store']);
+        Route::patch('/blogs/edit/{id}', [BlogController::class, 'update'])->name('admin.blogs.update');
+        Route::delete('/blogs/{id}', [BlogController::class, 'destroy']);
+        Route::post('/blogs/categories', [BlogCategoriesController::class, 'store'])->name('admin.blog-category.create');
+    });
+    
+    Route::get('/blogs/{id}', [BlogController::class, 'show']);
+    Route::get('/blogs', [BlogController::class, 'index']);
 
     Route::group(['middleware' => ['auth:api']], function () {
         Route::post('/user/preferences', [PreferenceController::class, 'store']);
@@ -140,7 +168,7 @@ Route::prefix('v1')->group(function () {
 
     // Notification settings
     Route::patch('/notification-settings/{user_id}', [NotificationPreferenceController::class, 'update']);
-    });
+});
 
 
 Route::group(['middleware' => ['auth:api']], function () {
@@ -149,5 +177,3 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('/user/preferences', [PreferenceController::class, 'index']);
     Route::delete('/user/preferences/{id}', [PreferenceController::class, 'delete']);
 });
-
-
