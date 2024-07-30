@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('faqs', function (Blueprint $table) {
-            $table->id();
-            $table->string('title');
-            $table->text('message');
+            $table->uuid('id')->primary();
+            $table->string('question');
+            $table->text('answer');
             $table->boolean('status')->default(1);
             $table->timestamps();
         });
