@@ -15,6 +15,10 @@
       "description": "Production server"
     },
     {
+      "url": "https://deployment.api-php.boilerplate.hng.tech/api/v1",
+      "description": "Deployment server"
+    },
+    {
       "url": "https://staging.example.com/api/v1",
       "description": "Staging server"
     }
