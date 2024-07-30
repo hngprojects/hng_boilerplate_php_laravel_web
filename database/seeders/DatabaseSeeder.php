@@ -55,7 +55,10 @@ class DatabaseSeeder extends Seeder
         $this->call(UserJobSeeder::class);
         $this->call(BlogSeeder::class);
 
+
         UserSubscription::factory()->create();
+
+        $this->call(BillingPlanSeeder::class);
 
         // Call individual seeders here
         $this->call([
