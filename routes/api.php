@@ -104,7 +104,6 @@ Route::prefix('v1')->group(function () {
     Route::get('/jobs', [JobController::class, 'index']);
     Route::get('/jobs/search', [JobSearchController::class, 'search']);
     Route::get('/jobs/{id}', [JobController::class, 'show']);
-    // Route::get('/jobs/Search', [JobController::class, 'index']);
 
 
 
