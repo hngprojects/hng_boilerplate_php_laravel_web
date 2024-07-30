@@ -38,6 +38,7 @@ use App\Http\Controllers\Api\V1\Organisation\OrganizationMemberController;
 
 use App\Http\Controllers\Api\V1\HelpArticleController;
 use App\Http\Controllers\Api\V1\JobSearchController;
+use App\Http\Controllers\Api\V1\User\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -144,6 +145,10 @@ Route::prefix('v1')->group(function () {
         // Roles
         Route::put('/organisations/{org_id}/roles/{role_id}', [RoleController::class, 'update']);
         Route::put('/organisations/{org_id}/roles/{role_id}/disable', [RoleController::class, 'disableRole']);
+
+        //profile Update
+        Route::patch('/profile', [ProfileController::class, 'update']);
+        Route::post('/profile/upload-image', [ProfileController::class, 'uploadImage']);
     });
 
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
