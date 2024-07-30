@@ -9,6 +9,4 @@ use Tests\TestCase;
 class HelpArticleTest extends TestCase
 {
     // use RefreshDatabase;
-
-    
 }
