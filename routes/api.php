@@ -101,7 +101,7 @@ Route::prefix('v1')->group(function () {
 
 
 
-    // Help Articless
+    // Help Articles
     Route::post('/help-center/topics', [HelpArticleController::class, 'store']);
     Route::patch('/help-center/topics/{articleId}', [HelpArticleController::class, 'update']);
     Route::delete('/help-center/topics/{articleId}', [HelpArticleController::class, 'destroy']);
