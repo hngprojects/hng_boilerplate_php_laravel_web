@@ -9,6 +9,7 @@ use App\Models\Organisation;
 use App\Models\Profile;
 use App\Models\User;
 use App\Models\UserSubscription;
+use Database\Factories\BlogFactory;
 use Illuminate\Database\Seeder;
 
 
@@ -52,10 +53,20 @@ class DatabaseSeeder extends Seeder
         $this->call(CategoriesTableSeeder::class);
         $this->call([ArticlesTableSeeder::class]);
         $this->call(UserJobSeeder::class);
+        $this->call(BlogSeeder::class);
 
 
         UserSubscription::factory()->create();
 
         $this->call(BillingPlanSeeder::class);
+
+        // Call individual seeders here
+        $this->call([
+            SizeSeeder::class,
+            ProductSeeder::class,
+            ProductVariantSeeder::class,
+            ProductVariantSizeSeeder::class,
+        ]);
+
     }
 }

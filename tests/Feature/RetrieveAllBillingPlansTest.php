@@ -41,23 +41,4 @@ class RetrieveAllBillingPlansTest extends TestCase
         $response->assertStatus(401);
     }
 
-    // public function test_it_returns_500_error_on_exception()
-    // {
-    //     $this->withoutExceptionHandling();
-
-    //     $user = User::factory()->create();
-    //     $this->actingAs($user, 'api');
-
-    //     $this->mock(BillingPlan::class, function ($mock) {
-    //         $mock->shouldReceive('all')->andThrow(new \Exception('Internal server error'));
-    //     });
-
-    //     $response = $this->getJson('/api/v1/billing-plans');
-
-    //     $response->assertStatus(Response::HTTP_INTERNAL_SERVER_ERROR)
-    //     ->assertJson([
-    //         'message' => 'Internal server error',
-    //         'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
-    //     ]);
-    // }
 }
