@@ -32,6 +32,7 @@ class JobController extends Controller
             'message' => 'Job listings retrieved successfully.',
             'data' => collect($jobs->items())->map(function ($job) {
                 return [
+                    'id' => $job->id,
                     'title' => $job->title,
                     'description' => $job->description,
                     'location' => $job->location,
