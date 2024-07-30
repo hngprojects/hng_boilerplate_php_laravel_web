@@ -108,8 +108,8 @@ Route::prefix('v1')->group(function () {
     Route::middleware('throttle:10,1')->get('/help-center/topics/search', [ArticleController::class, 'search']);
     Route::post('/contact', [ContactController::class, 'sendInquiry']);
 
-    Route::get('/blogs/latest', [BlogController::class, 'latest']);
-    Route::get('/blogs/search', [BlogSearchController::class, 'search']);
+    Route::get('/blog/latest', [BlogController::class, 'latest']);
+    Route::get('/blog/search', [BlogSearchController::class, 'search']);
 
     Route::post('/squeeze', [SqueezeController::class, 'store']);
 
