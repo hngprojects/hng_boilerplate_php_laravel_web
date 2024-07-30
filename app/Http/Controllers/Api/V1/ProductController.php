@@ -154,6 +154,13 @@ class ProductController extends Controller
     {
         $product = Product::find($product_id);
         // return $product_id;
+        if (!$product) {
+            return response()->json([
+                'status' => 'error',
+                "message" => "Product not found",
+                'status_code' => 404,
+            ]);
+        }
         $product =  new ProductResource($product);
         return response()->json([
             'status' => 'success',
