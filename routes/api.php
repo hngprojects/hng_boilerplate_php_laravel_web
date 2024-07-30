@@ -80,7 +80,7 @@ Route::prefix('v1')->group(function () {
 
 
 
-    //commet
+    //comment
     Route::middleware('auth:api')->group(function () {
         Route::post('/blogs/{blogId}/comments', [CommentController::class, 'createComment']);
         Route::post('/comments/{commentId}/reply', [CommentController::class, 'replyComment']);
