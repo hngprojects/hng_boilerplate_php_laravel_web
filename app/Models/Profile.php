@@ -10,7 +10,8 @@ class Profile extends Model
 {
     use HasFactory, HasUuids;
 
-    protected $fillable = ['first_name', 'last_name', 'avatar_url'];
+    protected $guarded = [];
+   
 
     /**
      * The primary key associated with the table.
