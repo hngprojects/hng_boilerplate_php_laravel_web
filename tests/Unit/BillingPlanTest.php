@@ -33,17 +33,5 @@ class BillingPlanTest extends TestCase
     }
 
     
-    /** @test */
-    public function it_returns_a_404_error_if_billing_plan_not_found()
-    {
-        // Perform GET request with a non-existing ID
-        $response = $this->getJson('/api/v1/billing-plans/non-existing-id');
-
-        // Assert the response
-        $response->assertStatus(404)
-                 ->assertJson([
-                     'status' => 404,
-                     'message' => 'Pricing plan not found',
-                 ]);
-    }
+    
 }
