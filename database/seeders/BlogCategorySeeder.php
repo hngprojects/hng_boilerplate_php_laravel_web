@@ -12,6 +12,6 @@ class BlogCategorySeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        
     }
 }

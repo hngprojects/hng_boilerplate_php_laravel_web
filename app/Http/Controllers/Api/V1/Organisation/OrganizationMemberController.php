@@ -8,7 +8,6 @@ use App\Models\OrganisationUser;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class OrganizationMemberController extends Controller
@@ -64,74 +63,46 @@ class OrganizationMemberController extends Controller
         ], 200);
     }
 
-    public function download($organizationId, Request $request)
+    public function searchMembers($org_id, Request $request)
     {
-        $currentUser = Auth::user();
+        // Validate the organization ID format
+        $validator = Validator::make(['org_id' => $org_id], [
+            'org_id' => 'required|uuid'
+        ]);
 
-        // Validate organization ID
-        if (!preg_match('/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/', $organizationId)) {
+        if ($validator->fails()) {
             return response()->json([
-                'status' => 'fail',
                 'message' => 'Invalid organization ID',
                 'status_code' => 400,
             ], 400);
         }
 
+        $user = Auth::user();
+
         // Fetch the organization
-        $organization = Organisation::findOrFail($organizationId);
-
-        // Get all users associated with this organization
-        $users = $organization->users()->get();
-
-        // Prepare data for CSV
-        $now = Carbon::today()->isoFormat('DD_MMMM_YYYY');
-        $columns = ['UserName', 'UserEmail', 'UserStatus', 'CreatedDate'];
-        $data = [];
-        $data[] = $columns;
-        $fileName = "users_$now.csv";
-
-        foreach ($users as $user) {
-            $row = [];
-            $row['UserName'] = $user->name;
-            $row['UserEmail'] = $user->email;
-            $row['UserStatus'] = $user->is_active ? 'Active' : 'Inactive';
-            $row['CreatedDate'] = $user->created_at->format('Y-m-d');
-            $data[] = array_values($row);
-        }
-
-        // Generate CSV content
-        $csvContent = '';
-        foreach ($data as $csvRow) {
-            $csvContent .= implode(',', $csvRow) . "\n";
-        }
-
-        $filePath = 'csv/' . $fileName;
-
-        // Store the CSV content in the storage/app/csv directory
-        try {
-            Storage::disk('local')->put($filePath, $csvContent);
-        } catch (\Exception $e) {
+        $organization = Organisation::where('org_id', $org_id)->first();
+        if (!$organization) {
             return response()->json([
-                'status' => 'fail',
-                'message' => 'Failed to create CSV file',
-                'status_code' => 500,
-            ], 500);
+                'message' => 'Organization does not exist',
+                'status_code' => 404
+            ], 404);
         }
 
-        $headers = [
-            "Content-type" => "text/csv",
-            "Content-Disposition" => "attachment; filename=$fileName",
-            "Pragma" => "no-cache",
-            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
-            "Expires" => "0"
-        ];
+        // Get the search term from the request
+        $searchTerm = $request->input('search', '');
 
-        // Return the response with the file from storage
-        return response()->stream(function () use ($filePath) {
-            readfile(storage_path('app/' . $filePath));
+        // Query users belonging to the organization and matching the search term
+        $users = $organization->users()
+            ->where(function ($query) use ($searchTerm) {
+                $query->where('name', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('email', 'LIKE', '%' . $searchTerm . '%');
+            })
+            ->get();
 
-            // Delete the file after reading
-            Storage::disk('local')->delete($filePath);
-        }, 200, $headers);
+        return response()->json([
+            'message' => 'Users retrieved successfully',
+            'status_code' => 200,
+            'data' => $users
+        ]);
     }
 }
