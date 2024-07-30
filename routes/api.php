@@ -132,6 +132,9 @@ Route::prefix('v1')->group(function () {
         Route::delete('/organisations/{org_id}/users/{user_id}', [OrganisationController::class, 'removeUser']);
         Route::get('/organisations/{organisation}/members', [OrganizationMemberController::class, 'index']);
 
+        // members
+        Route::get('/members/{org_id}/search', [OrganizationMemberController::class, 'searchMembers']);
+
         Route::delete('/organizations/{org_id}', [OrganisationController::class, 'destroy']);
 
         // Testimonials
