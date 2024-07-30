@@ -17,7 +17,7 @@ class BlogSearchController extends Controller
                 'author' => 'nullable|string',
                 'title' => 'nullable|string',
                 'content' => 'nullable|string',
-                'tags' => 'nullable|string',
+                'blog_category' => 'nullable|string',
                 'created_date' => 'nullable|date_format:Y-m-d',
                 'page' => 'nullable|integer|min:1',
                 'page_size' => 'nullable|integer|min:1|max:100',
@@ -26,8 +26,8 @@ class BlogSearchController extends Controller
             $page = $validatedData['page'] ?? 1;
             $pageSize = $validatedData['page_size'] ?? 20;
 
-            $query = Blog::query();
-
+            $query = Blog::query()->with('blog_category', 'images');
+            
             if (!empty($validatedData['author'])) {
                 $query->where('author', 'like', '%' . $validatedData['author'] . '%');
             }
@@ -37,8 +37,10 @@ class BlogSearchController extends Controller
             if (!empty($validatedData['content'])) {
                 $query->where('content', 'like', '%' . $validatedData['content'] . '%');
             }
-            if (!empty($validatedData['tags'])) {
-                $query->where('tags', 'like', '%' . $validatedData['tags'] . '%');
+            if (!empty($validatedData['blog_category'])) {
+                $query->whereHas('blog_category', function($sub_query) use ($validatedData){
+                    $sub_query->where('name', 'like', '%' . $validatedData['blog_category'] . '%');
+                });
             }
             if (!empty($validatedData['created_date'])) {
                 $query->whereDate('created_at', '>=', $validatedData['created_date']);
@@ -50,7 +52,7 @@ class BlogSearchController extends Controller
                 'current_page' => $blogs->currentPage(),
                 'total_pages' => $blogs->lastPage(),
                 'total_results' => $blogs->total(),
-                'blogs' => $this->formatBlogs($blogs->items()),
+                'blogs' => $blogs->items(),
                 'meta' => [
                     'has_next' => $blogs->hasMorePages(),
                     'total' => $blogs->total(),
@@ -58,12 +60,6 @@ class BlogSearchController extends Controller
                     'prev_page' => $blogs->currentPage() > 1 ? $blogs->currentPage() - 1 : null,
                 ],
             ];
-
-            // if ($blogs->total() == 0) {
-            //     $response['message'] = 'No blogs found matching the search criteria.';
-            // }
-
-            Log::info('Blog search request', ['params' => $validatedData, 'results' => $blogs->total()]);
 
             return response()->json($response);
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -81,19 +77,5 @@ class BlogSearchController extends Controller
                 'status_code' => 500
             ], 500);
         }
-    }
-
-    private function formatBlogs($blogs)
-    {
-        return array_map(function ($blog) {
-            return [
-                'id' => $blog->id,
-                'title' => $blog->title,
-                'content' => $blog->content,
-                'author' => $blog->author,
-                'created_date' => $blog->created_at->toDateTimeString(),
-                'tags' => explode(',', $blog->tags),
-            ];
-        }, $blogs);
     }
 }
