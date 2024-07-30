@@ -37,7 +37,7 @@ use App\Http\Controllers\Api\V1\Auth\ForgetPasswordRequestController;
 use App\Http\Controllers\Api\V1\Organisation\OrganizationMemberController;
 
 use App\Http\Controllers\Api\V1\HelpArticleController;
-
+use App\Http\Controllers\BillingPlanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -110,7 +110,7 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('/features', FeatureController::class);
         Route::apiResource('/plans', SubscriptionController::class);
         Route::post('/users/plans/{user_subscription}/cancel', [\App\Http\Controllers\Api\V1\User\SubscriptionController::class, 'destroy']);
-        Route::apiResource('/billing-plans', SubscriptionController::class);
+        Route::apiResource('/billing-plans', BillingPlanController::class);
 
 
         // Organisations
@@ -150,7 +150,7 @@ Route::prefix('v1')->group(function () {
         Route::delete('/blogs/{id}', [BlogController::class, 'destroy']);
         Route::post('/blogs/categories', [BlogCategoriesController::class, 'store'])->name('admin.blog-category.create');
     });
-    
+
     Route::get('/blogs/{id}', [BlogController::class, 'show']);
     Route::get('/blogs', [BlogController::class, 'index']);
 

@@ -16,18 +16,22 @@ class BillingPlanSeeder extends Seeder
     {
         BillingPlan::insert([
             [
-                'id' => Str::uuid(),
+                'id' => Str::uuid()->toString(),
                 'name' => 'Free',
                 'price' => 0.00,
                 'features' => json_encode(['Stage 1', 'Stage 2', 'Stage 3']),
-                'description' => 'Free plan with basic features.'
+                'description' => 'Free plan with basic features.',
+                'created_at' => now(),
+                'updated_at' => now()
             ],
             [
-                'id' => Str::uuid(),
+                'id' => Str::uuid()->toString(),
                 'name' => 'Premium',
-                'price' => 300,
+                'price' => 300.00,
                 'features' => json_encode(['Premium HNG', 'Premium Gen-z']),
-                'description' => 'Premium plan with advanced features.'
+                'description' => 'Premium plan with advanced features.',
+                'created_at' => now(),
+                'updated_at' => now()
             ]
         ]);
     }

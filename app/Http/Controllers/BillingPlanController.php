@@ -14,19 +14,17 @@ class BillingPlanController extends Controller
     public function index()
     {
         try {
-
-            $plans = BillingPlan::get(['id', 'name', 'price']);
-
+            $plans = BillingPlan::select(['id', 'name', 'price'])->get();
             return response()->json([
                 'status' => Response::HTTP_OK,
                 'message' => 'Pricing plans retrieved successfully',
                 'data' => $plans,
             ]);
+
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'Failed to retrieve job listings.',
-                'error' => $e->getMessage(),
-                'status_code' => Response::HTTP_INTERNAL_SERVER_ERROR
+                'message' => 'Internal server error',
+                'status' => Response::HTTP_INTERNAL_SERVER_ERROR
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
