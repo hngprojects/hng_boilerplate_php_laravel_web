@@ -210,11 +210,10 @@ Route::prefix('v1')->group(function () {
     // User Notification
     Route::patch('/notifications/{notification}', [UserNotificationController::class, 'update']);
     Route::delete('/notifications', [UserNotificationController::class, 'destroy']);
+    Route::post('/notifications', [UserNotificationController::class, 'create'])->middleware('auth.jwt');
+    Route::get('/notifications', [UserNotificationController::class, 'getByUser'])->middleware('auth.jwt');
 });
 
-// Notifications using JWT middleware
-Route::post('/notifications', [UserNotificationController::class, 'create'])->middleware('auth.jwt');
-Route::get('/notifications', [UserNotificationController::class, 'getByUser'])->middleware('auth.jwt');
 
 Route::group(['middleware' => ['auth:api']], function () {
     Route::post('/user/preferences', [PreferenceController::class, 'store']);
