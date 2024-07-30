@@ -136,6 +136,7 @@ class ProductController extends Controller
         $product = $user->User::products()->create($request->all());
 
         return response()->json([
+            'status' => 'success',
             'message' => 'Product created successfully',
             'status_code' => 201,
             'data' => [
@@ -155,7 +156,9 @@ class ProductController extends Controller
         // return $product_id;
         $product =  new ProductResource($product);
         return response()->json([
-            'message' => 'success',
+            'status' => 'success',
+            "message" => "Product retrieve ",
+            'status_code' => 200,
             'data' => $product
         ]);
     }
