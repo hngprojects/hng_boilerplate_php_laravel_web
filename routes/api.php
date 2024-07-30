@@ -37,8 +37,10 @@ use App\Http\Controllers\Api\V1\Auth\ForgetPasswordRequestController;
 use App\Http\Controllers\Api\V1\Organisation\OrganizationMemberController;
 
 use App\Http\Controllers\Api\V1\HelpArticleController;
-use App\Http\Controllers\Api\V1\JobSearchController;
+
 use App\Http\Controllers\Api\V1\User\ProfileController;
+use App\Http\Controllers\Api\V1\JobSearchController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -66,6 +68,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
 
     Route::apiResource('/users', UserController::class);
+
 
     Route::get('/products/categories', [CategoryController::class, 'index']);
     Route::get('/products/search', [ProductController::class, 'search']);
@@ -146,9 +149,14 @@ Route::prefix('v1')->group(function () {
         Route::put('/organisations/{org_id}/roles/{role_id}', [RoleController::class, 'update']);
         Route::put('/organisations/{org_id}/roles/{role_id}/disable', [RoleController::class, 'disableRole']);
 
+
+
+        //Update Password
+        Route::post('/password-update', [ProfileController::class, 'updatePassword']);
         //profile Update
         Route::patch('/profile', [ProfileController::class, 'update']);
         Route::post('/profile/upload-image', [ProfileController::class, 'uploadImage']);
+
     });
 
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
