@@ -44,9 +44,13 @@ class FaqController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Faq $faq)
     {
-        //
+        return response()->json([
+            'status_code' => 200,
+            'message' => "Faq returned successfully",
+            'data' => $faq
+        ], 200);
     }
 
     /**
