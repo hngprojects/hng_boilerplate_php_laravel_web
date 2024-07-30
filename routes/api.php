@@ -74,6 +74,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/products/categories', [CategoryController::class, 'index']);
     Route::get('/products/search', [ProductController::class, 'search']);
     Route::get('/billing-plans', [BillingPlanController::class, 'index']);
+    Route::get('/billing-plans/{id}', [BillingPlanController::class, 'getBillingPlan']);
 
 
     Route::middleware('throttle:10,1')->get('/topics/search', [ArticleController::class, 'search']);

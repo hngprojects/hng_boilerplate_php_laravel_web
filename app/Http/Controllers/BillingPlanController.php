@@ -48,9 +48,46 @@ class BillingPlanController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function getBillingPlan($id)
     {
-        //
+        
+
+        // Validate the id parameter
+        if (!is_string($id) || empty($id)) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Invalid pricing plan ID'
+            ], 400);
+        }
+
+        try {
+            // Retrieve the billing plan by ID
+            $billingPlan = BillingPlan::find($id);
+
+            if (!$billingPlan) {
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'Pricing plan not found'
+                ], 404);
+            }
+
+            // Return the billing plan details
+            return response()->json([
+                'status' => 200,
+                'message' => 'Pricing plan retrieved successfully',
+                'data' => [
+                    'id' => $billingPlan->id,
+                    'name' => $billingPlan->name,
+                    'price' => $billingPlan->price,
+                ]
+            ], 200);
+        } catch (\Exception $e) {
+            // Handle unexpected errors
+            return response()->json([
+                'status' => 500,
+                'message' => 'Internal server error'
+            ], 500);
+        }
     }
 
     /**
