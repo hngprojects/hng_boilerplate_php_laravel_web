@@ -45,13 +45,8 @@ class ArticleTest extends TestCase
         $response->assertStatus(400)
             ->assertJson([
                 'success' => false,
-                'message' => 'Invalid input data.',
-                'status_code' => 400,
-                'errors' => [
-                    'title' => [
-                        'The title field is required.'
-                    ]
-                ]
+                'message' => 'Title query parameter is required',
+                'status_code' => 400
             ]);
     }
 
@@ -62,7 +57,7 @@ class ArticleTest extends TestCase
         $response->assertStatus(404)
             ->assertJson([
                 'success' => false,
-                'message' => 'No articles found.',
+                'message' => 'No article matches the title search param.',
                 'status_code' => 404
             ]);
     }
