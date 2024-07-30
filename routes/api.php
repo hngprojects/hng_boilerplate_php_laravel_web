@@ -37,6 +37,7 @@ use App\Http\Controllers\Api\V1\Auth\ForgetPasswordRequestController;
 use App\Http\Controllers\Api\V1\Organisation\OrganizationMemberController;
 
 use App\Http\Controllers\Api\V1\HelpArticleController;
+use App\Http\Controllers\Api\V1\JobSearchController;
 use App\Http\Controllers\Api\V1\User\ProfileController;
 
 /*
@@ -61,6 +62,7 @@ Route::prefix('v1')->group(function () {
     Route::post('/auth/request-password-request/{token}', ResetUserPasswordController::class);
     Route::post('/roles', [RoleController::class, 'store']);
     Route::get('/auth/google', [SocialAuthController::class, 'redirectToGoogle']);
+    Route::get('/auth/login-google', [SocialAuthController::class, 'redirectToGoogle']);
     Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
 
     Route::apiResource('/users', UserController::class);
@@ -127,8 +129,14 @@ Route::prefix('v1')->group(function () {
         Route::delete('/testimonials/{testimonial}', [TestimonialController::class, 'destroy']);
 
         // Jobs
-        Route::apiResource('/jobs', JobController::class);
+        Route::post('/jobs', [JobController::class, 'store']);
+        Route::get('/jobs', [JobController::class, 'index']);
+        Route::put('/jobs/{id}', [JobController::class, 'update']);
+        Route::delete('/jobs/{id}', [JobController::class, 'destroy']);
+        Route::get('/jobs/{id}', [JobController::class, 'show']);
+        Route::get('/jobs/search', [JobController::class, 'search']);
 
+        
         Route::get('/user/export/{format}', [ExportUserController::class, 'export']);
 
         // Accounts
