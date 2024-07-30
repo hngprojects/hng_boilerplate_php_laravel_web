@@ -2,11 +2,8 @@
 
 namespace Tests\Feature;
 
-use App\Models\BillingPlan;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Http\Response;
 use Tests\TestCase;
 
 class RetrieveAllBillingPlansTest extends TestCase
