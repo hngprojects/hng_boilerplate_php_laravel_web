@@ -8,6 +8,7 @@ use App\Models\BlogImage;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 class BlogSeeder extends Seeder
 {
@@ -26,8 +27,11 @@ class BlogSeeder extends Seeder
 
             $blog = Blog::factory()->create(['blog_category_id' => $blog_category->id]);
             
+            $image = UploadedFile::fake()->image('image1.jpg');
+            $path = Storage::putFile('public/images', $image);
+            $imageUrl = Storage::url($path);
             $blog_image = BlogImage::create([
-                'image_url' => json_encode([UploadedFile::fake()->image('image1.jpg')->getClientOriginalName()]),
+                'image_url' => $imageUrl,
                 'blog_id' => $blog->id
             ]);
         }
