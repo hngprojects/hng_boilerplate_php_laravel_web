@@ -141,12 +141,12 @@ Route::prefix('v1')->group(function () {
 
 
         // Organisations
-        Route::post('/organisations', [OrganisationController::class, 'store']);
-        Route::get('/organisations', [OrganisationController::class, 'index']);
-        Route::put('/organisations/{org_id}', [OrganisationController::class, 'update']);
-        Route::delete('/organisations/{org_id}', [OrganisationController::class, 'destroy']);
-        Route::delete('/organisations/{org_id}/users/{user_id}', [OrganisationController::class, 'removeUser']);
-        Route::get('/organisations/{organisation}/members', [OrganizationMemberController::class, 'index']);
+        Route::post('/organizations', [OrganisationController::class, 'store']);
+        Route::get('/organizations', [OrganisationController::class, 'index']);
+        Route::put('/organizations/{org_id}', [OrganisationController::class, 'update']);
+        Route::delete('/organizations/{org_id}', [OrganisationController::class, 'destroy']);
+        Route::delete('/organizations/{org_id}/users/{user_id}', [OrganisationController::class, 'removeUser']);
+        Route::get('/organizations/{organisation}/users', [OrganizationMemberController::class, 'index']);
 
         // members
         Route::get('/members/{org_id}/search', [OrganizationMemberController::class, 'searchMembers']);
