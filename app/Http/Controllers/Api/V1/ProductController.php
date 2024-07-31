@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Requests\UpdateProductRequest;
+use App\Models\OrganisationUser;
 use App\Models\ProductVariant;
 use App\Models\ProductVariantSize;
 use App\Models\User;
@@ -211,10 +212,19 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, string $product_id)
     {
+        // $org_id = $request->route('org_id');
+
+        // $isOwner = OrganisationUser::where('org_id', $org_id)->where('user_id', auth()->id())->exists();
+
+        // if (!$isOwner) {
+        //     return response()->json(['message' => 'You are not authorized to create products for this organization.'], 403);
+        // }
+
         $validated = $request->validated();
+        // dd($product_id);
 
         $product = Product::findOrFail($product_id);
-
+// dd($product);
         $product->update([
             'name' => $validated['name'] ?? $product->name,
             'is_archived' => $validated['is_archived'] ?? $product->is_archived,
