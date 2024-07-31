@@ -95,4 +95,40 @@ class ProductCreateTest extends TestCase
             'size_id' => $size->id
         ]);
     }
+
+    /** @test */
+    public function it_cannot_create_a_product_if_not_an_owner()
+    {
+        // Create two users, one who is not an owner
+        $user = User::factory()->create();
+        $otherUser = User::factory()->create();
+        $this->actingAs($otherUser);
+
+        // Create a size with 'standard'
+        $size = Size::create(['size' => 'standard']);
+
+        // Create a category
+        $category = Category::create(['name' => 'Test Category', 'slug' => 'test-category', 'description' => 'Testing']);
+
+        // Create an organisation and get the first instance
+        $organisation = Organisation::factory()->create();
+
+        // Define the payload
+        $payload = [
+            'title' => 'Unauthorized Product',
+            'description' => 'Unauthorized Description',
+            'category' => $category->id, // Use the created category ID
+            'price' => 100,
+            'stock' => 10,
+            'image' => 'test_image.jpg',
+            'org_id' => $organisation->org_id
+        ];
+
+        // Send POST request to create product
+        $response = $this->postJson("/api/v1/products/{$organisation->org_id}", $payload);
+
+        // Assert the response status is 403 Forbidden
+        $response->assertStatus(403)
+                 ->assertJson(['message' => 'You are not authorized to create products for this organization.']);
+    }
 }

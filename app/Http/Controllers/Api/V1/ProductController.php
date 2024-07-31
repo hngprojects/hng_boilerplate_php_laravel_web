@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Models\CategoryProduct;
+use App\Models\OrganisationUser;
 use App\Models\ProductVariant;
 use App\Models\ProductVariantSize;
 use App\Models\Size;
@@ -173,6 +174,12 @@ class ProductController extends Controller
         // }
 
         $org_id = $request->route('org_id');
+
+        $isOwner = OrganisationUser::where('org_id', $org_id)->where('user_id', auth()->id())->exists();
+
+        if (!$isOwner) {
+            return response()->json(['message' => 'You are not authorized to create products for this organization.'], 403);
+        }
 
         $product = Product::create([
             'name' => $request->input('title'),
