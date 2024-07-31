@@ -112,6 +112,29 @@ class RoleController extends Controller
         }
     }
 
+    public function assignRole(Request $request, $org_id, $user_id) { 
+      $validator = Validator::make($request->all(), [
+        'role' => 'required|string|exists:roles,name',
+      ]);
+
+      if ($validator->fails()) {
+        return $this->apiResponse($validator->errors(), 422);
+      }
+
+      $user = User::find($user_id);
+      if (!$user) return ResponseHelper::response("User not found", 404, null);
+      if($organisation = Organisation::find($org_id)){
+        if(!$organisation->users->contains($user->id))
+          return ResponseHelper::response("You are not authorised to perform this action", 409, null);
+
+        $role_id = Role::where('org_id', $org_id)->where('name', $request->role)->pluck('id');
+        if($result = $user->roles()->syncWithoutDetaching($role_id))
+          return ResponseHelper::response("Roles updated successfully", 200, null);
+        else 
+          return response()->json(['message' => 'Role update failed', 'error' => $result], 400);
+        } else return ResponseHelper::response("Organisation not found", 404, null);
+    }
+
     public function update(UpdateRoleRequest $request, $org_id, $role_id)
     {
         $user = auth('api')->user();
