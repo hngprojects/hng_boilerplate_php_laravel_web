@@ -198,4 +198,10 @@ class User extends Authenticatable  implements JWTSubject, CanResetPasswordContr
     {
         $this->notify(new \App\Notifications\ResetPasswordNotification($token));
     }
+
+    // Making the User model has a relationship to the NotificationSettings model.
+    public function notificationSettings()
+    {
+        return $this->hasOne(NotificationSettings::class);
+    }
 }
