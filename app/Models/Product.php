@@ -11,15 +11,7 @@ class Product extends Model
 {
     use HasFactory, HasUuids;
 
-    protected $fillable = [
-        'user_id',
-        'name',
-        'description',
-        'price',
-        'slug',
-        'imageUrl',
-        'tags',
-    ];
+    protected $guarded = [];
 
     /**
      * The primary key associated with the table.
@@ -51,8 +43,10 @@ class Product extends Model
     {
         return $this->belongsToMany(Category::class, 'category_product', 'product_id', 'category_id')->using(CategoryProduct::class);
     }
+
+    //updated the product variant relationship
     public function productsVariant()
     {
-        return $this->hasMany(ProductVariant::class);
+        return $this->hasMany(ProductVariant::class, 'product_id', 'product_id');
     }
 }

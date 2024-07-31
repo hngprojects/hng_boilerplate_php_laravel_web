@@ -6,6 +6,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\Product;
+use App\Models\ProductVariant;
+use App\Models\Category;
 use App\Models\User;
 
 class ProductIndexTest extends TestCase
@@ -15,17 +17,28 @@ class ProductIndexTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        // Seed the database with test data
-        Product::factory()->count(50)->create();
+
+        // Create user and products
+        $user = User::factory()->create();
+        $this->actingAs($user, 'api');
+
+        $products = Product::factory()->count(50)->create(['user_id' => $user->id]);
+
+        // Create categories and associate with products
+        $categories = Category::factory()->count(5)->create();
+        foreach ($products as $product) {
+            $product->categories()->attach($categories->random());
+        }
+
+        // Create product variants and associate with products
+        foreach ($products as $product) {
+            ProductVariant::factory()->create(['product_id' => $product->product_id]);
+        }
     }
 
     /** @test */
     public function it_fetches_products_with_pagination()
     {
-        // Create and authenticate a user
-        $user = User::factory()->create();
-        $this->actingAs($user, 'api');
-
         $response = $this->getJson('/api/v1/products?page=1&limit=10');
 
         $response->assertStatus(200);
@@ -33,44 +46,47 @@ class ProductIndexTest extends TestCase
             'success',
             'message',
             'products' => [
-                '*' => ['name', 'price']
+                '*' => [
+                    'name',
+                    'price',
+                    'imageUrl',
+                    'description',
+                    'product_id',
+                    'quantity',
+                    'category',
+                    'stock',
+                    'status',
+                    'date_added',
+                ],
             ],
             'pagination' => [
                 'totalItems',
                 'totalPages',
-                'currentPage'
+                'currentPage',
             ],
-            'status_code'
+            'status_code',
         ]);
     }
 
     /** @test */
     public function it_validates_pagination_parameters()
     {
-        // Create and authenticate a user
-        $user = User::factory()->create();
-        $this->actingAs($user, 'api');
-
         $response = $this->getJson('/api/v1/products?page=0&limit=10');
 
         $response->assertStatus(400);
         $response->assertJson([
             'status' => 'bad request',
             'message' => 'Invalid query params passed',
-            'status_code' => 400
+            'status_code' => 400,
         ]);
     }
 
     /** @test */
     // public function it_handles_internal_server_error()
     // {
-    //     // Create and authenticate a user
-    //     $user = User::factory()->create();
-    //     $this->actingAs($user, 'api');
-
     //     // Mock the Product model to throw an exception
     //     $this->mock(Product::class, function ($mock) {
-    //         $mock->shouldReceive('count')->andThrow(new \Exception('Internal server error'));
+    //         $mock->shouldReceive('select')->andThrow(new \Exception('Internal server error'));
     //     });
 
     //     $response = $this->getJson('/api/v1/products?page=1&limit=10');
@@ -79,7 +95,7 @@ class ProductIndexTest extends TestCase
     //     $response->assertJson([
     //         'status' => 'error',
     //         'message' => 'Internal server error',
-    //         'status_code' => 500
+    //         'status_code' => 500,
     //     ]);
     // }
 }
