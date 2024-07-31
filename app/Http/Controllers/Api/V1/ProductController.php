@@ -84,7 +84,9 @@ class ProductController extends Controller
             'category' => 'nullable|string|max:255',
             'minPrice' => 'nullable|numeric|min:0',
             'maxPrice' => 'nullable|numeric|min:0',
-            'status' => 'nullable|string|in:in_stock,out_of_stock,low_on_stock'
+            'status' => 'nullable|string|in:in_stock,out_of_stock,low_on_stock',
+            'page' => 'nullable|integer|min:1',
+            'limit' => 'nullable|integer|min:1|max:100',
         ]);
 
         if ($validator->fails()) {
@@ -101,7 +103,7 @@ class ProductController extends Controller
             return response()->json([
                 'success' => false,
                 'errors' => $errors,
-                'statusCode' => 422
+                'status_code' => 422
             ], 422);
         }
 
@@ -130,7 +132,11 @@ class ProductController extends Controller
             });
         }
 
-        $products = $query->with(['productsVariant', 'categories'])->get();
+        //$products = $query->with(['productsVariant', 'categories'])->get();
+        $page = $request->input('page', 1);
+        $limit = $request->input('limit', 10);
+        $products = $query->with(['productsVariant', 'categories'])
+                      ->paginate($limit, ['*'], 'page', $page);
 
         $transformedProducts = $products->map(function ($product) {
             return [
@@ -150,7 +156,13 @@ class ProductController extends Controller
         return response()->json([
             'success' => true,
             'products' => $transformedProducts,
-            'statusCode' => 200
+            'pagination' => [
+                'totalItems' => $products->total(),
+                'totalPages' => $products->lastPage(),
+                'currentPage' => $products->currentPage(),
+                'perPage' => $products->perPage(),
+             ],
+            'status_code' => 200
         ], 200);
     }
 
