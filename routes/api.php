@@ -199,7 +199,7 @@ Route::prefix('v1')->group(function () {
 
 
 
-    });
+
 
     Route::post('/waitlists', [WaitListController::class, 'store']);
     Route::apiResource('faqs', FaqController::class);
@@ -227,12 +227,6 @@ Route::prefix('v1')->group(function () {
     Route::patch('/notifications/{notification}', [UserNotificationController::class, 'update']);
     Route::delete('/notifications', [UserNotificationController::class, 'destroy']);
 
-
-
-
-Route::group(['middleware' => ['auth:api']], function () {
-    Route::post('/user/preferences', [PreferenceController::class, 'store']);
-    Route::put('/user/preferences/{id}', [PreferenceController::class, 'update']);
-    Route::get('/user/preferences', [PreferenceController::class, 'index']);
-    Route::delete('/user/preferences/{id}', [PreferenceController::class, 'delete']);
 });
+
+
