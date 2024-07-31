@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Models\ProductVariant;
+use App\Models\ProductVariantSize;
 use App\Models\User;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -157,9 +159,53 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $product_id)
     {
-        //
+        $product = Product::findOrFail($product_id);
+
+        $product->update([
+            'title' => $request->input('title'),
+            'description' => $request->input('description'),
+            // 'tags' => $request->input('category'),
+            // 'price' => $request->input('price'),
+            'is_archived' => $request->input('is_archived'),
+            'imageUrl' => $request->input('image')
+        ]);
+
+        // CategoryProduct::where('product_id', $product_id)->update([
+        //     'category_id' => $request->input('category')
+        // ]);
+
+        foreach ($request->input('productsVariant') as $variant) {
+            $productVariant = ProductVariant::where('product_id', $product->product_id)
+                ->where('size_id', $variant['size_id'])
+                ->first();
+
+            if ($productVariant) {
+                // Update existing product variant
+                $productVariant->update([
+                    'stock' => $variant['stock'],
+                    'stock_status' => $variant['stock'] > 0 ? 'in_stock' : 'out_stock',
+                    'price' => $variant['price'],
+                ]);
+            } else {
+                // Create new product variant
+                $newProductVariant = ProductVariant::create([
+                    'product_id' => $product->product_id,
+                    'stock' => $variant['stock'],
+                    'stock_status' => $variant['stock'] > 0 ? 'in_stock' : 'out_stock',
+                    'price' => $variant['price'],
+                    'size_id' => $variant['size_id'],
+                ]);
+
+                ProductVariantSize::create([
+                    'product_variant_id' => $newProductVariant->id,
+                    'size_id' => $variant['size_id'],
+                ]);
+            }
+        }
+
+        return response()->json(['message' => 'Product updated successfully', 'product' => $product], 200);
     }
 
     /**
