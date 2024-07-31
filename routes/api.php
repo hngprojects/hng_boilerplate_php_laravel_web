@@ -139,6 +139,12 @@ Route::prefix('v1')->group(function () {
     Route::patch('/notification-settings/{user_id}', [NotificationPreferenceController::class, 'update']);
     });
 
+    // Notification settings(retrieving and updating)
+    Route::middleware('auth:api')->group(function () {
+        Route::get('/notification-settings', [NotificationSettingsController::class, 'getSettings']);
+        Route::patch('/notification-settings', [NotificationSettingsController::class, 'updateSettings']);
+    });
+
 
 Route::group(['middleware' => ['auth:api']], function () {
     Route::post('/user/preferences', [PreferenceController::class, 'store']);
