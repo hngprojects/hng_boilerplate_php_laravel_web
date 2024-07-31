@@ -22,6 +22,8 @@ class ProductResource extends JsonResource
             'imageUrl' => $this->imageUrl,
             'sock' => $this->quantity,
             'date_added' => $this->created_at,
+            'category' => $this->categories->isNotEmpty() ? $this->categories->map->name : [],
+
         ];
     }
 }
