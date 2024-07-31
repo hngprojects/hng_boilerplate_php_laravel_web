@@ -17,7 +17,7 @@ class BillingPlanController extends Controller
             $plans = BillingPlan::select(['id', 'name', 'price'])->get();
             return response()->json([
                 'status' => Response::HTTP_OK,
-                'message' => 'Pricing plans retrieved successfully',
+                'message' => 'Billing plans retrieved successfully',
                 'data' => $plans,
             ]);
 
@@ -56,7 +56,7 @@ class BillingPlanController extends Controller
         if (!is_string($id) || empty($id)) {
             return response()->json([
                 'status' => 400,
-                'message' => 'Invalid pricing plan ID'
+                'message' => 'Invalid billing plan ID'
             ], 400);
         }
 
@@ -67,14 +67,14 @@ class BillingPlanController extends Controller
             if (!$billingPlan) {
                 return response()->json([
                     'status' => 404,
-                    'message' => 'Pricing plan not found'
+                    'message' => 'Billing plan not found'
                 ], 404);
             }
 
             // Return the billing plan details
             return response()->json([
                 'status' => 200,
-                'message' => 'Pricing plan retrieved successfully',
+                'message' => 'Billing plans retrieved successfully',
                 'data' => [
                     'id' => $billingPlan->id,
                     'name' => $billingPlan->name,
