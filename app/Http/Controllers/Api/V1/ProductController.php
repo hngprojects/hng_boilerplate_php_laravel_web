@@ -175,7 +175,7 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request, $org_id)
     {
         try {
             // Validate pagination parameters
@@ -190,8 +190,19 @@ class ProductController extends Controller
             // Calculate offset
             $offset = ($page - 1) * $limit;
 
-            
-            $products = Product::select(
+            $user = auth('api')->user();
+
+            if (!$user->organisations->contains($org_id)) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Unauthorized: You are not a member of this organisation',
+                    'status_code' => 403
+                ], 403);
+            }
+
+            //$products = Product::select(
+            $products = Product::where('org_id', $org_id)
+            ->select(
             'product_id',
             'name',
             'price', 
@@ -206,7 +217,8 @@ class ProductController extends Controller
                 ->get();
 
             // Get total product count
-            $totalItems = Product::count();
+            //$totalItems = Product::count();
+            $totalItems = Product::where('org_id', $org_id)->count(); 
             $totalPages = ceil($totalItems / $limit);
 
             $transformedProducts = $products->map(function ($product) {
