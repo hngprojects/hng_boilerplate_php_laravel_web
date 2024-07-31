@@ -9,4 +9,12 @@ use Illuminate\Database\Eloquent\Model;
 class Notification extends Model
 {
     use HasFactory, HasUuids;
+
+    protected $fillable = ['type', 'title', 'message'];
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'user_notifications')->withPivot('status')
+            ->withTimestamps();;
+    }
 }
