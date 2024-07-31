@@ -1,7 +1,7 @@
 <?php
 
-
-
+use App\Http\Controllers\Api\V1\Admin\BlogCategoriesController;
+use App\Http\Controllers\Api\V1\Admin\FaqController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\JobController;
@@ -21,24 +21,21 @@ use App\Http\Controllers\Api\V1\PreferenceController;
 use App\Http\Controllers\Api\V1\User\AccountController;
 use App\Http\Controllers\InvitationAcceptanceController;
 use App\Http\Controllers\Api\V1\Admin\CustomerController;
-
 use App\Http\Controllers\Api\V1\User\ExportUserController;
 use App\Http\Controllers\Api\V1\NotificationPreferenceController;
-
 use App\Http\Controllers\Api\V1\Admin\Plan\FeatureController;
 use App\Http\Controllers\Api\V1\Auth\ResetUserPasswordController;
 use App\Http\Controllers\Api\V1\Admin\Plan\SubscriptionController;
-
-
 use App\Http\Controllers\Api\V1\Testimonial\TestimonialController;
-
 use App\Http\Controllers\Api\V1\Organisation\OrganisationController;
-
 use App\Http\Controllers\Api\V1\Auth\ForgetPasswordRequestController;
+use App\Http\Controllers\Api\V1\CommentController;
 use App\Http\Controllers\Api\V1\Organisation\OrganizationMemberController;
 use App\Http\Controllers\Api\V1\Admin\ProductsController;
-
-
+use App\Http\Controllers\Api\V1\HelpArticleController;
+use App\Http\Controllers\BillingPlanController;
+use App\Http\Controllers\Api\V1\User\ProfileController;
+use App\Http\Controllers\Api\V1\JobSearchController;
 
 /*
 |--------------------------------------------------------------------------
@@ -61,38 +58,32 @@ Route::prefix('v1')->group(function () {
     Route::post('/auth/password-reset-email', ForgetPasswordRequestController::class)->name('password.reset');
     Route::post('/auth/request-password-request/{token}', ResetUserPasswordController::class);
     Route::post('/roles', [RoleController::class, 'store']);
-    Route::get('/auth/social/google', [SocialAuthController::class, 'redirectToGoogle']);
+    Route::get('/auth/google', [SocialAuthController::class, 'redirectToGoogle']);
+    Route::get('/auth/login-google', [SocialAuthController::class, 'redirectToGoogle']);
     Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
 
     Route::apiResource('/users', UserController::class);
 
     Route::get('/products/categories', [CategoryController::class, 'index']);
     Route::get('/products/search', [ProductController::class, 'search']);
+    Route::get('/billing-plans', [BillingPlanController::class, 'index']);
+    Route::get('/billing-plans/{id}', [BillingPlanController::class, 'getBillingPlan']);
 
     Route::middleware('throttle:10,1')->get('/topics/search', [ArticleController::class, 'search']);
-
 
     Route::middleware('auth:api')->group(function () {
         Route::get('/products', [ProductController::class, 'index']);
         Route::post('/products', [ProductController::class, 'store']);
         Route::delete('/products/{productId}', [ProductController::class, 'destroy']);
-    });
 
-    Route::middleware('throttle:10,1')->get('/help-center/topics/search', [ArticleController::class, 'search']);
-    Route::post('/contact', [ContactController::class, 'sendInquiry']);
-
-    Route::get('/blogs/latest', [BlogController::class, 'latest']);
-    Route::get('/blogs/search', [BlogSearchController::class, 'search']);
-
-    Route::post('/squeeze', [SqueezeController::class, 'store']);
-
-
-    Route::post('/invitations/generate', [InvitationAcceptanceController::class, 'generateInvitation']);
-    Route::get('/invite/accept', [InvitationAcceptanceController::class, 'acceptInvitation']);
-    Route::post('/invite', [InvitationAcceptanceController::class, 'acceptInvitationPost']);
-
-
-    Route::middleware('auth:api')->group(function () {
+        // Comment routes
+        Route::post('/blogs/{blogId}/comments', [CommentController::class, 'createComment']);
+        Route::post('/comments/{commentId}/reply', [CommentController::class, 'replyComment']);
+        Route::post('/comments/{commentId}/like', [CommentController::class, 'likeComment']);
+        Route::post('/comments/{commentId}/dislike', [CommentController::class, 'dislikeComment']);
+        Route::patch('/comments/edit/{commentId}', [CommentController::class, 'editComment']);
+        Route::delete('/comments/{commentId}', [CommentController::class, 'deleteComment']);
+        Route::get('/blogs/{blogId}/comments', [CommentController::class, 'getBlogComments']);
 
         // Subscriptions, Plans and Features
         Route::apiResource('/features', FeatureController::class);
@@ -107,9 +98,8 @@ Route::prefix('v1')->group(function () {
         Route::delete('/organisations/{org_id}/users/{user_id}', [OrganisationController::class, 'removeUser']);
         Route::get('/organisations/{organisation}/members', [OrganizationMemberController::class, 'index']);
 
-        Route::delete('/organizations/{org_id}', [OrganisationController::class, 'destroy']);
-
-        Route::post('/blogs', [BlogController::class, 'store']);
+        // Members
+        Route::get('/members/{org_id}/search', [OrganizationMemberController::class, 'searchMembers']);
 
         // Testimonials
         Route::post('/testimonials', [TestimonialController::class, 'store']);
@@ -117,7 +107,9 @@ Route::prefix('v1')->group(function () {
         Route::delete('/testimonials/{testimonial}', [TestimonialController::class, 'destroy']);
 
         // Jobs
-        Route::apiResource('/jobs', JobController::class);
+        Route::post('/jobs', [JobController::class, 'store']);
+        Route::put('/jobs/{id}', [JobController::class, 'update']);
+        Route::delete('/jobs/{id}', [JobController::class, 'destroy']);
 
         Route::get('/user/export/{format}', [ExportUserController::class, 'export']);
 
@@ -125,13 +117,20 @@ Route::prefix('v1')->group(function () {
         Route::patch('/accounts/deactivate', [AccountController::class, 'deactivate']);
 
         // Roles
-        Route::put('/organisations/{org_id/roles/{role_id}/disable', [RoleController::class, 'disableRole']);
+        Route::put('/organisations/{org_id}/roles/{role_id}', [RoleController::class, 'update']);
         Route::put('/organisations/{org_id}/roles/{role_id}/disable', [RoleController::class, 'disableRole']);
+
+        // Update Password
+        Route::post('/password-update', [ProfileController::class, 'updatePassword']);
+        // Profile Update
+        Route::patch('/profile', [ProfileController::class, 'update']);
+        Route::post('/profile/upload-image', [ProfileController::class, 'uploadImage']);
     });
 
-    Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
-    Route::delete('/blogs/{id}', [BlogController::class, 'destroy'])->middleware(['auth:api', 'admin']);
     Route::middleware(['auth:api', 'admin'])->group(function () {
+        Route::get('/customers', [CustomerController::class, 'index']);
+        Route::delete('/blogs/{id}', [BlogController::class, 'destroy']);
+
         // Products
         Route::get('/products', [ProductsController::class, 'index']);
         Route::post('/products', [ProductsController::class, 'store']);
@@ -141,8 +140,8 @@ Route::prefix('v1')->group(function () {
         Route::get('/products/{product_id}/edit', [ProductsController::class, 'edit']);
         Route::get('/products/stats/total-revenue', [ProductsController::class, 'totalRevenue']);
         Route::get('/products/stats/total-price', [ProductsController::class, 'totalPrice']);
-
     });
+
     Route::group(['middleware' => ['auth:api']], function () {
         Route::post('/user/preferences', [PreferenceController::class, 'store']);
         Route::put('/user/preferences/{id}', [PreferenceController::class, 'update']);
@@ -152,14 +151,4 @@ Route::prefix('v1')->group(function () {
 
     // Notification settings
     Route::patch('/notification-settings/{user_id}', [NotificationPreferenceController::class, 'update']);
-    });
-
-
-Route::group(['middleware' => ['auth:api']], function () {
-    Route::post('/user/preferences', [PreferenceController::class, 'store']);
-    Route::put('/user/preferences/{id}', [PreferenceController::class, 'update']);
-    Route::get('/user/preferences', [PreferenceController::class, 'index']);
-    Route::delete('/user/preferences/{id}', [PreferenceController::class, 'delete']);
 });
-
-
