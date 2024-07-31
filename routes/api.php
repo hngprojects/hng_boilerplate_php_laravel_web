@@ -49,7 +49,7 @@ Route::prefix('v1')->group(function () {
     Route::post('/auth/logout', [LoginController::class, 'logout'])->middleware('auth:api');
     Route::post('/auth/password-reset-email', ForgetPasswordRequestController::class)->name('password.reset');
     Route::post('/auth/request-password-request/{token}', ResetUserPasswordController::class);
-    
+
     // Social auth routes
     Route::get('/auth/google', [SocialAuthController::class, 'redirectToGoogle']);
     Route::get('/auth/login-google', [SocialAuthController::class, 'redirectToGoogle']);
@@ -70,7 +70,7 @@ Route::prefix('v1')->group(function () {
     // Product and category routes
     Route::get('/products/categories', [CategoryController::class, 'index']);
     Route::get('/products/search', [ProductController::class, 'search']);
-    
+
     // Billing plan routes
     Route::get('/billing-plans', [BillingPlanController::class, 'index']);
     Route::get('/billing-plans/{id}', [BillingPlanController::class, 'getBillingPlan']);
@@ -158,8 +158,6 @@ Route::prefix('v1')->group(function () {
         Route::get('/customers', [CustomerController::class, 'index']);
         Route::delete('/blogs/{id}', [BlogController::class, 'destroy']);
         Route::post('/blogs/categories', [BlogCategoriesController::class, 'store'])->name('admin.blog-category.create');
-
-        // Admin product routes
         Route::get('/products', [ProductsController::class, 'index']);
         Route::post('/products', [ProductsController::class, 'store']);
         Route::get('/products/{id}', [ProductsController::class, 'show']);
