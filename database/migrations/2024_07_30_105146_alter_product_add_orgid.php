@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('faqs', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->string('question');
-            $table->text('answer');
-            $table->boolean('status')->default(1);
-            $table->timestamps();
+        //
+        Schema::table('products', function (Blueprint $table) {
+            $table->foreignUuid('org_id')->references('org_id')->on('organisations')->constrained()->onDelete('cascade')->onUpdate('cascade')->nullable();
         });
     }
 
@@ -25,6 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('faqs');
+        //
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropColumn('org_id');
+        });
     }
 };

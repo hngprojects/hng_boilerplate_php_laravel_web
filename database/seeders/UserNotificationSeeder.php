@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\UserNotification;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -12,6 +13,6 @@ class UserNotificationSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        UserNotification::factory()->count(5)->create();
     }
 }
