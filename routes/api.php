@@ -1,46 +1,42 @@
 <?php
 
 use App\Http\Controllers\Api\V1\Admin\BlogCategoriesController;
+use App\Http\Controllers\Api\V1\Admin\BlogController;
+use App\Http\Controllers\Api\V1\Admin\CustomerController;
+use App\Http\Controllers\Api\V1\Admin\EmailTemplateController;
+use App\Http\Controllers\Api\V1\Admin\Plan\FeatureController;
+use App\Http\Controllers\Api\V1\Admin\Plan\SubscriptionController;
 use App\Http\Controllers\Api\V1\Admin\FaqController;
+use App\Http\Controllers\UserNotificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\JobController;
 use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Controllers\Api\V1\ArticleController;
+use App\Http\Controllers\Api\V1\Auth\AuthController;
+use App\Http\Controllers\Api\V1\Auth\ForgetPasswordRequestController;
+use App\Http\Controllers\Api\V1\Auth\LoginController;
+use App\Http\Controllers\Api\V1\Auth\ResetUserPasswordController;
+use App\Http\Controllers\Api\V1\Auth\SocialAuthController;
+use App\Http\Controllers\Api\V1\BlogSearchController;
+use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\ContactController;
+use App\Http\Controllers\Api\V1\HelpArticleController;
+use App\Http\Controllers\Api\V1\NotificationPreferenceController;
+use App\Http\Controllers\Api\V1\Organisation\OrganisationController;
+use App\Http\Controllers\Api\V1\CommentController;
+use App\Http\Controllers\Api\V1\Organisation\OrganizationMemberController;
+use App\Http\Controllers\Api\V1\PreferenceController;
 use App\Http\Controllers\Api\V1\ProductController;
 use App\Http\Controllers\Api\V1\SqueezeController;
-use App\Http\Controllers\Api\V1\CategoryController;
-use App\Http\Controllers\Api\V1\Auth\AuthController;
-use App\Http\Controllers\Api\V1\Auth\SocialAuthController;
 use App\Http\Controllers\Api\V1\User\UserController;
-use App\Http\Controllers\Api\V1\Admin\BlogController;
-use App\Http\Controllers\Api\V1\Auth\LoginController;
-use App\Http\Controllers\Api\V1\BlogSearchController;
-use App\Http\Controllers\Api\V1\PreferenceController;
 use App\Http\Controllers\Api\V1\User\AccountController;
 use App\Http\Controllers\InvitationAcceptanceController;
-use App\Http\Controllers\Api\V1\Admin\CustomerController;
-
 use App\Http\Controllers\Api\V1\User\ExportUserController;
-use App\Http\Controllers\Api\V1\NotificationPreferenceController;
-
-use App\Http\Controllers\Api\V1\Admin\Plan\FeatureController;
-use App\Http\Controllers\Api\V1\Auth\ResetUserPasswordController;
-use App\Http\Controllers\Api\V1\Admin\Plan\SubscriptionController;
 
 
 use App\Http\Controllers\Api\V1\Testimonial\TestimonialController;
-
-use App\Http\Controllers\Api\V1\Organisation\OrganisationController;
-
-use App\Http\Controllers\Api\V1\Auth\ForgetPasswordRequestController;
-use App\Http\Controllers\Api\V1\CommentController;
-use App\Http\Controllers\Api\V1\Organisation\OrganizationMemberController;
-
-use App\Http\Controllers\Api\V1\HelpArticleController;
 use App\Http\Controllers\BillingPlanController;
-
 use App\Http\Controllers\Api\V1\User\ProfileController;
 use App\Http\Controllers\Api\V1\JobSearchController;
 
@@ -73,7 +69,11 @@ Route::prefix('v1')->group(function () {
     Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
 
     Route::apiResource('/users', UserController::class);
-
+    
+    //jobs
+    Route::get('/jobs', [JobController::class, 'index']);
+    Route::get('/jobs/search', [JobSearchController::class, 'search']);
+    Route::get('/jobs/{id}', [JobController::class, 'show']);
 
     Route::get('/products/categories', [CategoryController::class, 'index']);
     Route::get('/products/search', [ProductController::class, 'search']);
@@ -88,6 +88,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/products', [ProductController::class, 'index']);
         Route::post('/products', [ProductController::class, 'store']);
         Route::delete('/products/{productId}', [ProductController::class, 'destroy']);
+        Route::get('/products/{product_id}', [ProductController::class, 'show']);
     });
 
 
@@ -107,8 +108,8 @@ Route::prefix('v1')->group(function () {
     Route::middleware('throttle:10,1')->get('/help-center/topics/search', [ArticleController::class, 'search']);
     Route::post('/contact', [ContactController::class, 'sendInquiry']);
 
-    Route::get('/blogs/latest', [BlogController::class, 'latest']);
-    Route::get('/blogs/search', [BlogSearchController::class, 'search']);
+    Route::get('/blog/latest', [BlogController::class, 'latest']);
+    Route::get('/blog/search', [BlogSearchController::class, 'search']);
 
     Route::post('/squeeze', [SqueezeController::class, 'store']);
 
@@ -121,11 +122,10 @@ Route::prefix('v1')->group(function () {
     Route::get('/help-center/topics', [HelpArticleController::class, 'getArticles']);
     Route::get('/help-center/topics/search', [HelpArticleController::class, 'search']);
 
-    //jobs
-    Route::get('/jobs', [JobController::class, 'index']);
-    Route::get('/jobs/search', [JobSearchController::class, 'search']);
-    Route::get('/jobs/{id}', [JobController::class, 'show']);
-
+    Route::middleware(['auth:api', 'admin'])->group(function () {
+        Route::get('/email-templates', [EmailTemplateController::class, 'index']);
+        Route::patch('/email-templates/{id}', [EmailTemplateController::class, 'update']);
+    });
 
 
     Route::post('/invitations/generate', [InvitationAcceptanceController::class, 'generateInvitation']);
@@ -182,7 +182,6 @@ Route::prefix('v1')->group(function () {
         //profile Update
         Route::patch('/profile', [ProfileController::class, 'update']);
         Route::post('/profile/upload-image', [ProfileController::class, 'uploadImage']);
-
     });
 
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
@@ -198,8 +197,11 @@ Route::prefix('v1')->group(function () {
     });
 
 
-    Route::post('/waitlists', [WaitListController::class, 'store']);
+  
 
+    });
+
+    Route::post('/waitlists', [WaitListController::class, 'store']);
     Route::apiResource('faqs', FaqController::class);
 
 
@@ -211,11 +213,20 @@ Route::prefix('v1')->group(function () {
         Route::put('/user/preferences/{id}', [PreferenceController::class, 'update']);
         Route::get('/user/preferences', [PreferenceController::class, 'index']);
         Route::delete('/user/preferences/{id}', [PreferenceController::class, 'delete']);
-
     });
 
     // Notification settings
     Route::patch('/notification-settings/{user_id}', [NotificationPreferenceController::class, 'update']);
+
+
+    Route::middleware(['auth:api', 'admin'])->group(function () {
+        //Email Template
+        Route::apiResource('email-templates', EmailTemplateController::class);
+    });
+    // User Notification
+    Route::patch('/notifications/{notification}', [UserNotificationController::class, 'update']);
+    Route::delete('/notifications', [UserNotificationController::class, 'destroy']);
+
 });
 
 
