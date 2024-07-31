@@ -10,6 +10,8 @@ class ProductVariantSize extends Model
 {
     use HasFactory, HasUuids;
 
+    protected $guarded = [];
+
     protected $primaryKey = 'id';
     protected $keyType = 'uuid';
     public $incrementing = false;
