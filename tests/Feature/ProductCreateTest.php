@@ -52,7 +52,7 @@ class ProductCreateTest extends TestCase
     ];
 
     // Send POST request to create product
-    $response = $this->postJson("/api/v1/products/{$organisation->org_id}", $payload);
+    $response = $this->postJson("/api/v1/organizations/{$organisation->org_id}/products", $payload);
 
     // Assert the response status and structure
     $response->assertStatus(201)
@@ -132,7 +132,7 @@ class ProductCreateTest extends TestCase
         ];
 
         // Send POST request to create product
-        $response = $this->postJson("/api/v1/products/{$organisation->org_id}", $payload);
+        $response = $this->postJson("/api/v1/organizations/{$organisation->org_id}/products", $payload);
 
         // Assert the response status is 403 Forbidden
         $response->assertStatus(403)
