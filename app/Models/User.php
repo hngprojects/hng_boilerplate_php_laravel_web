@@ -188,6 +188,12 @@ class User extends Authenticatable  implements JWTSubject, CanResetPasswordContr
         return $this->hasMany(Preference::class);
     }
 
+    public function notifications()
+    {
+        return $this->belongsToMany(Notification::class, 'user_notifications')->withPivot('status')
+            ->withTimestamps();;
+    }
+
     /**
      * Send the password reset notification.
      *

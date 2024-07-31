@@ -66,8 +66,11 @@ Route::prefix('v1')->group(function () {
     Route::get('/auth/login-google', [SocialAuthController::class, 'redirectToGoogle']);
     Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
 
+    Route::get('/auth/login-facebook', [SocialAuthController::class, 'loginUsingFacebook']);
+    Route::get('/auth/facebook/callback', [SocialAuthController::class, 'callbackFromFacebook']);
+
     Route::apiResource('/users', UserController::class);
-    
+
     //jobs
     Route::get('/jobs', [JobController::class, 'index']);
     Route::get('/jobs/search', [JobSearchController::class, 'search']);
@@ -172,8 +175,7 @@ Route::prefix('v1')->group(function () {
         // Roles
         Route::put('/organisations/{org_id}/roles/{role_id}', [RoleController::class, 'update']);
         Route::put('/organisations/{org_id}/roles/{role_id}/disable', [RoleController::class, 'disableRole']);
-
-
+        Route::put('/organisations/{org_id}/{role_id}/permissions', [RoleController::class, 'assignPermissions']);
 
         //Update Password
         Route::post('/password-update', [ProfileController::class, 'updatePassword']);
@@ -217,7 +219,8 @@ Route::prefix('v1')->group(function () {
     // User Notification
     Route::patch('/notifications/{notification}', [UserNotificationController::class, 'update']);
     Route::delete('/notifications', [UserNotificationController::class, 'destroy']);
-
+    Route::post('/notifications', [UserNotificationController::class, 'create'])->middleware('auth.jwt');
+    Route::get('/notifications', [UserNotificationController::class, 'getByUser'])->middleware('auth.jwt');
 });
 
 
