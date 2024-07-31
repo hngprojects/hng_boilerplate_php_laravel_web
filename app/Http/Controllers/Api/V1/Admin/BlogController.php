@@ -32,7 +32,7 @@ class BlogController extends Controller
             // Fetch the latest blog posts with pagination
             $blogPosts = Blog::orderBy('created_at', 'desc')
                 ->select('id', 'title', 'content', 'author', 'created_at', 'blog_category_id')
-                ->with('blog_category', 'images')
+                ->with('blog_category', 'image')
                 ->paginate($pageSize, ['*'], 'page', $page);
 
             // Manually construct next and previous URLs with page_size parameter
@@ -125,7 +125,7 @@ class BlogController extends Controller
 
             if($request->has('images')){
                 foreach ($request->file('images') as $image) {
-                    $saved = Storage::disk('public')->put('blog_header', $image);
+                    $saved = Storage::disk('public')->put('images', $image);
                     if ($saved) {
                         BlogImage::create([
                             'image_url' => $saved,
@@ -157,7 +157,7 @@ class BlogController extends Controller
     {
         try {
 
-            $blog = Blog::with('images')->find($id);
+            $blog = Blog::with('image', 'blog_category')->find($id);
 
             if(!$blog){
                 return response()->json([
@@ -211,7 +211,7 @@ class BlogController extends Controller
 
                 // Upload new images
                 foreach ($request->file('images') as $image) {
-                    $saved = Storage::disk('public')->put('blog_header', $image);
+                    $saved = Storage::disk('public')->put('images', $image);
                     if ($saved) {
                         BlogImage::create([
                             'image_url' => $saved,

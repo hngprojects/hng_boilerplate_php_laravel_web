@@ -67,14 +67,11 @@ Route::prefix('v1')->group(function () {
     Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
 
     Route::apiResource('/users', UserController::class);
-
+    
     //jobs
     Route::get('/jobs', [JobController::class, 'index']);
     Route::get('/jobs/search', [JobSearchController::class, 'search']);
     Route::get('/jobs/{id}', [JobController::class, 'show']);
-    //blogs
-    Route::get('/blogs/{id}', [BlogController::class, 'show']);
-    Route::get('/blogs', [BlogController::class, 'index']);
 
     Route::get('/products/categories', [CategoryController::class, 'index']);
     Route::get('/products/search', [ProductController::class, 'search']);
@@ -123,7 +120,6 @@ Route::prefix('v1')->group(function () {
     Route::get('/help-center/topics', [HelpArticleController::class, 'getArticles']);
     Route::get('/help-center/topics/search', [HelpArticleController::class, 'search']);
 
-    
     Route::middleware(['auth:api', 'admin'])->group(function () {
         Route::get('/email-templates', [EmailTemplateController::class, 'index']);
         Route::patch('/email-templates/{id}', [EmailTemplateController::class, 'update']);
@@ -199,6 +195,9 @@ Route::prefix('v1')->group(function () {
 
     Route::apiResource('faqs', FaqController::class);
 
+
+    Route::get('/blogs/{id}', [BlogController::class, 'show']);
+    Route::get('/blogs', [BlogController::class, 'index']);
 
     Route::group(['middleware' => ['auth:api']], function () {
         Route::post('/user/preferences', [PreferenceController::class, 'store']);

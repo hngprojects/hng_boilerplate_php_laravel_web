@@ -22,6 +22,7 @@ class ProductController extends Controller
             'category' => 'nullable|string|max:255',
             'minPrice' => 'nullable|numeric|min:0',
             'maxPrice' => 'nullable|numeric|min:0',
+            'status' => 'nullable|string|in:in_stock,out_of_stock,low_on_stock'
         ]);
 
         if ($validator->fails()) {
@@ -61,6 +62,12 @@ class ProductController extends Controller
             $query->where('price', '<=', $request->maxPrice);
         }
 
+        if($request->filled('status')) {
+            $query->whereHas('productsVariant', function ($q) use ($request) {
+                $q->where('stock_status', $request->status);
+            });
+        }
+
         $products = $query->get();
 
         return response()->json([
@@ -87,7 +94,17 @@ class ProductController extends Controller
             // Calculate offset
             $offset = ($page - 1) * $limit;
 
-            $products = Product::select('name', 'price')
+            
+            $products = Product::select(
+            'product_id',
+            'name',
+            'price', 
+            'imageUrl', 
+            'description', 
+            'created_at',
+            'quantity'
+            )
+                ->with(['productsVariant', 'categories'])
                 ->offset($offset)
                 ->limit($limit)
                 ->get();
@@ -96,10 +113,25 @@ class ProductController extends Controller
             $totalItems = Product::count();
             $totalPages = ceil($totalItems / $limit);
 
+            $transformedProducts = $products->map(function ($product) {
+                return [
+                    'name' => $product->name,
+                    'price' => $product->price,
+                    'imageUrl' => $product->imageUrl,
+                    'description' => $product->description,
+                    'product_id' => $product->product_id,
+                    'quantity' => $product->quantity,
+                    'category' => $product->categories->isNotEmpty() ? $product->categories->map->name : [], 
+                    'stock' => $product->productsVariant->isNotEmpty() ? $product->productsVariant->first()->stock : null, 
+                    'status' => $product->productsVariant->isNotEmpty() ? $product->productsVariant->first()->stock_status : null, 
+                    'date_added' => $product->created_at
+                ];
+            });
+
             return response()->json([
                 'success' => true,
                 'message' => 'Products retrieved successfully',
-                'products' => $products,
+                'products' => $transformedProducts,
                 'pagination' => [
                     'totalItems' => $totalItems,
                     'totalPages' => $totalPages,
@@ -117,6 +149,7 @@ class ProductController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'Internal server error',
+                'error' => $e->getMessage(),
                 'status_code' => 500,
             ], 500);
         }
