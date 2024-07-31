@@ -14,7 +14,7 @@ class BlogSearchTest extends TestCase
     {
         Blog::factory()->count(20)->create();
 
-        $response = $this->getJson('/api/v1/blog/search?content=test&page=1&page_size=10');
+        $response = $this->getJson('/api/v1/blogs/search?content=test&page=1&page_size=10');
 
         $response->assertStatus(200)
             ->assertJsonStructure([
@@ -43,7 +43,7 @@ class BlogSearchTest extends TestCase
 
     public function test_search_with_invalid_params()
     {
-        $response = $this->getJson('/api/v1/blog/search?page=-1');
+        $response = $this->getJson('/api/v1/blogs/search?page=-1');
 
         $response->assertStatus(422)
             ->assertJsonStructure([

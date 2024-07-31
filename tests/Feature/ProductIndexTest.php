@@ -31,43 +31,11 @@ class ProductIndexTest extends TestCase
     //         $product->categories()->attach($categories->random());
     //     }
 
-    //     // Create product variants and associate with products
-    //     foreach ($products as $product) {
-    //         ProductVariant::factory()->create(['product_id' => $product->product_id]);
-    //     }
-    // }
-
-    // /** @test */
-    // public function it_fetches_products_with_pagination()
-    // {
-    //     $response = $this->getJson('/api/v1/products?page=1&limit=10');
-
-    //     $response->assertStatus(200);
-    //     $response->assertJsonStructure([
-    //         'success',
-    //         'message',
-    //         'products' => [
-    //             '*' => [
-    //                 'name',
-    //                 'price',
-    //                 'imageUrl',
-    //                 'description',
-    //                 'product_id',
-    //                 'quantity',
-    //                 'category',
-    //                 'stock',
-    //                 'status',
-    //                 'date_added',
-    //             ],
-    //         ],
-    //         'pagination' => [
-    //             'totalItems',
-    //             'totalPages',
-    //             'currentPage',
-    //         ],
-    //         'status_code',
-    //     ]);
-    // }
+        // Create product variants and associate with products
+        foreach ($products as $product) {
+            ProductVariant::factory()->create(['product_id' => $product->product_id]);
+        }
+    }
 
     // /** @test */
     // public function it_validates_pagination_parameters()

@@ -25,7 +25,7 @@ class LoginController extends Controller
             ], 422);
         }
 
-        $key = 'login_attempts_' . $request->ip();
+        /* $key = 'login_attempts_' . $request->ip();
         if (RateLimiter::tooManyAttempts($key, 3)) {
             $seconds = RateLimiter::availableIn($key);
             return response()->json([
@@ -33,7 +33,7 @@ class LoginController extends Controller
                 'error' => 'too_many_attempts',
                 'status_code' => 403
             ], 403);
-        }
+        } */
 
         $credentials = $request->only('email', 'password');
 
@@ -47,7 +47,7 @@ class LoginController extends Controller
             ], 401);
         }
 
-        RateLimiter::clear($key);
+        // RateLimiter::clear($key);
 
         $user = Auth::user();
         // $user->last_login_at = now();

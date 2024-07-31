@@ -40,9 +40,9 @@ class Handler extends ExceptionHandler
                     'app',
                     'errors_total',
                     'Total number of errors',
-                    ['type', 'endpoint']
+                    ['type', 'endpoint','message']
                 );
-                $counter->inc([get_class($e), $request->path()]);
+                $counter->inc([get_class($e), $request->path(),$e->getMessage()]);
                 // Optionally log the error
                 logger()->error($e);
 

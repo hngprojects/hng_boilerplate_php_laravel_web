@@ -48,7 +48,7 @@ class OrganizationMemberControllerTest extends TestCase
         $token = $response->json('data.access_token');
 
         // Create an organization
-        $response = $this->postJson('/api/v1/organisations', [
+        $response = $this->postJson('/api/v1/organizations', [
             'name' => 'Example Organization',
             'description' => 'This is an example organization description.',
             'email' => 'example@example.com',
@@ -65,7 +65,7 @@ class OrganizationMemberControllerTest extends TestCase
         $organisation = $response->json('data.org_id');
 
         // Fetch members with valid organization ID
-        $response = $this->getJson("/api/v1/organisations/{$organisation}/members?page=1&page_size=10", [
+        $response = $this->getJson("/api/v1/organizations/{$organisation}/users?page=1&page_size=10", [
             'Authorization' => 'Bearer ' . $token
         ]);
 

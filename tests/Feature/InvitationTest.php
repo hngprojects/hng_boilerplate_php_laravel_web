@@ -38,7 +38,7 @@ class InvitationTest extends TestCase
         $this->accessToken = $loginResponse['data']['access_token'];
 
         // Create an organisation
-        $orgResponse = $this->postJson('/api/v1/organisations', [
+        $orgResponse = $this->postJson('/api/v1/organizations', [
             'name' => 'test organisations',
             'description' => 'test org description',
             'email' => 'test.main.org@example.com',
