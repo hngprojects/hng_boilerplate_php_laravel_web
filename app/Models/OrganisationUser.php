@@ -30,4 +30,6 @@ class OrganisationUser extends Pivot
      * @var string
      */
     protected $keyType = 'string';
+
+    public $timestamps = false;
 }
