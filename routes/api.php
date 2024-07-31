@@ -63,9 +63,11 @@ Route::prefix('v1')->group(function () {
     Route::get('/auth/google', [SocialAuthController::class, 'redirectToGoogle']);
     Route::get('/auth/login-google', [SocialAuthController::class, 'redirectToGoogle']);
     Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
+    Route::post('/auth/google/callback', [SocialAuthController::class, 'saveGoogleRequest']);
 
     Route::get('/auth/login-facebook', [SocialAuthController::class, 'loginUsingFacebook']);
     Route::get('/auth/facebook/callback', [SocialAuthController::class, 'callbackFromFacebook']);
+    Route::post('/auth/facebook/callback', [SocialAuthController::class, 'saveFacebookRequest']);
 
     Route::apiResource('/users', UserController::class);
 

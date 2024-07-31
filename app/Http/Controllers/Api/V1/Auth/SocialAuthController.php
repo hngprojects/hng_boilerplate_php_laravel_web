@@ -64,6 +64,53 @@ class SocialAuthController extends Controller
         return response()->json($response);
     }
 
+    public function saveGoogleRequest(Request $request)
+    {
+        // Extract Google user data from the request
+        $googleUser = (object) $request->input('google_user');
+
+        $user = User::updateOrCreate(
+            ['email' => $googleUser->email],
+            [
+                'password' => Hash::make(Str::password(12)),
+                'social_id' => $googleUser->id,
+                'is_verified' => true,
+                'signup_type' => 'Google',
+                'is_active' => true,
+            ]
+        );
+
+        if ($user->profile) {
+            $user->profile->update([
+                'first_name' => $googleUser->user['given_name'],
+                'last_name' => $googleUser->user['family_name'],
+                'avatar_url' => $googleUser->attributes['avatar_original'],
+            ]);
+        } else {
+            $user->profile()->create([
+                'first_name' => $googleUser->user['given_name'],
+                'last_name' => $googleUser->user['family_name'],
+                'avatar_url' => $googleUser->attributes['avatar_original'],
+            ]);
+        }
+
+        $token = JWTAuth::fromUser($user);
+
+        $response = [
+            'status' => 'success',
+            'message' => 'User successfully authenticated',
+            'access_token' => $token,
+            'data' => [
+                'id' => $user->id,
+                'email' => $user->email,
+                'first_name' => $googleUser->user['given_name'],
+                'last_name' => $googleUser->user['family_name']
+            ]
+        ];
+
+        return response()->json($response);
+    }
+
     public function loginUsingFacebook()
     {
         return Socialite::driver('facebook')->stateless()->redirect();
@@ -72,6 +119,53 @@ class SocialAuthController extends Controller
     public function callbackFromFacebook()
     {
         $facebookUser = Socialite::driver('facebook')->stateless()->user();
+
+        $user = User::updateOrCreate(
+            ['email' => $facebookUser->email],
+            [
+                'password' => Hash::make(Str::password(12)),
+                'social_id' => $facebookUser->id,
+                'is_verified' => true,
+                'signup_type' => 'Facebook',
+                'is_active' => true,
+            ]
+        );
+
+        if ($user->profile) {
+            $user->profile->update([
+                'first_name' => $this->getFirstName($facebookUser->name),
+                'last_name' => $this->getLastName($facebookUser->name),
+                'avatar_url' => $facebookUser->avatar,
+            ]);
+        } else {
+            $user->profile()->create([
+                'first_name' => $this->getFirstName($facebookUser->name),
+                'last_name' => $this->getLastName($facebookUser->name),
+                'avatar_url' => $facebookUser->avatar,
+            ]);
+        }
+
+        $token = JWTAuth::fromUser($user);
+
+        $response = [
+            'status' => 'success',
+            'message' => 'User successfully authenticated',
+            'access_token' => $token,
+            'data' => [
+                'id' => $user->id,
+                'email' => $user->email,
+                'first_name' => $this->getFirstName($facebookUser->name),
+                'last_name' => $this->getLastName($facebookUser->name)
+            ]
+        ];
+
+        return response()->json($response);
+    }
+
+    public function saveFacebookRequest(Request $request)
+    {
+        // Extract Facebook user data from the request
+        $facebookUser = (object) $request->input('facebook_user');
 
         $user = User::updateOrCreate(
             ['email' => $facebookUser->email],
