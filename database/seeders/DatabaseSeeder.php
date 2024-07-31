@@ -55,7 +55,10 @@ class DatabaseSeeder extends Seeder
         $this->call(UserJobSeeder::class);
         $this->call(BlogSeeder::class);
 
+
         UserSubscription::factory()->create();
+
+        $this->call(BillingPlanSeeder::class);
 
         // Call individual seeders here
         $this->call([
@@ -63,6 +66,8 @@ class DatabaseSeeder extends Seeder
             ProductSeeder::class,
             ProductVariantSeeder::class,
             ProductVariantSizeSeeder::class,
+            FaqSeeder::class,
+            UserNotificationSeeder::class,
         ]);
 
     }

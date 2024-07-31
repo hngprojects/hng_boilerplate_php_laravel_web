@@ -3121,6 +3121,299 @@
           }
         }
       }
+    },
+    "/api/v1/notifitions/notification_id}": {
+      "patch": {
+          "tags": ["User Notifications"],
+          "summary": "Clear single notification",
+          "requestBody": {
+              "required": true,
+              "content": {
+                  "application/json" : {
+                      "schema": {
+                          "type": "array",
+                          "items": {
+                              "properties": {
+                                  "is_read": {
+                                      "type": "boolean",
+                                      "example": "1 or 0"
+                                  }
+                              }
+                          }
+                      }
+                  }
+              }
+          },
+          "responses": {
+              "200": {
+                  "description": "Successful response",
+                  "content": {
+                      "application/json": {
+                          "schema": {
+                              "type": "array",
+                              "items": {
+                                  "properties": {
+                                      "status": {
+                                          "type": "string",
+                                          "example": "success"
+                                      },
+                                      "message": {
+                                          "type": "string",
+                                          "example": "notification cleared successfully"
+                                      },
+                                      "data": {
+                                          "type": "object",
+                                          "example": {
+                                              "id": "xxxx-xxxx-xxxx-xxxx",
+                                              "user_id": "xxxx-xxxx-xxxx-xxxx",
+                                              "notification_id": "xxxx-xxxx-xxxx-xxxx",
+                                              "status": "read"
+                                          }
+                                      }
+                                  }
+                              }
+                          }
+                      }
+                  }
+              },
+              "404" : {
+                  "description": "Notification not found",
+                  "content": {
+                      "application/json": {
+                          "schema": {
+                              "type": "object",
+                              "properties": {
+                                  "status": {
+                                      "example": "error"
+                                  },
+                                  "message":  {
+                                      "example": "not found"
+                                  },
+                                  "status_code":  {
+                                      "example": 404
+                                  }
+                              }
+                          }
+                      }
+                  }
+              },
+              "422" : {
+                  "description": "Validation Errors",
+                  "content": {
+                      "application/json": {
+                          "schema": {
+                              "type": "object",
+                              "properties": {
+                                  "message":  {
+                                      "example": "The is read field must be true or false."
+                                  },
+                                  "errors":  {
+                                      "type": "array",
+                                      "items": {
+                                          "properties": {
+                                              "is_read": {
+                                                  "example": "The is read field must be true or false."
+                                              }
+                                          }
+                                      }
+                                  }
+                              }
+                          }
+                      }
+                  }
+              },
+              "500" : {
+                  "description": "Notification not found",
+                  "content": {
+                      "application/json": {
+                          "schema": {
+                              "type": "object",
+                              "properties": {
+                                  "status": {
+                                      "example": "error"
+                                  },
+                                  "message":  {
+                                      "example": "something went wrong"
+                                  },
+                                  "status_code":  {
+                                      "example": 500
+                                  }
+                              }
+                          }
+                      }
+                  }
+              }
+          }
+      }
+    },
+    "/api/v1/notifications": {
+        "delete": {
+            "tags": ["User Notifications"],
+            "summary": "Clear All notification",
+            "responses": {
+                "200": {
+                    "description": "Successful response",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "all notification cleared successfully"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": {
+                                                "id": "xxxx-xxxx-xxxx-xxxx",
+                                                "user_id": "xxxx-xxxx-xxxx-xxxx",
+                                                "notification_id": "xxxx-xxxx-xxxx-xxxx",
+                                                "status": "read"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "404" : {
+                    "description": "Notification not found",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "status": {
+                                        "example": "error"
+                                    },
+                                    "message":  {
+                                        "example": "not found"
+                                    },
+                                    "status_code":  {
+                                        "example": 404
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "500" : {
+                    "description": "Notification not found",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "status": {
+                                        "example": "error"
+                                    },
+                                    "message":  {
+                                        "example": "something went wrong"
+                                    },
+                                    "status_code":  {
+                                        "example": 500
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "get": {
+            "tags": ["User Notifications"],
+            "description": "Retrieves users notification, optionally can query for unread and read notifications with the `?is_read={boolean}`",
+            "parameters": [
+              {
+                "name": "is_read",
+                "in": "query",
+                "description": "The is_read status of the notification",
+                "required": false,
+                "style": "form",
+                "explode": true,
+                "schema": {
+                  "type": "boolean",
+                  "example": false
+                }
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "successfully querys users' nofications",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/GetNotificationsResponse"
+                      }
+                    }
+                  }
+                }
+              },
+              "401": {
+                "description": "Unauthenticated",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/inline_response_401"
+                    }
+                  }
+                }
+              }
+            },
+            "security": [
+              {
+                "bearerAuth": []
+              }
+            ]
+        },
+        "post": {
+            "tags": ["User Notifications"],
+            "description": "Create a new notification",
+            "requestBody": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CreateNotification"
+                  }
+                }
+              }
+            },
+            "responses": {
+              "201": {
+                "description": "successfully created new nofication",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/CreateNotificationResponse"
+                    }
+                  }
+                }
+              },
+              "401": {
+                "description": "Unauthenticated",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/inline_response_401"
+                    }
+                  }
+                }
+              }
+            },
+            "security": [
+              {
+                "bearerAuth": []
+              }
+            ]
+        }
     }
   },
   "components": {
@@ -3765,6 +4058,109 @@
           },
           "message": {
             "type": "string"
+          }
+        }
+      },
+      "Notification": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "9ca512c9-bfb3-476e-95f1-e5a063d8e560"
+          },
+          "is_read": {
+            "type": "boolean",
+            "example": "false"
+          },
+          "message": {
+            "type": "string",
+            "example": "A new Notification"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-07-30T08:26:27Z"
+          }
+        }
+      },
+      "CreateNotification": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateNotificationResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "message": {
+            "type": "string",
+            "example": "Notification created successfully"
+          },
+          "status_code": {
+            "type": "integer",
+            "example": 201
+          },
+          "data": {
+            "$ref": "#/components/schemas/Notification"
+          }
+        }
+      },
+      "GetNotificationsData": {
+        "type": "object",
+        "properties": {
+          "total_notification_count": {
+            "type": "integer",
+            "example": 3
+          },
+          "total_unread_notification_count": {
+            "type": "integer",
+            "example": 3
+          },
+          "notifications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Notification"
+            }
+          }
+        }
+      },
+      "GetNotificationsResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "message": {
+            "type": "string",
+            "example": "Unread Notifications retrieved successfully"
+          },
+          "status_code": {
+            "type": "integer",
+            "example": 200
+          },
+          "data": {
+            "$ref": "#/components/schemas/GetNotificationsData"
+          }
+        }
+      },
+      "inline_response_401": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Unauthenticated"
+          },
+          "status_code": {
+            "type": "number",
+            "example": 401
           }
         }
       }
