@@ -86,7 +86,7 @@ Route::prefix('v1')->group(function () {
     Route::middleware('auth:api')->group(function () {
         Route::get('/products', [ProductController::class, 'index']);
         Route::post('/organizations/{org_id}/products', [ProductController::class, 'store']);
-        Route::patch('/{org_id}/products/{product_id}', [ProductController::class,'update']);
+        Route::patch('/organizations/{org_id}/products/{product_id}', [ProductController::class,'update']);
         Route::delete('/products/{productId}', [ProductController::class, 'destroy']);
         Route::get('/products/{product_id}', [ProductController::class, 'show']);
     });
