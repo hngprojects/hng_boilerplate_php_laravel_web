@@ -8,9 +8,6 @@ use App\Models\ProductVariant;
 use App\Models\ProductVariantSize;
 use App\Models\Size;
 use App\Http\Requests\UpdateProductRequest;
-use App\Models\OrganisationUser;
-use App\Models\ProductVariant;
-use App\Models\ProductVariantSize;
 use App\Models\User;
 use App\Models\Product;
 use Carbon\Carbon;
@@ -73,7 +70,7 @@ class ProductController extends Controller
             $query->where('price', '<=', $request->maxPrice);
         }
 
-        if($request->filled('status')) {
+        if ($request->filled('status')) {
             $query->whereHas('productsVariant', function ($q) use ($request) {
                 $q->where('stock_status', $request->status);
             });
@@ -105,15 +102,15 @@ class ProductController extends Controller
             // Calculate offset
             $offset = ($page - 1) * $limit;
 
-            
+
             $products = Product::select(
-            'product_id',
-            'name',
-            'price', 
-            'imageUrl', 
-            'description', 
-            'created_at',
-            'quantity'
+                'product_id',
+                'name',
+                'price',
+                'imageUrl',
+                'description',
+                'created_at',
+                'quantity'
             )
                 ->with(['productsVariant', 'categories'])
                 ->offset($offset)
@@ -132,9 +129,9 @@ class ProductController extends Controller
                     'description' => $product->description,
                     'product_id' => $product->product_id,
                     'quantity' => $product->quantity,
-                    'category' => $product->categories->isNotEmpty() ? $product->categories->map->name : [], 
-                    'stock' => $product->productsVariant->isNotEmpty() ? $product->productsVariant->first()->stock : null, 
-                    'status' => $product->productsVariant->isNotEmpty() ? $product->productsVariant->first()->stock_status : null, 
+                    'category' => $product->categories->isNotEmpty() ? $product->categories->map->name : [],
+                    'stock' => $product->productsVariant->isNotEmpty() ? $product->productsVariant->first()->stock : null,
+                    'status' => $product->productsVariant->isNotEmpty() ? $product->productsVariant->first()->stock_status : null,
                     'date_added' => $product->created_at
                 ];
             });
@@ -198,12 +195,12 @@ class ProductController extends Controller
         ]);
 
         CategoryProduct::create([
-            'category_id'=> $request->input('category'),
-            'product_id'=> $product->product_id
+            'category_id' => $request->input('category'),
+            'product_id' => $product->product_id
         ]);
 
         $standardSize = Size::where('size', 'standard')->first('id');
-        
+
         $productVariant = ProductVariant::create([
             'product_id' => $product->product_id,
             'stock' => $request->input('stock'),
@@ -235,7 +232,7 @@ class ProductController extends Controller
                 'status_code' => 404,
             ]);
         }
-        $product =  new ProductResource($product);
+        $product = new ProductResource($product);
         return response()->json([
             'status' => 'success',
             "message" => "Product retrieve ",
@@ -247,28 +244,24 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateProductRequest $request, string $product_id)
+    public function update(UpdateProductRequest $request, string $org_id, string $product_id)
     {
-        // $org_id = $request->route('org_id');
+        $org_id = $request->route('org_id');
 
-        // $isOwner = OrganisationUser::where('org_id', $org_id)->where('user_id', auth()->id())->exists();
+        $isOwner = OrganisationUser::where('org_id', $org_id)->where('user_id', auth()->id())->exists();
 
-        // if (!$isOwner) {
-        //     return response()->json(['message' => 'You are not authorized to create products for this organization.'], 403);
-        // }
+        if (!$isOwner) {
+            return response()->json(['message' => 'You are not authorized to update products for this organization.'], 403);
+        }
 
         $validated = $request->validated();
-        // dd($product_id);
 
         $product = Product::findOrFail($product_id);
-// dd($product);
         $product->update([
             'name' => $validated['name'] ?? $product->name,
             'is_archived' => $validated['is_archived'] ?? $product->is_archived,
             'imageUrl' => $validated['image'] ?? $product->imageUrl
         ]);
-
-        // \Log::info('Updated Product Data:', $product->toArray());
 
         foreach ($request->input('productsVariant') as $variant) {
             $existingProductVariant = ProductVariant::where('product_id', $product->product_id)
@@ -297,7 +290,7 @@ class ProductController extends Controller
             }
         }
 
-        return response()->json(['message' => 'Product updated successfully', 'product' => $product], 200);
+        return response()->json(['message' => 'Product updated successfully'], 200);
     }
 
     /**

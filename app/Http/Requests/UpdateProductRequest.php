@@ -27,6 +27,7 @@ class UpdateProductRequest extends FormRequest
             'price' => 'nullable|numeric|min:0',
             'stock' => 'nullable|integer|min:0',
             'image' => 'nullable|url',
+            'is_archived' => 'sometimes|boolean',
             'productsVariant' => 'required|array',
             'productsVariant.*.size_id' => 'required|uuid|exists:sizes,id',
             'productsVariant.*.stock' => 'required|integer|min:0',

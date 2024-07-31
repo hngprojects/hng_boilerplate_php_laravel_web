@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Organisation;
+use App\Models\OrganisationUser;
 use App\Models\Size;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -26,13 +27,12 @@ class ProductUpdateTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        // Create a product with variants
         $product = Product::factory()->create();
         $size = Size::create(['size' => 'standard']);
         $existingVariant = ProductVariant::factory()->create(['product_id' => $product->product_id, 'size_id' => $size->id]);
 
         $newSizeId = Size::create(['size' => 'large'])->id;
-        // Mock the request data
+
         $data = [
             'name' => 'Updated Product Name',
             'is_archived' => true,
@@ -51,21 +51,11 @@ class ProductUpdateTest extends TestCase
             ]
         ];
 
-        // Mock the UpdateProductRequest
-        // $request = Mockery::mock(UpdateProductRequest::class);
-        // $request->shouldReceive('validated')->andReturn($data);
-        // $request->shouldReceive('input')->with('productsVariant')->andReturn($data['productsVariant']);
-
-        // Call the update method
-        // $controller = new ProductController();
-        // $response = $controller->update($request, $product->product_id);
-
-        // $response = $this->patchJson(route('products.update', $product->product_id), $data);
         $organisation = Organisation::factory()->create();
+        OrganisationUser::create(['org_id' => $organisation->org_id, 'user_id' => $user->id]);
 
-        $response = $this->patchJson("/api/v1/products/{$product->product_id}", $data);
-// dd($response);
-        // Assert the response
+        $response = $this->patchJson("/api/v1/{$organisation->org_id}/products/{$product->product_id}", $data);
+
         $response->assertStatus(200);
         $response->assertJson(['message' => 'Product updated successfully']);
 
@@ -97,10 +87,82 @@ class ProductUpdateTest extends TestCase
         ]);
 
         // Assert the ProductVariantSize entry was created for the new variant
-        $newVariant = ProductVariant::where('product_id', $product->product_id)->where('size_id', 'new_size_id')->first();
+        $newVariant = ProductVariant::where('product_id', $product->product_id)->where('size_id', $newSizeId)->first();
         $this->assertDatabaseHas('product_variant_sizes', [
             'product_variant_id' => $newVariant->id,
             'size_id' => $newSizeId
         ]);
     }
+
+    /** @test */
+    public function it_cannot_update_a_product_if_not_an_owner()
+    {
+        // Create two users, one who is not an owner
+        $user = User::factory()->create();
+        $otherUser = User::factory()->create();
+        $this->actingAs($otherUser);
+
+        // Create a product
+        $product = Product::factory()->create();
+
+        $size = Size::create(['size' => 'standard']);
+
+        ProductVariant::factory()->create(['product_id' => $product->product_id, 'size_id' => $size->id]);
+
+        $newSizeId = Size::create(['size' => 'large'])->id;
+
+        $payload = [
+            'name' => 'Unauthorized Product Update',
+            'is_archived' => true,
+            'image' => 'http://example.com/image.jpg',
+            'productsVariant' => [
+                [
+                    'size_id' => $size->id,
+                    'stock' => 20,
+                    'price' => 95.00
+                ],
+                [
+                    'size_id' => $newSizeId,
+                    'stock' => 30,
+                    'price' => 105.00
+                ]
+            ]
+        ];
+
+        $organisation = Organisation::factory()->create();
+        OrganisationUser::create(['org_id' => $organisation->org_id, 'user_id' => $user->id]);
+
+        $response = $this->patchJson("/api/v1/{$organisation->org_id}/products/{$product->product_id}", $payload);
+
+        // Assert the response status is 403 Forbidden
+        $response->assertStatus(403)
+            ->assertJson(['message' => 'You are not authorized to update products for this organization.']);
+
+        // Assert the product was not updated
+        $this->assertDatabaseMissing('products', [
+            'product_id' => $product->product_id,
+            'name' => 'Unauthorized Product Update',
+            'is_archived' => true,
+            'imageUrl' => 'http://example.com/image.jpg'
+        ]);
+
+        // Assert the existing variant was not updated
+        $this->assertDatabaseMissing('product_variants', [
+            'product_id' => $product->product_id,
+            'size_id' => $size->id,
+            'stock' => 20,
+            'stock_status' => 'in_stock',
+            'price' => 95.00
+        ]);
+
+        // Assert the new variant was not created
+        $this->assertDatabaseMissing('product_variants', [
+            'product_id' => $product->product_id,
+            'size_id' => $newSizeId,
+            'stock' => 30,
+            'stock_status' => 'in_stock',
+            'price' => 105.00
+        ]);
+    }
+
 }
