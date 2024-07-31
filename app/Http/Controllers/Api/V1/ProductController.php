@@ -13,6 +13,68 @@ use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
+    // public function search(Request $request)
+    // {
+    //     $validator = Validator::make($request->all(), [
+    //         'name' => 'required|string|max:255',
+    //         'category' => 'nullable|string|max:255',
+    //         'minPrice' => 'nullable|numeric|min:0',
+    //         'maxPrice' => 'nullable|numeric|min:0',
+    //         'status' => 'nullable|string|in:in_stock,out_of_stock,low_on_stock'
+    //     ]);
+
+    //     if ($validator->fails()) {
+    //         $errors = [];
+    //         foreach ($validator->errors()->messages() as $field => $messages) {
+    //             foreach ($messages as $message) {
+    //                 $errors[] = [
+    //                     'parameter' => $field,
+    //                     'message' => $message,
+    //                 ];
+    //             }
+    //         }
+
+    //         return response()->json([
+    //             'success' => false,
+    //             'errors' => $errors,
+    //             'statusCode' => 422
+    //         ], 422);
+    //     }
+
+    //     $query = Product::query();
+
+    //     $query->where('name', 'LIKE', '%' . $request->name . '%');
+
+    //     // Add category filter if provided
+    //     if ($request->filled('category')) {
+    //         $query->whereHas('categories', function ($q) use ($request) {
+    //             $q->where('name', $request->category);
+    //         });
+    //     }
+
+    //     if ($request->filled('minPrice')) {
+    //         $query->where('price', '>=', $request->minPrice);
+    //     }
+
+    //     if ($request->filled('maxPrice')) {
+    //         $query->where('price', '<=', $request->maxPrice);
+    //     }
+
+    //     if($request->filled('status')) {
+    //         $query->whereHas('productsVariant', function ($q) use ($request) {
+    //             $q->where('stock_status', $request->status);
+    //         });
+    //     }
+
+    //     $products = $query->get();
+
+    //     return response()->json([
+    //         'success' => true,
+    //         'products' => $products,
+    //         'statusCode' => 200
+    //     ], 200);
+    // }
+
     public function search(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -66,14 +128,30 @@ class ProductController extends Controller
             });
         }
 
-        $products = $query->get();
+        $products = $query->with(['productsVariant', 'categories'])->get();
+
+        $transformedProducts = $products->map(function ($product) {
+            return [
+                'name' => $product->name,
+                'price' => $product->price,
+                'imageUrl' => $product->imageUrl,
+                'description' => $product->description,
+                'product_id' => $product->product_id,
+                'quantity' => $product->quantity,
+                'category' => $product->categories->isNotEmpty() ? $product->categories->map->name : [], 
+                'stock' => $product->productsVariant->isNotEmpty() ? $product->productsVariant->first()->stock : null, 
+                'status' => $product->productsVariant->isNotEmpty() ? $product->productsVariant->first()->stock_status : null, 
+                'date_added' => $product->created_at
+            ];
+        });
 
         return response()->json([
             'success' => true,
-            'products' => $products,
+            'products' => $transformedProducts,
             'statusCode' => 200
         ], 200);
     }
+
     /**
      * Display a listing of the resource.
      */
