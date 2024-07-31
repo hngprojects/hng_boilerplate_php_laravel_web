@@ -2,12 +2,18 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Models\CategoryProduct;
+use App\Models\ProductVariant;
+use App\Models\ProductVariantSize;
+use App\Models\Size;
 use App\Models\User;
 use App\Models\Product;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateProductRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use App\Http\Resources\ProductResource;
@@ -250,24 +256,48 @@ class ProductController extends Controller
      */
     public function store(CreateProductRequest $request)
     {
-        $request->validated();
+        // $imageUrl = null;
+        // if($request->hasFile('image')) {
+        //     $imagePath = $request->file('image')->store('product_images', 'public');
+        //     $imageUrl = Storage::url($imagePath);
+        // }
 
-        $user = auth()->user();
-        $request['slug'] = Str::slug($request['name']);
-        $request['tags'] = " ";
-        $request['imageUrl'] = " ";
-        $product = $user->User::products()->create($request->all());
+        $org_id = $request->route('org_id');
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Product created successfully',
-            'status_code' => 201,
-            'data' => [
-                'product_id' => $product->product_id,
-                'name' => $product->name,
-                'description' => $product->description,
-            ]
-        ], 201);
+        $product = Product::create([
+            'name' => $request->input('title'),
+            'description' => $request->input('description'),
+            'slug' => Carbon::now(),
+            'tags' => $request->input('category'),
+            'price' => $request->input('price'),
+            // 'imageUrl' => $imageUrl,
+            'imageUrl' => $request->input('image'),
+            'user_id' => auth()->id(),
+            'org_id' => $org_id
+        ]);
+
+        CategoryProduct::create([
+            'category_id'=> $request->input('category'),
+            'product_id'=> $product->product_id
+        ]);
+
+        $standardSize = Size::where('size', 'standard')->first('id');
+        
+        $productVariant = ProductVariant::create([
+            'product_id' => $product->product_id,
+            'stock' => $request->input('stock'),
+            'stock_status' => $request->input('stock') > 0 ? 'in_stock' : 'out_stock',
+            'price' => $request->input('price'),
+            'size_id' => $standardSize->id,
+        ]);
+
+        ProductVariantSize::create([
+            'product_variant_id' => $productVariant->id,
+            'size_id' => $standardSize->id,
+        ]);
+
+        return response()->json(['message' => 'Product created successfully', 'product' => $product], 201);
+
     }
 
     /**
