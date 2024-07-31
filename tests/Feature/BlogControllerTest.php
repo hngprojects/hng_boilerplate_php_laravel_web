@@ -26,7 +26,7 @@ class BlogControllerTest extends TestCase
 
 
         // Send a request without pagination parameters
-        $response = $this->getJson('/api/v1/blog/latest');
+        $response = $this->getJson('/api/v1/blogs/latest');
 
         // Assert response status and structure
         $response->assertStatus(200)
@@ -60,7 +60,7 @@ class BlogControllerTest extends TestCase
         Blog::factory()->count(20)->create();
 
         // Send a request with pagination parameters
-        $response = $this->getJson('/api/v1/blog/latest?page=2&page_size=5');
+        $response = $this->getJson('/api/v1/blogs/latest?page=2&page_size=5');
 
         // Assert response status and structure
         $response->assertStatus(200)
@@ -94,7 +94,7 @@ class BlogControllerTest extends TestCase
     {
 
         // Send a request with invalid pagination parameters
-        $response = $this->getJson('/api/v1/blog/latest?page=-1&page_size=abc');
+        $response = $this->getJson('/api/v1/blogs/latest?page=-1&page_size=abc');
 
         // Assert response status and structure
         $response->assertStatus(400)
@@ -108,7 +108,7 @@ class BlogControllerTest extends TestCase
     {
 
         // Send a request when no blog posts are present
-        $response = $this->getJson('/api/v1/blog/latest');
+        $response = $this->getJson('/api/v1/blogs/latest');
 
         // Assert response status and structure
         $response->assertStatus(200)
