@@ -36,6 +36,7 @@ use App\Http\Controllers\Api\V1\Organisation\OrganisationController;
 
 use App\Http\Controllers\Api\V1\Auth\ForgetPasswordRequestController;
 use App\Http\Controllers\Api\V1\Organisation\OrganizationMemberController;
+use App\Http\Controllers\Api\V1\Admin\ProductsController;
 
 
 
@@ -130,7 +131,18 @@ Route::prefix('v1')->group(function () {
 
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
     Route::delete('/blogs/{id}', [BlogController::class, 'destroy'])->middleware(['auth:api', 'admin']);
+    Route::middleware(['auth:api', 'admin'])->group(function () {
+        // Products
+        Route::get('/products', [ProductsController::class, 'index']);
+        Route::post('/products', [ProductsController::class, 'store']);
+        Route::get('/products/{id}', [ProductsController::class, 'show']);
+        Route::put('/products/{productId}', [ProductsController::class, 'update']);
+        Route::delete('/products/{productId}', [ProductsController::class, 'destroy']);
+        Route::get('/products/{product_id}/edit', [ProductsController::class, 'edit']);
+        Route::get('/products/stats/total-revenue', [ProductsController::class, 'totalRevenue']);
+        Route::get('/products/stats/total-price', [ProductsController::class, 'totalPrice']);
 
+    });
     Route::group(['middleware' => ['auth:api']], function () {
         Route::post('/user/preferences', [PreferenceController::class, 'store']);
         Route::put('/user/preferences/{id}', [PreferenceController::class, 'update']);
