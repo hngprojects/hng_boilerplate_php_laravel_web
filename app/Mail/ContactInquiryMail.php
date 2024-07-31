@@ -30,7 +30,7 @@ class ContactInquiryMail extends Mailable implements ShouldQueue
      */
     public function build()
     {
-        return $this->from('amowogbajegideon@gmail.com', 'HNG API Task')
+        return $this->from(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'))
                     ->subject('New Inquiry from Contact Us Form')
                     ->view('emails.contact')
                     ->with('data', $this->data);
