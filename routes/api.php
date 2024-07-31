@@ -69,7 +69,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
 
     Route::apiResource('/users', UserController::class);
-    
+
     //jobs
     Route::get('/jobs', [JobController::class, 'index']);
     Route::get('/jobs/search', [JobSearchController::class, 'search']);
@@ -197,7 +197,7 @@ Route::prefix('v1')->group(function () {
     });
 
 
-  
+
 
     });
 
@@ -227,7 +227,7 @@ Route::prefix('v1')->group(function () {
     Route::patch('/notifications/{notification}', [UserNotificationController::class, 'update']);
     Route::delete('/notifications', [UserNotificationController::class, 'destroy']);
 
-});
+
 
 
 Route::group(['middleware' => ['auth:api']], function () {
