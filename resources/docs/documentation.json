@@ -3246,7 +3246,7 @@
           }
       }
     },
-    "/api/v1/notifitions": {
+    "/api/v1/notifications": {
         "delete": {
             "tags": ["User Notifications"],
             "summary": "Clear All notification",
@@ -3325,6 +3325,94 @@
                     }
                 }
             }
+        },
+        "get": {
+            "tags": ["User Notifications"],
+            "description": "Retrieves users notification, optionally can query for unread and read notifications with the `?is_read={boolean}`",
+            "parameters": [
+              {
+                "name": "is_read",
+                "in": "query",
+                "description": "The is_read status of the notification",
+                "required": false,
+                "style": "form",
+                "explode": true,
+                "schema": {
+                  "type": "boolean",
+                  "example": false
+                }
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "successfully querys users' nofications",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/GetNotificationsResponse"
+                      }
+                    }
+                  }
+                }
+              },
+              "401": {
+                "description": "Unauthenticated",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/inline_response_401"
+                    }
+                  }
+                }
+              }
+            },
+            "security": [
+              {
+                "bearerAuth": []
+              }
+            ]
+        },
+        "post": {
+            "tags": ["User Notifications"],
+            "description": "Create a new notification",
+            "requestBody": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CreateNotification"
+                  }
+                }
+              }
+            },
+            "responses": {
+              "201": {
+                "description": "successfully created new nofication",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/CreateNotificationResponse"
+                    }
+                  }
+                }
+              },
+              "401": {
+                "description": "Unauthenticated",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/inline_response_401"
+                    }
+                  }
+                }
+              }
+            },
+            "security": [
+              {
+                "bearerAuth": []
+              }
+            ]
         }
     }
   },
@@ -3970,6 +4058,109 @@
           },
           "message": {
             "type": "string"
+          }
+        }
+      },
+      "Notification": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "9ca512c9-bfb3-476e-95f1-e5a063d8e560"
+          },
+          "is_read": {
+            "type": "boolean",
+            "example": "false"
+          },
+          "message": {
+            "type": "string",
+            "example": "A new Notification"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-07-30T08:26:27Z"
+          }
+        }
+      },
+      "CreateNotification": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateNotificationResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "message": {
+            "type": "string",
+            "example": "Notification created successfully"
+          },
+          "status_code": {
+            "type": "integer",
+            "example": 201
+          },
+          "data": {
+            "$ref": "#/components/schemas/Notification"
+          }
+        }
+      },
+      "GetNotificationsData": {
+        "type": "object",
+        "properties": {
+          "total_notification_count": {
+            "type": "integer",
+            "example": 3
+          },
+          "total_unread_notification_count": {
+            "type": "integer",
+            "example": 3
+          },
+          "notifications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Notification"
+            }
+          }
+        }
+      },
+      "GetNotificationsResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "message": {
+            "type": "string",
+            "example": "Unread Notifications retrieved successfully"
+          },
+          "status_code": {
+            "type": "integer",
+            "example": 200
+          },
+          "data": {
+            "$ref": "#/components/schemas/GetNotificationsData"
+          }
+        }
+      },
+      "inline_response_401": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Unauthenticated"
+          },
+          "status_code": {
+            "type": "number",
+            "example": 401
           }
         }
       }

@@ -8,11 +8,14 @@ use App\Http\Requests\StoreRoleRequest;
 use App\Http\Requests\UpdateRoleRequest;
 use App\Models\User;
 use App\Models\Organisation;
+use App\Models\Permission;
 use App\Models\Role;
 use App\Traits\HttpResponses;
 use Illuminate\Http\Response;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class RoleController extends Controller
 {
@@ -121,4 +124,24 @@ class RoleController extends Controller
           } else return ResponseHelper::response("Role not found", 404, null);
         } else return ResponseHelper::response("Organisation not found", 404, null);
     }
+
+    public function assignPermissions(Request $request, $org_id, $role_id){
+      $role = Role::where('org_id', $org_id)->with('permissions')->find($role_id);
+      $payload = Validator::make($request->all(), [
+        'permission_list' => 'required|array'
+      ]);
+      if($payload->fails()) return ResponseHelper::response($payload->errors(), 422, null);
+      if($role && !$payload->fails()){
+        foreach ($request->permission_list as $permission => $value) {
+          $permissionId = Permission::where('name', $permission)->value('id');
+          if ($value && $permissionId) {
+            $role->permissions()->attach($permissionId);
+          } else {
+            $role->permissions()->detach($permissionId);
+          }
+        }
+        return ResponseHelper::response("Permissions updated successfully", 202, null);
+      } else return ResponseHelper::response("Role not found", 404, null);
+    }
+
 }
