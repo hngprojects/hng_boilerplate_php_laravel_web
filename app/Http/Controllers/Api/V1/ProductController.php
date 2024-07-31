@@ -10,6 +10,8 @@ use App\Http\Requests\CreateProductRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use App\Http\Resources\ProductResource;
+
 
 class ProductController extends Controller
 {
@@ -137,7 +139,6 @@ class ProductController extends Controller
                 ],
                 'status_code' => 200,
             ], 200);
-
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
                 'status' => 'bad request',
@@ -165,9 +166,10 @@ class ProductController extends Controller
         $request['slug'] = Str::slug($request['name']);
         $request['tags'] = " ";
         $request['imageUrl'] = " ";
-        $product = $user->products()->create($request->all());
+        $product = $user->User::products()->create($request->all());
 
         return response()->json([
+            'status' => 'success',
             'message' => 'Product created successfully',
             'status_code' => 201,
             'data' => [
@@ -176,15 +178,29 @@ class ProductController extends Controller
                 'description' => $product->description,
             ]
         ], 201);
-
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($product_id)
     {
-        //
+        $product = Product::find($product_id);
+        // return $product_id;
+        if (!$product) {
+            return response()->json([
+                'status' => 'error',
+                "message" => "Product not found",
+                'status_code' => 404,
+            ]);
+        }
+        $product =  new ProductResource($product);
+        return response()->json([
+            'status' => 'success',
+            "message" => "Product retrieve ",
+            'status_code' => 200,
+            'data' => $product
+        ]);
     }
 
     /**
