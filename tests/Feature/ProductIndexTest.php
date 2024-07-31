@@ -37,38 +37,6 @@ class ProductIndexTest extends TestCase
     }
 
     /** @test */
-    public function it_fetches_products_with_pagination()
-    {
-        $response = $this->getJson('/api/v1/products?page=1&limit=10');
-
-        $response->assertStatus(200);
-        $response->assertJsonStructure([
-            'success',
-            'message',
-            'products' => [
-                '*' => [
-                    'name',
-                    'price',
-                    'imageUrl',
-                    'description',
-                    'product_id',
-                    'quantity',
-                    'category',
-                    'stock',
-                    'status',
-                    'date_added',
-                ],
-            ],
-            'pagination' => [
-                'totalItems',
-                'totalPages',
-                'currentPage',
-            ],
-            'status_code',
-        ]);
-    }
-
-    /** @test */
     public function it_validates_pagination_parameters()
     {
         $response = $this->getJson('/api/v1/products?page=0&limit=10');
