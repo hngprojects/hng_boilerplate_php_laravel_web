@@ -112,9 +112,65 @@ class RegistrationTest extends TestCase
         $user = User::where('email', 'john.doe@example.com')->first();
         // dd($user);
         $this->assertNotNull($user);
-        // $this->assertEquals('google-id-12345', $user->social_id); // Adjusted field name
+        $this->assertEquals('google-id-12345', $user->social_id);
 
-        // Assert profile creation or update (if using a separate profile model)
+        $profile = $user->profile;
+        $this->assertNotNull($profile);
+        $this->assertEquals('John', $profile->first_name);
+        $this->assertEquals('Doe', $profile->last_name);
+    }
+
+    /** @test */
+    public function facebook_login_creates_or_updates_user_and_profile()
+    {
+        // Mock Google user response
+        $facebookUser = (object) [
+            'id' => '10220927895907350',
+            'nickname' => null,
+            'name' => 'John Doe',
+            'email' => 'john.doe@example.com',
+            'avatar' => 'https://graph.facebook.com/v3.3/10220927895907350/picture',
+            'user' => [
+                'name' => 'John Doe',
+                'email' => 'john.doe@example.com',
+                'id' => '102907350'
+            ],
+            'attributes' => [
+                'id' => '102209277350',
+                'nickname' => null,
+                'name' => 'John Doe',
+                'email' => 'john.doe@example.com',
+                'avatar' => 'https://graph.facebook.com/v3.3/102209907350/picture',
+                'avatar_original' => 'https://graph.facebook.com/v3.3/1022097350/picture?width=1920',
+                'profileUrl' => null
+            ],
+            'token' => 'EAAXSQSZAEan4BO48hdLYs84YGRXkTzBCZC5Pkpx3J6TlrmakX3SiMRJoYR2FYwb5hR1otRJxuGglfBVRJc9J9LgcDBOmHdsdblKZAFmPo6ZAwex6KN3DuRN9cyRM7ZCKGNdOWgvZCBmp0qUjhkaFUCr71L43ExxSc8ZAHQalcEDQqar9mXeg3EzuBasQFnFxOqFw3ZBbZBM3O91wENlK4YwZDZD',
+            'refreshToken' => null,
+            'expiresIn' => 5169882,
+            'approvedScopes' => [""]
+        ];
+
+        // Mock Socialite to return the mocked Google user
+        Socialite::shouldReceive('driver->stateless->user')
+            ->once()
+            ->andReturn($facebookUser);
+
+        // Simulate the Google login
+        $response = $this->get('/api/v1/auth/facebook/callback');
+
+        // Check for success response
+        $response->assertStatus(200)
+                 ->assertJson([
+                     'status' => 'success',
+                     'message' => 'User successfully authenticated',
+                 ]);
+
+        // Assert user creation or update
+        $user = User::where('email', 'john.doe@example.com')->first();
+        // dd($user);
+        $this->assertNotNull($user);
+        $this->assertEquals('10220927895907350', $user->social_id);
+
         $profile = $user->profile; // Ensure you have a profile relationship
         $this->assertNotNull($profile);
         $this->assertEquals('John', $profile->first_name);
