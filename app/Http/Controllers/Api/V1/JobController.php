@@ -33,10 +33,17 @@ class JobController extends Controller
             'data' => collect($jobs->items())->map(function ($job) {
                 return [
                     'id' => $job->id,
+                    'created_at' => $job->created_at,
+                    'updated_at' => $job->updated_at,
                     'title' => $job->title,
                     'description' => $job->description,
                     'location' => $job->location,
-                    'salary' => $job->salary,
+                    'deadline' => $job->deadline,
+                    'salary_range' => $job->salary,
+                    'job_type' => $job->job_type,
+                    'job_mode' => $job->work_mode,
+                    'company_name' =>$job->benefits,
+                    'is_deleted' => false,
                 ];
             }),
             'pagination' => [
@@ -57,16 +64,16 @@ class JobController extends Controller
             ], Response::HTTP_FORBIDDEN);
         }
 
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|string',
-            'description' => 'required|string',
-            'location' => 'required|string',
-            'salary' => 'nullable|string',
-            'job_type' => 'required|string',
+        $validator = Validator::make($request->all(), [            
+            'title' => $request->input('title'),
+            'description' => $request->input('description'),
+            'location' => $request->input('location'),
+            'deadline' => $request->input('deadline'),
+            'salary' => $request->input('salary_range'),
+            'job_type' => $request->input('job_type'),
+            'work_mode' => $request->input('job_mode'),
             'experience_level' => 'nullable|string',
-            'work_mode' => 'nullable|string',
             'benefits' => 'nullable|string',
-            'deadline' => 'nullable|date',
             'key_responsibilities' => 'nullable|string',
             'qualifications' => 'nullable|string',
         ]);
@@ -97,20 +104,19 @@ class JobController extends Controller
 
         return response()->json([
             'id' => $job->id,
+            'created_at' => $job->created_at,
+            'updated_at' => $job->updated_at,
             'title' => $job->title,
             'description' => $job->description,
             'location' => $job->location,
-            'salary' => $job->salary,
-            'job_type' => $job->job_type,
-            'experience_level' => $job->experience_level,
-            'work_mode' => $job->work_mode,
-            'benefits' => $job->benefits,
             'deadline' => $job->deadline,
-            'key_responsibilities' => $job->key_responsibilities,
-            'qualifications' => $job->qualifications,
-            'created_at' => $job->created_at,
-            'updated_at' => $job->updated_at,
+            'salary_range' => $job->salary,
+            'job_type' => $job->job_type,
+            'job_mode' => $job->work_mode,
+            'company_name' => 'Tech Corp', 
+            'is_deleted' => false, 
         ], Response::HTTP_OK);
+        
     }
 
     public function update(Request $request, $id)
@@ -125,15 +131,15 @@ class JobController extends Controller
         $job = Job::findOrFail($id);
 
         $validator = Validator::make($request->all(), [
-            'title' => 'string',
-            'description' => 'string',
-            'location' => 'string',
-            'salary' => 'nullable|string',
-            'job_type' => 'string',
+            'title' => $request->input('title'),
+            'description' => $request->input('description'),
+            'location' => $request->input('location'),
+            'deadline' => $request->input('deadline'),
+            'salary' => $request->input('salary_range'),
+            'job_type' => $request->input('job_type'),
+            'work_mode' => $request->input('job_mode'),
             'experience_level' => 'nullable|string',
-            'work_mode' => 'nullable|string',
             'benefits' => 'nullable|string',
-            'deadline' => 'nullable|date',
             'key_responsibilities' => 'nullable|string',
             'qualifications' => 'nullable|string',
         ]);
