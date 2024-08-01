@@ -25,6 +25,7 @@ class PaymentController extends Controller
     {
         // return response()->json(['h'=> 'ng']);
         $validator = Validator::make($request->all(), [
+            'organisation_id' => 'required',
             'plan_id' =>'required',
             'billing_option' => 'required|in:monthly,yearly',
             'full_name' => 'required',
@@ -106,6 +107,7 @@ class PaymentController extends Controller
     public function initiatePaymentForFlutterWave(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'organisation_id' => 'required',
             'plan_id' =>'required',
             'billing_option' => 'required|in:monthly,yearly',
             'full_name' => 'required',
