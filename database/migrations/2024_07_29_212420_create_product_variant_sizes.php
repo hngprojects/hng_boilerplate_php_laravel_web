@@ -27,7 +27,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_variants_size');
+        // Ensure that the table exists before attempting to drop it
+        if (Schema::hasTable('product_variant_sizes')) {
+            Schema::dropIfExists('product_variant_sizes');
+        }
         Schema::table('product_variants', function (Blueprint $table) {
             $table->dropColumn('product_id');
         });

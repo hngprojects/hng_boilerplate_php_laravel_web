@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('product_variants', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->integer('stock');
-            $table->enum('stock_status', ['in_stock', 'out_of_stock']);
+            $table->enum('stock_status', ['in_stock', 'out_of_stock', 'low_on_stock']);
             $table->integer('price');
             $table->foreignUuid('size_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
@@ -26,6 +26,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_variants');
+        // Ensure that the table exists before attempting to drop it
+        if (Schema::hasTable('product_variants')) {
+            Schema::dropIfExists('product_variants');
+        }
     }
 };
