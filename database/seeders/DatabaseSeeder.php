@@ -59,6 +59,7 @@ class DatabaseSeeder extends Seeder
         UserSubscription::factory()->create();
 
         $this->call(BillingPlanSeeder::class);
+        $this->call(SubscriptionPlanSeeder::class);
 
         // Call individual seeders here
         $this->call([
