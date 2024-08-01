@@ -13,7 +13,7 @@ class ContactControllerTest extends TestCase
 
     public function testSendInquiryValidationError()
     {
-        $response = $this->postJson('/api/v1/contacts', [
+        $response = $this->postJson('/api/v1/inquiries', [
             'name' => '',
             'email' => 'not-an-email',
             'message' => '',
@@ -37,7 +37,7 @@ class ContactControllerTest extends TestCase
         Mail::fake();
         Mail::shouldReceive('to->queue')->andThrow(new \Exception('Simulated server error'));
 
-        $response = $this->postJson('/api/v1/contacts', [
+        $response = $this->postJson('/api/v1/inquiries', [
             'name' => 'John Doe',
             'email' => 'john@example.com',
             'message' => 'This is a test message.',
@@ -55,16 +55,16 @@ class ContactControllerTest extends TestCase
         // Mock the mail sending
         Mail::fake();
 
-        $response = $this->postJson('/api/v1/contacts', [
+        $response = $this->postJson('/api/v1/inquiries', [
             'name' => 'John Doe',
             'email' => 'john@example.com',
             'message' => 'This is a test message.',
         ]);
 
-        $response->assertStatus(200)
+        $response->assertStatus(201)
             ->assertJson([
                 'message' => 'Inquiry successfully sent',
-                'status_code' => 200,
+                'status_code' => 201,
             ]);
 
         // Verify that an email was queued
