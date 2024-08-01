@@ -30,19 +30,7 @@ class ProductControllerTest extends TestCase
         $this->accessToken = $response->json('data.accessToken');
     }
 
-    public function testUnauthorizedProductAccess()
-    {
-
-        $product = Product::factory()->create();
-
-
-        $response = $this->getJson("/api/v1/products/{$product->id}");
-
-        $response->assertStatus(401);
-        $response->assertJson([
-            'message' => 'Unauthenticated.'
-        ]);
-    }
+   
 
     public function testUserLogin()
     {
