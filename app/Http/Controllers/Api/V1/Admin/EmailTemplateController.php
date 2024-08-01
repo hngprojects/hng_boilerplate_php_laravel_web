@@ -34,7 +34,7 @@ class EmailTemplateController extends Controller
 
         return response()->json($template, Response::HTTP_OK);
     }
-    
+
     /**
      * Display a paginated list of email templates.
      *
@@ -92,6 +92,26 @@ class EmailTemplateController extends Controller
             'status_code' => 200,
             'message' => 'Email template updated successfully',
             'data' => $template
+        ], 200);
+    }
+
+    public function store(Request $request)
+    {
+
+        // Validate request data
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'template' => 'required|string',
+            'status' => 'required|boolean'
+        ]);
+
+        // Create email template
+        $emailTemplate = EmailTemplate::create($validatedData);
+
+        return response()->json([
+            'status_code' => 200,
+            'message' => 'Email template created successfully',
+            'data' => $emailTemplate
         ], 200);
     }
 
