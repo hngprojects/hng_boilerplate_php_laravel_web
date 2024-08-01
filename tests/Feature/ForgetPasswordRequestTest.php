@@ -198,8 +198,7 @@ class ForgetPasswordRequestTest extends TestCase
             'email' => 'test@example.com',
         ]);
 
-        $randomNumber = Str::random(6);
-        $token = substr($randomNumber, 0, 6);
+        $token = random_int(100000, 999999);
 
         // Store the token in the password_reset_tokens table
         DB::table('password_reset_tokens')->updateOrInsert(
