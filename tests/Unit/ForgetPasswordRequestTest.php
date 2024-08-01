@@ -6,6 +6,7 @@ use Tests\TestCase;
 use App\Models\User;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\ResetPasswordNotification;
+use App\Notifications\ResetPasswordToken;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -60,5 +61,25 @@ class ForgetPasswordRequestTest extends TestCase
         $this->assertStringContainsString($url, $mailMessage->actionUrl);
         $this->assertStringContainsString('Reset Password', $mailMessage->actionText);
         $this->assertStringContainsString('Reset Password Notification', $mailMessage->subject);
+    }
+
+    /** @test */
+    public function it_sends_password_reset_token_via_notification()
+    {
+        Notification::fake();
+
+        $user = User::factory()->create();
+
+        $randomNumber = Str::random(6);
+        $token = substr($randomNumber, 0, 6);
+
+        $user->sendPasswordResetToken($token);
+
+        Notification::assertSentTo(
+            [$user], ResetPasswordToken::class,
+            function ($notification) use ($token) {
+                return $notification->token === $token;
+            }
+        );
     }
 }

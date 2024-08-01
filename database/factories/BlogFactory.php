@@ -3,10 +3,10 @@
 namespace Database\Factories;
 
 use App\Models\Blog;
-use App\Models\BlogCategory;
-use App\Models\BlogImage;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 /**
@@ -22,14 +22,18 @@ class BlogFactory extends Factory
      */
     public function definition(): array
     {
-        $blog_category = BlogCategory::factory()->create();
+        $author = User::factory()->create(['role' => 'admin']);
+        $image = UploadedFile::fake()->image('image1.jpg');
+        $path = Storage::putFile('public/images', $image);
         $blog_id = Str::uuid();
         return [
             'id' => $blog_id,
             'title' => $this->faker->sentence,
             'content' => $this->faker->paragraphs(3, true),
-            'author' => $this->faker->name,
-            'blog_category_id' => $blog_category->id
+            'author' => $author->name,
+            'author_id' => $author->id,
+            'category' => $this->faker->word(),
+            'image_url' => $path
         ];
     }
 }
