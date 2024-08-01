@@ -35,7 +35,7 @@ class ResetUserPasswordController extends Controller
         }
 
         // Check if the token exists in the password_reset_tokens table
-        $passwordReset = \DB::table('password_reset_tokens')->where([
+        $passwordReset = DB::table('password_reset_tokens')->where([
             ['email', $request->email],
             ['token', $token],
         ])->first();
