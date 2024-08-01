@@ -17,10 +17,10 @@ class SubscriptionPlanFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->randomElement(['basic', 'premium']),
-            'price' => $this->faker->numberBetween(1000, 2000),
-            'duration' => $this->faker->randomElement(['monthly', 'yearly']),
-            'description' => $this->faker->realText()
+            // 'name' => $this->faker->randomElement(['basic', 'premium']),
+            // 'price' => $this->faker->numberBetween(1000, 2000),
+            // 'duration' => $this->faker->randomElement(['monthly', 'yearly']),
+            // 'description' => $this->faker->realText()
         ];
     }
 }
