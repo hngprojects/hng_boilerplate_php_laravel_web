@@ -18,11 +18,7 @@ class Payment extends Model
         'status'
     ];
 
-    protected $casts = [
-        'id' => 'uuid',
-        'user_id' => 'uuid',
-        'gateway_id' => 'uuid',
-    ];
+
 
     public function user()
     {

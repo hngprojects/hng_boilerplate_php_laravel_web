@@ -64,7 +64,7 @@ class PaymentService
                 'redirect_url' => url('/api/v1/payments/flutterwave/verify'),
                 'customer' => [
                     'email' => $data['email'],
-                    'name' => $data['name']
+                    'name' => $data['full_name']
                 ],
                 'customizations' => [
                     'title' => 'Your Payment Title',

@@ -125,7 +125,8 @@ class PaymentController extends Controller
         $data['email'] = auth()->user()->email;
         $data['reference'] = Str::uuid();
         $data['plan_code'] = $subscriptionPlan->flutterwave_plan_code;
-        $data['amount'] = $subscriptionPlan->amount;
+        $data['amount'] = $subscriptionPlan->price;
+        $data['title'] = $subscriptionPlan->name;
 
         try {
             // Retrieve the gateway name
