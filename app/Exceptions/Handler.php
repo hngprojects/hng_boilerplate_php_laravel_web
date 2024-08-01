@@ -32,8 +32,11 @@ class Handler extends ExceptionHandler
 
 
 
+        
         $this->reportable(function (Throwable $e) {
+            
             if (env('APP_ENV') == 'production') {
+                
                 $request = request(); // Get the current request instance
                 $registry = App::make(CollectorRegistry::class);
                 $counter = $registry->getOrRegisterCounter(
@@ -46,7 +49,7 @@ class Handler extends ExceptionHandler
                 // Optionally log the error
                 logger()->error($e);
 
-                throw $e;
+                // throw $e;
             }
         });
     }
