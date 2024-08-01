@@ -150,6 +150,7 @@ Route::prefix('v1')->group(function () {
 
         // members
         Route::get('/members/{org_id}/search', [OrganizationMemberController::class, 'searchMembers']);
+        Route::get('/members/{org_id}/export', [OrganizationMemberController::class, 'download']);
 
         Route::delete('/organizations/{org_id}', [OrganisationController::class, 'destroy']);
 
@@ -181,7 +182,6 @@ Route::prefix('v1')->group(function () {
         //profile Update
         Route::patch('/profile', [ProfileController::class, 'update']);
         Route::post('/profile/upload-image', [ProfileController::class, 'uploadImage']);
-
     });
 
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
@@ -192,7 +192,6 @@ Route::prefix('v1')->group(function () {
         Route::patch('/blogs/edit/{id}', [BlogController::class, 'update'])->name('admin.blogs.update');
         Route::delete('/blogs/{id}', [BlogController::class, 'destroy']);
         Route::post('/blogs/categories', [BlogCategoriesController::class, 'store'])->name('admin.blog-category.create');
-
     });
 
     Route::apiResource('faqs', FaqController::class);
@@ -206,7 +205,6 @@ Route::prefix('v1')->group(function () {
         Route::put('/user/preferences/{id}', [PreferenceController::class, 'update']);
         Route::get('/user/preferences', [PreferenceController::class, 'index']);
         Route::delete('/user/preferences/{id}', [PreferenceController::class, 'delete']);
-
     });
 
     // Notification settings
