@@ -23,7 +23,7 @@ class User extends Authenticatable  implements JWTSubject, CanResetPasswordContr
      *
      * @var array<int, string>
      */
-    protected $guarded  = ['id'];
+    protected $guarded  = [];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -35,14 +35,14 @@ class User extends Authenticatable  implements JWTSubject, CanResetPasswordContr
         'remember_token',
     ];
 
-    protected $fillable = [
+    /* protected $fillable = [
         'name',
         'email',
         'password',
         'status',
         'deactivation_reason',
         'phone', 'is_active'
-    ];
+    ]; */
 
     /**
      * The attributes that should be cast.
@@ -186,6 +186,12 @@ class User extends Authenticatable  implements JWTSubject, CanResetPasswordContr
     public function preferences(): HasMany
     {
         return $this->hasMany(Preference::class);
+    }
+
+    public function notifications()
+    {
+        return $this->belongsToMany(Notification::class, 'user_notifications')->withPivot('status')
+            ->withTimestamps();;
     }
 
     /**

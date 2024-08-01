@@ -35,7 +35,7 @@ class BlogControllerTest extends TestCase
                 'next',
                 'previous',
                 'results' => [
-                    '*' => ['title', 'content', 'images', 'blog_category_id', 'author', 'created_at'],
+                    '*' => ['title', 'content', 'image', 'blog_category_id', 'author', 'created_at'],
                 ],
             ]);
 
@@ -69,7 +69,7 @@ class BlogControllerTest extends TestCase
                 'next',
                 'previous',
                 'results' => [
-                    '*' => ['title', 'content', 'images', 'blog_category_id', 'author', 'created_at'],
+                    '*' => ['title', 'content', 'image', 'blog_category_id', 'author', 'created_at'],
                 ],
             ]);
 
@@ -195,8 +195,8 @@ class BlogControllerTest extends TestCase
             'blog_category_id' => $blog_category->id,
         ]);
 
-        Storage::disk('public')->assertExists('blog_header/' . $image1->hashName());
-        Storage::disk('public')->assertExists('blog_header/' . $image2->hashName());
+        Storage::disk('public')->assertExists('images/' . $image1->hashName());
+        Storage::disk('public')->assertExists('images/' . $image2->hashName());
     }
 
     public function test_blog_create_request_validation()

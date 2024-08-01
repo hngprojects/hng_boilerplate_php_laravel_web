@@ -1,28 +1,24 @@
 openapi: 3.0.0
 info:
   title: Language Learning AI Game API
-  version: 1.0.0
   description: API documentation for the Language Learning AI Game
-
+  version: 1.0.0
 servers:
-  # Added by API Auto Mocking Plugin
-  - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/timiajayi/help-center-search/1.0.0
+  - url: https://virtserver.swaggerhub.com/timiajayi/help-center-search/1.0.0
+    description: SwaggerHub API Auto Mocking
   - url: https://example.com/api/v1
     description: Production server
+  - url: https://deployment.api-php.boilerplate.hng.tech/api/v1
+    description: Deployment server
   - url: https://staging.example.com/api/v1
     description: Staging server
-  - url: https://deployment.api-php.boilerplate.hng.tech/api/v1
-    description: deplyment server
-
 paths:
-  /auth/register:
+  /api/v1/auth/register:
     post:
       tags:
         - Authentication
       summary: Register a new user
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -32,6 +28,7 @@ paths:
               last_name: Doe
               email: john@example.com
               password: securepassword123
+        required: true
       responses:
         '201':
           description: User registered successfully
@@ -46,14 +43,12 @@ paths:
                   first_name: John
                   last_name: Doe
                   email: john@example.com
-
-  /auth/login:
+  /api/v1/auth/login:
     post:
       tags:
         - Authentication
       summary: User login
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -61,6 +56,7 @@ paths:
             example:
               email: john@example.com
               password: securepassword123
+        required: true
       responses:
         '200':
           description: Login successful
@@ -75,14 +71,11 @@ paths:
                   first_name: John
                   last_name: Doe
                   email: john@example.com
-
-  /auth/logout:
+  /api/v1/auth/logout:
     post:
       tags:
         - Authentication
       summary: User logout
-      security:
-        - bearerAuth: []
       responses:
         '200':
           description: Logout successful
@@ -92,20 +85,21 @@ paths:
                 $ref: '#/components/schemas/SuccessResponse'
               example:
                 message: Successfully logged out
-
-  /auth/password-reset-email:
+      security:
+        - bearerAuth: []
+  /api/v1/auth/password-reset-email:
     post:
       tags:
         - Authentication
       summary: Request password reset email
       requestBody:
-        required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/PasswordResetEmailInput'
             example:
               email: john@example.com
+        required: true
       responses:
         '200':
           description: Password reset email sent
@@ -115,8 +109,7 @@ paths:
                 $ref: '#/components/schemas/SuccessResponse'
               example:
                 message: Password reset email sent successfully
-
-  /auth/request-password-request/{token}:
+  /api/v1/auth/request-password-request/{token}:
     post:
       tags:
         - Authentication
@@ -125,10 +118,11 @@ paths:
         - name: token
           in: path
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -136,6 +130,7 @@ paths:
             example:
               password: newpassword123
               password_confirmation: newpassword123
+        required: true
       responses:
         '200':
           description: Password reset successful
@@ -145,20 +140,19 @@ paths:
                 $ref: '#/components/schemas/SuccessResponse'
               example:
                 message: Password reset successfully
-
-  /roles:
+  /api/v1/roles:
     post:
       tags:
         - Roles
       summary: Create a new role
       requestBody:
-        required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/RoleInput'
             example:
               name: admin
+        required: true
       responses:
         '201':
           description: Role created successfully
@@ -169,8 +163,7 @@ paths:
               example:
                 id: 1
                 name: admin
-
-  /auth/login-google:
+  /api/v1/auth/login-google:
     get:
       tags:
         - Authentication
@@ -178,8 +171,7 @@ paths:
       responses:
         '302':
           description: Redirect to Google
-
-  /auth/google/callback:
+  /api/v1/auth/google/callback:
     get:
       tags:
         - Authentication
@@ -198,14 +190,11 @@ paths:
                   first_name: John
                   last_name: Doe
                   email: john@example.com
-
-  /users:
+  /api/v1/users:
     get:
       tags:
         - Users
       summary: Get all users
-      security:
-        - bearerAuth: []
       responses:
         '200':
           description: Successful response
@@ -224,14 +213,13 @@ paths:
                   first_name: Jane
                   last_name: Smith
                   email: jane@example.com
+      security:
+        - bearerAuth: []
     post:
       tags:
         - Users
       summary: Create a new user
-      security:
-        - bearerAuth: []
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -241,6 +229,7 @@ paths:
               last_name: Johnson
               email: alice@example.com
               password: securepassword123
+        required: true
       responses:
         '201':
           description: User created successfully
@@ -253,8 +242,9 @@ paths:
                 first_name: Alice
                 last_name: Johnson
                 email: alice@example.com
-
-  /products/categories:
+      security:
+        - bearerAuth: []
+  /api/v1/products/categories:
     get:
       tags:
         - Products
@@ -273,8 +263,7 @@ paths:
                   name: Electronics
                 - id: 2
                   name: Books
-
-  /products/search:
+  /api/v1/products/search:
     get:
       tags:
         - Products
@@ -282,6 +271,9 @@ paths:
       parameters:
         - name: query
           in: query
+          required: false
+          style: form
+          explode: true
           schema:
             type: string
       responses:
@@ -299,8 +291,7 @@ paths:
                   description: Latest model smartphone
                   price: 599.99
                   category_id: 1
-
-  /topics/search:
+  /api/v1/topics/search:
     get:
       tags:
         - Topics
@@ -308,6 +299,9 @@ paths:
       parameters:
         - name: query
           in: query
+          required: false
+          style: form
+          explode: true
           schema:
             type: string
       responses:
@@ -323,14 +317,11 @@ paths:
                 - id: 1
                   title: Introduction to AI
                   content: AI is a rapidly growing field...
-
-  /products:
+  /api/v1/products:
     get:
       tags:
         - Products
       summary: Get all products
-      security:
-        - bearerAuth: []
       responses:
         '200':
           description: Successful response
@@ -351,14 +342,13 @@ paths:
                   description: High-performance laptop
                   price: 1299.99
                   category_id: 1
+      security:
+        - bearerAuth: []
     post:
       tags:
         - Products
       summary: Create a new product
-      security:
-        - bearerAuth: []
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -368,6 +358,7 @@ paths:
               description: 10-inch tablet with retina display
               price: 399.99
               category_id: 1
+        required: true
       responses:
         '201':
           description: Product created successfully
@@ -381,18 +372,19 @@ paths:
                 description: 10-inch tablet with retina display
                 price: 399.99
                 category_id: 1
-
-  /products/{productId}:
+      security:
+        - bearerAuth: []
+  /api/v1/products/{productId}:
     delete:
       tags:
         - Products
       summary: Delete a product
-      security:
-        - bearerAuth: []
       parameters:
         - name: productId
           in: path
           required: true
+          style: simple
+          explode: false
           schema:
             type: integer
       responses:
@@ -404,8 +396,9 @@ paths:
                 $ref: '#/components/schemas/SuccessResponse'
               example:
                 message: Product deleted successfully
-
-  /help-center/topics/search:
+      security:
+        - bearerAuth: []
+  /api/v1/help-center/topics/search:
     get:
       tags:
         - Help Center
@@ -413,6 +406,9 @@ paths:
       parameters:
         - name: query
           in: query
+          required: false
+          style: form
+          explode: true
           schema:
             type: string
       responses:
@@ -429,14 +425,12 @@ paths:
                   title: How to reset password
                   content: Follow these steps to reset your password...
                   category: Account Management
-
-  /contact:
+  /api/v1/contact:
     post:
       tags:
         - Contact
       summary: Send an inquiry
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -445,6 +439,7 @@ paths:
               name: John Doe
               email: john@example.com
               message: I have a question about your services.
+        required: true
       responses:
         '200':
           description: Inquiry sent successfully
@@ -454,8 +449,7 @@ paths:
                 $ref: '#/components/schemas/SuccessResponse'
               example:
                 message: Your inquiry has been sent successfully
-
-  /blogs/latest:
+  /api/v1/blogs/latest:
     get:
       tags:
         - Blogs
@@ -475,8 +469,7 @@ paths:
                   content: AI is revolutionizing various industries...
                   author: John Doe
                   created_at: '2023-07-23T10:00:00Z'
-
-  /blogs/search:
+  /api/v1/blogs/search:
     get:
       tags:
         - Blogs
@@ -484,6 +477,9 @@ paths:
       parameters:
         - name: query
           in: query
+          required: false
+          style: form
+          explode: true
           schema:
             type: string
       responses:
@@ -501,14 +497,12 @@ paths:
                   content: AI is revolutionizing various industries...
                   author: John Doe
                   created_at: '2023-07-23T10:00:00Z'
-
-  /squeeze:
+  /api/v1/squeeze:
     post:
       tags:
         - Squeeze
       summary: Create a squeeze page
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -516,6 +510,7 @@ paths:
             example:
               email: john@example.com
               name: John Doe
+        required: true
       responses:
         '201':
           description: Squeeze page created successfully
@@ -525,36 +520,7 @@ paths:
                 $ref: '#/components/schemas/SuccessResponse'
               example:
                 message: Squeeze page created successfully
-
-  /help-center/topics:
-    post:
-      tags:
-        - Help Center
-      summary: Create a new help article
-      security:
-        - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/HelpArticle'
-            example:
-              title: How to use our product
-              content: Follow these steps to use our product effectively...
-              category: Product Usage
-      responses:
-        '201':
-          description: Help article created successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HelpArticle'
-              example:
-                id: 2
-                title: How to use our product
-                content: Follow these steps to use our product effectively...
-                category: Product Usage
+  /api/v1/help-center/topics:
     get:
       tags:
         - Help Center
@@ -577,54 +543,45 @@ paths:
                   title: How to use our product
                   content: Follow these steps to use our product effectively...
                   category: Product Usage
-
-  /help-center/topics/{articleId}:
-    patch:
+    post:
       tags:
         - Help Center
-      summary: Update a help article
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: articleId
-          in: path
-          required: true
-          schema:
-            type: integer
+      summary: Create a new help article
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SuccessResponse'
+              $ref: '#/components/schemas/HelpArticle'
             example:
-              title: 
-              Updated: How to use our product
-              content: Here are the updated steps to use our product effectively...
+              title: How to use our product
+              content: Follow these steps to use our product effectively...
               category: Product Usage
+        required: true
       responses:
-        '200':
-          description: Help article updated successfully
+        '201':
+          description: Help article created successfully
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/HelpArticle'
               example:
                 id: 2
-                title: 
-                Updated: How to use our product
-                content: Here are the updated steps to use our product effectively...
+                title: How to use our product
+                content: Follow these steps to use our product effectively...
                 category: Product Usage
+      security:
+        - bearerAuth: []
+  /api/v1/help-center/topics/{articleId}:
     delete:
       tags:
         - Help Center
       summary: Delete a help article
-      security:
-        - bearerAuth: []
       parameters:
         - name: articleId
           in: path
           required: true
+          style: simple
+          explode: false
           schema:
             type: integer
       responses:
@@ -636,16 +593,50 @@ paths:
                 $ref: '#/components/schemas/SuccessResponse'
               example:
                 message: Help article deleted successfully
-
-  /invitations/generate:
+      security:
+        - bearerAuth: []
+    patch:
+      tags:
+        - Help Center
+      summary: Update a help article
+      parameters:
+        - name: articleId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+            example:
+              Updated: How to use our product
+              content: Here are the updated steps to use our product effectively...
+              category: Product Usage
+        required: true
+      responses:
+        '200':
+          description: Help article updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HelpArticle'
+              example:
+                id: 2
+                Updated: How to use our product
+                content: Here are the updated steps to use our product effectively...
+                category: Product Usage
+      security:
+        - bearerAuth: []
+  /api/v1/invitations/generate:
     post:
       tags:
         - Invitations
       summary: Generate an invitation
-      security:
-        - bearerAuth: []
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -653,6 +644,7 @@ paths:
             example:
               email: newuser@example.com
               role: member
+        required: true
       responses:
         '201':
           description: Invitation generated successfully
@@ -663,8 +655,9 @@ paths:
               example:
                 message: Invitation sent successfully
                 invitation_token: abc123xyz789
-
-  /invite/accept:
+      security:
+        - bearerAuth: []
+  /api/v1/invite/accept:
     get:
       tags:
         - Invitations
@@ -673,19 +666,19 @@ paths:
         - name: token
           in: query
           required: true
+          style: form
+          explode: true
           schema:
             type: string
       responses:
         '302':
           description: Redirect to invitation acceptance page
-
-  /invite:
+  /api/v1/invite:
     post:
       tags:
         - Invitations
       summary: Accept an invitation
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -695,6 +688,7 @@ paths:
               first_name: Jane
               last_name: Doe
               password: securepassword123
+        required: true
       responses:
         '200':
           description: Invitation accepted successfully
@@ -709,14 +703,11 @@ paths:
                   first_name: Jane
                   last_name: Doe
                   email: jane@example.com
-
-  /features:
+  /api/v1/features:
     get:
       tags:
         - Features
       summary: Get all features
-      security:
-        - bearerAuth: []
       responses:
         '200':
           description: Successful response
@@ -733,14 +724,13 @@ paths:
                 - id: 2
                   name: Priority Support
                   description: 24/7 priority customer support
+      security:
+        - bearerAuth: []
     post:
       tags:
         - Features
       summary: Create a new feature
-      security:
-        - bearerAuth: []
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -748,6 +738,7 @@ paths:
             example:
               name: Custom Branding
               description: Ability to add custom branding to the platform
+        required: true
       responses:
         '201':
           description: Feature created successfully
@@ -759,18 +750,19 @@ paths:
                 id: 3
                 name: Custom Branding
                 description: Ability to add custom branding to the platform
-
-  /features/{feature}:
+      security:
+        - bearerAuth: []
+  /api/v1/features/{feature}:
     get:
       tags:
         - Features
       summary: Get a specific feature
-      security:
-        - bearerAuth: []
       parameters:
         - name: feature
           in: path
           required: true
+          style: simple
+          explode: false
           schema:
             type: integer
       responses:
@@ -784,20 +776,21 @@ paths:
                 id: 1
                 name: Advanced Analytics
                 description: Access to advanced analytics tools
+      security:
+        - bearerAuth: []
     put:
       tags:
         - Features
       summary: Update a feature
-      security:
-        - bearerAuth: []
       parameters:
         - name: feature
           in: path
           required: true
+          style: simple
+          explode: false
           schema:
             type: integer
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -805,6 +798,7 @@ paths:
             example:
               name: Enhanced Analytics
               description: Access to enhanced and real-time analytics tools
+        required: true
       responses:
         '200':
           description: Feature updated successfully
@@ -816,16 +810,18 @@ paths:
                 id: 1
                 name: Enhanced Analytics
                 description: Access to enhanced and real-time analytics tools
+      security:
+        - bearerAuth: []
     delete:
       tags:
         - Features
       summary: Delete a feature
-      security:
-        - bearerAuth: []
       parameters:
         - name: feature
           in: path
           required: true
+          style: simple
+          explode: false
           schema:
             type: integer
       responses:
@@ -837,14 +833,13 @@ paths:
                 $ref: '#/components/schemas/SuccessResponse'
               example:
                 message: Feature deleted successfully
-
-  /plans:
+      security:
+        - bearerAuth: []
+  /api/v1/plans:
     get:
       tags:
         - Plans
       summary: Get all subscription plans
-      security:
-        - bearerAuth: []
       responses:
         '200':
           description: Successful response
@@ -869,14 +864,13 @@ paths:
                       name: Basic Analytics
                     - id: 2
                       name: Priority Support
+      security:
+        - bearerAuth: []
     post:
       tags:
         - Plans
       summary: Create a new subscription plan
-      security:
-        - bearerAuth: []
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -884,7 +878,11 @@ paths:
             example:
               name: Enterprise
               price: 49.99
-              features: [1, 2, 3]
+              features:
+                - 1
+                - 2
+                - 3
+        required: true
       responses:
         '201':
           description: Plan created successfully
@@ -903,18 +901,19 @@ paths:
                     name: Priority Support
                   - id: 3
                     name: Custom Branding
-
-  /plans/{plan}:
+      security:
+        - bearerAuth: []
+  /api/v1/plans/{plan}:
     get:
       tags:
         - Plans
       summary: Get a specific subscription plan
-      security:
-        - bearerAuth: []
       parameters:
         - name: plan
           in: path
           required: true
+          style: simple
+          explode: false
           schema:
             type: integer
       responses:
@@ -931,20 +930,21 @@ paths:
                 features:
                   - id: 1
                     name: Basic Analytics
+      security:
+        - bearerAuth: []
     put:
       tags:
         - Plans
       summary: Update a subscription plan
-      security:
-        - bearerAuth: []
       parameters:
         - name: plan
           in: path
           required: true
+          style: simple
+          explode: false
           schema:
             type: integer
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -952,7 +952,10 @@ paths:
             example:
               name: Basic Plus
               price: 14.99
-              features: [1, 2]
+              features:
+                - 1
+                - 2
+        required: true
       responses:
         '200':
           description: Plan updated successfully
@@ -969,16 +972,18 @@ paths:
                     name: Basic Analytics
                   - id: 2
                     name: Priority Support
+      security:
+        - bearerAuth: []
     delete:
       tags:
         - Plans
       summary: Delete a subscription plan
-      security:
-        - bearerAuth: []
       parameters:
         - name: plan
           in: path
           required: true
+          style: simple
+          explode: false
           schema:
             type: integer
       responses:
@@ -990,18 +995,19 @@ paths:
                 $ref: '#/components/schemas/SuccessResponse'
               example:
                 message: Subscription plan deleted successfully
-
-  /users/plans/{user_subscription}/cancel:
+      security:
+        - bearerAuth: []
+  /api/v1/users/plans/{user_subscription}/cancel:
     post:
       tags:
         - Subscriptions
       summary: Cancel a user's subscription
-      security:
-        - bearerAuth: []
       parameters:
         - name: user_subscription
           in: path
           required: true
+          style: simple
+          explode: false
           schema:
             type: integer
       responses:
@@ -1013,40 +1019,13 @@ paths:
                 $ref: '#/components/schemas/SuccessResponse'
               example:
                 message: Subscription cancelled successfully
-
-  /organisations:
-    post:
-      tags:
-        - Organisations
-      summary: Create a new organisation
       security:
         - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/OrganisationInput'
-            example:
-              name: Acme Corp
-              description: Leading innovation company
-      responses:
-        '201':
-          description: Organisation created successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Organisation'
-              example:
-                id: 1
-                name: Acme Corp
-                description: Leading innovation company
+  /api/v1/organisations:
     get:
       tags:
         - Organisations
       summary: Get all organisations
-      security:
-        - bearerAuth: []
       responses:
         '200':
           description: Successful response
@@ -1063,22 +1042,48 @@ paths:
                 - id: 2
                   name: Tech Innovators
                   description: Cutting-edge technology solutions
-
-  /organisations/{org_id}:
+      security:
+        - bearerAuth: []
+    post:
+      tags:
+        - Organisations
+      summary: Create a new organisation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganisationInput'
+            example:
+              name: Acme Corp
+              description: Leading innovation company
+        required: true
+      responses:
+        '201':
+          description: Organisation created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organisation'
+              example:
+                id: 1
+                name: Acme Corp
+                description: Leading innovation company
+      security:
+        - bearerAuth: []
+  /api/v1/organisations/{org_id}:
     put:
       tags:
         - Organisations
       summary: Update an organisation
-      security:
-        - bearerAuth: []
       parameters:
         - name: org_id
           in: path
           required: true
+          style: simple
+          explode: false
           schema:
             type: integer
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -1086,6 +1091,7 @@ paths:
             example:
               name: Acme Corporation
               description: Global leader in innovation
+        required: true
       responses:
         '200':
           description: Organisation updated successfully
@@ -1097,16 +1103,18 @@ paths:
                 id: 1
                 name: Acme Corporation
                 description: Global leader in innovation
+      security:
+        - bearerAuth: []
     delete:
       tags:
         - Organisations
       summary: Delete an organisation
-      security:
-        - bearerAuth: []
       parameters:
         - name: org_id
           in: path
           required: true
+          style: simple
+          explode: false
           schema:
             type: integer
       responses:
@@ -1118,23 +1126,26 @@ paths:
                 $ref: '#/components/schemas/SuccessResponse'
               example:
                 message: Organisation deleted successfully
-
-  /organisations/{org_id}/users/{user_id}:
+      security:
+        - bearerAuth: []
+  /api/v1/organisations/{org_id}/users/{user_id}:
     delete:
       tags:
         - Organisations
       summary: Remove a user from an organisation
-      security:
-        - bearerAuth: []
       parameters:
         - name: org_id
           in: path
           required: true
+          style: simple
+          explode: false
           schema:
             type: integer
         - name: user_id
           in: path
           required: true
+          style: simple
+          explode: false
           schema:
             type: integer
       responses:
@@ -1146,18 +1157,19 @@ paths:
                 $ref: '#/components/schemas/SuccessResponse'
               example:
                 message: User removed from organisation successfully
-
-  /organisations/{organisation}/members:
+      security:
+        - bearerAuth: []
+  /api/v1/organisations/{organisation}/members:
     get:
       tags:
         - Organisations
       summary: Get all members of an organisation
-      security:
-        - bearerAuth: []
       parameters:
         - name: organisation
           in: path
           required: true
+          style: simple
+          explode: false
           schema:
             type: integer
       responses:
@@ -1178,16 +1190,14 @@ paths:
                   first_name: Jane
                   last_name: Smith
                   email: jane@example.com
-
-  /testimonials:
+      security:
+        - bearerAuth: []
+  /api/v1/testimonials:
     post:
       tags:
         - Testimonials
       summary: Create a new testimonial
-      security:
-        - bearerAuth: []
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -1195,6 +1205,7 @@ paths:
             example:
               content: This product has revolutionized our workflow!
               rating: 5
+        required: true
       responses:
         '201':
           description: Testimonial created successfully
@@ -1207,18 +1218,19 @@ paths:
                 user_id: 1
                 content: This product has revolutionized our workflow!
                 rating: 5
-
-  /testimonials/{testimonial_id}:
+      security:
+        - bearerAuth: []
+  /api/v1/testimonials/{testimonial_id}:
     get:
       tags:
         - Testimonials
       summary: Get a specific testimonial
-      security:
-        - bearerAuth: []
       parameters:
         - name: testimonial_id
           in: path
           required: true
+          style: simple
+          explode: false
           schema:
             type: integer
       responses:
@@ -1233,16 +1245,18 @@ paths:
                 user_id: 1
                 content: This product has revolutionized our workflow!
                 rating: 5
+      security:
+        - bearerAuth: []
     delete:
       tags:
         - Testimonials
       summary: Delete a testimonial
-      security:
-        - bearerAuth: []
       parameters:
         - name: testimonial_id
           in: path
           required: true
+          style: simple
+          explode: false
           schema:
             type: integer
       responses:
@@ -1254,44 +1268,13 @@ paths:
                 $ref: '#/components/schemas/SuccessResponse'
               example:
                 message: Testimonial deleted successfully
-
-  /jobs:
-    post:
-      tags:
-        - Jobs
-      summary: Create a new job
       security:
         - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/JobInput'
-            example:
-              title: Software Engineer
-              description: We're looking for a talented software engineer to join our team.
-              location: Remote
-              salary: 100000
-      responses:
-        '201':
-          description: Job created successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Job'
-              example:
-                id: 1
-                title: Software Engineer
-                description: We're looking for a talented software engineer to join our team.
-                location: Remote
-                salary: 100000
+  /api/v1/jobs:
     get:
       tags:
         - Jobs
       summary: Get all jobs
-      security:
-        - bearerAuth: []
       responses:
         '200':
           description: Successful response
@@ -1312,75 +1295,49 @@ paths:
                   description: Seeking an experienced product manager to lead our team.
                   location: New York, NY
                   salary: 120000
-
-  /jobs/{id}:
-    put:
-      tags:
-        - Jobs
-      summary: Update a job
       security:
         - bearerAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
+    post:
+      tags:
+        - Jobs
+      summary: Create a new job
       requestBody:
-        required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/JobInput'
             example:
-              title: Senior Software Engineer
-              description: We're looking for a senior software engineer to lead our development team.
+              title: Software Engineer
+              description: We're looking for a talented software engineer to join our team.
               location: Remote
-              salary: 130000
+              salary: 100000
+        required: true
       responses:
-        '200':
-          description: Job updated successfully
+        '201':
+          description: Job created successfully
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Job'
               example:
                 id: 1
-                title: Senior Software Engineer
-                description: We're looking for a senior software engineer to lead our development team.
+                title: Software Engineer
+                description: We're looking for a talented software engineer to join our team.
                 location: Remote
-                salary: 130000
-    delete:
-      tags:
-        - Jobs
-      summary: Delete a job
+                salary: 100000
       security:
         - bearerAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Job deleted successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SuccessResponse'
-              example:
-                message: Job deleted successfully
+  /api/v1/jobs/{id}:
     get:
       tags:
         - Jobs
       summary: Get a specific job
-      security:
-        - bearerAuth: []
       parameters:
         - name: id
           in: path
           required: true
+          style: simple
+          explode: false
           schema:
             type: integer
       responses:
@@ -1396,17 +1353,80 @@ paths:
                 description: We're looking for a senior software engineer to lead our development team.
                 location: Remote
                 salary: 130000
-
-  /jobs/search:
+      security:
+        - bearerAuth: []
+    put:
+      tags:
+        - Jobs
+      summary: Update a job
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobInput'
+            example:
+              title: Senior Software Engineer
+              description: We're looking for a senior software engineer to lead our development team.
+              location: Remote
+              salary: 130000
+        required: true
+      responses:
+        '200':
+          description: Job updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+              example:
+                id: 1
+                title: Senior Software Engineer
+                description: We're looking for a senior software engineer to lead our development team.
+                location: Remote
+                salary: 130000
+      security:
+        - bearerAuth: []
+    delete:
+      tags:
+        - Jobs
+      summary: Delete a job
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Job deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+              example:
+                message: Job deleted successfully
+      security:
+        - bearerAuth: []
+  /api/v1/jobs/search:
     get:
       tags:
         - Jobs
       summary: Search jobs
-      security:
-        - bearerAuth: []
       parameters:
         - name: query
           in: query
+          required: false
+          style: form
+          explode: true
           schema:
             type: string
       responses:
@@ -1424,21 +1444,24 @@ paths:
                   description: We're looking for a senior software engineer to lead our development team.
                   location: Remote
                   salary: 130000
-
-  /user/export/{format}:
+      security:
+        - bearerAuth: []
+  /api/v1/user/export/{format}:
     get:
       tags:
         - Users
       summary: Export user data
-      security:
-        - bearerAuth: []
       parameters:
         - name: format
           in: path
           required: true
+          style: simple
+          explode: false
           schema:
             type: string
-            enum: [csv, json]
+            enum:
+              - csv
+              - json
       responses:
         '200':
           description: User data exported successfully
@@ -1447,14 +1470,13 @@ paths:
               schema:
                 type: string
                 format: binary
-
-  /accounts/deactivate:
+      security:
+        - bearerAuth: []
+  /api/v1/accounts/deactivate:
     patch:
       tags:
         - Accounts
       summary: Deactivate user account
-      security:
-        - bearerAuth: []
       responses:
         '200':
           description: Account deactivated successfully
@@ -1464,33 +1486,36 @@ paths:
                 $ref: '#/components/schemas/SuccessResponse'
               example:
                 message: Account deactivated successfully
-
-  /organisations/{org_id}/roles/{role_id}:
+      security:
+        - bearerAuth: []
+  /api/v1/organisations/{org_id}/roles/{role_id}:
     put:
       tags:
         - Roles
       summary: Update a role in an organisation
-      security:
-        - bearerAuth: []
       parameters:
         - name: org_id
           in: path
           required: true
+          style: simple
+          explode: false
           schema:
             type: integer
         - name: role_id
           in: path
           required: true
+          style: simple
+          explode: false
           schema:
             type: integer
       requestBody:
-        required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/RoleInput'
             example:
               name: Senior Manager
+        required: true
       responses:
         '200':
           description: Role updated successfully
@@ -1501,23 +1526,26 @@ paths:
               example:
                 id: 1
                 name: Senior Manager
-
-  /organisations/{org_id}/roles/{role_id}/disable:
+      security:
+        - bearerAuth: []
+  /api/v1/organisations/{org_id}/roles/{role_id}/disable:
     put:
       tags:
         - Roles
       summary: Disable a role in an organisation
-      security:
-        - bearerAuth: []
       parameters:
         - name: org_id
           in: path
           required: true
+          style: simple
+          explode: false
           schema:
             type: integer
         - name: role_id
           in: path
           required: true
+          style: simple
+          explode: false
           schema:
             type: integer
       responses:
@@ -1529,14 +1557,13 @@ paths:
                 $ref: '#/components/schemas/SuccessResponse'
               example:
                 message: Role disabled successfully
-
-  /customers:
+      security:
+        - bearerAuth: []
+  /api/v1/customers:
     get:
       tags:
         - Customers
       summary: Get all customers
-      security:
-        - bearerAuth: []
       responses:
         '200':
           description: Successful response
@@ -1555,38 +1582,9 @@ paths:
                   name: Jane Smith
                   email: jane@example.com
                   company: Tech Innovators
-
-  /blogs:
-    post:
-      tags:
-        - Blogs
-      summary: Create a new blog post
       security:
         - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/BlogInput'
-            example:
-              title: The Future of AI
-              content: AI is rapidly evolving and changing the way we live and work...
-              category_id: 1
-      responses:
-        '201':
-          description: Blog post created successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Blog'
-              example:
-                id: 1
-                title: The Future of AI
-                content: AI is rapidly evolving and changing the way we live and work...
-                category_id: 1
-                author: John Doe
-                created_at: '2023-07-24T10:00:00Z'
+  /api/v1/blogs:
     get:
       tags:
         - Blogs
@@ -1613,22 +1611,50 @@ paths:
                   category_id: 2
                   author: Jane Smith
                   created_at: '2023-07-25T11:30:00Z'
-
-  /blogs/edit/{id}:
+    post:
+      tags:
+        - Blogs
+      summary: Create a new blog post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlogInput'
+            example:
+              title: The Future of AI
+              content: AI is rapidly evolving and changing the way we live and work...
+              category_id: 1
+        required: true
+      responses:
+        '201':
+          description: Blog post created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Blog'
+              example:
+                id: 1
+                title: The Future of AI
+                content: AI is rapidly evolving and changing the way we live and work...
+                category_id: 1
+                author: John Doe
+                created_at: '2023-07-24T10:00:00Z'
+      security:
+        - bearerAuth: []
+  /api/v1/blogs/edit/{id}:
     patch:
       tags:
         - Blogs
       summary: Update a blog post
-      security:
-        - bearerAuth: []
       parameters:
         - name: id
           in: path
           required: true
+          style: simple
+          explode: false
           schema:
             type: integer
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -1637,6 +1663,7 @@ paths:
               title: The Evolving Future of AI
               content: AI is rapidly evolving and revolutionizing the way we live and work...
               category_id: 1
+        required: true
       responses:
         '200':
           description: Blog post updated successfully
@@ -1652,29 +1679,9 @@ paths:
                 author: John Doe
                 created_at: '2023-07-24T10:00:00Z'
                 updated_at: '2023-07-26T09:15:00Z'
-
-  /blogs/{id}:
-    delete:
-      tags:
-        - Blogs
-      summary: Delete a blog post
       security:
         - bearerAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Blog post deleted successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SuccessResponse'
-              example:
-                message: Blog post deleted successfully
+  /api/v1/blogs/{id}:
     get:
       tags:
         - Blogs
@@ -1683,6 +1690,8 @@ paths:
         - name: id
           in: path
           required: true
+          style: simple
+          explode: false
           schema:
             type: integer
       responses:
@@ -1700,22 +1709,42 @@ paths:
                 author: John Doe
                 created_at: '2023-07-24T10:00:00Z'
                 updated_at: '2023-07-26T09:15:00Z'
-
-  /blogs/categories:
+    delete:
+      tags:
+        - Blogs
+      summary: Delete a blog post
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Blog post deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+              example:
+                message: Blog post deleted successfully
+      security:
+        - bearerAuth: []
+  /api/v1/blogs/categories:
     post:
       tags:
         - Blogs
       summary: Create a new blog category
-      security:
-        - bearerAuth: []
       requestBody:
-        required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/BlogCategoryInput'
             example:
               name: Technology Trends
+        required: true
       responses:
         '201':
           description: Blog category created successfully
@@ -1726,41 +1755,13 @@ paths:
               example:
                 id: 3
                 name: Technology Trends
-
-  /user/preferences:
-    post:
-      tags:
-        - User Preferences
-      summary: Create user preferences
       security:
         - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PreferenceInput'
-            example:
-              key: theme
-              value: dark
-      responses:
-        '201':
-          description: User preference created successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Preference'
-              example:
-                id: 1
-                user_id: 1
-                key: theme
-                value: dark
+  /api/v1/user/preferences:
     get:
       tags:
         - User Preferences
       summary: Get user preferences
-      security:
-        - bearerAuth: []
       responses:
         '200':
           description: Successful response
@@ -1779,22 +1780,49 @@ paths:
                   user_id: 1
                   key: language
                   value: en
-
-  /user/preferences/{id}:
+      security:
+        - bearerAuth: []
+    post:
+      tags:
+        - User Preferences
+      summary: Create user preferences
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PreferenceInput'
+            example:
+              key: theme
+              value: dark
+        required: true
+      responses:
+        '201':
+          description: User preference created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Preference'
+              example:
+                id: 1
+                user_id: 1
+                key: theme
+                value: dark
+      security:
+        - bearerAuth: []
+  /api/v1/user/preferences/{id}:
     put:
       tags:
         - User Preferences
       summary: Update user preference
-      security:
-        - bearerAuth: []
       parameters:
         - name: id
           in: path
           required: true
+          style: simple
+          explode: false
           schema:
             type: integer
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -1802,6 +1830,7 @@ paths:
             example:
               key: theme
               value: light
+        required: true
       responses:
         '200':
           description: User preference updated successfully
@@ -1814,16 +1843,18 @@ paths:
                 user_id: 1
                 key: theme
                 value: light
+      security:
+        - bearerAuth: []
     delete:
       tags:
         - User Preferences
       summary: Delete user preference
-      security:
-        - bearerAuth: []
       parameters:
         - name: id
           in: path
           required: true
+          style: simple
+          explode: false
           schema:
             type: integer
       responses:
@@ -1835,22 +1866,22 @@ paths:
                 $ref: '#/components/schemas/SuccessResponse'
               example:
                 message: User preference deleted successfully
-
-  /notification-settings/{user_id}:
+      security:
+        - bearerAuth: []
+  /api/v1/notification-settings/{user_id}:
     patch:
       tags:
         - Notification Settings
       summary: Update user notification settings
-      security:
-        - bearerAuth: []
       parameters:
         - name: user_id
           in: path
           required: true
+          style: simple
+          explode: false
           schema:
             type: integer
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -1858,6 +1889,7 @@ paths:
             example:
               email_notifications: true
               push_notifications: false
+        required: true
       responses:
         '200':
           description: Notification settings updated successfully
@@ -1870,20 +1902,51 @@ paths:
                 user_id: 1
                 email_notifications: true
                 push_notifications: false
+      security:
+        - bearerAuth: []
+  /api/v1/faq:
+    post:
+      tags:
+        - FAQ
+      summary: Create a new FAQ
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FAQInput'
+      responses:
+        '201':
+          description: FAQ created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FAQ'
+      security:
+        - bearerAuth: []
+  /api/v1/faqs:
+    get:
+      tags:
+        - FAQ
+      summary: Get all FAQs
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FAQ'
 components:
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
   schemas:
     RegisterInput:
-      type: object
       required:
+        - email
         - first_name
         - last_name
-        - email
         - password
+      type: object
       properties:
         first_name:
           type: string
@@ -1896,10 +1959,10 @@ components:
           type: string
           format: password
     LoginInput:
-      type: object
       required:
         - email
         - password
+      type: object
       properties:
         email:
           type: string
@@ -1927,18 +1990,18 @@ components:
           type: string
           format: email
     PasswordResetEmailInput:
-      type: object
       required:
         - email
+      type: object
       properties:
         email:
           type: string
           format: email
     ResetPasswordInput:
-      type: object
       required:
         - password
         - password_confirmation
+      type: object
       properties:
         password:
           type: string
@@ -1947,9 +2010,9 @@ components:
           type: string
           format: password
     RoleInput:
-      type: object
       required:
         - name
+      type: object
       properties:
         name:
           type: string
@@ -1981,11 +2044,11 @@ components:
         category_id:
           type: integer
     ProductInput:
-      type: object
       required:
+        - category_id
         - name
         - price
-        - category_id
+      type: object
       properties:
         name:
           type: string
@@ -2016,11 +2079,11 @@ components:
         category:
           type: string
     ContactInput:
-      type: object
       required:
-        - name
         - email
         - message
+        - name
+      type: object
       properties:
         name:
           type: string
@@ -2049,11 +2112,11 @@ components:
           type: string
           format: date-time
     BlogInput:
-      type: object
       required:
-        - title
-        - content
         - category_id
+        - content
+        - title
+      type: object
       properties:
         title:
           type: string
@@ -2069,16 +2132,16 @@ components:
         name:
           type: string
     BlogCategoryInput:
-      type: object
       required:
         - name
+      type: object
       properties:
         name:
           type: string
     SqueezeInput:
-      type: object
       required:
         - email
+      type: object
       properties:
         email:
           type: string
@@ -2086,10 +2149,10 @@ components:
         name:
           type: string
     InvitationInput:
-      type: object
       required:
         - email
         - role
+      type: object
       properties:
         email:
           type: string
@@ -2104,12 +2167,12 @@ components:
         invitation_token:
           type: string
     InvitationAcceptInput:
-      type: object
       required:
-        - token
         - first_name
         - last_name
         - password
+        - token
+      type: object
       properties:
         token:
           type: string
@@ -2130,9 +2193,9 @@ components:
         description:
           type: string
     FeatureInput:
-      type: object
       required:
         - name
+      type: object
       properties:
         name:
           type: string
@@ -2152,10 +2215,10 @@ components:
           items:
             $ref: '#/components/schemas/Feature'
     PlanInput:
-      type: object
       required:
         - name
         - price
+      type: object
       properties:
         name:
           type: string
@@ -2175,9 +2238,9 @@ components:
         description:
           type: string
     OrganisationInput:
-      type: object
       required:
         - name
+      type: object
       properties:
         name:
           type: string
@@ -2195,10 +2258,10 @@ components:
         rating:
           type: integer
     TestimonialInput:
-      type: object
       required:
         - content
         - rating
+      type: object
       properties:
         content:
           type: string
@@ -2218,10 +2281,10 @@ components:
         salary:
           type: number
     JobInput:
-      type: object
       required:
-        - title
         - description
+        - title
+      type: object
       properties:
         title:
           type: string
@@ -2255,10 +2318,10 @@ components:
         value:
           type: string
     PreferenceInput:
-      type: object
       required:
         - key
         - value
+      type: object
       properties:
         key:
           type: string
@@ -2287,4 +2350,27 @@ components:
       properties:
         message:
           type: string
-    
+    FAQInput:
+      type: object
+      required:
+        - title
+        - message
+      properties:
+        title:
+          type: string
+        message:
+          type: string
+    FAQ:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        message:
+          type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
