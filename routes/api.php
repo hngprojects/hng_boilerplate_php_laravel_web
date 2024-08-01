@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\V1\Auth\ForgetPasswordRequestController;
 use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Controllers\Api\V1\Auth\ResetUserPasswordController;
 use App\Http\Controllers\Api\V1\Auth\SocialAuthController;
+use App\Http\Controllers\Api\V1\Auth\ForgetResetPasswordController;
 use App\Http\Controllers\Api\V1\BlogSearchController;
 use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\ContactController;
@@ -60,11 +61,16 @@ Route::prefix('v1')->group(function () {
     Route::post('/auth/logout', [LoginController::class, 'logout'])->middleware('auth:api');
     Route::post('/auth/password-reset-email', ForgetPasswordRequestController::class)->name('password.reset');
     Route::post('/auth/request-password-request/{token}', ResetUserPasswordController::class);
-    Route::post('/roles', [RoleController::class, 'store']);
     Route::get('/auth/google', [SocialAuthController::class, 'redirectToGoogle']);
     Route::get('/auth/login-google', [SocialAuthController::class, 'redirectToGoogle']);
     Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
     Route::post('/auth/google/callback', [SocialAuthController::class, 'saveGoogleRequest']);
+    /* Forget and Reset Password using OTP */
+    Route::post('/auth/forgot-password', [ForgetResetPasswordController::class, 'forgetPassword']);
+    Route::post('/auth/reset-forgot-password', [ForgetResetPasswordController::class, 'resetPassword']);
+    Route::post('/auth/verify-forget-otp', [ForgetResetPasswordController::class, 'verifyUserOTP']);
+
+    Route::post('/roles', [RoleController::class, 'store']);
 
     Route::get('/auth/login-facebook', [SocialAuthController::class, 'loginUsingFacebook']);
     Route::get('/auth/facebook/callback', [SocialAuthController::class, 'callbackFromFacebook']);
