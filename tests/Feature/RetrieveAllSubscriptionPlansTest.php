@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -12,10 +11,8 @@ class RetrieveAllSubscriptionPlansTest extends TestCase
 
     public function test_it_retrieves_billing_plans_successfully()
     {
-        $user = User::factory()->create();
-        $this->actingAs($user, 'api');
-        $response = $this->getJson('/api/v1/plans');
 
+        $response = $this->getJson('/api/v1/billing-plans');
         $response->assertStatus(200)
             ->assertJsonStructure([
                 'status',
@@ -24,7 +21,8 @@ class RetrieveAllSubscriptionPlansTest extends TestCase
                     '*' => [
                         'id',
                         'name',
-                        'price'
+                        'price',
+                        'created_at'
                     ]
                 ]
             ]);
