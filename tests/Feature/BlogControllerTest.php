@@ -3,8 +3,6 @@
 namespace Tests\Feature;
 
 use App\Models\Blog;
-use App\Models\BlogCategory;
-use App\Models\BlogImage;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -26,7 +24,7 @@ class BlogControllerTest extends TestCase
 
 
         // Send a request without pagination parameters
-        $response = $this->getJson('/api/v1/blog/latest');
+        $response = $this->getJson('/api/v1/blogs/latest');
 
         // Assert response status and structure
         $response->assertStatus(200)
@@ -35,7 +33,7 @@ class BlogControllerTest extends TestCase
                 'next',
                 'previous',
                 'results' => [
-                    '*' => ['title', 'content', 'image', 'blog_category_id', 'author', 'created_at'],
+                    '*' => ['title', 'content', 'category', 'author', 'image_url', 'created_at'],
                 ],
             ]);
 
@@ -60,7 +58,7 @@ class BlogControllerTest extends TestCase
         Blog::factory()->count(20)->create();
 
         // Send a request with pagination parameters
-        $response = $this->getJson('/api/v1/blog/latest?page=2&page_size=5');
+        $response = $this->getJson('/api/v1/blogs/latest?page=2&page_size=5');
 
         // Assert response status and structure
         $response->assertStatus(200)
@@ -69,7 +67,7 @@ class BlogControllerTest extends TestCase
                 'next',
                 'previous',
                 'results' => [
-                    '*' => ['title', 'content', 'image', 'blog_category_id', 'author', 'created_at'],
+                    '*' => ['title', 'content', 'category', 'author', 'image_url', 'created_at'],
                 ],
             ]);
 
@@ -94,7 +92,7 @@ class BlogControllerTest extends TestCase
     {
 
         // Send a request with invalid pagination parameters
-        $response = $this->getJson('/api/v1/blog/latest?page=-1&page_size=abc');
+        $response = $this->getJson('/api/v1/blogs/latest?page=-1&page_size=abc');
 
         // Assert response status and structure
         $response->assertStatus(400)
@@ -108,7 +106,7 @@ class BlogControllerTest extends TestCase
     {
 
         // Send a request when no blog posts are present
-        $response = $this->getJson('/api/v1/blog/latest');
+        $response = $this->getJson('/api/v1/blogs/latest');
 
         // Assert response status and structure
         $response->assertStatus(200)
@@ -126,7 +124,7 @@ class BlogControllerTest extends TestCase
         $superAdmin = User::factory()->create(['role' => 'admin']);
 
         // Create a blog post
-        $blog = Blog::factory()->create();
+        $blog = Blog::factory()->create(['author_id' => $superAdmin->id, 'author'=> $superAdmin->name]);
 
         // Generate a JWT token for the superadmin user
         $token = JWTAuth::fromUser($superAdmin);
@@ -135,6 +133,26 @@ class BlogControllerTest extends TestCase
         $this->withHeaders(['Authorization' => 'Bearer ' . $token])
                         ->deleteJson("/api/v1/blogs/{$blog->id}")
                         ->assertStatus(204);
+    }
+
+    public function test_non_author_cannot_delete_blog()
+    {
+        // create a user to create a blog 
+        $superAdmin = User::factory()->create(['role' => 'admin']);
+
+        // Create a blog post
+        $blog = Blog::factory()->create(['author_id'=> $superAdmin->id, 'author' => $superAdmin->name]);
+
+        // not an author 
+        $user = User::factory()->create(['role' => 'admin']);
+
+          // Authenticate the user with a valid JWT token
+        $token = JWTAuth::fromUser($user);
+
+        // Send delete request with the token and assert status
+        $this->withHeaders(['Authorization' => "Bearer $token"])
+            ->deleteJson("/api/v1/blogs/{$blog->id}")
+            ->assertStatus(403); // Forbidden
     }
 
     public function test_non_superadmin_cannot_delete_blog()
@@ -146,7 +164,7 @@ class BlogControllerTest extends TestCase
         $token = JWTAuth::fromUser($user);
 
         // Create a blog post
-        $blog = Blog::factory()->create();
+        $blog = Blog::factory()->create(['author_id'=> $user->id, 'author' => $user->name]);
 
         // Send delete request with the token and assert status
         $this->withHeaders(['Authorization' => "Bearer $token"])
@@ -165,21 +183,20 @@ class BlogControllerTest extends TestCase
     {
         Storage::fake('public');
 
-        $admin = User::factory()->create(['role'=>'admin']);
-        $blog_category = BlogCategory::factory()->create();
+        $admin = User::factory()->create(['role' => 'admin']);
         $token = JWTAuth::fromUser($admin);
 
-        $image1 = UploadedFile::fake()->image('blog_image1.jpg');
-        $image2 = UploadedFile::fake()->image('blog_image2.jpg');
-
-        $author = 'John Doe';
+        $image = UploadedFile::fake()->image('image1.jpg');
+        $path = Storage::putFile('public/images', $image);
+        $imageUrl = str_replace('public/', 'storage/', $path);
 
         $response = $this->withHeaders(['Authorization' => "Bearer $token"])->postJson('/api/v1/blogs', [
             'title' => 'Test Blog Post',
             'content' => 'This is a test blog post content.',
-            'author' => $author,
-            'images' => [$image1, $image2],
-            'blog_category_id' => $blog_category->id,
+            'author' => $admin->name,
+            'author_id' => $admin->id,
+            'image_url' => $image,
+            'category' => 'Example 2',
         ]);
 
         $response->assertStatus(201)
@@ -191,12 +208,13 @@ class BlogControllerTest extends TestCase
         $this->assertDatabaseHas('blogs', [
             'title' => 'Test Blog Post',
             'content' => 'This is a test blog post content.',
-            'author' => $author,
-            'blog_category_id' => $blog_category->id,
+            'author' => $admin->name,
+            'author_id' => $admin->id,
+            'image_url' => $imageUrl,
+            'category' => 'Example 2',
         ]);
 
-        Storage::disk('public')->assertExists('images/' . $image1->hashName());
-        Storage::disk('public')->assertExists('images/' . $image2->hashName());
+        Storage::disk('public')->assertExists('images/' . $image->hashName());
     }
 
     public function test_blog_create_request_validation()
@@ -209,81 +227,15 @@ class BlogControllerTest extends TestCase
         $invalidData = [
             'title' => '',
             'content' => '',
-            'author' => '',
-            'blog_category_id' => 12345,
+            'image_url' => '',
+            'category' => 12345,
         ];
 
         $response = $this->withHeaders(['Authorization' => "Bearer $token"])->postJson('/api/v1/blogs', $invalidData);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['title', 'content', 'author', 'blog_category_id']);
+            ->assertJsonValidationErrors(['title', 'content', 'image_url', 'category']);
 
-    }
-
-    public function test_admin_can_create_blog_category()
-    {
-        // Create a user with admin role
-        $admin = User::factory()->create([
-            'role' => 'admin',
-        ]);
-        
-        $token = JWTAuth::fromUser($admin);
-
-        // Data to create the blog category
-        $data = [
-            'name' => 'New category',
-            'description' => 'This is a new Category',
-        ];
-
-        // Send a request to create the blog category
-        $response = $this->withHeaders(['Authorization' => "Bearer $token"])
-                            ->json('POST', route('admin.blog-category.create'), $data)
-                            ->assertJson([
-                                'message' => 'Blog category created successfully.',
-                                'status_code' => 201,
-                            ]);
-                
-        $this->assertDatabaseHas('blog_categories', [
-            'name' => 'New category',
-            'description' => 'This is a new Category',
-        ]);
-    }
-
-    /**
-     * Test that a non-admin user cannot update the blog.
-     */
-    public function test_non_admin_cannot_create_blog_category()
-    {
-        // Create a user without admin role
-        $user = User::factory()->create([
-            'role' => 'user',
-        ]);
-
-        // Log in the user
-        $token = JWTAuth::fromUser($user);
-
-        // Create a blog category to update
-        $blog = Blog::factory()->create();
-
-        // Data to update the blog category
-        $data = [
-            'name' => 'Updated Title',
-            'description' => 'Updated Content',
-        ];
-
-        // Send a request to update the blog category
-        $response = $this->withHeaders(['Authorization' => "Bearer $token"])
-                        ->json('PATCH', route('admin.blogs.update', ['id' => $blog->id]), $data);
-
-        // Assert the response status
-        $response->assertStatus(401);
-
-        // Assert the blog category was not updated
-        $this->assertDatabaseMissing('blog_categories', [
-            'id' => $blog->id,
-            'name' => 'Updated Title',
-            'description' => 'Updated Content',
-        ]);
     }
     
     public function test_admin_can_update_blog()
@@ -295,23 +247,12 @@ class BlogControllerTest extends TestCase
         
         $token = JWTAuth::fromUser($admin);
         // Create a blog post to update
-        $blog = Blog::factory()->create();
-
-        // Fake the storage to test image uploads
-        Storage::fake('public');
-
-        // New images for the blog
-        $images = [
-            UploadedFile::fake()->image('image1.jpg'),
-            UploadedFile::fake()->image('image2.jpg')
-        ];
+        $blog = Blog::factory()->create(['author_id'=> $admin->id, 'author' => $admin->name]);
 
         // Data to update the blog post
         $data = [
             'title' => 'Updated Title',
             'content' => 'Updated Content',
-            'author' => 'Updated Author',
-            'images' => $images,
         ];
 
         // Send a request to update the blog post
@@ -326,15 +267,7 @@ class BlogControllerTest extends TestCase
             'id' => $blog->id,
             'title' => 'Updated Title',
             'content' => 'Updated Content',
-            'author' => 'Updated Author',
         ]);
-
-        // Assert the images were uploaded and associated with the blog post
-        $uploadedImages = BlogImage::where('blog_id', $blog->id)->get();
-        $this->assertCount(2, $uploadedImages);
-        foreach ($uploadedImages as $uploadedImage) {
-            Storage::disk('public')->assertExists($uploadedImage->image_url);
-        }
     }
 
     /**
@@ -351,14 +284,13 @@ class BlogControllerTest extends TestCase
         $token = auth()->login($user);
 
         // Create a blog post to update
-        $blog = Blog::factory()->create();
+        $blog = Blog::factory()->create(['author_id' => $user->id, 'author'=> $user->name]);
 
         // Data to update the blog post
         $data = [
             'title' => 'Updated Title',
             'content' => 'Updated Content',
-            'author' => 'Updated Author',
-            'images' => [UploadedFile::fake()->image('image1.jpg')],
+            'image_url' => UploadedFile::fake()->image('image1.jpg'),
         ];
 
         // Send a request to update the blog post
@@ -373,7 +305,6 @@ class BlogControllerTest extends TestCase
             'id' => $blog->id,
             'title' => 'Updated Title',
             'content' => 'Updated Content',
-            'author' => 'Updated Author',
         ]);
     }
 }

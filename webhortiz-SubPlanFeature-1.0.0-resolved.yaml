@@ -152,15 +152,11 @@ paths:
                           type: string
                         author:
                           type: string
+                        image_url:
+                          type: object
                         created_at:
                           type: string
                           format: date-time
-                        blog_category:
-                          $ref: '#/components/schemas/BlogCategory'
-                        images:
-                          type: array
-                          items:
-                            $ref: '#/components/schemas/BlogImage'
                   message:
                     type: string
                     example: All blog posts retrieved successfully
@@ -306,12 +302,8 @@ paths:
                         created_at:
                           type: string
                           format: date-time
-                        blog_category:
-                          $ref: '#/components/schemas/BlogCategory'
-                        images:
-                          type: array
-                          items:
-                            $ref: '#/components/schemas/BlogImage'
+                        image_url:
+                          type: object
                   status_code:
                     type: integer
                     example: 200
@@ -347,7 +339,7 @@ paths:
         - blogs
       summary: Delete a blog post
       operationId: deleteBlog
-      description: Deletes a blog post by ID. Accessible only to super admins.
+      description: Deletes a blog post by ID. Accessible only to admins and author of the blog post.
       parameters:
         - name: id
           in: path
@@ -372,7 +364,7 @@ paths:
                     type: integer
                     example: 204
         '403':
-          description: You are not authorized to perform this action
+          description: Not authorized to delete this blog post
           content:
             application/json:
               schema:
@@ -380,7 +372,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: You are not authorized to perform this action
+                    example: Not authorized to delete this blog post
                   status_code:
                     type: integer
                     example: 403
@@ -445,12 +437,8 @@ paths:
                       created_at:
                         type: string
                         format: date-time
-                      blog_category:
-                        $ref: '#/components/schemas/BlogCategory'
-                      images:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/BlogImage'
+                      image_url:
+                          type: object
                   message:
                     type: string
                     example: Blog post fetched successfully.
@@ -489,7 +477,7 @@ paths:
         - blogs
       summary: Update a blog post
       operationId: updateBlog
-      description: Updates a blog post by ID. Accessible only to admins.
+      description: Updates a blog post by ID. Accessible only to admins and author of blog post.
       parameters:
         - name: id
           in: path
@@ -564,6 +552,19 @@ paths:
                   status_code:
                     type: integer
                     example: 401
+        '403':
+          description: Not authorized to edit this blog post
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Not authorized to edit this blog post
+                  status_code:
+                    type: integer
+                    example: 403
         '404':
           description: Blog with the given Id does not exist
           content:
@@ -590,72 +591,6 @@ paths:
                   status_code:
                     type: integer
                     example: 500
-
-        requestBody:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SubscriptionPlanInput'
-          description: Inventory item to add
-  /blogs/categories:
-      post:
-        tags:
-          - blog_categories
-        summary: Create a new blog category
-        operationId: createBlogCategory
-        description: Store a newly created blog category.
-        requestBody:
-          required: true
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  name:
-                    type: string
-                    example: Tech
-                  description:
-                    type: string
-                    example: Blogs related to technology
-        responses:
-          '201':
-            description: Blog category created successfully.
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    message:
-                      type: string
-                      example: Blog category created successfully.
-                    status_code:
-                      type: integer
-                      example: 201
-          '422':
-            description: Validation error.
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    errors:
-                      type: object
-                    status_code:
-                      type: integer
-                      example: 422
-          '500':
-            description: Internal server error.
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    error:
-                      type: string
-                      example: Internal server error.
-                    status_code:
-                      type: integer
-                      example: 500
 components:
   schemas:
     SubscriptionPlan:

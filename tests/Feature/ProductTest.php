@@ -10,20 +10,7 @@ class ProductTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * Test that unauthenticated user cannot retrieve products.
-     */
-    public function test_unauthenticated_user_cannot_retrieve_products()
-    {
-        // Attempt to retrieve products without authentication
-        $response = $this->getJson('/api/v1/products');
-
-        // Ensure the response status is 401 Unauthorized
-        $response->assertStatus(401);
-        $response->assertJson([
-            'message' => 'Unauthenticated.',
-        ]);
-    }
+    
 
     /**
      * Test that authenticated user can retrieve products with pagination.
