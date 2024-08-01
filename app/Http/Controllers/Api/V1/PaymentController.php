@@ -25,7 +25,7 @@ class PaymentController extends Controller
     {
         // return response()->json(['h'=> 'ng']);
         $validator = Validator::make($request->all(), [
-            'organisation_id' => 'required',
+            // 'organisation_id' => 'required',
             'plan_id' =>'required',
             'billing_option' => 'required|in:monthly,yearly',
             'full_name' => 'required',
@@ -94,6 +94,11 @@ class PaymentController extends Controller
 
             $payment->save();
 
+            $userSubscription = new UserSubscription;
+            $userSubscription->user_id =
+            $userSubscription->subscription_plan_id = 
+
+
             // Redirect to the specified URL with status
             return redirect()->to($payment->redirect_url . '?status=' . $payment->status);
         } catch (Exception $e) {
@@ -107,7 +112,7 @@ class PaymentController extends Controller
     public function initiatePaymentForFlutterWave(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'organisation_id' => 'required',
+            // 'organisation_id' => 'required',
             'plan_id' =>'required',
             'billing_option' => 'required|in:monthly,yearly',
             'full_name' => 'required',
