@@ -105,7 +105,7 @@ class User extends Authenticatable  implements JWTSubject, CanResetPasswordContr
     }
 
     public function organisationsPublicColumns(){
-      $columns = ['org_id', 'name', 'description', 'slug', 'email', 'industry', 'type', 'country', 'address', 'state'];
+      $columns = ['org_id', 'name', 'description', 'email', 'industry', 'type', 'country', 'address', 'state'];
       return $this->organisations()->select($columns);
   }
 
