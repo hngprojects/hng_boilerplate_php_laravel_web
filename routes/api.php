@@ -68,7 +68,7 @@ Route::prefix('v1')->group(function () {
     /* Forget and Reset Password using OTP */
     Route::post('/auth/forgot-password', [ForgetResetPasswordController::class, 'forgetPassword']);
     Route::post('/auth/reset-forgot-password', [ForgetResetPasswordController::class, 'resetPassword']);
-    Route::post('/auth/verify-forget-otp', [ForgetResetPasswordController::class, 'verifyUserOTP']);
+    Route::post('/auth/verify-forgot-otp', [ForgetResetPasswordController::class, 'verifyUserOTP']);
 
     Route::post('/roles', [RoleController::class, 'store']);
 
