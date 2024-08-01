@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Api\V1\Organisation;
 
 use App\Http\Controllers\Controller;
 use App\Models\Organisation;
+use Carbon\Carbon;
 use App\Models\OrganisationUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class OrganizationMemberController extends Controller
@@ -103,5 +105,82 @@ class OrganizationMemberController extends Controller
             'status_code' => 200,
             'data' => $users
         ]);
+    }
+
+    public function download($org_id, Request $request)
+    {
+        $currentUser = Auth::user();
+
+        // Validate organization ID
+        if (!preg_match('/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/', $org_id)) {
+            return response()->json([
+                'status' => 'fail',
+                'message' => 'Invalid organization ID',
+                'status_code' => 400,
+            ], 400);
+        }
+
+        // Fetch the organization
+        $organization = Organisation::where('org_id', $org_id)->first();
+        if (!$organization) {
+            return response()->json([
+                'message' => 'Organization does not exist',
+                'status_code' => 404
+            ], 404);
+        }
+
+        // Get all users associated with this organization
+        $users = $organization->users()->get();
+
+        // Prepare data for CSV
+        $now = Carbon::today()->isoFormat('DD_MMMM_YYYY');
+        $columns = ['UserName', 'UserEmail', 'UserStatus', 'CreatedDate'];
+        $data = [];
+        $data[] = $columns;
+        $fileName = "users_$now.csv";
+
+        foreach ($users as $user) {
+            $row = [];
+            $row['UserName'] = $user->name;
+            $row['UserEmail'] = $user->email;
+            $row['UserStatus'] = $user->is_active ? 'Active' : 'Inactive';
+            $row['CreatedDate'] = $user->created_at->format('Y-m-d');
+            $data[] = array_values($row);
+        }
+
+        // Generate CSV content
+        $csvContent = '';
+        foreach ($data as $csvRow) {
+            $csvContent .= implode(',', $csvRow) . "\n";
+        }
+
+        $filePath = 'csv/' . $fileName;
+
+        // Store the CSV content in the storage/app/csv directory
+        try {
+            Storage::disk('local')->put($filePath, $csvContent);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'fail',
+                'message' => 'Failed to create CSV file',
+                'status_code' => 500,
+            ], 500);
+        }
+
+        $headers = [
+            "Content-type" => "text/csv",
+            "Content-Disposition" => "attachment; filename=$fileName",
+            "Pragma" => "no-cache",
+            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+            "Expires" => "0"
+        ];
+
+        // Return the response with the file from storage
+        return response()->stream(function () use ($filePath) {
+            readfile(storage_path('app/' . $filePath));
+
+            // Delete the file after reading
+            Storage::disk('local')->delete($filePath);
+        }, 200, $headers);
     }
 }
