@@ -46,8 +46,7 @@ class Handler extends ExceptionHandler
                     ['type', 'endpoint','message']
                 );
                 $counter->inc([get_class($e), $request->path(),$e->getMessage()]);
-                // Optionally log the error
-                logger()->error($e);
+                
 
             }
         });
