@@ -38,6 +38,7 @@ use App\Http\Controllers\Api\V1\Testimonial\TestimonialController;
 use App\Http\Controllers\BillingPlanController;
 use App\Http\Controllers\Api\V1\User\ProfileController;
 use App\Http\Controllers\Api\V1\JobSearchController;
+use App\Http\Controllers\Api\V1\WaitListController;
 
 /*
 |--------------------------------------------------------------------------
@@ -198,9 +199,16 @@ Route::prefix('v1')->group(function () {
         Route::post('/blogs', [BlogController::class, 'store']);
         Route::patch('/blogs/edit/{id}', [BlogController::class, 'update'])->name('admin.blogs.update');
         Route::delete('/blogs/{id}', [BlogController::class, 'destroy']);
+        Route::get('/waitlists', [WaitListController::class, 'index']);
+
     });
 
 
+
+
+
+
+    Route::post('/waitlists', [WaitListController::class, 'store']);
     Route::apiResource('faqs', FaqController::class);
 
 
@@ -230,9 +238,3 @@ Route::prefix('v1')->group(function () {
 });
 
 
-Route::group(['middleware' => ['auth:api']], function () {
-    Route::post('/user/preferences', [PreferenceController::class, 'store']);
-    Route::put('/user/preferences/{id}', [PreferenceController::class, 'update']);
-    Route::get('/user/preferences', [PreferenceController::class, 'index']);
-    Route::delete('/user/preferences/{id}', [PreferenceController::class, 'delete']);
-});
