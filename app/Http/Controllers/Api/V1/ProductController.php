@@ -23,68 +23,6 @@ use App\Http\Resources\ProductResource;
 
 class ProductController extends Controller
 {
-    // public function search(Request $request)
-    // {
-    //     $validator = Validator::make($request->all(), [
-    //         'name' => 'required|string|max:255',
-    //         'category' => 'nullable|string|max:255',
-    //         'minPrice' => 'nullable|numeric|min:0',
-    //         'maxPrice' => 'nullable|numeric|min:0',
-    //         'status' => 'nullable|string|in:in_stock,out_of_stock,low_on_stock'
-    //     ]);
-
-    //     if ($validator->fails()) {
-    //         $errors = [];
-    //         foreach ($validator->errors()->messages() as $field => $messages) {
-    //             foreach ($messages as $message) {
-    //                 $errors[] = [
-    //                     'parameter' => $field,
-    //                     'message' => $message,
-    //                 ];
-    //             }
-    //         }
-
-    //         return response()->json([
-    //             'success' => false,
-    //             'errors' => $errors,
-    //             'statusCode' => 422
-    //         ], 422);
-    //     }
-
-    //     $query = Product::query();
-
-    //     $query->where('name', 'LIKE', '%' . $request->name . '%');
-
-    //     // Add category filter if provided
-    //     if ($request->filled('category')) {
-    //         $query->whereHas('categories', function ($q) use ($request) {
-    //             $q->where('name', $request->category);
-    //         });
-    //     }
-
-    //     if ($request->filled('minPrice')) {
-    //         $query->where('price', '>=', $request->minPrice);
-    //     }
-
-    //     if ($request->filled('maxPrice')) {
-    //         $query->where('price', '<=', $request->maxPrice);
-    //     }
-
-    //     if($request->filled('status')) {
-    //         $query->whereHas('productsVariant', function ($q) use ($request) {
-    //             $q->where('stock_status', $request->status);
-    //         });
-    //     }
-
-    //     $products = $query->get();
-
-    //     return response()->json([
-    //         'success' => true,
-    //         'products' => $products,
-    //         'statusCode' => 200
-    //     ], 200);
-    // }
-
     public function search(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -177,7 +115,7 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, $org_id)
+    public function index(Request $request)
     {
         try {
             // Validate pagination parameters
@@ -192,29 +130,6 @@ class ProductController extends Controller
             // Calculate offset
             $offset = ($page - 1) * $limit;
 
-<<<<<<< HEAD
-            $user = auth('api')->user();
-
-            if (!$user->organisations->contains($org_id)) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Unauthorized: You are not a member of this organisation',
-                    'status_code' => 403
-                ], 403);
-            }
-
-            //$products = Product::select(
-            $products = Product::where('org_id', $org_id)
-            ->select(
-            'product_id',
-            'name',
-            'price', 
-            'imageUrl', 
-            'description', 
-            'created_at',
-            'quantity'
-=======
-
             $products = Product::select(
                 'product_id',
                 'name',
@@ -223,7 +138,6 @@ class ProductController extends Controller
                 'description',
                 'created_at',
                 'quantity'
->>>>>>> 830496e416adcbd9d9413884b4d853d2bbf26f1a
             )
                 ->with(['productsVariant', 'categories'])
                 ->offset($offset)
@@ -231,8 +145,7 @@ class ProductController extends Controller
                 ->get();
 
             // Get total product count
-            //$totalItems = Product::count();
-            $totalItems = Product::where('org_id', $org_id)->count(); 
+            $totalItems = Product::count();
             $totalPages = ceil($totalItems / $limit);
 
             $transformedProducts = $products->map(function ($product) {
@@ -282,11 +195,6 @@ class ProductController extends Controller
      */
     public function store(CreateProductRequest $request)
     {
-        // $imageUrl = null;
-        // if($request->hasFile('image')) {
-        //     $imagePath = $request->file('image')->store('product_images', 'public');
-        //     $imageUrl = Storage::url($imagePath);
-        // }
 
         $org_id = $request->route('org_id');
 
