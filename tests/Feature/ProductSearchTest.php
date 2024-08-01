@@ -66,15 +66,6 @@ class ProductSearchTest extends TestCase
         $category = $this->categories->first()->name;
         $product = $this->products->first();
 
-        // $response = $this->json('GET', '/api/v1/products/search', [
-        //     'name' => $product->name,
-        //     'category' => $category,
-        //     'minPrice' => 10,
-        //     'maxPrice' => 1000,
-        //     'status' => 'in_stock',
-        //     'page' => 1,
-        //     'limit' => 10,
-        // ]);
         $response = $this->getJson('/api/v1/products/search?name=' . $product->name . '&category=' . $category . '&minPrice=0&maxPrice=1000&status=in_stock&page=1&limit=10');
 
         $response->assertStatus(200);

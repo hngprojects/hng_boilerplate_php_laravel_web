@@ -78,7 +78,7 @@ class ProductController extends Controller
             });
         }
 
-        //$products = $query->with(['productsVariant', 'categories'])->get();
+    
         $page = $request->input('page', 1);
         $limit = $request->input('limit', 10);
         $products = $query->with(['productsVariant', 'categories'])
