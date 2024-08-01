@@ -125,6 +125,7 @@ Route::prefix('v1')->group(function () {
     Route::middleware(['auth:api', 'admin'])->group(function () {
         Route::get('/email-templates', [EmailTemplateController::class, 'index']);
         Route::patch('/email-templates/{id}', [EmailTemplateController::class, 'update']);
+        Route::delete('/email-templates/{id}', [EmailTemplateController::class, 'destroy']);
     });
 
 

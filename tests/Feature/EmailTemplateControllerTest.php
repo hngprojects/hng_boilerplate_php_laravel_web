@@ -229,4 +229,22 @@ class EmailTemplateControllerTest extends TestCase
         $response->assertStatus(404)
             ->assertJson(['error' => 'Template not found']);
     }
+    public function only_super_admin_can_delete_email_template()
+{
+    [$user, $token] = $this->getAuthenticatedUser('admin');
+
+    $emailTemplate = EmailTemplate::factory()->create();
+
+    $response = $this->withHeaders([
+        'Authorization' => 'Bearer ' . $token,
+        'Accept' => 'application/json',
+    ])->deleteJson('/api/v1/email-templates/' . $emailTemplate->id);
+
+    $response->assertStatus(200)
+             ->assertJson([
+                 'status_code' => 200,
+                 'message' => 'Email template deleted successfully'
+             ]);
+}
+
 }
