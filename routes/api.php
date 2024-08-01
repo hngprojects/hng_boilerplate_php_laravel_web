@@ -6,9 +6,9 @@ use App\Http\Controllers\Api\V1\Admin\CustomerController;
 use App\Http\Controllers\Api\V1\Admin\EmailTemplateController;
 use App\Http\Controllers\Api\V1\Admin\Plan\FeatureController;
 use App\Http\Controllers\Api\V1\Admin\Plan\SubscriptionController;
+use App\Http\Controllers\Api\V1\PaymentController;
 use App\Http\Controllers\Api\V1\Admin\FaqController;
 use App\Http\Controllers\UserNotificationController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\JobController;
 use App\Http\Controllers\Api\V1\RoleController;
@@ -39,9 +39,7 @@ use App\Http\Controllers\Api\V1\Testimonial\TestimonialController;
 use App\Http\Controllers\BillingPlanController;
 use App\Http\Controllers\Api\V1\User\ProfileController;
 use App\Http\Controllers\Api\V1\JobSearchController;
-
 use App\Http\Controllers\Api\V1\WaitListController;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -67,6 +65,11 @@ Route::prefix('v1')->group(function () {
     Route::get('/auth/google', [SocialAuthController::class, 'redirectToGoogle']);
     Route::get('/auth/login-google', [SocialAuthController::class, 'redirectToGoogle']);
     Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
+    Route::post('/auth/google/callback', [SocialAuthController::class, 'saveGoogleRequest']);
+
+    Route::get('/auth/login-facebook', [SocialAuthController::class, 'loginUsingFacebook']);
+    Route::get('/auth/facebook/callback', [SocialAuthController::class, 'callbackFromFacebook']);
+    Route::post('/auth/facebook/callback', [SocialAuthController::class, 'saveFacebookRequest']);
 
     Route::apiResource('/users', UserController::class);
 
@@ -77,22 +80,19 @@ Route::prefix('v1')->group(function () {
 
     Route::get('/products/categories', [CategoryController::class, 'index']);
     Route::get('/products/search', [ProductController::class, 'search']);
+    Route::get('/products', [ProductController::class, 'index']);
+    Route::get('/products/{product_id}', [ProductController::class, 'show']);
     Route::get('/billing-plans', [BillingPlanController::class, 'index']);
     Route::get('/billing-plans/{id}', [BillingPlanController::class, 'getBillingPlan']);
 
-
     Route::middleware('throttle:10,1')->get('/topics/search', [ArticleController::class, 'search']);
 
-
     Route::middleware('auth:api')->group(function () {
-        Route::get('/products', [ProductController::class, 'index']);
-        Route::post('/products', [ProductController::class, 'store']);
+        
+        Route::post('/organizations/{org_id}/products', [ProductController::class, 'store']);
+        Route::patch('/organizations/{org_id}/products/{product_id}', [ProductController::class, 'update']);
         Route::delete('/products/{productId}', [ProductController::class, 'destroy']);
-        Route::get('/products/{product_id}', [ProductController::class, 'show']);
     });
-
-
-
 
     //comment
     Route::middleware('auth:api')->group(function () {
@@ -106,10 +106,11 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::middleware('throttle:10,1')->get('/help-center/topics/search', [ArticleController::class, 'search']);
-    Route::post('/contact', [ContactController::class, 'sendInquiry']);
+    Route::post('/inquiries', [ContactController::class, 'sendInquiry']);
+    Route::get('/inquiries', [ContactController::class, 'index']);
 
-    Route::get('/blog/latest', [BlogController::class, 'latest']);
-    Route::get('/blog/search', [BlogSearchController::class, 'search']);
+    Route::get('/blogs/latest', [BlogController::class, 'latest']);
+    Route::get('/blogs/search', [BlogSearchController::class, 'search']);
 
     Route::post('/squeeze', [SqueezeController::class, 'store']);
 
@@ -124,6 +125,7 @@ Route::prefix('v1')->group(function () {
 
     Route::middleware(['auth:api', 'admin'])->group(function () {
         Route::get('/email-templates', [EmailTemplateController::class, 'index']);
+        Route::post('/email-templates', [EmailTemplateController::class, 'store']);
         Route::patch('/email-templates/{id}', [EmailTemplateController::class, 'update']);
     });
 
@@ -138,19 +140,26 @@ Route::prefix('v1')->group(function () {
         // Subscriptions, Plans and Features
         Route::apiResource('/features', FeatureController::class);
         Route::apiResource('/plans', SubscriptionController::class);
+        Route::post('/payments/paystack', [PaymentController::class, 'initiatePaymentForPayStack']);
+        Route::get('/payments/paystack/verify/{id}', [PaymentController::class, 'handlePaystackCallback']);
+        Route::post('/payments/flutterwave', [PaymentController::class, 'initiatePaymentForFlutterWave']);
+        Route::get('/payments/flutterwave/verify/{id}', [PaymentController::class, 'handleFlutterwaveCallback']);
+        Route::get('/payments/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
         Route::post('/users/plans/{user_subscription}/cancel', [\App\Http\Controllers\Api\V1\User\SubscriptionController::class, 'destroy']);
+        Route::get('/users/plan', [\App\Http\Controllers\Api\V1\User\SubscriptionController::class, 'userPlan']);
 
 
         // Organisations
-        Route::post('/organisations', [OrganisationController::class, 'store']);
-        Route::get('/organisations', [OrganisationController::class, 'index']);
-        Route::put('/organisations/{org_id}', [OrganisationController::class, 'update']);
-        Route::delete('/organisations/{org_id}', [OrganisationController::class, 'destroy']);
-        Route::delete('/organisations/{org_id}/users/{user_id}', [OrganisationController::class, 'removeUser']);
-        Route::get('/organisations/{organisation}/members', [OrganizationMemberController::class, 'index']);
+        Route::post('/organizations', [OrganisationController::class, 'store']);
+        Route::get('/organizations', [OrganisationController::class, 'index']);
+        Route::put('/organizations/{org_id}', [OrganisationController::class, 'update']);
+        Route::delete('/organizations/{org_id}', [OrganisationController::class, 'destroy']);
+        Route::delete('/organizations/{org_id}/users/{user_id}', [OrganisationController::class, 'removeUser']);
+        Route::get('/organizations/{organisation}/users', [OrganizationMemberController::class, 'index']);
 
         // members
         Route::get('/members/{org_id}/search', [OrganizationMemberController::class, 'searchMembers']);
+        Route::get('/members/{org_id}/export', [OrganizationMemberController::class, 'download']);
 
         Route::delete('/organizations/{org_id}', [OrganisationController::class, 'destroy']);
 
@@ -174,8 +183,8 @@ Route::prefix('v1')->group(function () {
         // Roles
         Route::put('/organisations/{org_id}/roles/{role_id}', [RoleController::class, 'update']);
         Route::put('/organisations/{org_id}/roles/{role_id}/disable', [RoleController::class, 'disableRole']);
-
-
+        Route::put('/organisations/{org_id}/users/{user_id}/roles', [RoleController::class, 'assignRole']);
+        Route::put('/organisations/{org_id}/{role_id}/permissions', [RoleController::class, 'assignPermissions']);
 
         //Update Password
         Route::post('/password-update', [ProfileController::class, 'updatePassword']);
@@ -226,7 +235,8 @@ Route::prefix('v1')->group(function () {
     // User Notification
     Route::patch('/notifications/{notification}', [UserNotificationController::class, 'update']);
     Route::delete('/notifications', [UserNotificationController::class, 'destroy']);
-
+    Route::post('/notifications', [UserNotificationController::class, 'create'])->middleware('auth.jwt');
+    Route::get('/notifications', [UserNotificationController::class, 'getByUser'])->middleware('auth.jwt');
 });
 
 

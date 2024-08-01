@@ -26,6 +26,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_variants');
+        // Ensure that the table exists before attempting to drop it
+        if (Schema::hasTable('product_variants')) {
+            Schema::dropIfExists('product_variants');
+        }
     }
 };
