@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('blogs', function (Blueprint $table) {
-            $table->string('category');
-            $table->text('image_url');
+            $table->string('category')->nullable();
+            $table->text('image_url')->nullable();
             $table->dropColumn('blog_category_id');
-            $table->foreignUuid('author_id')->constrained('users', 'id')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignUuid('author_id')->nullable()->constrained('users', 'id')->cascadeOnDelete()->cascadeOnUpdate();
         });
         Schema::dropIfExists('blog_categories');
         Schema::dropIfExists('blog_images');
