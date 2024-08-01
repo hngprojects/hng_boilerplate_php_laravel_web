@@ -77,6 +77,8 @@ Route::prefix('v1')->group(function () {
 
     Route::get('/products/categories', [CategoryController::class, 'index']);
     Route::get('/products/search', [ProductController::class, 'search']);
+    Route::get('/products', [ProductController::class, 'index']);
+    Route::get('/products/{product_id}', [ProductController::class, 'show']);
     Route::get('/billing-plans', [BillingPlanController::class, 'index']);
     Route::get('/billing-plans/{id}', [BillingPlanController::class, 'getBillingPlan']);
 
@@ -85,11 +87,10 @@ Route::prefix('v1')->group(function () {
 
 
     Route::middleware('auth:api')->group(function () {
-        Route::get('/products', [ProductController::class, 'index']);
+        
         Route::post('/organizations/{org_id}/products', [ProductController::class, 'store']);
         Route::patch('/organizations/{org_id}/products/{product_id}', [ProductController::class,'update']);
         Route::delete('/products/{productId}', [ProductController::class, 'destroy']);
-        Route::get('/products/{product_id}', [ProductController::class, 'show']);
     });
 
 
