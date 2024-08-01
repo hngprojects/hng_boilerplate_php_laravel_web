@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Models\Organisation;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class OrganizationMemberControllerTest extends TestCase
 {
@@ -150,6 +152,50 @@ class OrganizationMemberControllerTest extends TestCase
                 'message' => 'Organization does not exist',
                 'status_code' => 404,
             ]);
+    }
+
+    public function testDownloadCsv()
+    {
+   
+        $user = $this->user;
+        // Create an organization
+        $organization = Organisation::factory()->create();
+   
+   
+        // Attach user to the organization
+        $organization->users()->attach($user);
+   
+        // Mock the storage
+        Storage::fake('local');
+   
+        //dd($organization->org_id);
+   
+        // Call the download endpoint
+        $response = $this->get("/api/v1/members/{$organization->org_id}/export");
+   
+   
+        $response->assertOk();
+   
+        $now = Carbon::today()->isoFormat('DD_MMMM_YYYY');
+        $fileName = "users_$now.csv";
+        $filePath = 'csv/' . $fileName;
+   
+        // Assert the file was created
+        $this->assertTrue(Storage::disk('local')->exists($filePath));
+   
+        // Assert the file content
+        $csvContent = Storage::disk('local')->get($filePath);
+        $lines = explode("\n", trim($csvContent));
+   
+        // Assert the CSV header
+        $this->assertEquals('UserName,UserEmail,UserStatus,CreatedDate', $lines[0]);
+   
+        // Assert the response headers
+        $response->assertHeader('Content-Type', 'text/csv; charset=UTF-8');
+        $response->assertHeader('Content-Disposition', 'attachment; filename=' . $fileName);
+   
+        // Clean up: Remove the file
+        Storage::disk('local')->delete($filePath);
     }
 }
 // Added comment so i can push again
