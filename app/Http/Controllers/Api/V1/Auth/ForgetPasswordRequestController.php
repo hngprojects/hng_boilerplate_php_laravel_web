@@ -47,11 +47,12 @@ class ForgetPasswordRequestController extends Controller
         );
 
         // Send the reset password email
-        $url = URL::temporarySignedRoute(
-            'password.reset',
-            Carbon::now()->addMinutes(config('auth.passwords.users.expire')),
-            ['token' => $token, 'email' => $request->email]
-        );
+        // $url = URL::temporarySignedRoute(
+        //     'password.reset',
+        //     Carbon::now()->addMinutes(config('auth.passwords.users.expire')),
+        //     ['token' => $token, 'email' => $request->email]
+        // );
+        $resetPasswordLink = env('RESET_PASSWORD_LINK') . '?token=' . $token . '&email=' . urlencode($request->email);
         
         $user->sendPasswordResetNotification($url);
 
