@@ -15,16 +15,16 @@ class SendEmailRequestsTest extends TestCase
     public function test_job_sends_emails()
     {
         Mail::fake();
-        $requests = EmailRequest::factory()->count(3)->create(['status' => 'pending']);
+    $requests = EmailRequest::factory()->count(3)->create(['status' => 'pending']);
 
-        SendEmailRequestsJob::dispatch();
+    SendEmailRequestsJob::dispatch();
 
-        foreach ($requests as $request) {
-            Mail::assertQueued(EmailRequestMailable::class, function ($mail) use ($request) {
-                return $mail->emailRequest->id === $request->id;
-            });
+    foreach ($requests as $request) {
+        Mail::assertQueued(EmailRequestMailable::class, function ($mail) use ($request) {
+            return $mail->emailRequest->id === $request->id;
+        });
 
-            $this->assertEquals('queued', $request->fresh()->status);
-        }
+        $this->assertEquals('queued', $request->fresh()->status);
+    }
     }
 }

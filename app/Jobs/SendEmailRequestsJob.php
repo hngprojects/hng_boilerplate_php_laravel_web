@@ -36,11 +36,8 @@ class SendEmailRequestsJob implements ShouldQueue
         foreach ($requests as $request) {
             Log::info('Processing request: ' . $request->id);
             // Send the email
-            Mail::to($request->recipient)->send(new EmailRequestMailable($request));
-            
-            // Update status to 'queued'
-            $request->status = 'queued';
-            $request->save();
+            Mail::to($request->recipient)->queue(new EmailRequestMailable($request));
+            $request->update(['status' => 'queued']);
         }
     }
 }

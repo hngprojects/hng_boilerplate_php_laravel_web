@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('email_requests', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('sender_id')->constrained('users')->onDelete('cascade');
             $table->foreignUuid('template_id')->constrained('email_templates')->onDelete('cascade');
             $table->string('recipient');
             $table->json('variables')->nullable();

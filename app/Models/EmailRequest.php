@@ -8,7 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class EmailRequest extends Model
 {
     use HasFactory;
-
+    protected $fillable = [
+        "template_id",
+        "recipient",
+        "variables",
+        "status"
+    ];
     protected $primaryKey = 'id';
     public $incrementing = false;
     protected $keyType = 'string';
