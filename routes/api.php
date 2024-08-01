@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\V1\Admin\Plan\FeatureController;
 use App\Http\Controllers\Api\V1\Admin\Plan\SubscriptionController;
 use App\Http\Controllers\Api\V1\PaymentController;
 use App\Http\Controllers\Api\V1\Admin\FaqController;
+use App\Http\Controllers\NotificationSettingController;
 use App\Http\Controllers\UserNotificationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\JobController;
@@ -88,7 +89,7 @@ Route::prefix('v1')->group(function () {
     Route::middleware('throttle:10,1')->get('/topics/search', [ArticleController::class, 'search']);
 
     Route::middleware('auth:api')->group(function () {
-        
+
         Route::post('/organizations/{org_id}/products', [ProductController::class, 'store']);
         Route::patch('/organizations/{org_id}/products/{product_id}', [ProductController::class, 'update']);
         Route::delete('/products/{productId}', [ProductController::class, 'destroy']);
@@ -192,7 +193,11 @@ Route::prefix('v1')->group(function () {
         //profile Update
         Route::patch('/profile', [ProfileController::class, 'update']);
         Route::post('/profile/upload-image', [ProfileController::class, 'uploadImage']);
+
+        Route::get('/notification-settings', [NotificationSettingController::class, 'show']);
+        Route::patch('/notification-settings', [NotificationSettingController::class, 'update']);
     });
+    Route::get('/notification-settings', [NotificationSettingController::class, 'show']);
 
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
 
