@@ -102,9 +102,6 @@ class ProductSearchTest extends TestCase
             ],
             'status_code'
         ]);
-
-        //$response->assertJsonFragment(['name' => $product->name]);
-        //$response->assertJsonFragment(['category' => [$category]]);
     }
 
     /** @test */
