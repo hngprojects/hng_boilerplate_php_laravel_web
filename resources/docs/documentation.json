@@ -1417,74 +1417,6 @@
                     }
                 }
             },
-            "put": {
-                "tags": [
-                    "Blogs"
-                ],
-                "summary": "Update a blog post",
-                "description": "Update an existing blog post. Requires authentication.",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "The ID of the blog post to update",
-                        "required": true,
-                        "style": "simple",
-                        "explode": false,
-                        "schema": {
-                            "type": "string",
-                            "format": "uuid"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/blogs_id_body"
-                            }
-                        }
-                    },
-                    "required": true
-                },
-                "responses": {
-                    "200": {
-                        "description": "Blog post updated successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/inline_response_200_2"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/inline_response_401"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/inline_response_422"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            },
             "delete": {
                 "tags": [
                     "Blogs"
@@ -1595,69 +1527,13 @@
                 ]
             }
         },
-        "/api/v1/blogs/categories": {
-            "post": {
-                "tags": [
-                    "Blogs"
-                ],
-                "summary": "Create a new blog category",
-                "description": "Create a new blog category. Requires authentication.",
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/blogs_categories_body"
-                            }
-                        }
-                    },
-                    "required": true
-                },
-                "responses": {
-                    "201": {
-                        "description": "Blog category created successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/inline_response_201_1"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/inline_response_401"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/inline_response_422_1"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
         "/api/v1/blogs/search": {
             "get": {
                 "tags": [
                     "Blogs"
                 ],
                 "summary": "Search blogs",
-                "description": "Search for blogs based on various criteria such as author, title, content, blog category, and created date with pagination.",
+                "description": "Search for blogs based on various criteria such as author, title, content, category, and created date with pagination.",
                 "parameters": [
                     {
                         "name": "author",
@@ -1693,7 +1569,7 @@
                         }
                     },
                     {
-                        "name": "blog_category",
+                        "name": "category",
                         "in": "query",
                         "description": "Filter by blog category name.",
                         "required": false,
@@ -3487,15 +3363,18 @@
                     "Blogs"
                 ],
                 "summary": "Update a blog post",
+                "description": "Update an existing blog post. Requires authentication.",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
+                        "description": "The ID of the blog post to update",
                         "required": true,
                         "style": "simple",
                         "explode": false,
                         "schema": {
-                            "type": "integer"
+                            "type": "string",
+                            "format": "uuid"
                         }
                     }
                 ],
@@ -3503,12 +3382,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/BlogInput"
-                            },
-                            "example": {
-                                "title": "The Evolving Future of AI",
-                                "content": "AI is rapidly evolving and revolutionizing the way we live and work...",
-                                "category_id": "31491b6a-a2f1-47d4-804c-0a705bbb73a8"
+                                "$ref": "#/components/schemas/blogs_id_body"
                             }
                         }
                     },
@@ -3520,16 +3394,27 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/Blog"
-                                },
-                                "example": {
-                                    "id": "31491b6a-a2f1-47d4-804c-0a705bbb73a8",
-                                    "title": "The Evolving Future of AI",
-                                    "content": "AI is rapidly evolving and revolutionizing the way we live and work...",
-                                    "category_id": "31491b6a-a2f1-47d4-804c-0a705bbb73a8",
-                                    "author": "John Doe",
-                                    "created_at": "2023-07-24T10:00:00Z",
-                                    "updated_at": "2023-07-26T09:15:00Z"
+                                    "$ref": "#/components/schemas/inline_response_200_2"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/inline_response_401"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/inline_response_422"
                                 }
                             }
                         }
@@ -3540,7 +3425,7 @@
                         "bearerAuth": []
                     }
                 ]
-            }
+            },
         },
         "/api/v1/user/preferences": {
             "get": {
@@ -4712,71 +4597,14 @@
                         "type": "string",
                         "example": "Updated content of the blog post."
                     },
-                    "image": {
+                    "category": {
+                        "type": "string",
+                        "example": "Category of the blog post."
+                    },
+                    "image_url": {
                         "type": "string",
                         "format": "uri",
-                        "example": "/storage/images/updated-example.jpg"
-                    },
-                    "blog_category_id": {
-                        "type": "string",
-                        "format": "uuid",
-                        "example": "9ca652f7-bb0b-44c5-bfbe-9e2fa3f6c563"
-                    }
-                }
-            },
-            "inline_response_200_3_blog_category": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "string",
-                        "format": "uuid",
-                        "example": "9ca652f7-bb0b-44c5-bfbe-9e2fa3f6c563"
-                    },
-                    "name": {
-                        "type": "string",
-                        "example": "World News"
-                    },
-                    "description": {
-                        "type": "string",
-                        "example": "World News is a blog category. Learn more and explore."
-                    },
-                    "created_at": {
-                        "type": "string",
-                        "format": "date-time",
-                        "example": "2024-07-30T23:21:44Z"
-                    },
-                    "updated_at": {
-                        "type": "string",
-                        "format": "date-time",
-                        "example": "2024-07-30T23:21:44Z"
-                    }
-                }
-            },
-            "inline_response_200_blog_category": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "string",
-                        "format": "uuid",
-                        "example": "9ca652f7-abc9-4da1-96fa-640084d4c915"
-                    },
-                    "name": {
-                        "type": "string",
-                        "example": "Business"
-                    },
-                    "description": {
-                        "type": "string",
-                        "example": "Business is a blog category. Learn more and explore."
-                    },
-                    "created_at": {
-                        "type": "string",
-                        "format": "date-time",
-                        "example": "2024-07-30T23:21:44Z"
-                    },
-                    "updated_at": {
-                        "type": "string",
-                        "format": "date-time",
-                        "example": "2024-07-30T23:21:44Z"
+                        "example": "/storage/images/example.jpg"
                     }
                 }
             },
@@ -4800,13 +4628,19 @@
                         "type": "string",
                         "example": "Content of the blog post."
                     },
-                    "image": {
+                    "category": {
+                        "type": "string",
+                        "example": "Category of the blog post."
+                    },
+                    "image_url": {
                         "type": "string",
                         "format": "uri",
                         "example": "/storage/images/example.jpg"
                     },
-                    "blog_category": {
-                        "$ref": "#/components/schemas/inline_response_200_blog_category"
+                    "author_id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "example": "9ca63580-4b7b-4529-b3e9-165baa5de794"
                     },
                     "created_at": {
                         "type": "string",
@@ -4840,13 +4674,14 @@
                         "type": "string",
                         "example": "Content of the blog post."
                     },
-                    "image": {
+                    "category": {
+                        "type": "string",
+                        "example": "Category of the blog post."
+                    },
+                    "image_url": {
                         "type": "string",
                         "format": "uri",
                         "example": "/storage/images/example.jpg"
-                    },
-                    "blog_category": {
-                        "$ref": "#/components/schemas/inline_response_200_blog_category"
                     },
                     "created_at": {
                         "type": "string",
@@ -4880,13 +4715,14 @@
                         "type": "string",
                         "example": "Updated content of the blog post."
                     },
-                    "image": {
+                    "category": {
+                        "type": "string",
+                        "example": "Category of the blog post."
+                    },
+                    "image_url": {
                         "type": "string",
                         "format": "uri",
-                        "example": "/storage/images/updated-example.jpg"
-                    },
-                    "blog_category": {
-                        "$ref": "#/components/schemas/inline_response_200_blog_category"
+                        "example": "/storage/images/example.jpg"
                     },
                     "created_at": {
                         "type": "string",
@@ -4943,41 +4779,19 @@
                         "type": "string",
                         "example": "Content of the blog post."
                     },
-                    "image": {
+                    "category": {
+                        "type": "string",
+                        "example": "Category of the blog post."
+                    },
+                    "image_url": {
                         "type": "string",
                         "format": "uri",
                         "example": "/storage/images/example.jpg"
                     },
-                    "blog_category": {
-                        "$ref": "#/components/schemas/inline_response_200_blog_category"
-                    },
-                    "created_at": {
-                        "type": "string",
-                        "format": "date-time",
-                        "example": "2024-07-30T23:21:44Z"
-                    },
-                    "updated_at": {
-                        "type": "string",
-                        "format": "date-time",
-                        "example": "2024-07-30T23:21:44Z"
-                    }
-                }
-            },
-            "inline_response_201_1": {
-                "type": "object",
-                "properties": {
-                    "id": {
+                    "author_id": {
                         "type": "string",
                         "format": "uuid",
-                        "example": "9ca652f7-bb0b-44c5-bfbe-9e2fa3f6c563"
-                    },
-                    "name": {
-                        "type": "string",
-                        "example": "World News"
-                    },
-                    "description": {
-                        "type": "string",
-                        "example": "World News is a blog category. Learn more and explore."
+                        "example": "9ca63580-4b7b-4529-b3e9-165baa5de794"
                     },
                     "created_at": {
                         "type": "string",
@@ -5078,28 +4892,19 @@
                         "type": "string",
                         "example": "Content of the blog post."
                     },
-                    "image": {
+                    "category": {
+                        "type": "string",
+                        "example": "Category of the blog post."
+                    },
+                    "image_url": {
                         "type": "string",
                         "format": "uri",
                         "example": "/storage/images/example.jpg"
                     },
-                    "blog_category_id": {
+                    "author_id": {
                         "type": "string",
                         "format": "uuid",
-                        "example": "9ca652f7-bb0b-44c5-bfbe-9e2fa3f6c563"
-                    }
-                }
-            },
-            "blogs_categories_body": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string",
-                        "example": "World News"
-                    },
-                    "description": {
-                        "type": "string",
-                        "example": "World News is a blog category. Learn more and explore."
+                        "example": "9ca63580-4b7b-4529-b3e9-165baa5de794"
                     }
                 }
             },
@@ -5115,10 +4920,16 @@
                     "content": {
                         "type": "string"
                     },
-                    "category_id": {
+                    "category": {
                         "type": "integer"
                     },
+                    "image_url": {
+                        "type": "object"
+                    },
                     "author": {
+                        "type": "string"
+                    },
+                    "author_id": {
                         "type": "string"
                     },
                     "created_at": {
@@ -5133,7 +4944,8 @@
             },
             "BlogInput": {
                 "required": [
-                    "category_id",
+                    "category",
+                    "image_url",
                     "content",
                     "title"
                 ],
@@ -5145,30 +4957,11 @@
                     "content": {
                         "type": "string"
                     },
-                    "category_id": {
-                        "type": "integer"
-                    }
-                }
-            },
-            "BlogCategory": {
-                "type": "object",
-                "properties": {
-                    "id": {
+                    "category": {
                         "type": "integer"
                     },
-                    "name": {
-                        "type": "string"
-                    }
-                }
-            },
-            "BlogCategoryInput": {
-                "required": [
-                    "name"
-                ],
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string"
+                    "image_url": {
+                        "type": "object"
                     }
                 }
             },

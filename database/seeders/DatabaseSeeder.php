@@ -56,7 +56,7 @@ class DatabaseSeeder extends Seeder
         $this->call(BlogSeeder::class);
 
 
-        UserSubscription::factory()->create();
+        // UserSubscription::factory()->create();
 
         $this->call(BillingPlanSeeder::class);
         $this->call(SubscriptionPlanSeeder::class);

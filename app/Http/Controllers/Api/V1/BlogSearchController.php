@@ -17,16 +17,16 @@ class BlogSearchController extends Controller
                 'author' => 'nullable|string',
                 'title' => 'nullable|string',
                 'content' => 'nullable|string',
-                'blog_category' => 'nullable|string',
+                'category' => 'nullable|string',
                 'created_date' => 'nullable|date_format:Y-m-d',
                 'page' => 'nullable|integer|min:1',
                 'page_size' => 'nullable|integer|min:1|max:100',
             ]);
-
+       
             $page = $validatedData['page'] ?? 1;
             $pageSize = $validatedData['page_size'] ?? 20;
 
-            $query = Blog::query()->with('blog_category', 'images');
+            $query = Blog::query();
             
             if (!empty($validatedData['author'])) {
                 $query->where('author', 'like', '%' . $validatedData['author'] . '%');
@@ -37,15 +37,13 @@ class BlogSearchController extends Controller
             if (!empty($validatedData['content'])) {
                 $query->where('content', 'like', '%' . $validatedData['content'] . '%');
             }
-            if (!empty($validatedData['blog_category'])) {
-                $query->whereHas('blog_category', function($sub_query) use ($validatedData){
-                    $sub_query->where('name', 'like', '%' . $validatedData['blog_category'] . '%');
-                });
+            if (!empty($validatedData['category'])) {
+                $query->where('category', 'like', '%' . $validatedData['category'] . '%');
             }
             if (!empty($validatedData['created_date'])) {
                 $query->whereDate('created_at', '>=', $validatedData['created_date']);
             }
-
+            
             $blogs = $query->paginate($pageSize, ['*'], 'page', $page);
 
             $response = [
