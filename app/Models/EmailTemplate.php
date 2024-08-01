@@ -15,4 +15,9 @@ class EmailTemplate extends Model
         'template',
         'status',
     ];
+
+    public function emailRequests()
+    {
+        return $this->hasMany(EmailRequest::class, 'template_id');
+    }
 }
