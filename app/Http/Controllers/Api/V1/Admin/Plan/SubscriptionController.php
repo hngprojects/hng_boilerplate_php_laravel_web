@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Plan\SubscriptionRequest;
 use App\Http\Resources\SubscriptionResource;
 use App\Models\SubscriptionPlan;
+use App\Models\UserSubscription;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -78,6 +79,39 @@ class SubscriptionController extends Controller
                 'error' => 'creation of subscription plan failed',
                 'status_code' => Response::HTTP_BAD_REQUEST
             ],  Response::HTTP_BAD_REQUEST);
+        }
+
+    }
+
+    public function userPlan() {
+        $userPlan = UserSubscription::where('user_id', auth()->user()->id)->first()->subscription_plan_id;
+        try {
+            // Retrieve the billing plan by ID
+            $billingPlan = SubscriptionPlan::find($userPlan);
+
+            if (!$billingPlan) {
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'Billing plan not found'
+                ], 404);
+            }
+
+            // Return the billing plan details
+            return response()->json([
+                'status' => 200,
+                'message' => 'Billing plans retrieved successfully',
+                'data' => [
+                    'id' => $billingPlan->id,
+                    'name' => $billingPlan->name,
+                    'price' => $billingPlan->price,
+                ]
+            ], 200);
+        } catch (\Exception $e) {
+            // Handle unexpected errors
+            return response()->json([
+                'status' => 500,
+                'message' => 'Internal server error'
+            ], 500);
         }
 
     }

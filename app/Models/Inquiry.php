@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class WaitList extends Model
+class Inquiry extends Model
 {
     use HasFactory, HasUuids;
 
-    protected $fillable = ['name', 'email'];
+    protected $guarded = [];
 }
