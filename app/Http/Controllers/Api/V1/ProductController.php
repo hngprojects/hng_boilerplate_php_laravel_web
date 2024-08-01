@@ -77,8 +77,7 @@ class ProductController extends Controller
                 $q->where('stock_status', $request->status);
             });
         }
-
-        //$products = $query->with(['productsVariant', 'categories'])->get();
+        
         $page = $request->input('page', 1);
         $limit = $request->input('limit', 10);
         $products = $query->with(['productsVariant', 'categories'])
