@@ -114,4 +114,28 @@ class EmailTemplateController extends Controller
             'data' => $emailTemplate
         ], 200);
     }
+
+    public function destroy($id)
+{
+    // Find the email template by ID
+    $emailTemplate = EmailTemplate::find($id);
+
+    // Check if the email template exists
+    if (!$emailTemplate) {
+        return response()->json([
+            'status_code' => 404,
+            'error' => 'Not Found',
+            'message' => 'Email template not found'
+        ], 404);
+    }
+
+    // Delete the email template
+    $emailTemplate->delete();
+
+    // Return success response
+    return response()->json([
+        'status_code' => 200,
+        'message' => 'Email template deleted successfully'
+    ], 200);
+}
 }
