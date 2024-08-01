@@ -49,7 +49,6 @@ class Handler extends ExceptionHandler
                 // Optionally log the error
                 logger()->error($e);
 
-                // throw $e;
             }
         });
     }
