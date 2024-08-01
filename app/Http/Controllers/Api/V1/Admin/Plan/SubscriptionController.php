@@ -18,7 +18,20 @@ class SubscriptionController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            $plans = SubscriptionPlan::select(['id', 'name', 'price'])->get();
+            return response()->json([
+                'status' => Response::HTTP_OK,
+                'message' => 'Subscription plans retrieved successfully',
+                'data' => $plans,
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Internal server error',
+                'status' => Response::HTTP_INTERNAL_SERVER_ERROR
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**
