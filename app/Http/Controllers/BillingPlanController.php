@@ -14,7 +14,7 @@ class BillingPlanController extends Controller
     public function index()
     {
         try {
-            $plans = SubscriptionPlan::select(['id', 'name', 'price'])->get();
+            $plans = SubscriptionPlan::select(['id', 'name', 'price', 'created_at'])->get();
             return response()->json([
                 'status' => Response::HTTP_OK,
                 'message' => 'Billing plans retrieved successfully',
@@ -50,7 +50,7 @@ class BillingPlanController extends Controller
      */
     public function getBillingPlan($id)
     {
-        
+
 
         // Validate the id parameter
         if (!is_string($id) || empty($id)) {

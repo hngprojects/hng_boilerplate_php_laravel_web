@@ -6,6 +6,7 @@ use App\Models\Blog;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -16,6 +17,7 @@ class BlogSeeder extends Seeder
      */
     public function run(): void
     {
+        DB::table('blogs')->truncate();
         $categories = ['Business', 'Food', 'Lifestyle', 'World News'];
         $images = [
             'https://free-images.com/lg/dd2c/port_au_prince_haiti.jpg',
