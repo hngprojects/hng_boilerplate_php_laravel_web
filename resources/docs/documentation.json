@@ -744,6 +744,7 @@
                     "title": "Latest AI Trends",
                     "content": "AI is revolutionizing various industries...",
                     "author": "John Doe",
+                    "image_url": "storage/images/sample.jpg",
                     "created_at": "2023-07-23T10:00:00Z"
                   }
                 ]
@@ -788,6 +789,7 @@
                     "title": "Latest AI Trends",
                     "content": "AI is revolutionizing various industries...",
                     "author": "John Doe",
+                    "image_url": "storage/images/sample.jpg",
                     "created_at": "2023-07-23T10:00:00Z"
                   }
                 ]
@@ -2616,7 +2618,8 @@
               "example": {
                 "title": "The Future of AI",
                 "content": "AI is rapidly evolving and changing the way we live and work...",
-                "category_id": 1
+                "category_id": 1,
+                "image_url": "image.jpg",
               }
             }
           },
@@ -2636,6 +2639,7 @@
                   "content": "AI is rapidly evolving and changing the way we live and work...",
                   "category_id": 1,
                   "author": "John Doe",
+                  "image_url": "storage/images/sample.jpg",
                   "created_at": "2023-07-24T10:00:00Z"
                 }
               }
@@ -2698,6 +2702,45 @@
                   "author": "John Doe",
                   "created_at": "2023-07-24T10:00:00Z",
                   "updated_at": "2023-07-26T09:15:00Z"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not authorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Blog"
+                },
+                "example": {
+                  "message": "Not authorized to edit this blog post"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Blog post not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Blog"
+                },
+                "example": {
+                  "message": "Blog post not found"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Blog"
+                },
+                "example": {
+                  "message": "Internal server error"
                 }
               }
             }
@@ -2780,45 +2823,42 @@
                 }
               }
             }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
-      }
-    },
-    "/api/v1/blogs/categories": {
-      "post": {
-        "tags": [
-          "Blogs"
-        ],
-        "summary": "Create a new blog category",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/BlogCategoryInput"
-              },
-              "example": {
-                "name": "Technology Trends"
-              }
-            }
           },
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "description": "Blog category created successfully",
+          "403": {
+            "description": "Not authorized",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BlogCategory"
+                  "$ref": "#/components/schemas/Blog"
                 },
                 "example": {
-                  "id": 3,
-                  "name": "Technology Trends"
+                  "message": "Not authorized to delete this blog post"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Blog post not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Blog"
+                },
+                "example": {
+                  "message": "Blog post not found"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Blog"
+                },
+                "example": {
+                  "message": "Internal server error"
                 }
               }
             }
@@ -3656,11 +3696,14 @@
           "content": {
             "type": "string"
           },
-          "category_id": {
+          "category": {
             "type": "integer"
           },
           "author": {
             "type": "string"
+          },
+          "image_url": {
+            "type": "object"
           },
           "created_at": {
             "type": "string",
@@ -3674,9 +3717,10 @@
       },
       "BlogInput": {
         "required": [
-          "category_id",
+          "category",
           "content",
-          "title"
+          "title",
+          "image_url"
         ],
         "type": "object",
         "properties": {
@@ -3686,30 +3730,11 @@
           "content": {
             "type": "string"
           },
-          "category_id": {
-            "type": "integer"
-          }
-        }
-      },
-      "BlogCategory": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer"
+          "category": {
+            "type": "string"
           },
-          "name": {
-            "type": "string"
-          }
-        }
-      },
-      "BlogCategoryInput": {
-        "required": [
-          "name"
-        ],
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
+          "image_url": {
+            "type": "object"
           }
         }
       },

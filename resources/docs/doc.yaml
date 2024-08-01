@@ -1732,31 +1732,6 @@ paths:
                 message: Blog post deleted successfully
       security:
         - bearerAuth: []
-  /api/v1/blogs/categories:
-    post:
-      tags:
-        - Blogs
-      summary: Create a new blog category
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/BlogCategoryInput'
-            example:
-              name: Technology Trends
-        required: true
-      responses:
-        '201':
-          description: Blog category created successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BlogCategory'
-              example:
-                id: 3
-                name: Technology Trends
-      security:
-        - bearerAuth: []
   /api/v1/user/preferences:
     get:
       tags:
@@ -2124,20 +2099,6 @@ components:
           type: string
         category_id:
           type: integer
-    BlogCategory:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-    BlogCategoryInput:
-      required:
-        - name
-      type: object
-      properties:
-        name:
-          type: string
     SqueezeInput:
       required:
         - email
