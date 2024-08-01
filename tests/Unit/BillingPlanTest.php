@@ -23,7 +23,7 @@ class BillingPlanTest extends TestCase
         $response->assertStatus(200)
                  ->assertJson([
                      'status' => 200,
-                     'message' => 'Pricing plan retrieved successfully',
+                     'message' => 'Billing plans retrieved successfully',
                      'data' => [
                          'id' => $billingPlan->id,
                          'name' => $billingPlan->name,

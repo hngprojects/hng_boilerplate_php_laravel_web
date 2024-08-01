@@ -20,7 +20,7 @@ class ProductVariantFactory extends Factory
         return [
             'id' => Str::uuid(),
             'stock' => $this->faker->numberBetween(0, 100),
-            'stock_status' => $this->faker->randomElement(['in_stock', 'out_of_stock']),
+            'stock_status' => $this->faker->randomElement(['in_stock', 'out_of_stock', 'low_on_stock']),
             'price' => $this->faker->numberBetween(100, 1000),
             'size_id' => Size::factory(),
         ];
