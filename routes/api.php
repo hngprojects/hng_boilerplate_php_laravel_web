@@ -139,9 +139,9 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('/features', FeatureController::class);
         Route::apiResource('/plans', SubscriptionController::class);
         Route::post('/payments/paystack', [PaymentController::class, 'initiatePaymentForPayStack']);
-        Route::get('/payments/paystack/verify', [PaymentController::class, 'handlePaystackCallback']);
+        Route::get('/payments/paystack/verify/{id}', [PaymentController::class, 'handlePaystackCallback']);
         Route::post('/payments/flutterwave', [PaymentController::class, 'initiatePaymentForFlutterWave']);
-        Route::get('/payments/flutterwave/verify', [PaymentController::class, 'handleFlutterwaveCallback']);
+        Route::get('/payments/flutterwave/verify/{id}', [PaymentController::class, 'handleFlutterwaveCallback']);
         Route::get('/payments/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
         Route::post('/users/plans/{user_subscription}/cancel', [\App\Http\Controllers\Api\V1\User\SubscriptionController::class, 'destroy']);
 

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\Payment;
 use App\Services\PaymentService;
 use App\Models\SubscriptionPlan;
+use App\Models\UserSubscription;
 use Illuminate\Support\Str;
 
 class PaymentController extends Controller
@@ -45,6 +46,7 @@ class PaymentController extends Controller
         $data['email'] = auth()->user()->email;
         $data['reference'] = Str::uuid();
         $data['plan_code'] = $subscriptionPlan->paystack_plan_code;
+        $data['plan_id'] = $subscriptionPlan->id;
 
         try {
 
@@ -75,7 +77,7 @@ class PaymentController extends Controller
         }
     }
 
-    public function handlePaystackCallback(Request $request)
+    public function handlePaystackCallback($id, Request $request)
     {
         $reference = $request->query('reference');
 
@@ -95,8 +97,9 @@ class PaymentController extends Controller
             $payment->save();
 
             $userSubscription = new UserSubscription;
-            $userSubscription->user_id =
-            $userSubscription->subscription_plan_id = 
+            $userSubscription->user_id = auth()->user()->id;
+            $userSubscription->subscription_plan_id = $id;
+            $userSubscription->save();
 
 
             // Redirect to the specified URL with status
@@ -132,6 +135,7 @@ class PaymentController extends Controller
         $data['email'] = auth()->user()->email;
         $data['reference'] = Str::uuid();
         $data['plan_code'] = $subscriptionPlan->flutterwave_plan_code;
+        $data['plan_id'] = $subscriptionPlan->id;
         $data['amount'] = $subscriptionPlan->price;
         $data['title'] = $subscriptionPlan->name;
 
@@ -167,7 +171,7 @@ class PaymentController extends Controller
         }
     }
 
-    public function handleFlutterwaveCallback(Request $request)
+    public function handleFlutterwaveCallback($id, Request $request)
     {
         $transaction_id = $request->query('transaction_id');
 
@@ -185,6 +189,10 @@ class PaymentController extends Controller
             }
 
             $payment->save();
+            $userSubscription = new UserSubscription;
+            $userSubscription->user_id = auth()->user()->id;
+            $userSubscription->subscription_plan_id = $id;
+            $userSubscription->save();
 
             // Redirect to the specified URL with status
             return redirect()->to($payment->redirect_url . '?status=' . $payment->status);
