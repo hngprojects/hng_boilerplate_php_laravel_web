@@ -30,7 +30,9 @@ class ProductController extends Controller
             'category' => 'nullable|string|max:255',
             'minPrice' => 'nullable|numeric|min:0',
             'maxPrice' => 'nullable|numeric|min:0',
-            'status' => 'nullable|string|in:in_stock,out_of_stock,low_on_stock'
+            'status' => 'nullable|string|in:in_stock,out_of_stock,low_on_stock',
+            'page' => 'nullable|integer|min:1',
+            'limit' => 'nullable|integer|min:1|max:100',
         ]);
 
         if ($validator->fails()) {
@@ -47,7 +49,7 @@ class ProductController extends Controller
             return response()->json([
                 'success' => false,
                 'errors' => $errors,
-                'statusCode' => 422
+                'status_code' => 422
             ], 422);
         }
 
@@ -76,14 +78,40 @@ class ProductController extends Controller
             });
         }
 
-        $products = $query->get();
+    
+        $page = $request->input('page', 1);
+        $limit = $request->input('limit', 10);
+        $products = $query->with(['productsVariant', 'categories'])
+                      ->paginate($limit, ['*'], 'page', $page);
+
+        $transformedProducts = $products->map(function ($product) {
+            return [
+                'name' => $product->name,
+                'price' => $product->price,
+                'imageUrl' => $product->imageUrl,
+                'description' => $product->description,
+                'product_id' => $product->product_id,
+                'quantity' => $product->quantity,
+                'category' => $product->categories->isNotEmpty() ? $product->categories->map->name : [], 
+                'stock' => $product->productsVariant->isNotEmpty() ? $product->productsVariant->first()->stock : null, 
+                'status' => $product->productsVariant->isNotEmpty() ? $product->productsVariant->first()->stock_status : null, 
+                'date_added' => $product->created_at
+            ];
+        });
 
         return response()->json([
             'success' => true,
-            'products' => $products,
-            'statusCode' => 200
+            'products' => $transformedProducts,
+            'pagination' => [
+                'totalItems' => $products->total(),
+                'totalPages' => $products->lastPage(),
+                'currentPage' => $products->currentPage(),
+                'perPage' => $products->perPage(),
+             ],
+            'status_code' => 200
         ], 200);
     }
+
     /**
      * Display a listing of the resource.
      */
@@ -101,7 +129,6 @@ class ProductController extends Controller
 
             // Calculate offset
             $offset = ($page - 1) * $limit;
-
 
             $products = Product::select(
                 'product_id',
@@ -168,11 +195,6 @@ class ProductController extends Controller
      */
     public function store(CreateProductRequest $request)
     {
-        // $imageUrl = null;
-        // if($request->hasFile('image')) {
-        //     $imagePath = $request->file('image')->store('product_images', 'public');
-        //     $imageUrl = Storage::url($imagePath);
-        // }
 
         $org_id = $request->route('org_id');
 
