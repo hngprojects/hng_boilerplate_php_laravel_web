@@ -126,6 +126,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/email-templates', [EmailTemplateController::class, 'index']);
         Route::post('/email-templates', [EmailTemplateController::class, 'store']);
         Route::patch('/email-templates/{id}', [EmailTemplateController::class, 'update']);
+        Route::delete('/email-templates/{id}', [EmailTemplateController::class, 'destroy']);
     });
 
 
