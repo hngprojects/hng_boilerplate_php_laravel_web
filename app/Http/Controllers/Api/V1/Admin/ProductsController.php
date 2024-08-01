@@ -35,28 +35,36 @@ class ProductsController extends Controller
 
     public function store(Request $request)
 {
-    $validatedData = $request->validate([
-        'name' => 'required|string|max:255',
-        'price' => 'required|numeric|min:0',
-        'description' => 'required|string',
-        'imageUrl' => 'required|string',
-        'quantity' => 'required|integer|min:0',
-        'status' => 'required|in:active,draft',
-        'slug' => 'required|string|max:255|unique:products,slug',
-        'tags' => 'required|string',
+    try {
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'price' => 'required|numeric|min:0',
+            'description' => 'required|string',
+            'imageUrl' => 'required|string',
+            'quantity' => 'required|integer|min:0',
+            'status' => 'required|in:active,draft',
+            'slug' => 'required|string|max:255|unique:products,slug',
+            'tags' => 'required|string',
+        ]);
 
-    ]);
+        $validatedData['price'] = (int) ($validatedData['price'] * 100);
+        $validatedData['user_id'] = auth()->id();
 
-    $validatedData['price'] = (int) ($validatedData['price'] * 100);
-    $validatedData['user_id'] = auth()->id();
+        $product = Product::create($validatedData);
 
-    $product = Product::create($validatedData);
+        return response()->json(['data' => array_merge(
+            $product->toArray(),
+            ['price' => $product->price / 100]
+        )], 201);
 
-    return response()->json(['data' => array_merge(
-        $product->toArray(),
-        ['price' => $product->price / 100]
-    )], 201);
+    } catch (\Exception $e) {
+        return response()->json([
+            'message' => 'An error occurred while creating the product.',
+            'error' => $e->getMessage()
+        ], 500);
+    }
 }
+
 
 public function show($id)
 {

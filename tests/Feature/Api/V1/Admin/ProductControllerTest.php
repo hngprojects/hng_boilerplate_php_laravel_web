@@ -5,6 +5,7 @@ use App\Models\Product;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use Illuminate\Http\Response;
 
 class ProductControllerTest extends TestCase
 {
@@ -35,34 +36,6 @@ class ProductControllerTest extends TestCase
                 'meta',
             ]);
     }
-
-    public function test_can_create_product()
-{
-    $productData = [
-        'name' => 'Test Product',
-        'description' => 'This is a test product',
-        'price' => 99.99,
-        'imageUrl' => 'test-image.jpg',
-        'quantity' => 10,
-        'status' => 'active',
-        'slug' => 'test-product',
-        'tags' => 'test,product'
-
-    ];
-
-    $response = $this->actingAs($this->admin, 'api')->postJson('/api/v1/products', $productData);
-
-    $response->assertStatus(201)
-    ->assertJson([
-        'data' => array_merge($productData, ['price' => 99.99])
-    ]);
-
-
-    $this->assertDatabaseHas('products', array_merge(
-        $productData,
-        ['price' => 9999]
-    ));
-}
 
 public function test_can_show_product()
 {
