@@ -3,16 +3,25 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Str;
 use App\Models\Organisation;
 use App\Models\Permission;
 use App\Models\Role;
-use App\Models\RolePermission;
+use App\Models\User;
 use Tests\TestCase;
 
 class ShowRoleTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected $user;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->user = User::factory()->create();
+        $this->actingAs($this->user, 'api'); // Ensure user is authenticated
+    }
 
     /**
      * Test fetching a role successfully.
@@ -21,19 +30,18 @@ class ShowRoleTest extends TestCase
      */
     public function testFetchRoleSuccessfully()
     {
-        $organisation = Organisation::factory()->create();
-        $role = Role::factory()->create(['org_id' => $organisation->id]);
+        $organisation = Organisation::factory()->create(['user_id' => $this->user->id]);
+        $role = Role::factory()->create(['org_id' => $organisation->org_id]);
         $permissions = Permission::factory()->count(3)->create();
 
         // Attach permissions to role
-        $role->permissions()->attach($permissions);
+        $role->permissions()->attach($permissions->pluck('id'));
 
-        $response = $this->getJson("/api/v1/organisations/{$organisation->id}/roles/{$role->id}");
+        $response = $this->getJson("/api/v1/organisations/{$organisation->org_id}/roles/{$role->id}");
 
         $permissionsArray = $permissions->map(function ($permission) use ($role) {
             return [
                 'id' => $permission->id,
-                'category' => $permission->category,
                 'permission_list' => [
                     'can_view_transactions' => $role->permissions()->where('permission_id', $permission->id)->where('name', 'can_view_transactions')->exists(),
                     'can_view_refunds' => $role->permissions()->where('permission_id', $permission->id)->where('name', 'can_view_refunds')->exists(),
@@ -61,7 +69,8 @@ class ShowRoleTest extends TestCase
      */
     public function testFetchRoleWithInvalidOrganisationIdFormat()
     {
-        $response = $this->getJson('/api/v1/organisations/invalid_id/roles/1');
+        // Use an invalid UUID format
+        $response = $this->getJson('/api/v1/organisations/invalid_uuid_format/roles/1');
 
         $response->assertStatus(400)
                  ->assertJson([
@@ -78,9 +87,10 @@ class ShowRoleTest extends TestCase
      */
     public function testFetchRoleWithInvalidRoleIdFormat()
     {
-        $organisation = Organisation::factory()->create();
+        $organisation = Organisation::factory()->create(['user_id' => $this->user->id]);
 
-        $response = $this->getJson("/api/v1/organisations/{$organisation->id}/roles/invalid_id");
+        // Use a valid UUID for organisation but invalid format for role ID
+        $response = $this->getJson("/api/v1/organisations/{$organisation->org_id}/roles/invalid_uuid_format");
 
         $response->assertStatus(400)
                  ->assertJson([
@@ -97,13 +107,14 @@ class ShowRoleTest extends TestCase
      */
     public function testFetchRoleForNonExistentOrganisation()
     {
-        $response = $this->getJson('/api/v1/organisations/999/roles/1');
+        // Use a UUID that does not exist in the database
+        $response = $this->getJson('/api/v1/organisations/00000000-0000-0000-0000-000000000000/roles/1');
 
         $response->assertStatus(404)
                  ->assertJson([
                      'status_code' => 404,
                      'error' => 'Not Found',
-                     'message' => 'The organisation with ID 999 does not exist',
+                     'message' => 'The organisation with ID 00000000-0000-0000-0000-000000000000 does not exist',
                  ]);
     }
 
@@ -114,15 +125,16 @@ class ShowRoleTest extends TestCase
      */
     public function testFetchNonExistentRole()
     {
-        $organisation = Organisation::factory()->create();
+        $organisation = Organisation::factory()->create(['user_id' => $this->user->id]);
 
-        $response = $this->getJson("/api/v1/organisations/{$organisation->id}/roles/999");
+        // Use a valid UUID for organisation but one that does not exist as a role
+        $response = $this->getJson("/api/v1/organisations/{$organisation->org_id}/roles/00000000000000000000000000000000");
 
         $response->assertStatus(404)
                  ->assertJson([
                      'status_code' => 404,
                      'error' => 'Not Found',
-                     'message' => 'The role with ID 999 does not exist',
+                     'message' => 'The role with ID 00000000000000000000000000000000 does not exist',
                  ]);
     }
 }

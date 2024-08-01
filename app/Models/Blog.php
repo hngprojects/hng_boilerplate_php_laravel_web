@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Blog extends Model
 {
@@ -37,5 +38,10 @@ class Blog extends Model
     public function images(): HasMany
     {
         return $this->hasMany(BlogImage::class);
+    }
+
+    public function image(): HasOne
+    {
+        return $this->hasOne(BlogImage::class);
     }
 }
