@@ -3,12 +3,11 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\BlogCategory>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\EmailRequest>
  */
-class BlogCategoryFactory extends Factory
+class EmailRequestFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,9 +17,7 @@ class BlogCategoryFactory extends Factory
     public function definition(): array
     {
         return [
-            'id' => Str::uuid(),
-            'name' => $this->faker->word,
-            'description' => $this->faker->text
+            //
         ];
     }
 }
