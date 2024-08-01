@@ -103,7 +103,8 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::middleware('throttle:10,1')->get('/help-center/topics/search', [ArticleController::class, 'search']);
-    Route::post('/contact', [ContactController::class, 'sendInquiry']);
+    Route::post('/inquiries', [ContactController::class, 'sendInquiry']);
+    Route::get('/inquiries', [ContactController::class, 'index']);
 
     Route::get('/blogs/latest', [BlogController::class, 'latest']);
     Route::get('/blogs/search', [BlogSearchController::class, 'search']);
