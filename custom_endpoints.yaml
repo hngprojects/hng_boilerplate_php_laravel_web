@@ -324,3 +324,97 @@ components:
           type: string
           format: string
           example: 'xeoo'
+
+  /api/v1/notification-settings:
+    get:
+      summary: Get notification settings
+      tags:
+        - NotificationSettings
+      responses:
+        '200':
+          description: Notification preferences retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  status_code:
+                    type: integer
+                  data:
+                    type: object
+                    properties:
+                      email_notification_activity_in_workspace:
+                        type: boolean
+                      email_notification_always_send_email_notifications:
+                        type: boolean
+                      email_notification_email_digest:
+                        type: boolean
+                      email_notification_announcement_and_update_emails:
+                        type: boolean
+                      slack_notifications_activity_on_your_workspace:
+                        type: boolean
+                      slack_notifications_always_send_email_notifications:
+                        type: boolean
+                      slack_notifications_announcement_and_update_emails:
+                        type: boolean
+
+    patch:
+      summary: Update notification settings
+      tags:
+        - NotificationSettings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email_notification_activity_in_workspace:
+                  type: boolean
+                email_notification_always_send_email_notifications:
+                  type: boolean
+                email_notification_email_digest:
+                  type: boolean
+                email_notification_announcement_and_update_emails:
+                  type: boolean
+                slack_notifications_activity_on_your_workspace:
+                  type: boolean
+                slack_notifications_always_send_email_notifications:
+                  type: boolean
+                slack_notifications_announcement_and_update_emails:
+                  type: boolean
+      responses:
+        '200':
+          description: Notification preferences updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  status_code:
+                    type: integer
+                  data:
+                    type: object
+                    properties:
+                      email_notification_activity_in_workspace:
+                        type: boolean
+                      email_notification_always_send_email_notifications:
+                        type: boolean
+                      email_notification_email_digest:
+                        type: boolean
+                      email_notification_announcement_and_update_emails:
+                        type: boolean
+                      slack_notifications_activity_on_your_workspace:
+                        type: boolean
+                      slack_notifications_always_send_email_notifications:
+                        type: boolean
+                      slack_notifications_announcement_and_update_emails:
+                        type: boolean
