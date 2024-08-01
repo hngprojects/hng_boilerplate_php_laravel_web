@@ -156,8 +156,9 @@ Route::prefix('v1')->group(function () {
 
 
         // Organisations
-        Route::post('/organizations', [OrganisationController::class, 'store']);
+        Route::post('/organisations', [OrganisationController::class, 'store']);
         Route::get('/organizations', [OrganisationController::class, 'index']);
+        Route::get('/organizations/{org_id}', [OrganisationController::class, 'show']);
         Route::put('/organizations/{org_id}', [OrganisationController::class, 'update']);
         Route::delete('/organizations/{org_id}', [OrganisationController::class, 'destroy']);
         Route::delete('/organizations/{org_id}/users/{user_id}', [OrganisationController::class, 'removeUser']);

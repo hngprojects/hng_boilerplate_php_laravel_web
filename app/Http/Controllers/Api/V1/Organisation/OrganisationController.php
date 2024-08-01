@@ -92,9 +92,20 @@ class OrganisationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        //
+    public function show($org_id)
+    { 
+        $user = auth('api')->user();
+        if($organisation = Organisation::find($org_id)){
+          $organisation = $user->organisations()->where('organisations.org_id', $org_id)->first();
+          
+            if (!$organisation) {
+                return ResponseHelper::response("You don't have access to view this organisation", 403, null);
+            }
+            unset($organisation['pivot']);
+            return ResponseHelper::response("Retrieved organisation successfully", 200, $organisation);
+        }else{
+            return ResponseHelper::response("Organisation not found", 404, null);
+        }
     }
 
     /**
