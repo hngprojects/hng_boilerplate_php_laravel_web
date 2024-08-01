@@ -36,8 +36,7 @@ class ForgetResetPasswordController extends Controller
         }
 
         // Create a new token
-        $randomNumber = Str::random(6);
-        $token = substr($randomNumber, 0, 6);
+        $token = random_int(100000, 999999);
 
         // Store the token in the password_reset_tokens table
         DB::table('password_reset_tokens')->updateOrInsert(
@@ -91,7 +90,7 @@ class ForgetResetPasswordController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email:rfc',
-            'otp' => 'required|string|min:6|max:6',
+            'otp' => ['required', 'digits:6', 'integer'],
         ]);
 
         if ($validator->fails()) {
