@@ -157,20 +157,44 @@ Route::prefix('v1')->group(function () {
     Route::middleware(['auth:api', 'admin'])->group(function () {
         Route::get('/customers', [CustomerController::class, 'index']);
         Route::delete('/blogs/{id}', [BlogController::class, 'destroy']);
-        Route::post('/blogs/categories', [BlogCategoriesController::class, 'store'])->name('admin.blog-category.create');
+        Route::patch('/blogs/{id}', [BlogController::class, 'update']);
+        Route::post('/blogs', [BlogController::class, 'store']);
+        Route::get('/blogs/{id}', [BlogController::class, 'show']);
+        Route::post('/blogs/{id}/categories', [BlogCategoriesController::class, 'store']);
+        Route::patch('/blogs/{id}/categories/{category_id}', [BlogCategoriesController::class, 'update']);
+        Route::delete('/blogs/{id}/categories/{category_id}', [BlogCategoriesController::class, 'destroy']);
+        Route::get('/email-templates', [EmailTemplateController::class, 'index']);
+        Route::post('/email-templates', [EmailTemplateController::class, 'store']);
+        Route::patch('/email-templates/{id}', [EmailTemplateController::class, 'update']);
+        Route::delete('/email-templates/{id}', [EmailTemplateController::class, 'destroy']);
         Route::get('/products', [ProductsController::class, 'index']);
         Route::post('/products', [ProductsController::class, 'store']);
-        Route::get('/products/{id}', [ProductsController::class, 'show']);
-        Route::put('/products/{productId}', [ProductsController::class, 'update']);
-        Route::delete('/products/{productId}', [ProductsController::class, 'destroy']);
-        Route::get('/products/{product_id}/edit', [ProductsController::class, 'edit']);
+        Route::patch('/products/{id}', [ProductsController::class, 'update']);
+        Route::delete('/products/{id}', [ProductsController::class, 'destroy']);
         Route::get('/products/stats/total-revenue', [ProductsController::class, 'totalRevenue']);
         Route::get('/products/stats/total-price', [ProductsController::class, 'totalPrice']);
-
-        // Email template routes
-        Route::apiResource('email-templates', EmailTemplateController::class);
+        Route::get('/features', [FeatureController::class, 'index']);
+        Route::post('/features', [FeatureController::class, 'store']);
+        Route::patch('/features/{id}', [FeatureController::class, 'update']);
+        Route::delete('/features/{id}', [FeatureController::class, 'destroy']);
+        Route::get('/plans', [SubscriptionController::class, 'index']);
+        Route::post('/plans', [SubscriptionController::class, 'store']);
+        Route::patch('/plans/{id}', [SubscriptionController::class, 'update']);
+        Route::delete('/plans/{id}', [SubscriptionController::class, 'destroy']);
+        Route::get('/faqs', [FaqController::class, 'index']);
+        Route::post('/faqs', [FaqController::class, 'store']);
+        Route::patch('/faqs/{id}', [FaqController::class, 'update']);
+        Route::delete('/faqs/{id}', [FaqController::class, 'destroy']);
     });
 
+    // Public routes
+    Route::get('/contact', [ContactController::class, 'index']);
+    Route::get('/blogs', [BlogController::class, 'index']);
+    Route::get('/blogs/latest', [BlogController::class, 'latest']);
+    Route::get('/blogs/{id}', [BlogController::class, 'show']);
+    Route::get('/help-center/articles', [HelpArticleController::class, 'index']);
+    Route::get('/help-center/articles/{id}', [HelpArticleController::class, 'show']);
+    Route::post('/invitations/{id}/accept', [InvitationAcceptanceController::class, 'accept']);
     // Public routes
     Route::post('/contact', [ContactController::class, 'sendInquiry']);
     Route::get('/blogs/latest', [BlogController::class, 'latest']);
