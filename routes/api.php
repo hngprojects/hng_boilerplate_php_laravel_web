@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\Admin\Plan\FeatureController;
 use App\Http\Controllers\Api\V1\Admin\Plan\SubscriptionController;
 use App\Http\Controllers\Api\V1\PaymentController;
 use App\Http\Controllers\Api\V1\Admin\FaqController;
+use App\Http\Controllers\NotificationSettingController;
 use App\Http\Controllers\UserNotificationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\JobController;
@@ -197,7 +198,11 @@ Route::prefix('v1')->group(function () {
         //profile Update
         Route::patch('/profile', [ProfileController::class, 'update']);
         Route::post('/profile/upload-image', [ProfileController::class, 'uploadImage']);
+
+        Route::get('/notification-settings', [NotificationSettingController::class, 'show']);
+        Route::patch('/notification-settings', [NotificationSettingController::class, 'update']);
     });
+    Route::get('/notification-settings', [NotificationSettingController::class, 'show']);
 
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
 
