@@ -14,8 +14,25 @@ class UserController extends Controller
      */
     public function index()
     {
-        return User::query()
-            ->paginate();
+        $users = User::latest()->paginate();
+
+        $totalUsers = User::count();
+        $totalDeletedUsers = User::onlyTrashed()->count();
+        $totalActiveUsers = User::where('is_active', 1)->count() - $totalDeletedUsers;
+        $totalInActiveUsers = User::where('is_active', 0)->count();
+
+        return response()->json(
+            [
+                "status_code" => 200,
+                "message" => "Users returned successfully",
+                "total_users" => $totalUsers,
+                "total_deleted_users" => $totalDeletedUsers,
+                "total_active_users" => $totalActiveUsers,
+                "total_inActive_users" => $totalInActiveUsers,
+                "data" => $users
+            ],
+            200
+        );
     }
 
 
@@ -71,7 +88,6 @@ class UserController extends Controller
         }, $data);
 
         $user->update($data);
-
 
 
         return response()->json(
