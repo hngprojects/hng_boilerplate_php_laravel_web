@@ -69,6 +69,7 @@ class DatabaseSeeder extends Seeder
             ProductVariantSizeSeeder::class,
             FaqSeeder::class,
             UserNotificationSeeder::class,
+            NotificationSettingSeeder::class
         ]);
 
     }
