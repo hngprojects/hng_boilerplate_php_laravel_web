@@ -10,7 +10,7 @@ class Preference extends Model
 {
     use HasFactory, HasUuids;
 
-    protected $guarded = [];
+    protected $guarded = ['id'];
 
     // Set the key type to string
     protected $keyType = 'string';
