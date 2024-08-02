@@ -14,7 +14,7 @@ class NotificationSettingsTest extends TestCase
     public function test_get_notification_settings()
     {
         $user = User::factory()->create();
-        $notificationSettings = NotificationSettings::factory()->create(['user_id' => $user->id]);
+//        $notificationSettings = NotificationSettings::factory()->create(['user_id' => $user->id]);
         $this->actingAs($user, 'api');
         $response = $this->getJson('/api/v1/notification-settings');
         $response->assertStatus(200)
@@ -37,7 +37,7 @@ class NotificationSettingsTest extends TestCase
     public function test_update_notification_settings()
     {
         $user = User::factory()->create();
-        $notificationSettings = NotificationSettings::factory()->create(['user_id' => $user->id]);
+ //       $notificationSettings = NotificationSettings::factory()->create(['user_id' => $user->id]);
         $this->actingAs($user, 'api');
         $response = $this->patchJson('/api/v1/notification-settings', [
             'email_notification_activity_in_workspace' => true,
