@@ -14,6 +14,7 @@ class NotificationSettingsTest extends TestCase
     public function test_get_notification_settings()
     {
         $user = User::factory()->create();
+        $notificationSettings = NotificationSettings::factory()->create(['user_id' => $user->id]);
         $this->actingAs($user, 'api');
         $response = $this->getJson('/api/v1/notification-settings');
         $response->assertStatus(200)
@@ -36,9 +37,16 @@ class NotificationSettingsTest extends TestCase
     public function test_update_notification_settings()
     {
         $user = User::factory()->create();
+        $notificationSettings = NotificationSettings::factory()->create(['user_id' => $user->id]);
         $this->actingAs($user, 'api');
         $response = $this->patchJson('/api/v1/notification-settings', [
             'email_notification_activity_in_workspace' => true,
+            'email_notification_always_send_email_notifications' => true,
+            'email_notification_email_digest' => true,
+            'email_notification_announcement_and_update_emails' => true,
+            'slack_notifications_activity_on_your_workspace' => true,
+            'slack_notifications_always_send_email_notifications' => true,
+            'slack_notifications_announcement_and_update_emails' => true,
         ]);
         $response->assertStatus(200)
                  ->assertJson([
@@ -47,6 +55,12 @@ class NotificationSettingsTest extends TestCase
                      'status_code' => 200,
                      'data' => [
                          'email_notification_activity_in_workspace' => true,
+                         'email_notification_always_send_email_notifications' => true,
+                         'email_notification_email_digest' => true,
+                         'email_notification_announcement_and_update_emails' => true,
+                         'slack_notifications_activity_on_your_workspace' => true,
+                         'slack_notifications_always_send_email_notifications' => true,
+                         'slack_notifications_announcement_and_update_emails' => true,
                      ]
                  ]);
     }
