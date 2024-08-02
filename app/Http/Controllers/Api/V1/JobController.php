@@ -42,7 +42,7 @@ class JobController extends Controller
                     'salary_range' => $job->salary,
                     'job_type' => $job->job_type,
                     'job_mode' => $job->work_mode,
-                    'company_name' =>$job->benefits,
+                    'company_name' => $job->benefits,
                     'is_deleted' => false,
                 ];
             }),
@@ -64,16 +64,16 @@ class JobController extends Controller
             ], Response::HTTP_FORBIDDEN);
         }
 
-        $validator = Validator::make($request->all(), [            
-            'title' => $request->input('title'),
-            'description' => $request->input('description'),
-            'location' => $request->input('location'),
-            'deadline' => $request->input('deadline'),
-            'salary' => $request->input('salary_range'),
-            'job_type' => $request->input('job_type'),
-            'work_mode' => $request->input('job_mode'),
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string',
+            'description' => 'required|string',
+            'location' => 'required|string',
+            'deadline' => 'required|date',
+            'salary_range' => 'required|string',
+            'job_type' => 'required|string',
+            'job_mode' => 'required|string',
             'experience_level' => 'nullable|string',
-            'benefits' => 'nullable|string',
+            'company_name' => 'nullable|string',
             'key_responsibilities' => 'nullable|string',
             'qualifications' => 'nullable|string',
         ]);
@@ -88,9 +88,17 @@ class JobController extends Controller
 
         $job = Job::create(array_merge(
             $validator->validated(),
-            ['user_id' => auth()->id()]
+            [
+                'user_id' => auth()->id(),
+                'salary' => $request->input('salary_range'),
+                'work_mode' => $request->input('job_mode'),
+                'benefits' => $request->input('company_name'),
+            ]
         ));
-
+        $responseData = $job->toArray();
+        $responseData['company_name'] = $responseData['benefits'];
+        unset($responseData['benefits']);
+        
         return response()->json([
             'success' => true,
             'message' => 'Job listing created successfully.',
@@ -113,10 +121,9 @@ class JobController extends Controller
             'salary_range' => $job->salary,
             'job_type' => $job->job_type,
             'job_mode' => $job->work_mode,
-            'company_name' => 'Tech Corp', 
+            'company_name' => $job->benefits, 
             'is_deleted' => false, 
         ], Response::HTTP_OK);
-        
     }
 
     public function update(Request $request, $id)
@@ -131,13 +138,13 @@ class JobController extends Controller
         $job = Job::findOrFail($id);
 
         $validator = Validator::make($request->all(), [
-            'title' => $request->input('title'),
-            'description' => $request->input('description'),
-            'location' => $request->input('location'),
-            'deadline' => $request->input('deadline'),
-            'salary' => $request->input('salary_range'),
-            'job_type' => $request->input('job_type'),
-            'work_mode' => $request->input('job_mode'),
+            'title' => 'sometimes|required|string',
+            'description' => 'sometimes|required|string',
+            'location' => 'sometimes|required|string',
+            'deadline' => 'sometimes|required|date',
+            'salary_range' => 'sometimes|required|string',
+            'job_type' => 'sometimes|required|string',
+            'job_mode' => 'sometimes|required|string',
             'experience_level' => 'nullable|string',
             'benefits' => 'nullable|string',
             'key_responsibilities' => 'nullable|string',
@@ -152,7 +159,14 @@ class JobController extends Controller
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        $job->update($validator->validated());
+        $job->update(array_merge(
+            $validator->validated(),
+            [
+                'salary' => $request->input('salary_range'),
+                'work_mode' => $request->input('job_mode'),
+                'benefits' => $request->input('benefits'),
+            ]
+        ));
 
         return response()->json([
             'success' => true,
@@ -178,5 +192,4 @@ class JobController extends Controller
             'message' => 'Job listing deleted successfully.'
         ], Response::HTTP_OK);
     }
-
 }
