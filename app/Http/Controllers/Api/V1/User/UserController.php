@@ -71,7 +71,7 @@ class UserController extends Controller
         }, $data);
 
         $user->update($data);
-        
+
 
 
         return response()->json(
@@ -89,6 +89,17 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json([
+                'status_code' => 404,
+                'message' => 'User not found'
+            ], 404);
+        }
+
+        $user->delete();
+        return response()->noContent();
     }
+
 }
