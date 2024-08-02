@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::table('blogs', function (Blueprint $table) {
             $table->string('category')->nullable();
             $table->text('image_url')->nullable();
+            $table->dropForeign(['blog_category_id']);
             $table->dropColumn('blog_category_id');
             $table->foreignUuid('author_id')->nullable()->constrained('users', 'id')->cascadeOnDelete()->cascadeOnUpdate();
         });
