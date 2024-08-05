@@ -9,7 +9,7 @@ class CookiePreference extends Model
 {
     use HasFactory;
 
-    // Set the table name if it's not the plural form of the model name
+
     protected $table = 'cookie_preferences';
 
     // The attributes that are mass assignable.
@@ -17,7 +17,7 @@ class CookiePreference extends Model
 
     // Cast attributes to the desired data type
     protected $casts = [
-        'preferences' => 'array', // Cast the preferences JSON field to an array
+        'preferences' => 'array',
     ];
 
     // Indicates if the model's ID is auto-incrementing
