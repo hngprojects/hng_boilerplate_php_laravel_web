@@ -12,11 +12,9 @@ class CookiePreferencesController extends Controller
 {
     public function update(Request $request)
     {
-        // Get the authenticated user's ID
-        $userId = auth()->id();
-
         // Validation rules
         $validator = Validator::make($request->all(), [
+            'user_id' => 'required|uuid|exists:users,id',
             'preferences' => 'required|array',
             'preferences.analytics_cookies' => 'boolean',
             'preferences.marketing_cookies' => 'boolean',
@@ -34,7 +32,9 @@ class CookiePreferencesController extends Controller
         }
 
         try {
-            $preferences = $request->input('preferences');
+            $data = $request->only('user_id', 'preferences');
+            $userId = $data['user_id'];
+            $preferences = $data['preferences'];
 
             // Check if a cookie preference record exists for the given user_id
             $cookiePreference = CookiePreference::where('user_id', $userId)->first();
@@ -62,7 +62,7 @@ class CookiePreferencesController extends Controller
                 ],
             ], 200);
         } catch (\Exception $e) {
-
+            // Output the error details directly
             return response()->json([
                 'status_code' => 500,
                 'success' => false,
@@ -74,8 +74,22 @@ class CookiePreferencesController extends Controller
 
     public function getPreferences(Request $request)
     {
-        // Get the authenticated user's ID
-        $userId = auth()->id();
+        // Validation rules
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required|uuid|exists:users,id',
+        ]);
+
+        // If validation fails, return errors
+        if ($validator->fails()) {
+            return response()->json([
+                'status_code' => 400,
+                'success' => false,
+                'message' => 'Invalid user ID.',
+                'errors' => $validator->errors(),
+            ], 400);
+        }
+
+        $userId = $request->input('user_id');
 
         try {
             // Retrieve cookie preferences from the database
