@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\V1\Admin\Plan\SubscriptionController;
 use App\Http\Controllers\Api\V1\PaymentController;
 use App\Http\Controllers\Api\V1\Admin\FaqController;
 use App\Http\Controllers\NotificationSettingController;
+use App\Http\Controllers\Api\V1\Admin\ProductsController;
 use App\Http\Controllers\UserNotificationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\JobController;
@@ -134,6 +135,13 @@ Route::prefix('v1')->group(function () {
         Route::post('/email-templates', [EmailTemplateController::class, 'store']);
         Route::patch('/email-templates/{id}', [EmailTemplateController::class, 'update']);
         Route::delete('/email-templates/{id}', [EmailTemplateController::class, 'destroy']);
+        Route::get('/products', [ProductsController::class, 'index']);
+        Route::post('/products', [ProductsController::class, 'store']);
+        Route::get('/products/{productId}/edit', [ProductsController::class, 'edit']);
+        Route::patch('/products/{productId}', [ProductsController::class, 'update']);
+        Route::delete('/products/{productId}', [ProductsController::class, 'destroy']);
+        Route::get('/products/stats/total-revenue', [ProductsController::class, 'totalRevenue']);
+        Route::get('/products/stats/total-price', [ProductsController::class, 'totalPrice']);
     });
 
 
