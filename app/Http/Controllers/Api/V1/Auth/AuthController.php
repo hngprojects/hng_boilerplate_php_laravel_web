@@ -57,7 +57,7 @@ class AuthController extends Controller
 
         // Check if validation fails
         if ($validator->fails()) {
-            return $this->apiResponse($validator->errors(), 422);
+            return $this->apiResponse(message: $validator->errors(), status_code: 400);
         }
 
         try {
@@ -70,7 +70,7 @@ class AuthController extends Controller
                 'password' => Hash::make($request->password),
             ]);
 
-            $user->profile()->create([
+            $profile = $user->profile()->create([
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name
             ]);
@@ -80,10 +80,22 @@ class AuthController extends Controller
 
             DB::commit();
             $data = [
-                'accessToken' => $token,
-                'user' => $user,
+                'user' => [
+                    'id' => $user->id,
+                    'first_name' => $profile->first_name,
+                    'last_name' => $profile->last_name,
+                    'email' => $user->email,
+                    'avatar_url' => $profile->avatar_url,
+                    'role' => $user->role
+                ],
             ]; 
-            return $this->apiResponse('Registration successful', Response::HTTP_CREATED, $data);
+
+            return $this->apiResponse(
+                message: 'User Created Successfully', 
+                status_code: Response::HTTP_CREATED, 
+                data: $data,
+                token: $token
+            );
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Registration error: ' . $e->getMessage());
