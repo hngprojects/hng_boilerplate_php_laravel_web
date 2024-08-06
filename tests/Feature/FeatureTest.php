@@ -42,7 +42,6 @@ class FeatureTest extends TestCase
             'accept' => 'application/json'
         ]);
         $response->assertStatus(Response::HTTP_CREATED);
-//        dd($response);
         $response->assertJson([
             'message' => 'Feature created successfully',
             'status_code' => Response::HTTP_CREATED,
