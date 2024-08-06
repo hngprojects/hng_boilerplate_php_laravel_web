@@ -34,22 +34,23 @@ class RegistrationTest extends TestCase
 
         // Check the response structure
         $response->assertJsonStructure([
+            'status',
             'message',
-            'status_code',
+            'access_token',
             'data' => [
-                'accessToken',
                 'user' => [
-                    'name',
-                    'email',
                     'id',
-                    'updated_at',
-                    'created_at',
+                    'first_name',
+                    'last_name',
+                    'email',
+                    'avatar_url',
+                    'role'
                 ]
             ]
         ]);
 
         // Optionally, decode and verify the token
-        $token = $response->json('data.accessToken');
+        $token = $response->json('access_token');
         $this->assertNotEmpty($token);
     }
 
@@ -57,7 +58,6 @@ class RegistrationTest extends TestCase
     {
         $registrationData = [
             'name' => 'Test User',
-            'email' => '',
             'password' => 'Ed8M7s*)?e:hTb^#&;C!<y',
             'password_confirmation' => 'Ed8M7s*)?e:hTb^#&;C!<y',
             'first_name' => 'Test',
@@ -143,7 +143,7 @@ class RegistrationTest extends TestCase
         ]);
 
         $response->assertStatus(Response::HTTP_OK);
-        
+
         // Verify user in the database
         $user = User::where('email', $googleUser['email'])->first();
         $this->assertNotNull($user);
@@ -245,7 +245,7 @@ class RegistrationTest extends TestCase
         ]);
 
         $response->assertStatus(Response::HTTP_OK);
-        
+
         // Verify user in the database
         $user = User::where('email', $facebookUser['email'])->first();
         $this->assertNotNull($user);

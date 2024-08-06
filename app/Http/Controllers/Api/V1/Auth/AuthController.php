@@ -68,6 +68,7 @@ class AuthController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
+                'role' => 'user'
             ]);
 
             $user->profile()->create([
@@ -79,14 +80,26 @@ class AuthController extends Controller
             $token = JWTAuth::fromUser($user);
 
             DB::commit();
-            $data = [
-                'accessToken' => $token,
-                'user' => $user,
-            ]; 
-            return $this->apiResponse('Registration successful', Response::HTTP_CREATED, $data);
+
+            return response()->json([
+
+                'status' => 201,
+                "message" => "User Created Successfully",
+                'access_token' => $token,
+                'data' => [
+                    'user' => [
+                        'id' => $user->id,
+                        'first_name' => $request->first_name,
+                        'last_name' => $request->last_name,
+                        'avatar_url' => $user->profile->avatar_url,
+                        'email' => $user->email,
+                        'role' => $user->role
+                    ]
+                ],
+            ], 201);
+            // return $this->apiResponse('Registration successful', Response::HTTP_CREATED, $data);
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Registration error: ' . $e->getMessage());
 
             return $this->apiResponse('Registration unsuccessful', Response::HTTP_BAD_REQUEST);
         }
