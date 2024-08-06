@@ -221,4 +221,9 @@ class User extends Authenticatable  implements JWTSubject, CanResetPasswordContr
     {
         return $this->HasOne(NotificationSetting::class);
     }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
+    }
 }
