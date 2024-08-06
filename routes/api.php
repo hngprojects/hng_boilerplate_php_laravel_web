@@ -97,7 +97,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/billing-plans/{id}', [BillingPlanController::class, 'getBillingPlan']);
 
     //Dashboard
-    Route::get('/analytics/summary', [AnalyticController::class, 'index']);
+    Route::get('/analytics/summary', [AnalyticController::class, 'getSummary']);
     
     Route::middleware('throttle:10,1')->get('/topics/search', [ArticleController::class, 'search']);
 
