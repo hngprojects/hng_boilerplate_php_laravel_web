@@ -4,14 +4,26 @@ namespace App\Http\Controllers\Api\V1;
 
 
 use App\Http\Controllers\Controller;
+use App\Models\Inquiry;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Log;
 use App\Mail\ContactInquiryMail;
 
 class ContactController extends Controller
 {
+
+    public function index()
+    {
+        $inquiry = Inquiry::all();
+
+        return response()->json([
+            'status_code' => 200,
+            'message' => "Inquiries returned successfully",
+            'data' => $inquiry
+        ], 200);
+
+    }
     public function sendInquiry(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -31,15 +43,17 @@ class ContactController extends Controller
         try {
             $data = $request->only(['name', 'email', 'message']);
 
+            Inquiry::create($data);
 
-            Mail::to('amowogbajegideon@gmail.com')->queue(new ContactInquiryMail($data));
+            Mail::to($request->email)->queue(new ContactInquiryMail($data));
+
             return response()->json([
                 'message' => 'Inquiry successfully sent',
-                'status_code' => 200,
+                'status_code' => 201,
 
-            ], 200);
+            ], 201);
         } catch (\Exception $e) {
-            Log::error('Error sending inquiry: ' . $e->getMessage());
+
             return response()->json([
                 'message' => 'A server error occurred',
                 'status_code' => 500,

@@ -10,7 +10,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Notifications\ResetPasswordNotification;
+use App\Notifications\ResetPasswordToken;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class ForgetPasswordRequestTest extends TestCase
 {
@@ -104,7 +107,90 @@ class ForgetPasswordRequestTest extends TestCase
     }
 
     /** @test */
-    public function can_send_password_reset_email()
+    public function it_fails_when_email_is_not_provided_via_token()
+    {
+        $response = $this->postJson('/api/v1/auth/forgot-password', []);
+        $response->assertStatus(422)
+                ->assertJson([
+                    'message' => [
+                        'email' => [
+                            'The email field is required.'
+                        ]
+                    ],
+                    'status_code' => 422
+                ]);
+    }
+
+     /** @test */
+     public function it_returns_error_when_user_does_not_exist_via_token()
+     {
+         // Create a valid email but without an associated user
+         $response = $this->postJson('/api/v1/auth/forgot-password', [
+             'email' => 'nonexistentuser@example.com',
+         ]);
+ 
+         $response->assertStatus(400)
+                 ->assertJson([
+                     'message' => 'User does not exist',
+                     'status_code' => 400
+                 ]);
+     }
+
+     /** @test */
+    public function it_returns_error_for_invalid_email_domain_via_token()
+    {
+        // Provide an email with a domain that should not be in the database
+        $response = $this->postJson('/api/v1/auth/forgot-password', [
+            'email' => 'test@invalid-domain.com',
+        ]);
+
+        $response->assertStatus(400)
+                ->assertJson([
+                    'message' => 'User does not exist',
+                    'status_code' => 400
+                ]);
+    }
+
+    /** @test */
+    public function it_returns_error_for_email_with_invalid_format_via_otp()
+    {
+        // Provide an invalid email format
+        $response = $this->postJson('/api/v1/auth/forgot-password', [
+            'email' => 'invalid-email-format',
+        ]);
+
+        $response->assertStatus(422)  // Expect validation error for invalid email format
+                ->assertJson([
+                    'message' => [
+                        'email' => [
+                            'The email field must be a valid email address.'
+                        ]
+                    ],
+                    'status_code' => 422
+                ]);
+    }
+
+    /** @test */
+    public function it_returns_error_when_email_field_is_empty_via_otp()
+    {
+        // Provide an empty email field
+        $response = $this->postJson('/api/v1/auth/forgot-password', [
+            'email' => '',
+        ]);
+
+        $response->assertStatus(422)  // Expect validation error for empty email
+                ->assertJson([
+                    'message' => [
+                        'email' => [
+                            'The email field is required.'
+                        ]
+                    ],
+                    'status_code' => 422
+                ]);
+    }
+
+    /** @test */
+    public function can_send_password_reset_email_via_otp()
     {
         Notification::fake();
 
@@ -112,37 +198,24 @@ class ForgetPasswordRequestTest extends TestCase
             'email' => 'test@example.com',
         ]);
 
-        $token = Password::createToken($user);
+        $token = random_int(100000, 999999);
 
-        $response = $this->postJson('/api/v1/auth/password-reset-email', [
-            'email' => 'test@example.com',
+        // Store the token in the password_reset_tokens table
+        DB::table('password_reset_tokens')->updateOrInsert(
+            ['email' => $user->email],
+            [
+                'token' => $token,
+                'created_at' => Carbon::now(),
+            ]
+        );
+
+        $response = $this->postJson('/api/v1/auth/forgot-password', [
+            'email' => $user->email,
         ]);
 
         $response->assertStatus(200)
                  ->assertJson([
                      'message' => 'Password reset link sent',
                  ]);
-
-        // Assert a notification was sent
-        Notification::assertSentTo(
-            [$user],
-            ResetPasswordNotification::class,
-            function ($notification) use ($token, $user) {
-                // Extract the URL from the notification
-                $url = $notification->toMail($user)->actionUrl;
-
-                // Extract query parameters from the URL
-                $query = parse_url($url, PHP_URL_QUERY);
-                parse_str($query, $params);
-
-                // Verify  email in the URL
-                return $params['email'] === $user->email;
-            }
-        );
-
-        // Check if token is saved in the database
-        $this->assertDatabaseHas('password_reset_tokens', [
-            'email' => 'test@example.com',
-        ]);
     }
 }

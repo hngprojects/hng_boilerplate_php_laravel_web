@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -16,14 +17,14 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
 class User extends Authenticatable  implements JWTSubject, CanResetPasswordContract
 {
-    use HasApiTokens, HasFactory, Notifiable, HasUuids, CanResetPassword;
+    use HasApiTokens, HasFactory, Notifiable, HasUuids, CanResetPassword, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
-    protected $guarded  = ['id'];
+    protected $guarded  = [];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -35,14 +36,14 @@ class User extends Authenticatable  implements JWTSubject, CanResetPasswordContr
         'remember_token',
     ];
 
-    protected $fillable = [
+    /* protected $fillable = [
         'name',
         'email',
         'password',
         'status',
         'deactivation_reason',
         'phone', 'is_active'
-    ];
+    ]; */
 
     /**
      * The attributes that should be cast.
@@ -188,6 +189,12 @@ class User extends Authenticatable  implements JWTSubject, CanResetPasswordContr
         return $this->hasMany(Preference::class);
     }
 
+    public function notifications()
+    {
+        return $this->belongsToMany(Notification::class, 'user_notifications')->withPivot('status')
+            ->withTimestamps();;
+    }
+
     /**
      * Send the password reset notification.
      *
@@ -197,5 +204,21 @@ class User extends Authenticatable  implements JWTSubject, CanResetPasswordContr
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new \App\Notifications\ResetPasswordNotification($token));
+    }
+
+     /**
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetToken($token)
+    {
+        $this->notify(new \App\Notifications\ResetPasswordToken($token));
+    }
+
+    public function notificationSetting(): HasOne
+    {
+        return $this->HasOne(NotificationSetting::class);
     }
 }

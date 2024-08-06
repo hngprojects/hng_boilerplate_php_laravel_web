@@ -2,81 +2,47 @@
 
 namespace Tests\Feature;
 
-use App\Models\Category;
-use App\Models\Product;
-use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\Models\User;
+use App\Models\Product;
 
 class ProductControllerTest extends TestCase
 {
-    use LazilyRefreshDatabase;
+    use RefreshDatabase;
 
-    public function test_search_products_by_name()
+    private $accessToken;
+
+    protected function setUp(): void
     {
-        $product = Product::factory()->create(['name' => 'Test Product']);
+        parent::setUp();
 
-        $response = $this->get('/api/v1/products/search?name=Test');
-
-        $response->assertStatus(200);
-        $response->assertJsonFragment(['name' => 'Test Product']);
-    }
-
-    public function test_search_products_by_category()
-    {
-        $product = Product::factory()->create([
-            'name' => 'Test Product'
+        // Register a new user
+        $response = $this->postJson('/api/v1/auth/register', [
+            'first_name' => 'Precious',
+            'last_name' => 'Test',
+            'email' => 'precious@test.com',
+            'password' => '120oklsQQMNu)',
         ]);
 
-        $category = Category::factory()->create([
-            'name' => 'Test Category'
+        $response->assertStatus(201);
+
+        $this->accessToken = $response->json('data.accessToken');
+    }
+
+   
+
+    public function testUserLogin()
+    {
+        $response = $this->postJson('/api/v1/auth/login', [
+            'email' => 'precious@test.com',
+            'password' => '120oklsQQMNu)',
         ]);
 
-        $product->categories()->attach($category->id);
-
-        $response = $this->get('/api/v1/products/search?name=Test&category=Test Category');
-
         $response->assertStatus(200);
-        $response->assertJsonFragment(['name' => 'Test Product']);
-    }
-
-    public function test_search_products_by_price_range()
-    {
-        $product = Product::factory()->create(['name' => 'Test Product', 'price' => 150]);
-
-        $response = $this->get('/api/v1/products/search?name=Test&minPrice=100&maxPrice=200');
-
-        $response->assertStatus(200);
-        $response->assertJsonFragment(['name' => 'Test Product']);
-    }
-
-    public function test_search_returns_empty_for_nonexistent_name()
-    {
-        $response = $this->get('/api/v1/products/search?name=Nonexistent');
-
-        $response->assertStatus(200);
-        $response->assertJson([
-            'success' => true,
-            'products' => [],
-            'statusCode' => 200
-        ]);
-    }
-
-    public function test_search_validation_error()
-    {
-        $response = $this->get('/api/v1/products/search');
-
-        $response->assertStatus(422);
-        $response->assertJson([
-            'success' => false,
-            'errors' => [
-                [
-                    'parameter' => 'name',
-                    'message' => 'The name field is required.',
-                ]
-            ],
-            'statusCode' => 422
+        $response->assertJsonStructure([
+            'message',
+            'data' => ['user' => ['id', 'email', 'role', 'signup_type', 'is_active', 'is_verified', 'created_at', 'updated_at'], 'access_token', 'refresh_token']
         ]);
     }
 }

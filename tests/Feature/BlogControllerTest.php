@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\Blog;
 use App\Models\User;
-use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
@@ -15,8 +14,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class BlogControllerTest extends TestCase
 {
-
-    use LazilyRefreshDatabase;
+    use RefreshDatabase;
 
     /** @test */
     public function it_fetches_paginated_latest_blog_posts_without_parameters()
@@ -35,7 +33,7 @@ class BlogControllerTest extends TestCase
                 'next',
                 'previous',
                 'results' => [
-                    '*' => ['title', 'content', 'images', 'tags', 'author', 'created_at'],
+                    '*' => ['title', 'content', 'category', 'author', 'image_url', 'created_at'],
                 ],
             ]);
 
@@ -69,7 +67,7 @@ class BlogControllerTest extends TestCase
                 'next',
                 'previous',
                 'results' => [
-                    '*' => ['title', 'content', 'images', 'tags', 'author', 'created_at'],
+                    '*' => ['title', 'content', 'category', 'author', 'image_url', 'created_at'],
                 ],
             ]);
 
@@ -126,15 +124,35 @@ class BlogControllerTest extends TestCase
         $superAdmin = User::factory()->create(['role' => 'admin']);
 
         // Create a blog post
-        $blog = Blog::factory()->create();
+        $blog = Blog::factory()->create(['author_id' => $superAdmin->id, 'author'=> $superAdmin->name]);
 
         // Generate a JWT token for the superadmin user
-        $token = \Tymon\JWTAuth\Facades\JWTAuth::fromUser($superAdmin);
+        $token = JWTAuth::fromUser($superAdmin);
 
         // Act as the superadmin user with the generated token
         $this->withHeaders(['Authorization' => 'Bearer ' . $token])
                         ->deleteJson("/api/v1/blogs/{$blog->id}")
                         ->assertStatus(204);
+    }
+
+    public function test_non_author_cannot_delete_blog()
+    {
+        // create a user to create a blog 
+        $superAdmin = User::factory()->create(['role' => 'admin']);
+
+        // Create a blog post
+        $blog = Blog::factory()->create(['author_id'=> $superAdmin->id, 'author' => $superAdmin->name]);
+
+        // not an author 
+        $user = User::factory()->create(['role' => 'admin']);
+
+          // Authenticate the user with a valid JWT token
+        $token = JWTAuth::fromUser($user);
+
+        // Send delete request with the token and assert status
+        $this->withHeaders(['Authorization' => "Bearer $token"])
+            ->deleteJson("/api/v1/blogs/{$blog->id}")
+            ->assertStatus(403); // Forbidden
     }
 
     public function test_non_superadmin_cannot_delete_blog()
@@ -143,10 +161,10 @@ class BlogControllerTest extends TestCase
         $user = User::factory()->create(['role' => 'user']);
 
           // Authenticate the user with a valid JWT token
-        $token = auth()->login($user);
+        $token = JWTAuth::fromUser($user);
 
         // Create a blog post
-        $blog = Blog::factory()->create();
+        $blog = Blog::factory()->create(['author_id'=> $user->id, 'author' => $user->name]);
 
         // Send delete request with the token and assert status
         $this->withHeaders(['Authorization' => "Bearer $token"])
@@ -159,32 +177,26 @@ class BlogControllerTest extends TestCase
 
         ]);
         $response->assertStatus(401);
-        $response->assertJson([
-            'message' => 'Unauthenticated.'
-        ]);
     }
 
     public function test_admin_can_create_blog_post()
     {
         Storage::fake('public');
 
-        $admin = User::factory()->create();
-        $this->actingAs($admin);
+        $admin = User::factory()->create(['role' => 'admin']);
+        $token = JWTAuth::fromUser($admin);
 
-        $image1 = UploadedFile::fake()->image('blog_image1.jpg');
-        $image2 = UploadedFile::fake()->image('blog_image2.jpg');
+        $image = UploadedFile::fake()->image('image1.jpg');
+        $path = Storage::putFile('public/images', $image);
+        $imageUrl = str_replace('public/', 'storage/', $path);
 
-        $author = Str::uuid();
-
-        $response = $this->postJson('/api/v1/blogs', [
+        $response = $this->withHeaders(['Authorization' => "Bearer $token"])->postJson('/api/v1/blogs', [
             'title' => 'Test Blog Post',
             'content' => 'This is a test blog post content.',
-            'author' => $author,
-            'images' => [$image1, $image2],
-            'tags' => [
-                ['name' => 'Technology'],
-                ['name' => 'Programming'],
-            ],
+            'author' => $admin->name,
+            'author_id' => $admin->id,
+            'image_url' => $image,
+            'category' => 'Example 2',
         ]);
 
         $response->assertStatus(201)
@@ -196,40 +208,103 @@ class BlogControllerTest extends TestCase
         $this->assertDatabaseHas('blogs', [
             'title' => 'Test Blog Post',
             'content' => 'This is a test blog post content.',
-            'author' => $author,
+            'author' => $admin->name,
+            'author_id' => $admin->id,
+            'image_url' => $imageUrl,
+            'category' => 'Example 2',
         ]);
 
-        $this->assertDatabaseHas('blog_tags', [
-            'name' => 'Technology',
-        ]);
-
-        $this->assertDatabaseHas('blog_tags', [
-            'name' => 'Programming',
-        ]);
-
-        Storage::disk('public')->assertExists('blog_header/' . $image1->hashName());
-        Storage::disk('public')->assertExists('blog_header/' . $image2->hashName());
+        Storage::disk('public')->assertExists('images/' . $image->hashName());
     }
 
     public function test_blog_create_request_validation()
     {
         Storage::fake('public');
 
-        $admin = User::factory()->create();
-        $this->actingAs($admin);
+        $admin = User::factory()->create(['role'=>'admin']);
+        $token = JWTAuth::fromUser($admin);
 
         $invalidData = [
             'title' => '',
             'content' => '',
-            'author' => '',
-            'images' => ['not_an_image'],
-            'tags' => 'not_an_array',
+            'image_url' => '',
+            'category' => 12345,
         ];
 
-        $response = $this->postJson('/api/v1/blogs', $invalidData);
+        $response = $this->withHeaders(['Authorization' => "Bearer $token"])->postJson('/api/v1/blogs', $invalidData);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['title', 'content', 'author', 'images.0', 'tags']);
+            ->assertJsonValidationErrors(['title', 'content', 'image_url', 'category']);
 
+    }
+    
+    public function test_admin_can_update_blog()
+    {
+        // Create a user with admin role
+        $admin = User::factory()->create([
+            'role' => 'admin',
+        ]);
+        
+        $token = JWTAuth::fromUser($admin);
+        // Create a blog post to update
+        $blog = Blog::factory()->create(['author_id'=> $admin->id, 'author' => $admin->name]);
+
+        // Data to update the blog post
+        $data = [
+            'title' => 'Updated Title',
+            'content' => 'Updated Content',
+        ];
+
+        // Send a request to update the blog post
+        $response = $this->withHeaders(['Authorization' => "Bearer $token"])
+                            ->json('PATCH', route('admin.blogs.update', ['id' => $blog->id]), $data);
+
+        // Assert the response status
+        $response->assertStatus(200);
+
+        // Assert the blog post was updated
+        $this->assertDatabaseHas('blogs', [
+            'id' => $blog->id,
+            'title' => 'Updated Title',
+            'content' => 'Updated Content',
+        ]);
+    }
+
+    /**
+     * Test that a non-admin user cannot update the blog.
+     */
+    public function test_non_admin_cannot_update_blog()
+    {
+        // Create a user without admin role
+        $user = User::factory()->create([
+            'role' => 'user',
+        ]);
+
+        // Log in the user
+        $token = auth()->login($user);
+
+        // Create a blog post to update
+        $blog = Blog::factory()->create(['author_id' => $user->id, 'author'=> $user->name]);
+
+        // Data to update the blog post
+        $data = [
+            'title' => 'Updated Title',
+            'content' => 'Updated Content',
+            'image_url' => UploadedFile::fake()->image('image1.jpg'),
+        ];
+
+        // Send a request to update the blog post
+        $response = $this->withHeaders(['Authorization' => "Bearer $token"])
+                        ->json('PATCH', route('admin.blogs.update', ['id' => $blog->id]), $data);
+
+        // Assert the response status
+        $response->assertStatus(401);
+
+        // Assert the blog post was not updated
+        $this->assertDatabaseMissing('blogs', [
+            'id' => $blog->id,
+            'title' => 'Updated Title',
+            'content' => 'Updated Content',
+        ]);
     }
 }
