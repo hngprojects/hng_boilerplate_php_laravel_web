@@ -193,15 +193,18 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CreateProductRequest $request)
-    {
-
-        $org_id = $request->route('org_id');
-
+    public function store(CreateProductRequest $request, $org_id)
+    {        
         $isOwner = OrganisationUser::where('org_id', $org_id)->where('user_id', auth()->id())->exists();
 
         if (!$isOwner) {
             return response()->json(['message' => 'You are not authorized to create products for this organization.'], 403);
+        }
+
+        $imageUrl = null;
+        if($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('product_images', 'public');
+            $imageUrl = Storage::url($imagePath);
         }
 
         $product = Product::create([
@@ -210,8 +213,7 @@ class ProductController extends Controller
             'slug' => Carbon::now(),
             'tags' => $request->input('category'),
             'price' => $request->input('price'),
-            // 'imageUrl' => $imageUrl,
-            'imageUrl' => $request->input('image'),
+            'imageUrl' => $imageUrl,
             'user_id' => auth()->id(),
             'org_id' => $org_id
         ]);
