@@ -57,6 +57,7 @@ class PaymentController extends Controller
         $data['reference'] = Str::uuid();
         $data['plan_code'] = $subscriptionPlan->paystack_plan_code;
         $data['plan_id'] = $subscriptionPlan->id;
+        $data['organisation_id'] = $request->organisation_id;
 
         try {
 
@@ -159,6 +160,7 @@ class PaymentController extends Controller
         $data['plan_code'] = $subscriptionPlan->flutterwave_plan_code;
         $data['plan_id'] = $subscriptionPlan->id;
         $data['amount'] = $subscriptionPlan->price;
+        $data['organisation_id'] = $request->organisation_id;
         $data['title'] = $subscriptionPlan->name;
 
         try {
