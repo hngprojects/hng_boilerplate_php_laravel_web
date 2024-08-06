@@ -1,0 +1,90 @@
+name: Laravel CI PROD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+         image: postgres:latest
+         env:
+           POSTGRES_DB: postgres        
+           POSTGRES_PASSWORD: postgres
+           POSTGRES_USER: postgres
+         ports:
+           - 5432:5432
+       # Set health checks to wait until postgres has started
+         options: >-
+           --health-cmd pg_isready
+           --health-interval 10s
+           --health-timeout 5s
+           --health-retries 5
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: pgsql, pdo_pgsql, zip, bcmath, apcu
+          ini-values: |
+            apc.enabled=1
+            apc.enable_cli=1
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-dir)"
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+      - name: Install PHP dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Set environment variables for CI
+        run: |
+          cp .env.example .env
+          echo "APP_KEY=${{ secrets.APP_KEY }}" >> .env
+          echo "DB_CONNECTION=pgsql" >> .env
+          echo "DB_HOST=localhost" >> .env
+          echo "DB_PORT=5432" >> .env
+          echo "DB_DATABASE=postgres" >> .env
+          echo "DB_USERNAME=postgres" >> .env
+          echo "DB_PASSWORD=postgres" >> .env
+      - name: Run database migrations
+        run: php artisan migrate --force
+
+      - name: Clear all cache
+        run: php artisan optimize
+
+      - name: Clear configuration cache
+        run: php artisan config:clear
+
+      - name: Run Laravel tests
+        run: |
+          php artisan jwt:secret
+          php artisan test
+          
+      - name: Deploy to server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            echo "About to Deploy"
+            cd /var/www/langlearnai-be/api
+            eval $(ssh-agent)
+            ssh-add ~/.ssh/id_ecdsa
+            git pull origin main
+            composer install --no-dev
+            php artisan migrate --force

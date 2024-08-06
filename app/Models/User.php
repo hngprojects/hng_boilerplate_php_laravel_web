@@ -2,29 +2,29 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
-class User extends Authenticatable  implements JWTSubject
+class User extends Authenticatable  implements JWTSubject, CanResetPasswordContract
 {
-    use HasApiTokens, HasFactory, Notifiable, HasUuids;
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasUuids, CanResetPassword, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    protected $guarded  = [];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -36,6 +36,15 @@ class User extends Authenticatable  implements JWTSubject
         'remember_token',
     ];
 
+    /* protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'status',
+        'deactivation_reason',
+        'phone', 'is_active'
+    ]; */
+
     /**
      * The attributes that should be cast.
      *
@@ -45,6 +54,27 @@ class User extends Authenticatable  implements JWTSubject
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    /**
+     * The primary key associated with the table.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'id';
+
+    /**
+     * Indicates if the model's ID is auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = false;
+
+    /**
+     * The data type of the primary key ID.
+     *
+     * @var string
+     */
+    protected $keyType = 'string';
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
@@ -63,5 +93,137 @@ class User extends Authenticatable  implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function profile(): HasOne
+    {
+        return $this->hasOne(Profile::class, 'user_id', 'id');
+    }
+
+    public function organisations(): BelongsToMany
+    {
+        return $this->belongsToMany(Organisation::class, 'organisation_user', 'user_id', 'org_id')->using(OrganisationUser::class);
+    }
+
+    public function jobs(): BelongsToMany
+    {
+        return $this->belongsToMany(Job::class, 'job_users', 'user_id', 'job_id')->using(JobUser::class);
+    }
+
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class, 'user_id', 'id');
+    }
+
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class, 'users_permissions', 'user_id', 'permission_id');
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'users_roles', 'user_id', 'role_id');
+    }
+
+    public function hasPermissionTo($permission)
+    {
+        return $this->permissions()->where('name', $permission)->exists() ||
+            $this->roles()->whereHas('permissions', function ($query) use ($permission) {
+                $query->where('name', $permission);
+            })->exists();
+    }
+
+    public function hasRole($role)
+    {
+        return $this->roles()->where('name', $role)->exists();
+    }
+
+    public function givePermissionTo($permission)
+    {
+        $this->permissions()->attach($permission);
+    }
+
+    public function revokePermissionTo($permission)
+    {
+        $this->permissions()->detach($permission);
+    }
+
+    public function assignRole($role)
+    {
+        $this->roles()->attach($role);
+    }
+
+    public function removeRole($role)
+    {
+        $this->roles()->detach($role);
+    }
+
+    public function getAllPermissions()
+    {
+        $rolePermissions = $this->roles->load('permissions')->pluck('permissions')->flatten();
+        return $this->permissions->merge($rolePermissions)->unique('id');
+    }
+
+    public function hasPermissionThroughRole($permission)
+    {
+        return $this->roles()->whereHas('permissions', function ($query) use ($permission) {
+            $query->where('name', $permission);
+        })->exists();
+    }
+
+    public function hasAnyRole($roles)
+    {
+        return $this->roles()->whereIn('name', $roles)->exists();
+    }
+
+    public function hasAnyPermission($permissions)
+    {
+        return $this->permissions()->whereIn('name', $permissions)->exists() ||
+            $this->roles()->whereHas('permissions', function ($query) use ($permissions) {
+                $query->whereIn('name', $permissions);
+            })->exists();
+    }
+
+    public function preferences(): HasMany
+    {
+        return $this->hasMany(Preference::class);
+    }
+
+    public function notifications()
+    {
+        return $this->belongsToMany(Notification::class, 'user_notifications')->withPivot('status')
+            ->withTimestamps();;
+    }
+
+    /**
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new \App\Notifications\ResetPasswordNotification($token));
+    }
+
+     /**
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetToken($token)
+    {
+        $this->notify(new \App\Notifications\ResetPasswordToken($token));
+    }
+
+    public function notificationSetting(): HasOne
+    {
+        return $this->HasOne(NotificationSetting::class);
+    }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
     }
 }

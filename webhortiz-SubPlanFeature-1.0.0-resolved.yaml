@@ -1,0 +1,702 @@
+openapi: 3.0.0
+servers:
+  - description: Subscription Plan and Feature
+    url: https://virtserver.swaggerhub.com/bhimbho/SubPlanFeature/1.0.0
+info:
+  description: Subscription Plan and Feature API
+  version: "1.0.0"
+  title: Subscription Plan and Feature API
+  contact:
+    email: soneyeabimbola@aol.com
+tags:
+  - name: features
+    description: feature
+  - name: plans
+    description: Plans
+paths:
+  /features:
+    post:
+      tags:
+        - features
+      summary: creates a feature for reuse
+      operationId: addFeature
+      description: creates a feature for reuse
+      responses:
+        '201':
+          description: feature created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Features'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated
+        '422':
+          description: validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: one or more validation errors
+                  errors:
+                    type: array
+                    items:
+                      properties:
+                        name:
+                          type: string
+                          example: name field required
+        '400':
+          description: feature creation failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: feature creation failed
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeaturesInput'
+        description: Inventory item to add
+  /plans:
+    post:
+      tags:
+        - plans
+      summary: creates a subscription plan
+      operationId: addplan
+      description: Adds an item to the system
+      responses:
+        '201':
+          description: subscription plan created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionPlan'
+
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated
+        '422':
+          description: validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: one or more validation errors
+                  errors:
+                    type: array
+                    items:
+                      properties:
+                        name:
+                          type: string
+                          example: name field required
+        '400':
+          description: creation of subscription plan failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: creation of subscription plan failed
+  /blogs:
+    get:
+      tags:
+        - blogs
+      summary: Get all blog posts
+      operationId: getAllBlogs
+      description: Retrieve all blog posts.
+      responses:
+        '200':
+          description: A list of all blog posts.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        title:
+                          type: string
+                        content:
+                          type: string
+                        author:
+                          type: string
+                        image_url:
+                          type: object
+                        created_at:
+                          type: string
+                          format: date-time
+                  message:
+                    type: string
+                    example: All blog posts retrieved successfully
+                  status_code:
+                    type: integer
+                    example: 200
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error.
+                  status_code:
+                    type: integer
+                    example: 500
+    post:
+      tags:
+        - blogs
+      summary: Create a new blog post
+      operationId: createBlog
+      description: Store a newly created blog post.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: My Blog Title
+                content:
+                  type: string
+                  example: This is the content of the blog.
+                images:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                author:
+                  type: string
+                  example: John Doe
+                blog_category_id:
+                  type: string
+                  example: uuid
+      responses:
+        '201':
+          description: Blog post created successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Blog post created successfully.
+                  status_code:
+                    type: integer
+                    example: 201
+        '422':
+          description: Validation error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: object
+                  status_code:
+                    type: integer
+                    example: 422
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error.
+                  status_code:
+                    type: integer
+                    example: 500
+  /blogs/latest:
+    get:
+      tags:
+        - blogs
+      summary: Get the latest blog posts with pagination
+      operationId: getLatestBlogs
+      description: Fetch the latest blog posts with pagination.
+      parameters:
+        - name: page
+          in: query
+          required: false
+          description: The page number to fetch.
+          schema:
+            type: integer
+            default: 1
+        - name: page_size
+          in: query
+          required: false
+          description: The number of blog posts per page.
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: A list of the latest blog posts.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: Total number of blog posts.
+                  next:
+                    type: string
+                    nullable: true
+                    description: URL to fetch the next page of results.
+                  previous:
+                    type: string
+                    nullable: true
+                    description: URL to fetch the previous page of results.
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        title:
+                          type: string
+                        content:
+                          type: string
+                        author:
+                          type: string
+                        created_at:
+                          type: string
+                          format: date-time
+                        image_url:
+                          type: object
+                  status_code:
+                    type: integer
+                    example: 200
+        '400':
+          description: Invalid page or page_size parameter.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid page or page_size parameter.
+                  status_code:
+                    type: integer
+                    example: 400
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error.
+                  status_code:
+                    type: integer
+                    example: 500                
+  /blogs/{id}:
+    delete:
+      tags:
+        - blogs
+      summary: Delete a blog post
+      operationId: deleteBlog
+      description: Deletes a blog post by ID. Accessible only to admins and author of the blog post.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the blog post to delete
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Blog successfully deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Blog successfully deleted
+                  status_code:
+                    type: integer
+                    example: 204
+        '403':
+          description: Not authorized to delete this blog post
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Not authorized to delete this blog post
+                  status_code:
+                    type: integer
+                    example: 403
+        '404':
+          description: Blog with the given Id does not exist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Blog with the given Id does not exist
+                  status_code:
+                    type: integer
+                    example: 404
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal server error.
+                  status_code:
+                    type: integer
+                    example: 500
+    get:
+      tags:
+        - blogs
+      summary: Get a specific blog post
+      operationId: getBlogById
+      description: Retrieve a blog post by its ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the blog post to retrieve
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Blog post retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      title:
+                        type: string
+                      content:
+                        type: string
+                      author:
+                        type: string
+                      created_at:
+                        type: string
+                        format: date-time
+                      image_url:
+                          type: object
+                  message:
+                    type: string
+                    example: Blog post fetched successfully.
+                  status_code:
+                    type: integer
+                    example: 200
+        '404':
+          description: Blog not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Blog not found.
+                  status_code:
+                    type: integer
+                    example: 404
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error.
+                  status_code:
+                    type: integer
+                    example: 500
+  /blogs/edit/{id}:
+    patch:
+      tags:
+        - blogs
+      summary: Update a blog post
+      operationId: updateBlog
+      description: Updates a blog post by ID. Accessible only to admins and author of blog post.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the blog post to update
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: Title of the blog post
+                  example: "Updated Blog Title"
+                content:
+                  type: string
+                  description: Content of the blog post
+                  example: "Updated blog content."
+                author:
+                  type: string
+                  description: Author of the blog post
+                  example: "Author Name"
+                blog_category_id:
+                  type: string
+                  format: uuid
+                  example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Blog successfully updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Blog successfully updated
+                  status_code:
+                    type: integer
+                    example: 200
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invalid input
+                  status_code:
+                    type: integer
+                    example: 400
+        '401':
+          description: You are not authorized to perform this action
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: You are not authorized to perform this action
+                  status_code:
+                    type: integer
+                    example: 401
+        '403':
+          description: Not authorized to edit this blog post
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Not authorized to edit this blog post
+                  status_code:
+                    type: integer
+                    example: 403
+        '404':
+          description: Blog with the given Id does not exist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Blog with the given Id does not exist
+                  status_code:
+                    type: integer
+                    example: 404
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal server error
+                  status_code:
+                    type: integer
+                    example: 500
+components:
+  schemas:
+    SubscriptionPlan:
+      type: object
+      required:
+        - name
+        - price
+        - duration
+        - description
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        name:
+          type: string
+          example: basic
+        price:
+          type: integer
+          example: 1000
+        duration:
+          type: string
+          example: monthly
+        description:
+          type: string
+          example: this plan is valid for one month with extra 3days
+        features:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/Features'
+
+    Features:
+      required:
+        - name
+        - status
+      properties:
+        name:
+          type: string
+          example: 2TB space
+        description:
+          type: string
+          format: string
+          example: 'xeoo'
+        status:
+          type: integer
+          description: Status of the feature (can only be 1 or 0)
+          example: 1
+        status_text:
+          type: string
+          description: Status text of the feature (can only be active or inactive)
+          example: active
+
+    SubscriptionPlanInput:
+      type: object
+      required:
+        - name
+        - price
+        - duration
+        - description
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        name:
+          type: string
+          example: basic
+        price:
+          type: integer
+          example: 1000
+        duration:
+          type: string
+          example: monthly
+        description:
+          type: string
+          example: this plan is valid for one month with extra 3days
+        features:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+                example: xxxx-xxxxx-xxxxx-xxxxxx
+              status:
+                type: string
+                example: 1 for active 0 for inactive
+
+
+    FeaturesInput:
+      required:
+        - name
+        - status
+      properties:
+        name:
+          type: string
+          example: 2TB space
+        description:
+          type: string
+          format: string
+          example: 'xeoo'
+          
+securitySchemes:
+  bearerAuth:
+    type: http
+    scheme: bearer
+    bearerFormat: JWT
