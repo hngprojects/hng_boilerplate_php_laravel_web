@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('blogs', function (Blueprint $table) {
-            $table->foreignUuid('blog_category_id')->references('id')->on('blog_categories')->constrained()->onDelete('cascade')->onUpdate('cascade')->nullable();
+            $table->foreignUuid('blog_category_id')->nullable()->references('id')->on('blog_categories')->constrained()->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

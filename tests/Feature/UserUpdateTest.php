@@ -23,6 +23,8 @@ class UserUpdateTest extends TestCase{
             'name' => $this->faker->name,
             'email' => $this->faker->email,
             'phone' => $this->faker->phoneNumber,
+            'first_name' => $this->faker->firstName,
+            'last_name' => $this->faker->lastName,
         ];
 
         $response = $this->withHeaders(['Authorization' => "Bearer $token"])
@@ -40,6 +42,12 @@ class UserUpdateTest extends TestCase{
             'name' => $data['name'],
             'email' => $data['email'],
             'phone' => $data['phone'],
+        ]);
+
+        $this->assertDatabaseHas('profiles', [
+            'user_id' => $user->id,
+            'first_name' => $data['first_name'],
+            'last_name' => $data['last_name']
         ]);
     }
 
