@@ -68,6 +68,7 @@ class AuthController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
+                'role' => 'user'
             ]);
 
             $profile = $user->profile()->create([
@@ -79,26 +80,26 @@ class AuthController extends Controller
             $token = JWTAuth::fromUser($user);
 
             DB::commit();
-            $data = [
-                'user' => [
-                    'id' => $user->id,
-                    'first_name' => $profile->first_name,
-                    'last_name' => $profile->last_name,
-                    'email' => $user->email,
-                    'avatar_url' => $profile->avatar_url,
-                    'role' => $user->role
-                ],
-            ]; 
 
-            return $this->apiResponse(
-                message: 'User Created Successfully', 
-                status_code: Response::HTTP_CREATED, 
-                data: $data,
-                token: $token
-            );
+            return response()->json([
+
+                'status' => 201,
+                "message" => "User Created Successfully",
+                'access_token' => $token,
+                'data' => [
+                    'user' => [
+                        'id' => $user->id,
+                        'first_name' => $request->first_name,
+                        'last_name' => $request->last_name,
+                        'avatar_url' => $user->profile->avatar_url,
+                        'email' => $user->email,
+                        'role' => $user->role
+                    ]
+                ],
+            ], 201);
+            // return $this->apiResponse('Registration successful', Response::HTTP_CREATED, $data);
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Registration error: ' . $e->getMessage());
 
             return $this->apiResponse('Registration unsuccessful', Response::HTTP_BAD_REQUEST);
         }

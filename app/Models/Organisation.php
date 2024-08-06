@@ -71,4 +71,21 @@ class Organisation extends Model
     {
         return $this->hasMany(Role::class, 'org_id');
     }
+
+    public function subscription()
+    {
+        return $this->hasOne(UserSubscription::class, 'org_id', 'org_id');
+    }
+
+    public function subscriptionPlan()
+    {
+        return $this->hasOneThrough(
+            SubscriptionPlan::class,
+            UserSubscription::class,
+            'org_id', // Foreign key on UserSubscription table
+            'id',     // Foreign key on SubscriptionPlan table
+            'org_id', // Local key on Organisation table
+            'subscription_plan_id' // Local key on UserSubscription table
+        );
+    }
 }
