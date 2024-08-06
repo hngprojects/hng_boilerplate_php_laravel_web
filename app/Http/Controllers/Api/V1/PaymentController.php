@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Payment;
 use App\Services\PaymentService;
+use App\Models\Organisation;
 use App\Models\SubscriptionPlan;
 use App\Models\UserSubscription;
 use Illuminate\Support\Str;
@@ -26,7 +27,7 @@ class PaymentController extends Controller
     {
         // return response()->json(['h'=> 'ng']);
         $validator = Validator::make($request->all(), [
-            // 'organisation_id' => 'required',
+            'organisation_id' => 'required',
             'plan_id' =>'required',
             'billing_option' => 'required|in:monthly,yearly',
             'full_name' => 'required',
@@ -38,6 +39,15 @@ class PaymentController extends Controller
                 'status' => 400,
                 'message' => 'Validation error: ' . $validator->errors()->first()
             ], 400);
+        }
+        $userIsAnAdminInOrganisation = Organisation::where('user_id', auth()->user()->id)
+                                            ->where('org_id', $request->organisation_id)
+                                            ->exists();
+        if ($userIsAnAdminInOrganisation) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'You do not have permission to initiate this payment'
+            ], 403);
         }
 
         // $gateway_id = Gateway::where('code', 'paystack')->first()->id;
@@ -72,7 +82,8 @@ class PaymentController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 500,
-                'message' => 'Payment Initialization Failed: ' . $e->getMessage()
+                'message' => 'An unexpected error occurred. Please try again later.'
+                // 'message' => 'Payment Initialization Failed: ' . $e->getMessage()
             ], 500);
         }
     }
@@ -115,7 +126,7 @@ class PaymentController extends Controller
     public function initiatePaymentForFlutterWave(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            // 'organisation_id' => 'required',
+            'organisation_id' => 'required',
             'plan_id' =>'required',
             'billing_option' => 'required|in:monthly,yearly',
             'full_name' => 'required',
@@ -127,6 +138,16 @@ class PaymentController extends Controller
                 'status' => 400,
                 'message' => 'Validation error: ' . $validator->errors()->first()
             ], 400);
+        }
+
+        $userIsAnAdminInOrganisation = Organisation::where('user_id', auth()->user()->id)
+                                            ->where('org_id', $request->organisation_id)
+                                            ->exists();
+        if ($userIsAnAdminInOrganisation) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'You do not have permission to initiate this payment'
+            ], 403);
         }
         // $gateway_id = Gateway::where('code', 'flutterwave')->first()->id;
         $subscriptionPlan = SubscriptionPlan::find($request->plan_id);
