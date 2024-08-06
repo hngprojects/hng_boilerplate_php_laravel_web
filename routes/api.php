@@ -42,8 +42,7 @@ use App\Http\Controllers\Api\V1\User\ProfileController;
 use App\Http\Controllers\Api\V1\JobSearchController;
 use App\Http\Controllers\Api\V1\WaitListController;
 use App\Http\Controllers\Api\V1\CookiePreferencesController;
-
-
+use App\Http\Controllers\Api\V1\SqueezePageCoontroller;
 
 /*
 |--------------------------------------------------------------------------
@@ -127,7 +126,6 @@ Route::prefix('v1')->group(function () {
     //Cookies Preference
     Route::post('/cookies/preferences', [CookiePreferencesController::class, 'update']);
     Route::get('/cookies/preferences', [CookiePreferencesController::class, 'getPreferences']);
-
 
 
     // Help Articles
@@ -220,12 +218,8 @@ Route::prefix('v1')->group(function () {
         Route::patch('/blogs/edit/{id}', [BlogController::class, 'update'])->name('admin.blogs.update');
         Route::delete('/blogs/{id}', [BlogController::class, 'destroy']);
         Route::get('/waitlists', [WaitListController::class, 'index']);
+        Route::apiResource('squeeze-pages', SqueezePageCoontroller::class);
     });
-
-
-
-
-
 
     Route::post('/waitlists', [WaitListController::class, 'store']);
     Route::apiResource('faqs', FaqController::class);
