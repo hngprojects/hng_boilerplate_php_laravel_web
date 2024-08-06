@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -16,7 +17,7 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
 class User extends Authenticatable  implements JWTSubject, CanResetPasswordContract
 {
-    use HasApiTokens, HasFactory, Notifiable, HasUuids, CanResetPassword;
+    use HasApiTokens, HasFactory, Notifiable, HasUuids, CanResetPassword, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -203,5 +204,26 @@ class User extends Authenticatable  implements JWTSubject, CanResetPasswordContr
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new \App\Notifications\ResetPasswordNotification($token));
+    }
+
+     /**
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetToken($token)
+    {
+        $this->notify(new \App\Notifications\ResetPasswordToken($token));
+    }
+
+    public function notificationSetting(): HasOne
+    {
+        return $this->HasOne(NotificationSetting::class);
+    }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
     }
 }

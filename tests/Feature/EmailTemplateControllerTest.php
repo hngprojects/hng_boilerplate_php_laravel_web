@@ -94,10 +94,12 @@ class EmailTemplateControllerTest extends TestCase
         $response->assertStatus(401)
         ->assertJson([
             'status_code' => 401,
-            'message' => 'Unauthorized',
+            'message' => 'Unauthorized, admin access only',
             'error' => 'Bad Request'
         ]);
     }
+
+
     /** @test */
     public function only_super_admin_can_fetch_email_templates()
     {
@@ -140,7 +142,7 @@ class EmailTemplateControllerTest extends TestCase
 
         $response->assertStatus(401)
             ->assertJson([
-                'message' => 'Unauthorized'
+                'message' => 'Unauthorized, admin access only'
             ]);
     }
 
@@ -197,7 +199,7 @@ class EmailTemplateControllerTest extends TestCase
         ]);
 
         $response->assertStatus(401)
-            ->assertJson(['message' => 'Unauthorized']);
+            ->assertJson(['message' => 'Unauthorized, admin access only']);
     }
 
     public function test_update_with_invalid_data()
@@ -229,4 +231,128 @@ class EmailTemplateControllerTest extends TestCase
         $response->assertStatus(404)
             ->assertJson(['error' => 'Template not found']);
     }
+
+
+    // store email tests
+
+    public function it_creates_an_email_template_successfully()
+    {
+        [$admin, $token] = $this->getAuthenticatedUser('super-admin');
+
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+            'Accept' => 'application/json',
+        ])->postJson('/api/v1/email-templates', [
+            'title' => 'Welcome Email',
+            'template' => '<p>Hello, welcome to our service!</p>',
+            'status' => true
+        ]);
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'status_code' => 200,
+                'message' => 'Email template created successfully',
+            ]);
+
+        $this->assertDatabaseHas('email_templates', [
+            'title' => 'Welcome Email',
+            'template' => '<p>Hello, welcome to our service!</p>',
+            'status' => true,
+        ]);
+    }
+
+    public function it_requires_title_to_create_email_template()
+    {
+        [$admin, $token] = $this->getAuthenticatedUser('super-admin');
+
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+            'Accept' => 'application/json',
+        ])->postJson('/api/v1/email-templates', [
+            'template' => '<p>Hello, welcome to our service!</p>',
+            'status' => true
+        ]);
+
+        $response->assertStatus(422)
+            ->assertJson([
+                'status_code' => 422,
+                'error' => 'Invalid request',
+                'message' => 'The title field is required.'
+            ]);
+    }
+
+    public function it_requires_template_to_create_email_template()
+    {
+        [$admin, $token] = $this->getAuthenticatedUser('super-admin');
+
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+            'Accept' => 'application/json',
+        ])->postJson('/api/v1/email-templates', [
+            'title' => 'Welcome Email',
+            'status' => true
+        ]);
+
+        $response->assertStatus(422)
+            ->assertJson([
+                'status_code' => 422,
+                'error' => 'Invalid request',
+                'message' => 'The template field is required.'
+            ]);
+    }
+
+    public function non_admin_user_cannot_create_email_template()
+    {
+        [$user, $token] = $this->getAuthenticatedUser('user'); // Regular user
+
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+            'Accept' => 'application/json',
+        ])->postJson('/api/v1/email-templates', [
+            'title' => 'Welcome Email',
+            'template' => '<p>Hello, welcome to our service!</p>',
+            'status' => true
+        ]);
+
+        $response->assertStatus(403)
+            ->assertJson([
+                'status_code' => 403,
+                'error' => 'Forbidden',
+                'message' => 'User does not have the necessary permissions'
+            ]);
+    }
+
+    public function it_fails_when_user_is_not_authenticated()
+    {
+        $response = $this->postJson('/api/v1/email-templates', [
+            'title' => 'Welcome Email',
+            'template' => '<p>Hello, welcome to our service!</p>',
+            'status' => true
+        ]);
+
+        $response->assertStatus(401)
+            ->assertJson([
+                'status_code' => 401,
+                'error' => 'Unauthorized',
+                'message' => 'User not authenticated'
+            ]);
+    }
+    public function only_super_admin_can_delete_email_template()
+{
+    [$user, $token] = $this->getAuthenticatedUser('admin');
+
+    $emailTemplate = EmailTemplate::factory()->create();
+
+    $response = $this->withHeaders([
+        'Authorization' => 'Bearer ' . $token,
+        'Accept' => 'application/json',
+    ])->deleteJson('/api/v1/email-templates/' . $emailTemplate->id);
+
+    $response->assertStatus(200)
+             ->assertJson([
+                 'status_code' => 200,
+                 'message' => 'Email template deleted successfully'
+             ]);
+}
+
 }

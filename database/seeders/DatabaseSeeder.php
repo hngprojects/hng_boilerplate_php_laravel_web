@@ -20,13 +20,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        //create an admin user
+        $this->call([
+            AdminSeeder::class
+        ]);
+
         $user1 = User::factory()->has(
             Profile::factory()
                     ->state(function (array $attributes, User $user) {
                         $full_name = explode(" ", $user->name);
                         return ['first_name' => $full_name[0], 'last_name' => $full_name[1]];
                     })
-        )->hasProducts(2)->hasPreferences(5)->create();
+        // )->hasProducts(2)->hasPreferences(5)->create();
+        )->hasProducts(2)->create();
 
         $user2 = User::factory()->has(
             Profile::factory()
@@ -34,7 +40,7 @@ class DatabaseSeeder extends Seeder
                         $full_name = explode(" ", $user->name);
                         return ['first_name' => $full_name[0], 'last_name' => $full_name[1]];
                     })
-        )->hasProducts(2)->hasPreferences(3)->create();
+        )->hasProducts(2)->create();
 
         $organisation1 = Organisation::factory()->create();
         $organisation2 = Organisation::factory()->create();
@@ -59,6 +65,7 @@ class DatabaseSeeder extends Seeder
         UserSubscription::factory()->create();
 
         $this->call(BillingPlanSeeder::class);
+        $this->call(SubscriptionPlanSeeder::class);
 
         // Call individual seeders here
         $this->call([
@@ -68,6 +75,7 @@ class DatabaseSeeder extends Seeder
             ProductVariantSizeSeeder::class,
             FaqSeeder::class,
             UserNotificationSeeder::class,
+            NotificationSettingSeeder::class,
         ]);
 
         $this->call([

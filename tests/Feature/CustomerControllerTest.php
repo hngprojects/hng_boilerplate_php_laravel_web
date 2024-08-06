@@ -71,7 +71,7 @@ class CustomerControllerTest extends TestCase
         $response->assertStatus(401)
             ->assertJson([
                 'status_code' => 401,
-                'message' => 'Unauthorized',
+                'message' => 'Unauthorized, admin access only',
                 'error' => 'Bad Request'
             ]);
     }
@@ -130,7 +130,7 @@ class CustomerControllerTest extends TestCase
                     [
                         // 'first_name' => $customer->first_name,
                         // 'last_name' => $customer->last_name,
-                        'name' => $customer->name, 
+                        'name' => $customer->name,
                         'email' => $customer->email,
                         'phone' => $customer->phone,
                         'organisations' => $customer->organisations->pluck('org_id')->toArray()

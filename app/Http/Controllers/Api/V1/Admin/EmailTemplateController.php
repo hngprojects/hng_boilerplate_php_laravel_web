@@ -34,7 +34,7 @@ class EmailTemplateController extends Controller
 
         return response()->json($template, Response::HTTP_OK);
     }
-    
+
     /**
      * Display a paginated list of email templates.
      *
@@ -94,4 +94,48 @@ class EmailTemplateController extends Controller
             'data' => $template
         ], 200);
     }
+
+    public function store(Request $request)
+    {
+
+        // Validate request data
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'template' => 'required|string',
+            'status' => 'required|boolean'
+        ]);
+
+        // Create email template
+        $emailTemplate = EmailTemplate::create($validatedData);
+
+        return response()->json([
+            'status_code' => 200,
+            'message' => 'Email template created successfully',
+            'data' => $emailTemplate
+        ], 200);
+    }
+
+    public function destroy($id)
+{
+    // Find the email template by ID
+    $emailTemplate = EmailTemplate::find($id);
+
+    // Check if the email template exists
+    if (!$emailTemplate) {
+        return response()->json([
+            'status_code' => 404,
+            'error' => 'Not Found',
+            'message' => 'Email template not found'
+        ], 404);
+    }
+
+    // Delete the email template
+    $emailTemplate->delete();
+
+    // Return success response
+    return response()->json([
+        'status_code' => 200,
+        'message' => 'Email template deleted successfully'
+    ], 200);
+}
 }

@@ -35,7 +35,7 @@ class InvitationTest extends TestCase
             'password' => 'Ed8M7s*)?e:hTb^#&;C!<y',
         ]);
 
-        $this->accessToken = $loginResponse['data']['access_token'];
+        $this->accessToken = $loginResponse['access_token'];
 
         // Create an organisation
         $orgResponse = $this->postJson('/api/v1/organizations', [

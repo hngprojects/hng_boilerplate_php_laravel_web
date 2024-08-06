@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\BillingPlan;
+use App\Models\SubscriptionPlan;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -14,7 +14,7 @@ class BillingPlanController extends Controller
     public function index()
     {
         try {
-            $plans = BillingPlan::select(['id', 'name', 'price'])->get();
+            $plans = SubscriptionPlan::select(['id', 'name', 'price', 'created_at'])->get();
             return response()->json([
                 'status' => Response::HTTP_OK,
                 'message' => 'Billing plans retrieved successfully',
@@ -50,7 +50,7 @@ class BillingPlanController extends Controller
      */
     public function getBillingPlan($id)
     {
-        
+
 
         // Validate the id parameter
         if (!is_string($id) || empty($id)) {
@@ -62,7 +62,7 @@ class BillingPlanController extends Controller
 
         try {
             // Retrieve the billing plan by ID
-            $billingPlan = BillingPlan::find($id);
+            $billingPlan = SubscriptionPlan::find($id);
 
             if (!$billingPlan) {
                 return response()->json([

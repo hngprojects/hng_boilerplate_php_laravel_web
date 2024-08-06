@@ -12,11 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('blogs', function (Blueprint $table) {
-            $table->uuid('blog_category_id')->nullable();
-
-            $table->foreign('blog_category_id')
-                  ->references('id')->on('blog_categories')
-                  ->onDelete('cascade');
+            $table->foreignUuid('blog_category_id')->nullable()->references('id')->on('blog_categories')->constrained()->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
@@ -25,11 +21,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('blogs', function (Blueprint $table) {
-            $table->dropForeign(['blog_category_id']);
-
-            // Drop the foreign UUID column
-            $table->dropColumn('blog_category_id');
-        });
+        if (Schema::hasTable('blogs')) {
+            Schema::dropIfExists('blog_category_id');
+        }
+        
     }
 };

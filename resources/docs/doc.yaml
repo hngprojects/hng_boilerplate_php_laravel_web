@@ -4,6 +4,8 @@ info:
   description: API documentation for the Language Learning AI Game
   version: 1.0.0
 servers:
+  - url: https://virtserver.swaggerhub.com/WILSONABDIEL86/Language_Learning_AI_Game_API/1.0.0
+    description: SwaggerHub API Auto Mocking
   - url: https://virtserver.swaggerhub.com/timiajayi/help-center-search/1.0.0
     description: SwaggerHub API Auto Mocking
   - url: https://example.com/api/v1
@@ -24,6 +26,7 @@ paths:
             schema:
               $ref: '#/components/schemas/RegisterInput'
             example:
+              name: johnnyDoe
               first_name: John
               last_name: Doe
               email: john@example.com
@@ -39,10 +42,11 @@ paths:
               example:
                 token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
                 user:
-                  id: 1
-                  first_name: John
-                  last_name: Doe
+                  id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
+                  name: johnnyDoe
                   email: john@example.com
+                  updated_at: '2024-07-30T16:59:41.000000Z'
+                  created_at: '2024-07-30T16:59:41.000000Z'
   /api/v1/auth/login:
     post:
       tags:
@@ -67,10 +71,16 @@ paths:
               example:
                 token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
                 user:
-                  id: 1
+                  id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                   first_name: John
                   last_name: Doe
                   email: john@example.com
+                  role: user
+                  signup_type: Token
+                  is_active: 1
+                  is_verified: 0
+                  created_at: '2024-07-30T16:59:41.000000Z'
+                  updated_at: '2024-07-30T16:59:41.000000Z'
   /api/v1/auth/logout:
     post:
       tags:
@@ -84,7 +94,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/SuccessResponse'
               example:
-                message: Successfully logged out
+                message: Logout successful
+                status: 200
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: Unauthorized
+                status: 401
       security:
         - bearerAuth: []
   /api/v1/auth/password-reset-email:
@@ -186,7 +206,7 @@ paths:
               example:
                 token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
                 user:
-                  id: 1
+                  id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                   first_name: John
                   last_name: Doe
                   email: john@example.com
@@ -205,14 +225,30 @@ paths:
                 items:
                   $ref: '#/components/schemas/User'
               example:
-                - id: 1
-                  first_name: John
-                  last_name: Doe
-                  email: john@example.com
-                - id: 2
-                  first_name: Jane
-                  last_name: Smith
-                  email: jane@example.com
+                - id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
+                  name: Ludie Rogahn,
+                  email: little.nelson@example.com,
+                  phone: null,
+                  role: user,
+                  email_verified_at: 2024-07-31T14:30:48.000000Z,
+                  is_active: true,
+                  is_verified: false,
+                  signup_type: user,
+                  social_id: null,
+                  created_at: 2024-07-31T14:30:48.000000Z,
+                  updated_at: '2024-07-31T14:30:48.000000Z'
+                - id: 9ca79813-632e-4ac7-9db7-2d1ad9587c65,
+                  name: Lisandro Becker,
+                  email: ybraun@example.net,
+                  phone: null,
+                  role: user,
+                  email_verified_at: 2024-07-31T14:30:48.000000Z,
+                  is_active: true,
+                  is_verified: false,
+                  signup_type: user,
+                  social_id": null,
+                  created_at: 2024-07-31T14:30:48.000000Z,
+                  updated_at: '2024-07-31T14:30:48.000000Z'
       security:
         - bearerAuth: []
     post:
@@ -238,12 +274,373 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
               example:
-                id: 3
+                id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                 first_name: Alice
                 last_name: Johnson
                 email: alice@example.com
       security:
         - bearerAuth: []
+  /api/v1/analytics:
+    get:
+      tags:
+        - Dashboard
+      summary: Get graph data
+      description: It shows the total revenue per month.
+      operationId: analytics
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_4'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_4'
+        '400':
+          description: Error fetching analytics
+        '500':
+          description: Internal server error
+      security:
+        - bearerAuth: []
+  /api/v1sales:
+    get:
+      tags:
+        - Dashboard
+      summary: Get recent sales
+      description: It retrieves the 6 recent sales
+      operationId: sales
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Error fetching analytics
+        '500':
+          description: Internal server error
+      security:
+        - bearerAuth: []
+  /api/v1/statistics:
+    get:
+      tags:
+        - Dashboard
+      summary: Get dashboard statistics
+      description: Retrieve the statistics for the dashboard, including total revenue, subscriptions, and sales.
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_5'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_5'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_500_3'
+      security:
+        - bearerAuth: []
+  /api/v1/export/{format}:
+    get:
+      tags:
+        - Dashboard
+      summary: Export all data
+      description: Export data in the specified format within the provided date range.
+      operationId: export
+      parameters:
+        - name: format
+          in: path
+          description: The format in which to export the data (e.g., csv, json, xml).
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            enum:
+              - csv
+              - json
+              - xml
+        - name: start_date
+          in: query
+          description: The start date for the data export (YYYY-MM-DD).
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+            format: date
+            example: '2023-01-01'
+        - name: end_date
+          in: query
+          description: The end date for the data export (YYYY-MM-DD).
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+            format: date
+            example: '2023-12-31'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_6'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_6'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400_1'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_500_3'
+      security:
+        - bearerAuth: []
+  /api/v1/products:
+    get:
+      tags:
+        - Products
+      summary: Get all products
+      description: Retrieve a list of all products with selected fields.
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/inline_response_200_7'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400_2'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_500_3'
+      security:
+        - bearerAuth: []
+  /api/v1/products/create:
+    post:
+      tags:
+        - Products
+      summary: Add a new product
+      description: Add a new product with details including variants and sizes.
+      requestBody:
+        description: Product object that needs to be added
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/products_create_body'
+        required: true
+      responses:
+        '201':
+          description: Product created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_201_2'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400_3'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_422_3'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_500_3'
+      security:
+        - bearerAuth: []
+  /api/v1/products/{id}:
+    patch:
+      tags:
+        - Products
+      summary: Update a product
+      description: Edit an existing product in the inventory.
+      parameters:
+        - name: id
+          in: path
+          description: ID of the product to update
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        description: Product object that needs to be updated
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/products_id_body'
+        required: true
+      responses:
+        '200':
+          description: Product updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_8'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400_3'
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404_1'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_422_3'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_500_3'
+      security:
+        - bearerAuth: []
+  /api/v1/products/{id}/delete:
+    delete:
+      tags:
+        - Products
+      summary: Delete a product
+      description: Remove a product from the inventory.
+      parameters:
+        - name: id
+          in: path
+          description: ID of the product to delete
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400_4'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404_1'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_500_3'
+      security:
+        - bearerAuth: []
+  /api/v1/profile:
+    patch:
+      tags:
+        - Profile
+      summary: Update user profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/v1_profile_body'
+        required: true
+      responses:
+        '200':
+          description: Profile updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_9'
+        '400':
+          description: Validation errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400_5'
+        '404':
+          description: Profile not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404_2'
+  /api/v1/profile/upload-image:
+    post:
+      tags:
+        - Profile
+      summary: Upload and update profile image
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/profile_uploadimage_body'
+        required: true
+      responses:
+        '200':
+          description: Image uploaded and profile updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_10'
+        '400':
+          description: Validation errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400_5'
+        '404':
+          description: Profile not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404_2'
+        '500':
+          description: Failed to upload image
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404_2'
   /api/v1/products/categories:
     get:
       tags:
@@ -259,38 +656,10 @@ paths:
                 items:
                   $ref: '#/components/schemas/Category'
               example:
-                - id: 1
+                - id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                   name: Electronics
-                - id: 2
+                - id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                   name: Books
-  /api/v1/products/search:
-    get:
-      tags:
-        - Products
-      summary: Search products
-      parameters:
-        - name: query
-          in: query
-          required: false
-          style: form
-          explode: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Product'
-              example:
-                - id: 1
-                  name: Smartphone
-                  description: Latest model smartphone
-                  price: 599.99
-                  category_id: 1
   /api/v1/topics/search:
     get:
       tags:
@@ -314,98 +683,52 @@ paths:
                 items:
                   $ref: '#/components/schemas/Topic'
               example:
-                - id: 1
+                - id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                   title: Introduction to AI
                   content: AI is a rapidly growing field...
-  /api/v1/products:
+  /api/v1/help-center/topics:
     get:
       tags:
-        - Products
-      summary: Get all products
+        - Help Center
+      summary: Get all help center topics
       responses:
         '200':
-          description: Successful response
+          description: A list of help center topics
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Product'
-              example:
-                - id: 1
-                  name: Smartphone
-                  description: Latest model smartphone
-                  price: 599.99
-                  category_id: 1
-                - id: 2
-                  name: Laptop
-                  description: High-performance laptop
-                  price: 1299.99
-                  category_id: 1
-      security:
-        - bearerAuth: []
+                  $ref: '#/components/schemas/inline_response_200_11'
     post:
       tags:
-        - Products
-      summary: Create a new product
+        - Help Center
+      summary: Create a new help center topic
       requestBody:
+        description: Data for the new help center topic
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ProductInput'
-            example:
-              name: Tablet
-              description: 10-inch tablet with retina display
-              price: 399.99
-              category_id: 1
+              $ref: '#/components/schemas/helpcenter_topics_body'
         required: true
       responses:
         '201':
-          description: Product created successfully
+          description: Help article created successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Product'
-              example:
-                id: 3
-                name: Tablet
-                description: 10-inch tablet with retina display
-                price: 399.99
-                category_id: 1
-      security:
-        - bearerAuth: []
-  /api/v1/products/{productId}:
-    delete:
-      tags:
-        - Products
-      summary: Delete a product
-      parameters:
-        - name: productId
-          in: path
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Product deleted successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SuccessResponse'
-              example:
-                message: Product deleted successfully
+                $ref: '#/components/schemas/inline_response_201_3'
       security:
         - bearerAuth: []
   /api/v1/help-center/topics/search:
     get:
       tags:
         - Help Center
-      summary: Search help center topics
+      summary: Search for help center topics by title
       parameters:
-        - name: query
+        - name: title
           in: query
+          description: Title of the help center topic
           required: false
           style: form
           explode: true
@@ -413,18 +736,67 @@ paths:
             type: string
       responses:
         '200':
-          description: Successful response
+          description: A list of help center topics matching the search query
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/HelpArticle'
-              example:
-                - id: 1
-                  title: How to reset password
-                  content: Follow these steps to reset your password...
-                  category: Account Management
+                  $ref: '#/components/schemas/inline_response_200_11'
+  /api/v1/help-center/topics/{articleId}:
+    delete:
+      tags:
+        - Help Center
+      summary: Delete a help center topic
+      parameters:
+        - name: articleId
+          in: path
+          description: ID of the help center topic to delete
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Help article deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_12'
+      security:
+        - bearerAuth: []
+    patch:
+      tags:
+        - Help Center
+      summary: Update an existing help center topic
+      parameters:
+        - name: articleId
+          in: path
+          description: ID of the help center topic to update
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Data for updating the help center topic
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/topics_articleId_body'
+        required: true
+      responses:
+        '200':
+          description: Help article updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_13'
+      security:
+        - bearerAuth: []
   /api/v1/contact:
     post:
       tags:
@@ -453,50 +825,223 @@ paths:
     get:
       tags:
         - Blogs
-      summary: Get latest blog posts
+      summary: Get the latest blog posts
+      description: Retrieve the latest blog posts with pagination.
+      parameters:
+        - name: page
+          in: query
+          description: Page number for pagination.
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: integer
+            example: 1
+        - name: page_size
+          in: query
+          description: Number of blog posts per page.
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: integer
+            example: 10
       responses:
         '200':
-          description: Successful response
+          description: A list of the latest blog posts
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Blog'
-              example:
-                - id: 1
-                  title: Latest AI Trends
-                  content: AI is revolutionizing various industries...
-                  author: John Doe
-                  created_at: '2023-07-23T10:00:00Z'
+                $ref: '#/components/schemas/inline_response_200'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_500'
+  /api/v1/blogs/{id}:
+    get:
+      tags:
+        - Blogs
+      summary: Get a specific blog post by ID
+      description: Retrieve a blog post along with its details, including category and image, by the blog's ID.
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the blog post to retrieve
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Blog post details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_500_1'
+    delete:
+      tags:
+        - Blogs
+      summary: Delete a blog post
+      description: Delete an existing blog post. Requires authentication.
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the blog post to delete
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Blog post deleted successfully
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+      security:
+        - bearerAuth: []
+  /api/v1/blogs:
+    post:
+      tags:
+        - Blogs
+      summary: Create a new blog post
+      description: Create a new blog post. Requires authentication.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/blogs_body'
+        required: true
+      responses:
+        '201':
+          description: Blog post created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_201'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_422'
+      security:
+        - bearerAuth:
+            - JWT
   /api/v1/blogs/search:
     get:
       tags:
         - Blogs
-      summary: Search blog posts
+      summary: Search blogs
+      description: Search for blogs based on various criteria such as author, title, content, category, and created date with pagination.
       parameters:
-        - name: query
+        - name: author
           in: query
+          description: Filter by author name.
           required: false
           style: form
           explode: true
           schema:
             type: string
+        - name: title
+          in: query
+          description: Filter by blog title.
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+        - name: content
+          in: query
+          description: Filter by blog content.
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+        - name: category
+          in: query
+          description: Filter by blog category name.
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+        - name: created_date
+          in: query
+          description: Filter by created date.
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+            format: date
+        - name: page
+          in: query
+          description: Page number for pagination.
+          required: false
+          style: form
+          explode: true
+          schema:
+            minimum: 1
+            type: integer
+            example: 1
+        - name: page_size
+          in: query
+          description: Number of blogs per page.
+          required: false
+          style: form
+          explode: true
+          schema:
+            maximum: 100
+            minimum: 1
+            type: integer
+            example: 20
       responses:
         '200':
-          description: Successful response
+          description: List of blogs matching the search criteria
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Blog'
-              example:
-                - id: 1
-                  title: Latest AI Trends
-                  content: AI is revolutionizing various industries...
-                  author: John Doe
-                  created_at: '2023-07-23T10:00:00Z'
+                $ref: '#/components/schemas/inline_response_200_3'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_422_2'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_500_2'
   /api/v1/squeeze:
     post:
       tags:
@@ -520,117 +1065,6 @@ paths:
                 $ref: '#/components/schemas/SuccessResponse'
               example:
                 message: Squeeze page created successfully
-  /api/v1/help-center/topics:
-    get:
-      tags:
-        - Help Center
-      summary: Get all help articles
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/HelpArticle'
-              example:
-                - id: 1
-                  title: How to reset password
-                  content: Follow these steps to reset your password...
-                  category: Account Management
-                - id: 2
-                  title: How to use our product
-                  content: Follow these steps to use our product effectively...
-                  category: Product Usage
-    post:
-      tags:
-        - Help Center
-      summary: Create a new help article
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/HelpArticle'
-            example:
-              title: How to use our product
-              content: Follow these steps to use our product effectively...
-              category: Product Usage
-        required: true
-      responses:
-        '201':
-          description: Help article created successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HelpArticle'
-              example:
-                id: 2
-                title: How to use our product
-                content: Follow these steps to use our product effectively...
-                category: Product Usage
-      security:
-        - bearerAuth: []
-  /api/v1/help-center/topics/{articleId}:
-    delete:
-      tags:
-        - Help Center
-      summary: Delete a help article
-      parameters:
-        - name: articleId
-          in: path
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Help article deleted successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SuccessResponse'
-              example:
-                message: Help article deleted successfully
-      security:
-        - bearerAuth: []
-    patch:
-      tags:
-        - Help Center
-      summary: Update a help article
-      parameters:
-        - name: articleId
-          in: path
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: integer
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SuccessResponse'
-            example:
-              Updated: How to use our product
-              content: Here are the updated steps to use our product effectively...
-              category: Product Usage
-        required: true
-      responses:
-        '200':
-          description: Help article updated successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HelpArticle'
-              example:
-                id: 2
-                Updated: How to use our product
-                content: Here are the updated steps to use our product effectively...
-                category: Product Usage
-      security:
-        - bearerAuth: []
   /api/v1/invitations/generate:
     post:
       tags:
@@ -718,10 +1152,10 @@ paths:
                 items:
                   $ref: '#/components/schemas/Feature'
               example:
-                - id: 1
+                - id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                   name: Advanced Analytics
                   description: Access to advanced analytics tools
-                - id: 2
+                - id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                   name: Priority Support
                   description: 24/7 priority customer support
       security:
@@ -747,7 +1181,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Feature'
               example:
-                id: 3
+                id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                 name: Custom Branding
                 description: Ability to add custom branding to the platform
       security:
@@ -807,7 +1241,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Feature'
               example:
-                id: 1
+                id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                 name: Enhanced Analytics
                 description: Access to enhanced and real-time analytics tools
       security:
@@ -850,7 +1284,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Plan'
               example:
-                - id: 1
+                - id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                   name: Basic
                   price: 9.99
                   features:
@@ -860,9 +1294,9 @@ paths:
                   name: Pro
                   price: 19.99
                   features:
-                    - id: 1
+                    - id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                       name: Basic Analytics
-                    - id: 2
+                    - id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                       name: Priority Support
       security:
         - bearerAuth: []
@@ -891,15 +1325,15 @@ paths:
               schema:
                 $ref: '#/components/schemas/Plan'
               example:
-                id: 3
+                id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                 name: Enterprise
                 price: 49.99
                 features:
-                  - id: 1
+                  - id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                     name: Basic Analytics
-                  - id: 2
+                  - id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                     name: Priority Support
-                  - id: 3
+                  - id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                     name: Custom Branding
       security:
         - bearerAuth: []
@@ -924,11 +1358,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/Plan'
               example:
-                id: 1
+                id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                 name: Basic
                 price: 9.99
                 features:
-                  - id: 1
+                  - id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                     name: Basic Analytics
       security:
         - bearerAuth: []
@@ -968,9 +1402,9 @@ paths:
                 name: Basic Plus
                 price: 14.99
                 features:
-                  - id: 1
+                  - id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                     name: Basic Analytics
-                  - id: 2
+                  - id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                     name: Priority Support
       security:
         - bearerAuth: []
@@ -1038,9 +1472,21 @@ paths:
               example:
                 - id: 1
                   name: Acme Corp
+                  email: hello@acme.com,
+                  industry: Oil and gas,
+                  type: Message board,
+                  country: ng,
+                  address: 44 crescent,
+                  state: lagos,
                   description: Leading innovation company
                 - id: 2
                   name: Tech Innovators
+                  email: hello@acme.com,
+                  industry: Oil and gas,
+                  type: Message board,
+                  country: ng,
+                  address: 44 crescent,
+                  state: lagos,
                   description: Cutting-edge technology solutions
       security:
         - bearerAuth: []
@@ -1055,6 +1501,12 @@ paths:
               $ref: '#/components/schemas/OrganisationInput'
             example:
               name: Acme Corp
+              email: hello@acme.com,
+              industry: Oil and gas,
+              type: Message board,
+              country: ng,
+              address: 44 crescent,
+              state: kkk,
               description: Leading innovation company
         required: true
       responses:
@@ -1067,6 +1519,12 @@ paths:
               example:
                 id: 1
                 name: Acme Corp
+                email: hello@acme.com,
+                industry: Oil and gas,
+                type: Message board,
+                country: ng,
+                address: 44 crescent,
+                state: kkk,
                 description: Leading innovation company
       security:
         - bearerAuth: []
@@ -1182,16 +1640,68 @@ paths:
                 items:
                   $ref: '#/components/schemas/User'
               example:
-                - id: 1
+                - id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                   first_name: John
                   last_name: Doe
                   email: john@example.com
-                - id: 2
+                - id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                   first_name: Jane
                   last_name: Smith
                   email: jane@example.com
       security:
         - bearerAuth: []
+  /api/v1/members/{org_id}/search:
+    get:
+      tags:
+        - Organisations
+      summary: Search members of an organization
+      description: Retrieve a paginated list of users belonging to an organization and matching a search term.
+      parameters:
+        - name: org_id
+          in: path
+          description: UUID of the organization
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            format: uuid
+        - name: search
+          in: query
+          description: Search term to filter users by name or email
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+        - name: per_page
+          in: query
+          description: Number of items per page (default is 10)
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: Users retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_14'
+        '400':
+          description: Invalid organization ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400_6'
+        '404':
+          description: Organization does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404_3'
   /api/v1/testimonials:
     post:
       tags:
@@ -1214,8 +1724,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/Testimonial'
               example:
-                id: 1
-                user_id: 1
+                id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
+                user_id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                 content: This product has revolutionized our workflow!
                 rating: 5
       security:
@@ -1241,8 +1751,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/Testimonial'
               example:
-                id: 1
-                user_id: 1
+                id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
+                user_id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                 content: This product has revolutionized our workflow!
                 rating: 5
       security:
@@ -1285,12 +1795,12 @@ paths:
                 items:
                   $ref: '#/components/schemas/Job'
               example:
-                - id: 1
+                - id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                   title: Software Engineer
                   description: We're looking for a talented software engineer to join our team.
                   location: Remote
                   salary: 100000
-                - id: 2
+                - id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                   title: Product Manager
                   description: Seeking an experienced product manager to lead our team.
                   location: New York, NY
@@ -1310,6 +1820,13 @@ paths:
               title: Software Engineer
               description: We're looking for a talented software engineer to join our team.
               location: Remote
+              job_type: full-time,
+              experience_level: 10years,
+              Deadline: 2204-4-31,
+              Benefits: lol,
+              Key_responsibilities: remote,
+              Company_name: remote,
+              work_mode: remote
               salary: 100000
         required: true
       responses:
@@ -1320,10 +1837,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/Job'
               example:
-                id: 1
+                id: 1fbgvjfbvjcnjvjdnvdnkkdnvk
                 title: Software Engineer
                 description: We're looking for a talented software engineer to join our team.
                 location: Remote
+                job_type: full-time,
+                experience_level: 10years,
+                Deadline: 2204-4-31,
+                Benefits: lol,
+                Key_responsibilities: remote,
+                Company_name: remote,
+                work_mode: remote
                 salary: 100000
       security:
         - bearerAuth: []
@@ -1348,7 +1872,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Job'
               example:
-                id: 1
+                id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                 title: Senior Software Engineer
                 description: We're looking for a senior software engineer to lead our development team.
                 location: Remote
@@ -1386,7 +1910,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Job'
               example:
-                id: 1
+                id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                 title: Senior Software Engineer
                 description: We're looking for a senior software engineer to lead our development team.
                 location: Remote
@@ -1524,7 +2048,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Role'
               example:
-                id: 1
+                id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                 name: Senior Manager
       security:
         - bearerAuth: []
@@ -1574,71 +2098,14 @@ paths:
                 items:
                   $ref: '#/components/schemas/Customer'
               example:
-                - id: 1
+                - id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                   name: John Doe
                   email: john@example.com
                   company: Acme Corp
-                - id: 2
+                - id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                   name: Jane Smith
                   email: jane@example.com
                   company: Tech Innovators
-      security:
-        - bearerAuth: []
-  /api/v1/blogs:
-    get:
-      tags:
-        - Blogs
-      summary: Get all blog posts
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Blog'
-              example:
-                - id: 1
-                  title: The Future of AI
-                  content: AI is rapidly evolving and changing the way we live and work...
-                  category_id: 1
-                  author: John Doe
-                  created_at: '2023-07-24T10:00:00Z'
-                - id: 2
-                  title: Machine Learning Basics
-                  content: An introduction to the fundamental concepts of machine learning...
-                  category_id: 2
-                  author: Jane Smith
-                  created_at: '2023-07-25T11:30:00Z'
-    post:
-      tags:
-        - Blogs
-      summary: Create a new blog post
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/BlogInput'
-            example:
-              title: The Future of AI
-              content: AI is rapidly evolving and changing the way we live and work...
-              category_id: 1
-        required: true
-      responses:
-        '201':
-          description: Blog post created successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Blog'
-              example:
-                id: 1
-                title: The Future of AI
-                content: AI is rapidly evolving and changing the way we live and work...
-                category_id: 1
-                author: John Doe
-                created_at: '2023-07-24T10:00:00Z'
       security:
         - bearerAuth: []
   /api/v1/blogs/edit/{id}:
@@ -1646,23 +2113,22 @@ paths:
       tags:
         - Blogs
       summary: Update a blog post
+      description: Update an existing blog post. Requires authentication.
       parameters:
         - name: id
           in: path
+          description: The ID of the blog post to update
           required: true
           style: simple
           explode: false
           schema:
-            type: integer
+            type: string
+            format: uuid
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/BlogInput'
-            example:
-              title: The Evolving Future of AI
-              content: AI is rapidly evolving and revolutionizing the way we live and work...
-              category_id: 1
+              $ref: '#/components/schemas/blogs_id_body'
         required: true
       responses:
         '200':
@@ -1670,91 +2136,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Blog'
-              example:
-                id: 1
-                title: The Evolving Future of AI
-                content: AI is rapidly evolving and revolutionizing the way we live and work...
-                category_id: 1
-                author: John Doe
-                created_at: '2023-07-24T10:00:00Z'
-                updated_at: '2023-07-26T09:15:00Z'
-      security:
-        - bearerAuth: []
-  /api/v1/blogs/{id}:
-    get:
-      tags:
-        - Blogs
-      summary: Get a specific blog post
-      parameters:
-        - name: id
-          in: path
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Successful response
+                $ref: '#/components/schemas/inline_response_200_2'
+        '401':
+          description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Blog'
-              example:
-                id: 1
-                title: The Evolving Future of AI
-                content: AI is rapidly evolving and revolutionizing the way we live and work...
-                category_id: 1
-                author: John Doe
-                created_at: '2023-07-24T10:00:00Z'
-                updated_at: '2023-07-26T09:15:00Z'
-    delete:
-      tags:
-        - Blogs
-      summary: Delete a blog post
-      parameters:
-        - name: id
-          in: path
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Blog post deleted successfully
+                $ref: '#/components/schemas/inline_response_401'
+        '422':
+          description: Unprocessable Entity
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SuccessResponse'
-              example:
-                message: Blog post deleted successfully
-      security:
-        - bearerAuth: []
-  /api/v1/blogs/categories:
-    post:
-      tags:
-        - Blogs
-      summary: Create a new blog category
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/BlogCategoryInput'
-            example:
-              name: Technology Trends
-        required: true
-      responses:
-        '201':
-          description: Blog category created successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BlogCategory'
-              example:
-                id: 3
-                name: Technology Trends
+                $ref: '#/components/schemas/inline_response_422'
       security:
         - bearerAuth: []
   /api/v1/user/preferences:
@@ -1772,12 +2166,12 @@ paths:
                 items:
                   $ref: '#/components/schemas/Preference'
               example:
-                - id: 1
-                  user_id: 1
+                - id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
+                  user_id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                   key: theme
                   value: dark
-                - id: 2
-                  user_id: 1
+                - id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
+                  user_id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                   key: language
                   value: en
       security:
@@ -1803,8 +2197,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/Preference'
               example:
-                id: 1
-                user_id: 1
+                id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
+                user_id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                 key: theme
                 value: dark
       security:
@@ -1839,8 +2233,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/Preference'
               example:
-                id: 1
-                user_id: 1
+                id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
+                user_id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                 key: theme
                 value: light
       security:
@@ -1866,6 +2260,140 @@ paths:
                 $ref: '#/components/schemas/SuccessResponse'
               example:
                 message: User preference deleted successfully
+      security:
+        - bearerAuth: []
+  /api/v1/email-templates:
+    get:
+      tags:
+        - Email Templates
+      summary: Retrieve a list of email templates
+      description: Only super admin can fetch the list of email templates
+      operationId: getEmailTemplates
+      parameters:
+        - name: page
+          in: query
+          description: Page number for pagination
+          required: false
+          style: form
+          explode: true
+          schema:
+            minimum: 1
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          description: Number of items per page
+          required: false
+          style: form
+          explode: true
+          schema:
+            minimum: 1
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: A list of email templates
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_15'
+        '403':
+          description: Forbidden. User is not authorized to access this resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+      security:
+        - bearerAuth: []
+  /api/v1/email-templates/{id}:
+    get:
+      tags:
+        - Email Templates
+      summary: Retrieve a specific email template
+      description: Retrieve detailed information about a single email template by its ID. Accessible only to super admins.
+      parameters:
+        - name: id
+          in: path
+          description: Unique identifier of the email template.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successful response with the email template details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_16'
+        '400':
+          description: Invalid template ID format.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400_7'
+        '401':
+          description: Unauthorized access.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401_1'
+        '404':
+          description: Template not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404_4'
+      security:
+        - bearerAuth: []
+    patch:
+      tags:
+        - Email Templates
+      summary: Update an email template
+      description: Update an existing email template by its ID. Only accessible by authenticated super admins.
+      operationId: updateEmailTemplate
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the email template to update.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/emailtemplates_id_body'
+        required: true
+      responses:
+        '200':
+          description: Email template updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_17'
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400_8'
+        '403':
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+        '404':
+          description: Template not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404_5'
       security:
         - bearerAuth: []
   /api/v1/notification-settings/{user_id}:
@@ -1910,11 +2438,11 @@ paths:
         - FAQ
       summary: Create a new FAQ
       requestBody:
-        required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/FAQInput'
+        required: true
       responses:
         '201':
           description: FAQ created successfully
@@ -1938,6 +2466,217 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/FAQ'
+  /api/v1/blogs/{blogId}/comments:
+    get:
+      tags:
+        - Comments
+      summary: Get comments for a blog
+      description: Retrieve all comments for a specific blog post
+      parameters:
+        - name: blogId
+          in: path
+          description: ID of the blog post
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Comments retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_18'
+        '400':
+          description: Bad request
+        '404':
+          description: Blog not found
+        '500':
+          description: Internal server error
+    post:
+      tags:
+        - Comments
+      summary: Create a comment
+      description: Create a new comment for a blog post
+      parameters:
+        - name: blogId
+          in: path
+          description: ID of the blog post
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/blogId_comments_body'
+        required: true
+      responses:
+        '201':
+          description: Comment created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_201_4'
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+  /api/v1/comments/{commentId}/reply:
+    post:
+      tags:
+        - Comments
+      summary: Reply to a comment
+      description: Create a reply to an existing comment
+      parameters:
+        - name: commentId
+          in: path
+          description: ID of the original comment
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/commentId_reply_body'
+        required: true
+      responses:
+        '201':
+          description: Reply created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_201_5'
+        '400':
+          description: Bad request
+        '404':
+          description: Comment not found
+        '500':
+          description: Internal server error
+  /api/v1/comments/{commentId}/like:
+    post:
+      tags:
+        - Comments
+      summary: Like a comment
+      description: Like a specific comment
+      parameters:
+        - name: commentId
+          in: path
+          description: ID of the comment to like
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Comment liked successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_19'
+        '400':
+          description: Bad request
+        '404':
+          description: Comment not found
+        '500':
+          description: Internal server error
+  /api/v1/comments/{commentId}/dislike:
+    post:
+      tags:
+        - Comments
+      summary: Dislike a comment
+      description: Dislike a specific comment
+      parameters:
+        - name: commentId
+          in: path
+          description: ID of the comment to dislike
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Comment disliked successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_20'
+        '400':
+          description: Bad request
+        '404':
+          description: Comment not found
+        '500':
+          description: Internal server error
+  /api/v1/comments/edit/{commentId}:
+    patch:
+      tags:
+        - Comments
+      summary: Edit a comment
+      description: Edit an existing comment
+      parameters:
+        - name: commentId
+          in: path
+          description: ID of the comment to edit
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/edit_commentId_body'
+        required: true
+      responses:
+        '200':
+          description: Comment edited successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_21'
+        '400':
+          description: Bad request
+        '404':
+          description: Comment not found
+        '500':
+          description: Internal server error
+  /api/v1/comments/{commentId}:
+    delete:
+      tags:
+        - Comments
+      summary: Delete a comment
+      description: Delete a specific comment
+      parameters:
+        - name: commentId
+          in: path
+          description: ID of the comment to delete
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Comment deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_22'
+        '400':
+          description: Bad request
+        '404':
+          description: Comment not found
+        '500':
+          description: Internal server error
 components:
   schemas:
     RegisterInput:
@@ -2009,6 +2748,29 @@ components:
         password_confirmation:
           type: string
           format: password
+    Comment:
+      type: object
+      properties:
+        id:
+          type: string
+        user_id:
+          type: string
+        blog_id:
+          type: string
+        name:
+          type: string
+        content:
+          type: string
+        likes:
+          type: integer
+        dislikes:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
     RoleInput:
       required:
         - name
@@ -2034,30 +2796,69 @@ components:
       type: object
       properties:
         id:
-          type: integer
+          type: string
+        image:
+          type: string
         name:
+          type: string
+        category:
+          type: string
+        price:
+          type: object
+        status:
           type: string
         description:
           type: string
-        price:
-          type: number
-        category_id:
-          type: integer
-    ProductInput:
-      required:
-        - category_id
-        - name
-        - price
+        stock_status:
+          type: string
+          enum:
+            - in_stock
+            - out_stock
+            - low_stock
+        is_archived:
+          type: boolean
+        user_id:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    Product_variant:
       type: object
       properties:
-        name:
-          type: string
-        description:
-          type: string
+        id:
+          type: integer
+        stock:
+          type: integer
         price:
           type: number
-        category_id:
+        product_id:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+        size_id:
+          type: array
+          items:
+            $ref: '#/components/schemas/size'
+    size:
+      type: object
+      properties:
+        id:
           type: integer
+        size:
+          type: integer
+        product_variant_id:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product_variant'
+        product_id:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
     Topic:
       type: object
       properties:
@@ -2092,6 +2893,244 @@ components:
           format: email
         message:
           type: string
+    blogs_id_body:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Updated Blog Post Title
+        author:
+          type: string
+          example: Updated Author Name
+        content:
+          type: string
+          example: Updated content of the blog post.
+        category:
+          type: string
+          example: Category of the blog post.
+        image_url:
+          type: string
+          format: uri
+          example: /storage/images/example.jpg
+    inline_response_200:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 77aa8ed2-758d-47e8-8d7a-4686deed8218
+        title:
+          type: string
+          example: Blog Post Title
+        author:
+          type: string
+          example: John Doe
+        content:
+          type: string
+          example: Content of the blog post.
+        category:
+          type: string
+          example: Category of the blog post.
+        image_url:
+          type: string
+          format: uri
+          example: /storage/images/example.jpg
+        author_id:
+          type: string
+          format: uuid
+          example: 9ca63580-4b7b-4529-b3e9-165baa5de794
+        created_at:
+          type: string
+          format: date-time
+          example: '2024-07-30T23:21:44Z'
+        updated_at:
+          type: string
+          format: date-time
+          example: '2024-07-30T23:21:44Z'
+    inline_response_200_1:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 77aa8ed2-758d-47e8-8d7a-4686deed8218
+        title:
+          type: string
+          example: Blog Post Title
+        author:
+          type: string
+          example: John Doe
+        content:
+          type: string
+          example: Content of the blog post.
+        category:
+          type: string
+          example: Category of the blog post.
+        image_url:
+          type: string
+          format: uri
+          example: /storage/images/example.jpg
+        created_at:
+          type: string
+          format: date-time
+          example: '2024-07-30T23:21:44Z'
+        updated_at:
+          type: string
+          format: date-time
+          example: '2024-07-30T23:21:44Z'
+    inline_response_200_2:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 77aa8ed2-758d-47e8-8d7a-4686deed8218
+        title:
+          type: string
+          example: Updated Blog Post Title
+        author:
+          type: string
+          example: Updated Author Name
+        content:
+          type: string
+          example: Updated content of the blog post.
+        category:
+          type: string
+          example: Category of the blog post.
+        image_url:
+          type: string
+          format: uri
+          example: /storage/images/example.jpg
+        created_at:
+          type: string
+          format: date-time
+          example: '2024-07-30T23:21:44Z'
+        updated_at:
+          type: string
+          format: date-time
+          example: '2024-07-30T23:21:44Z'
+    inline_response_200_3:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/inline_response_200_1'
+        page:
+          type: integer
+          example: 1
+        page_size:
+          type: integer
+          example: 20
+        total:
+          type: integer
+          example: 100
+    inline_response_201:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 77aa8ed2-758d-47e8-8d7a-4686deed8218
+        title:
+          type: string
+          example: Blog Post Title
+        author:
+          type: string
+          example: John Doe
+        content:
+          type: string
+          example: Content of the blog post.
+        category:
+          type: string
+          example: Category of the blog post.
+        image_url:
+          type: string
+          format: uri
+          example: /storage/images/example.jpg
+        author_id:
+          type: string
+          format: uuid
+          example: 9ca63580-4b7b-4529-b3e9-165baa5de794
+        created_at:
+          type: string
+          format: date-time
+          example: '2024-07-30T23:21:44Z'
+        updated_at:
+          type: string
+          format: date-time
+          example: '2024-07-30T23:21:44Z'
+    inline_response_401:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Unauthorized
+    inline_response_404:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Not Found
+    inline_response_422:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Unprocessable Entity
+    inline_response_422_1:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Unprocessable Entity
+    inline_response_422_2:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Validation error
+    inline_response_500:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Internal Server Error
+    inline_response_500_1:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Internal Server Error
+    inline_response_500_2:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Internal Server Error
+    blogs_body:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Blog Post Title
+        author:
+          type: string
+          example: John Doe
+        content:
+          type: string
+          example: Content of the blog post.
+        category:
+          type: string
+          example: Category of the blog post.
+        image_url:
+          type: string
+          format: uri
+          example: /storage/images/example.jpg
+        author_id:
+          type: string
+          format: uuid
+          example: 9ca63580-4b7b-4529-b3e9-165baa5de794
     Blog:
       type: object
       properties:
@@ -2101,9 +3140,13 @@ components:
           type: string
         content:
           type: string
-        category_id:
+        category:
           type: integer
+        image_url:
+          type: object
         author:
+          type: string
+        author_id:
           type: string
         created_at:
           type: string
@@ -2113,7 +3156,8 @@ components:
           format: date-time
     BlogInput:
       required:
-        - category_id
+        - category
+        - image_url
         - content
         - title
       type: object
@@ -2122,22 +3166,10 @@ components:
           type: string
         content:
           type: string
-        category_id:
+        category:
           type: integer
-    BlogCategory:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-    BlogCategoryInput:
-      required:
-        - name
-      type: object
-      properties:
-        name:
-          type: string
+        image_url:
+          type: object
     SqueezeInput:
       required:
         - email
@@ -2345,16 +3377,61 @@ components:
           type: boolean
         push_notifications:
           type: boolean
+    Profile:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+        first_name:
+          type: string
+        last_name:
+          type: string
+        job_title:
+          type: string
+          nullable: true
+        pronoun:
+          type: string
+          nullable: true
+        bio:
+          type: string
+          nullable: true
+        avatar_url:
+          type: string
+          format: uri
+          nullable: true
+        display_image:
+          type: string
+          format: uri
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
     SuccessResponse:
       type: object
       properties:
         message:
           type: string
-    FAQInput:
+        status:
+          type: integer
+    ErrorResponse:
       type: object
+      properties:
+        message:
+          type: string
+        status:
+          type: integer
+    FAQInput:
       required:
-        - title
         - message
+        - title
+      type: object
       properties:
         title:
           type: string
@@ -2369,6 +3446,737 @@ components:
           type: string
         message:
           type: string
+    inline_response_200_4:
+      type: object
+      properties:
+        month:
+          type: string
+          example: July
+        revenue:
+          type: number
+          format: float
+          example: 12345.67
+    inline_response_200_5:
+      type: object
+      properties:
+        totalRevenue:
+          type: number
+          format: float
+          example: 123456.78
+        subscriptions:
+          type: integer
+          example: 1200
+        sales:
+          type: integer
+          example: 500
+    inline_response_400:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Bad Request
+        message:
+          type: string
+          example: Error fetching data
+    inline_response_500_3:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Internal Server Error
+        message:
+          type: string
+          example: An unexpected error occurred. Please try again later.
+    inline_response_200_6:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Data exported successfully.
+        data:
+          type: string
+          example: Exported data in the specified format.
+    inline_response_400_1:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Bad Request
+        message:
+          type: string
+          example: Invalid date format or missing format parameter.
+    inline_response_200_7:
+      type: object
+      properties:
+        id:
+          type: string
+        image:
+          type: string
+        name:
+          type: string
+        category:
+          type: string
+        price:
+          type: number
+        stock_status:
+          type: string
+          enum:
+            - in_stock
+            - out_stock
+            - low_stock
+    inline_response_400_2:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Bad Request
+        message:
+          type: string
+          example: Invalid request parameters.
+    products_create_body:
+      type: object
+      properties:
+        image:
+          type: string
+        name:
+          type: string
+        category:
+          type: string
+        price:
+          type: number
+        description:
+          type: string
+        stock:
+          type: integer
+        user_id:
+          type: string
+    inline_response_201_2:
+      type: object
+      properties:
+        id:
+          type: string
+        message:
+          type: string
+          example: Product created successfully.
+    inline_response_400_3:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Bad Request
+        message:
+          type: string
+          example: Invalid input.
+    inline_response_422_3:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Validation Error
+        message:
+          type: string
+          example: The input data is invalid.
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/inline_response_422_3_details'
+    apiv1productsid_variants:
+      type: object
+      properties:
+        stock:
+          type: integer
+        price:
+          type: number
+        size_id:
+          type: integer
+    products_id_body:
+      type: object
+      properties:
+        name:
+          type: string
+        image:
+          type: string
+        description:
+          type: string
+        stock_status:
+          type: string
+          enum:
+            - in_stock
+            - out_stock
+            - low_stock
+        is_archived:
+          type: boolean
+        user_id:
+          type: string
+        variants:
+          type: array
+          items:
+            $ref: '#/components/schemas/apiv1productsid_variants'
+    inline_response_200_8:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Product updated successfully.
+    inline_response_404_1:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Not Found
+        message:
+          type: string
+          example: Product not found.
+    inline_response_400_4:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Bad Request
+        message:
+          type: string
+          example: Invalid product ID.
+    v1_profile_body:
+      type: object
+      properties:
+        first_name:
+          maxLength: 255
+          type: string
+        last_name:
+          maxLength: 255
+          type: string
+        job_title:
+          maxLength: 255
+          type: string
+          nullable: true
+        pronoun:
+          maxLength: 255
+          type: string
+          nullable: true
+        bio:
+          maxLength: 500
+          type: string
+          nullable: true
+        email:
+          maxLength: 255
+          type: string
+          format: email
+          nullable: true
+        avatar_url:
+          type: string
+          format: uri
+          nullable: true
+        display_image:
+          type: string
+          format: uri
+          nullable: true
+    inline_response_200_9:
+      type: object
+      properties:
+        Status:
+          type: integer
+        Message:
+          type: string
+        Data:
+          $ref: '#/components/schemas/Profile'
+    inline_response_400_5:
+      type: object
+      properties:
+        Status:
+          type: integer
+        Message:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+    inline_response_404_2:
+      type: object
+      properties:
+        Status:
+          type: integer
+        Message:
+          type: string
+    profile_uploadimage_body:
+      type: object
+      properties:
+        file:
+          type: string
+          format: binary
+    inline_response_200_10:
+      type: object
+      properties:
+        Status:
+          type: integer
+        Message:
+          type: string
+        Data:
+          $ref: '#/components/schemas/inline_response_200_10_Data'
+    inline_response_200_11:
+      type: object
+      properties:
+        article_id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        content:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    helpcenter_topics_body:
+      type: object
+      properties:
+        user_id:
+          type: string
+          format: uuid
+          example: 9ca63580-4b7b-4529-b3e9-165baa5de794
+        title:
+          type: string
+          example: A new titles
+        content:
+          type: string
+          example: A good content
+    inline_response_201_3:
+      type: object
+      properties:
+        status_code:
+          type: integer
+          example: 201
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: Help article created successfully.
+        data:
+          $ref: '#/components/schemas/inline_response_201_3_data'
+    inline_response_200_12:
+      type: object
+      properties:
+        status_code:
+          type: integer
+          example: 200
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: Help article deleted successfully.
+    topics_articleId_body:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Blazer
+        content:
+          type: string
+          example: Updated content of the Blazing article...
+    inline_response_200_13:
+      type: object
+      properties:
+        status_code:
+          type: integer
+          example: 200
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: Help article updated successfully.
+        data:
+          $ref: '#/components/schemas/inline_response_200_13_data'
+    inline_response_200_14:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        message:
+          type: string
+          example: Users retrieved successfully
+        status_code:
+          type: integer
+          example: 200
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/inline_response_200_14_data'
+        pagination:
+          $ref: '#/components/schemas/inline_response_200_14_pagination'
+    inline_response_400_6:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Invalid organization ID
+        status_code:
+          type: integer
+          example: 400
+    inline_response_404_3:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Organization does not exist
+        status_code:
+          type: integer
+          example: 404
+    inline_response_200_15:
+      type: object
+      properties:
+        templates:
+          type: array
+          items:
+            $ref: '#/components/schemas/inline_response_200_15_templates'
+        total:
+          type: integer
+        page:
+          type: integer
+        limit:
+          type: integer
+    inline_response_403:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Unauthorized access
+    inline_response_200_16:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: f47ac10b-58cc-4372-a567-0e02b2c3d479
+        title:
+          type: string
+          example: Welcome Email
+        template:
+          type: string
+          example: <html><body>Welcome {{name}}!</body></html>
+        status:
+          type: boolean
+          example: true
+        created_at:
+          type: string
+          format: date-time
+          example: '2024-07-27T14:30:00Z'
+        updated_at:
+          type: string
+          format: date-time
+          example: '2024-07-27T14:30:00Z'
+    inline_response_400_7:
+      type: object
+      properties:
+        status_code:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Bad Request
+        error:
+          type: string
+          example: Invalid template ID format
+    inline_response_401_1:
+      type: object
+      properties:
+        status_code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Unauthorized
+        error:
+          type: string
+          example: Unauthorized
+    inline_response_404_4:
+      type: object
+      properties:
+        status_code:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Not Found
+        error:
+          type: string
+          example: Template not found
+    emailtemplates_id_body:
+      required:
+        - status
+        - template
+        - title
+      type: object
+      properties:
+        title:
+          type: string
+          description: The title of the email template.
+        template:
+          type: string
+          description: The content of the email template.
+        status:
+          type: boolean
+          description: The status of the email template.
+    inline_response_200_17:
+      type: object
+      properties:
+        status_code:
+          type: integer
+          example: 200
+        message:
+          type: string
+          example: Email template updated successfully
+        data:
+          $ref: '#/components/schemas/inline_response_200_17_data'
+    inline_response_400_8:
+      type: object
+      properties:
+        status_code:
+          type: integer
+          example: 400
+        error:
+          type: string
+          example: Invalid input data
+        message:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+    inline_response_404_5:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Template not found
+    inline_response_200_18:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 200
+        message:
+          type: string
+          example: Comments retrieved successfully
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Comment'
+    blogId_comments_body:
+      type: object
+      properties:
+        content:
+          type: string
+          example: This is a test comment
+    inline_response_201_4:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 201
+        message:
+          type: string
+          example: Comment created successfully
+        data:
+          $ref: '#/components/schemas/Comment'
+    commentId_reply_body:
+      type: object
+      properties:
+        content:
+          type: string
+          example: This is a reply
+    inline_response_201_5:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 201
+        message:
+          type: string
+          example: Reply created successfully
+        data:
+          $ref: '#/components/schemas/Comment'
+    inline_response_200_19:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 200
+        message:
+          type: string
+          example: Comment liked successfully
+        data:
+          $ref: '#/components/schemas/Comment'
+    inline_response_200_20:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 200
+        message:
+          type: string
+          example: Comment disliked successfully
+        data:
+          $ref: '#/components/schemas/Comment'
+    edit_commentId_body:
+      type: object
+      properties:
+        content:
+          type: string
+          example: This is an edited comment
+    inline_response_200_21:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 200
+        message:
+          type: string
+          example: Comment edited successfully
+        data:
+          $ref: '#/components/schemas/Comment'
+    inline_response_200_22:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 200
+        message:
+          type: string
+          example: Comment deleted successfully
+    inline_response_422_3_details:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    inline_response_200_10_Data:
+      type: object
+      properties:
+        avatar_url:
+          type: string
+          format: uri
+    inline_response_201_3_data:
+      type: object
+      properties:
+        user_id:
+          type: string
+          format: uuid
+          example: 9ca63580-4b7b-4529-b3e9-165baa5de794
+        title:
+          type: string
+          example: A new titles
+        content:
+          type: string
+          example: A good content
+        article_id:
+          type: string
+          format: uuid
+          example: 902656c5-930d-4259-afb8-55244e1d2f1d
+        updated_at:
+          type: string
+          format: date-time
+          example: '2024-07-30T22:09:50Z'
+        created_at:
+          type: string
+          format: date-time
+          example: '2024-07-30T22:09:50Z'
+    inline_response_200_13_data:
+      type: object
+      properties:
+        article_id:
+          type: string
+          format: uuid
+          example: 902656c5-930d-4259-afb8-55244e1d2f1d
+        user_id:
+          type: string
+          format: uuid
+          example: 9ca63580-4b7b-4529-b3e9-165baa5de794
+        title:
+          type: string
+          example: Blazer
+        content:
+          type: string
+          example: Updated content of the Blazing article...
+        created_at:
+          type: string
+          format: date-time
+          example: '2024-07-30T22:09:50Z'
+        updated_at:
+          type: string
+          format: date-time
+          example: '2024-07-30T22:10:19Z'
+    inline_response_200_14_data:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Jane Smith
+        email:
+          type: string
+          example: jane@example.com
+    inline_response_200_14_pagination:
+      type: object
+      properties:
+        total:
+          type: integer
+          example: 100
+        per_page:
+          type: integer
+          example: 10
+        current_page:
+          type: integer
+          example: 1
+        last_page:
+          type: integer
+          example: 10
+        from:
+          type: integer
+          example: 1
+        to:
+          type: integer
+          example: 10
+    inline_response_200_15_templates:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        template:
+          type: string
+        status:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    inline_response_200_17_data:
+      type: object
+      properties:
+        id:
+          type: string
+          example: some-uuid
+        title:
+          type: string
+          example: Updated Template Title
+        template:
+          type: string
+          example: Updated Template Content
+        status:
+          type: boolean
+          example: true
   securitySchemes:
     bearerAuth:
       type: http

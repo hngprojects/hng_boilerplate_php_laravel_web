@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Api\V1\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\BlogCreateRequest;
 use App\Models\Blog;
+use App\Models\User;
 use Exception;
-use App\Models\BlogImage;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -31,8 +31,7 @@ class BlogController extends Controller
 
             // Fetch the latest blog posts with pagination
             $blogPosts = Blog::orderBy('created_at', 'desc')
-                ->select('id', 'title', 'content', 'author', 'created_at', 'blog_category_id')
-                ->with('blog_category', 'image')
+                ->select('id', 'title', 'content', 'author', 'created_at', 'category', 'image_url')
                 ->paginate($pageSize, ['*'], 'page', $page);
 
             // Manually construct next and previous URLs with page_size parameter
@@ -67,8 +66,7 @@ class BlogController extends Controller
     {
         try{
             $blogPosts = Blog::orderBy('created_at', 'desc')
-                ->select('id', 'title', 'content', 'author', 'created_at', 'blog_category_id')
-                ->with('images', 'blog_category')
+                ->select('id', 'title', 'content', 'author', 'created_at', 'category', 'image_url')
                 ->get();
 
             return response()->json([
@@ -95,19 +93,18 @@ class BlogController extends Controller
      */
     public function store(Request $request)
     {
+        Log::error('Error creating blog post: ' . Auth::id());
         $validator = Validator::make($request->all(), [
             'title' => ['required', 'string', 'max:255'],
             'content' => ['required', 'string'],
-            // 'images' => ['required'],
-            'images.*' => ['image', 'mimes:jpeg,png,jpg,gif,svg', 'max:500'],
-            'author' => ['required', 'string', 'max:255'],
-            'blog_category_id' => ['required', 'uuid', 'exists:blog_categories,id'],
-        ]
-        , [
-            'blog_category_id.uuid' => 'The blog category does not exist.',
-            'blog_category_id.exists' => 'The selected blog category does not exist.',
+            'image_url' => ['required', 'mimes:jpeg,png,jpg,gif,svg'],
+            'category' => ['required', 'string', 'max:255'],
         ]);
-    
+        $author = User::where('id', Auth::id())->first();
+
+        if(!$author){
+            return response()->json(['error' => 'User Not found.'], 404);
+        }
         if ($validator->fails()) {
             return response()->json([
                 'errors' => $validator->errors(),
@@ -116,35 +113,24 @@ class BlogController extends Controller
         }
         try {
             DB::beginTransaction();
+            $saved = Storage::disk('public')->put('images', $request->file('image_url'));
             $blog = Blog::create([
                 'title' => $request->get('title'),
                 'content' => (string)$request->get('content'),
-                'author' => $request->get('author'),
-                'blog_category_id' => $request->get('blog_category_id'),
+                'author' => $author->name ? $author->name : "",
+                'image_url' => 'storage/'.$saved,
+                'category' => $request->get('category'),
+                'author_id' => $author->id
             ]);
-
-            if($request->has('images')){
-                foreach ($request->file('images') as $image) {
-                    $saved = Storage::disk('public')->put('images', $image);
-                    if ($saved) {
-                        BlogImage::create([
-                            'image_url' => $saved,
-                            'blog_id' => $blog->id,
-                        ]);
-                    } else {
-                        throw new \Exception('Error saving image');
-                    }
-                }
-            }
-            
 
             DB::commit();
             return response()->json([
+                'data' => $blog,
                 'message' => 'Blog post created successfully.',
                 'status_code' => Response::HTTP_CREATED,
             ], Response::HTTP_CREATED);
         } catch (\Exception $exception) {
-            // Log::error('Error creating blog post: ' . $exception->getMessage());
+            Log::error('Error creating blog post: ' . $exception->getMessage());
             DB::rollBack();
             return response()->json(['error' => 'Internal server error.'], 500);
         }
@@ -156,8 +142,7 @@ class BlogController extends Controller
     public function show(Request $request, string $id)
     {
         try {
-
-            $blog = Blog::with('image', 'blog_category')->find($id);
+            $blog = Blog::find($id);
 
             if(!$blog){
                 return response()->json([
@@ -167,7 +152,13 @@ class BlogController extends Controller
             }
 
             return response()->json([
-                'data' => $blog,
+                'data' => [
+                    'title' => $blog->title,
+                    'category' => $blog->category,
+                    'content' => $blog->content,
+                    'image_url' => $blog->image_url,
+                    'created_at' => $blog->created_at,
+                ],
                 'message' => 'Blog post fetched sucessfully.',
                 'status_code' => Response::HTTP_OK,
             ], Response::HTTP_OK);
@@ -194,38 +185,37 @@ class BlogController extends Controller
                     'status_code' => Response::HTTP_NOT_FOUND,
                 ], 404);
             }
+            
+            //user not the author
+            if($blog->author_id != Auth::id()){
+                return response()->json([
+                    'status' => 'Forbidden',
+                    'message' => 'Not authorized to edit this blog post',
+                    'status_code' => 403
+                ], 403);
+            }
+            if ($request->hasFile('image_url')) {
+                // Delete old image
+                if(Storage::disk('public')->exists($blog->image_url)) Storage::disk('public')->delete($blog->image_url);
+
+                // Upload new image
+                $saved_image = Storage::disk('public')->put('images', $request->file('image_url'));
+                $saved = 'storage/'.$saved_image;
+            }else{
+                $saved = $blog->image_url;
+            }
 
             $blog->update([
                 'title' => $request->get('title') ?? $blog->title,
-                'content' => (string)$request->get('content') ?? $blog->content,
-                'author' => $request->get('author') ?? $blog->author,
-                'blog_category_id' => $request->get('blog_category_id') ?? $blog->blog_category_id,
+                'content' => $request->get('content') ?? $blog->content,
+                'category' => $request->get('category') ?? $blog->category,
+                'image_url' => $saved,
             ]);
-
-            if ($request->hasFile('images')) {
-                // Delete old images
-                foreach ($blog->images as $image) {
-                    Storage::disk('public')->delete($image->image_url);
-                    $image->delete();
-                }
-
-                // Upload new images
-                foreach ($request->file('images') as $image) {
-                    $saved = Storage::disk('public')->put('images', $image);
-                    if ($saved) {
-                        BlogImage::create([
-                            'image_url' => $saved,
-                            'blog_id' => $blog->id,
-                        ]);
-                    } else {
-                        throw new \Exception('Error saving image');
-                    }
-                }
-            }
 
             DB::commit();
 
             return response()->json([
+                'data' => $blog,
                 'message' => 'Blog post updated successfully.',
                 'status_code' => Response::HTTP_OK,
             ], Response::HTTP_OK);
@@ -241,7 +231,7 @@ class BlogController extends Controller
     public function destroy(string $id)
     {
         try {
-            $blog = Blog::with('images')->find($id);
+            $blog = Blog::find($id);
 
             if (!$blog) {
                 return response()->json([
@@ -249,12 +239,14 @@ class BlogController extends Controller
                     'status_code' => 404
                 ], 404);
             }
-            
-            if(count($blog->images) > 0){
-                foreach($blog->images as $image){
-                    $image->delete();
-                }
+            if($blog->author_id != Auth::id()){
+                return response()->json([
+                    'status' => 'Forbidden',
+                    'message' => 'Not authorized to delete this blog post',
+                    'status_code' => 403
+                ], 403);
             }
+
             $blog->delete();
 
             return response()->noContent();
