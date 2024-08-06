@@ -1,47 +1,50 @@
 <?php
 
-use App\Http\Controllers\Api\V1\Admin\BlogController;
-use App\Http\Controllers\Api\V1\Admin\CustomerController;
-use App\Http\Controllers\Api\V1\Admin\EmailTemplateController;
-use App\Http\Controllers\Api\V1\Admin\Plan\FeatureController;
-use App\Http\Controllers\Api\V1\Admin\Plan\SubscriptionController;
-use App\Http\Controllers\Api\V1\PaymentController;
-use App\Http\Controllers\Api\V1\Admin\FaqController;
-use App\Http\Controllers\NotificationSettingController;
-use App\Http\Controllers\UserNotificationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\JobController;
 use App\Http\Controllers\Api\V1\RoleController;
+use App\Http\Controllers\BillingPlanController;
 use App\Http\Controllers\Api\V1\ArticleController;
-use App\Http\Controllers\Api\V1\Auth\AuthController;
-use App\Http\Controllers\Api\V1\Auth\ForgetPasswordRequestController;
-use App\Http\Controllers\Api\V1\Auth\LoginController;
-use App\Http\Controllers\Api\V1\Auth\ResetUserPasswordController;
-use App\Http\Controllers\Api\V1\Auth\SocialAuthController;
-use App\Http\Controllers\Api\V1\Auth\ForgetResetPasswordController;
-use App\Http\Controllers\Api\V1\BlogSearchController;
-use App\Http\Controllers\Api\V1\CategoryController;
-use App\Http\Controllers\Api\V1\ContactController;
-use App\Http\Controllers\Api\V1\HelpArticleController;
-use App\Http\Controllers\Api\V1\NotificationPreferenceController;
-use App\Http\Controllers\Api\V1\Organisation\OrganisationController;
 use App\Http\Controllers\Api\V1\CommentController;
-use App\Http\Controllers\Api\V1\Organisation\OrganizationMemberController;
-use App\Http\Controllers\Api\V1\PreferenceController;
+use App\Http\Controllers\Api\V1\ContactController;
+use App\Http\Controllers\Api\V1\PaymentController;
 use App\Http\Controllers\Api\V1\ProductController;
 use App\Http\Controllers\Api\V1\SqueezeController;
-use App\Http\Controllers\Api\V1\User\UserController;
-use App\Http\Controllers\Api\V1\User\AccountController;
-use App\Http\Controllers\InvitationAcceptanceController;
-use App\Http\Controllers\Api\V1\User\ExportUserController;
-
-
-use App\Http\Controllers\Api\V1\Testimonial\TestimonialController;
-use App\Http\Controllers\BillingPlanController;
-use App\Http\Controllers\Api\V1\User\ProfileController;
-use App\Http\Controllers\Api\V1\JobSearchController;
+use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\WaitListController;
+use App\Http\Controllers\Api\V1\Admin\FaqController;
+use App\Http\Controllers\Api\V1\Auth\AuthController;
+use App\Http\Controllers\Api\V1\JobSearchController;
+use App\Http\Controllers\Api\V1\User\UserController;
+use App\Http\Controllers\UserNotificationController;
+use App\Http\Controllers\Api\V1\Admin\BlogController;
+use App\Http\Controllers\Api\V1\Auth\LoginController;
+use App\Http\Controllers\Api\V1\BlogSearchController;
+use App\Http\Controllers\Api\V1\PreferenceController;
+use App\Http\Controllers\Api\V1\HelpArticleController;
+use App\Http\Controllers\Api\V1\User\AccountController;
+use App\Http\Controllers\Api\V1\User\ProfileController;
+use App\Http\Controllers\NotificationSettingController;
+use App\Http\Controllers\InvitationAcceptanceController;
+use App\Http\Controllers\Api\V1\Admin\CustomerController;
+use App\Http\Controllers\Api\V1\Auth\SocialAuthController;
+use App\Http\Controllers\Api\V1\User\ExportUserController;
 use App\Http\Controllers\Api\V1\CookiePreferencesController;
+use App\Http\Controllers\Api\V1\Admin\Plan\FeatureController;
+use App\Http\Controllers\Api\V1\Admin\EmailTemplateController;
+use App\Http\Controllers\Api\V1\Auth\ResetUserPasswordController;
+use App\Http\Controllers\Api\V1\NotificationPreferenceController;
+
+
+use App\Http\Controllers\Api\V1\Admin\Plan\SubscriptionController;
+use App\Http\Controllers\Api\V1\Testimonial\TestimonialController;
+use App\Http\Controllers\Api\V1\Auth\ForgetResetPasswordController;
+use App\Http\Controllers\Api\V1\Organisation\OrganisationController;
+use App\Http\Controllers\Api\V1\Auth\ForgetPasswordRequestController;
+use App\Http\Controllers\Api\V1\SuperAdmin\SuperAdminProductController;
+use App\Http\Controllers\Api\V1\Organisation\OrganizationMemberController;
+
+
 
 
 
@@ -136,6 +139,11 @@ Route::prefix('v1')->group(function () {
     Route::delete('/help-center/topics/{articleId}', [HelpArticleController::class, 'destroy']);
     Route::get('/help-center/topics', [HelpArticleController::class, 'getArticles']);
     Route::get('/help-center/topics/search', [HelpArticleController::class, 'search']);
+
+    //Super Admin Products dashboard
+    Route::middleware(['auth:api', 'admin'])->group(function () {
+        Route::get('/superadmin/products', [SuperAdminProductController::class, 'index']);
+    });
 
     Route::middleware(['auth:api', 'admin'])->group(function () {
         Route::get('/email-templates', [EmailTemplateController::class, 'index']);
