@@ -49,7 +49,7 @@ class ProductDeletionTest extends TestCase
         $response->assertStatus(201);
 
         // Retrieve the JWT token from the registration response
-        $token = $response->json('data.accessToken');
+        $token = $response->json('access_token');
 
         $this->assertNotEmpty($token);
 
@@ -95,7 +95,7 @@ class ProductDeletionTest extends TestCase
         $response->assertStatus(201);
 
         // Retrieve the JWT token from the registration response
-        $token = $response->json('data.accessToken');
+        $token = $response->json('access_token');
 
         $this->assertNotEmpty($token);
 
