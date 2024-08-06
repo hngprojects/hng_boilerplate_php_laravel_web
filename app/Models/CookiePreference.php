@@ -25,4 +25,10 @@ class CookiePreference extends Model
 
     // Indicates the type of the model's primary key (UUID)
     protected $keyType = 'string';
+
+    // Define relationship with User model
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }
