@@ -16,6 +16,7 @@ class PaymentService
             ])->post('https://api.paystack.co/transaction/initialize', [
                 'email' => $data['email'],
                 'plan' => $data['plan_code'],
+                'amount' => $data['amount'],
                 'reference' => $data['reference'],
                 'callback_url' => url('/api/v1/payments/paystack/'.$data['organisation_id'].'verify/'.$data['plan_id']),
                 'metadata' => [

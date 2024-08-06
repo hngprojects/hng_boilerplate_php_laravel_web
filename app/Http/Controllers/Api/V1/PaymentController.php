@@ -63,6 +63,7 @@ class PaymentController extends Controller
         $data['reference'] = Str::uuid();
         $data['plan_code'] = $subscriptionPlan->paystack_plan_code;
         $data['plan_id'] = $subscriptionPlan->id;
+        $data['amount'] = $subscriptionPlan->price;
         $data['organisation_id'] = $request->organisation_id;
 
         try {
@@ -89,8 +90,8 @@ class PaymentController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 500,
-                'message' => 'An unexpected error occurred. Please try again later.'
-                // 'message' => 'Payment Initialization Failed: ' . $e->getMessage()
+                // 'message' => 'An unexpected error occurred. Please try again later.'
+                'message' => 'Payment Initialization Failed: ' . $e->getMessage()
             ], 500);
         }
     }
