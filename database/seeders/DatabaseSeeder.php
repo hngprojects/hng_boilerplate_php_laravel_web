@@ -70,5 +70,10 @@ class DatabaseSeeder extends Seeder
             UserNotificationSeeder::class,
         ]);
 
+        $this->call([
+            QuestsSeeder::class,
+            QuestMessageSeeder::class,
+        ]);
+
     }
 }

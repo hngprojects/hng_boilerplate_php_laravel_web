@@ -39,6 +39,7 @@ use App\Http\Controllers\BillingPlanController;
 use App\Http\Controllers\Api\V1\User\ProfileController;
 use App\Http\Controllers\Api\V1\JobSearchController;
 
+use App\Http\Controllers\QuestController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -220,6 +221,11 @@ Route::prefix('v1')->group(function () {
     Route::delete('/notifications', [UserNotificationController::class, 'destroy']);
     Route::post('/notifications', [UserNotificationController::class, 'create'])->middleware('auth.jwt');
     Route::get('/notifications', [UserNotificationController::class, 'getByUser'])->middleware('auth.jwt');
+
+
+//    quest
+    Route::get('/quests/{id}/messages', [QuestController::class, 'getQuestMessages']);
+
 });
 
 
