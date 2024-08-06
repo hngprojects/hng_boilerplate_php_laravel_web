@@ -18,7 +18,7 @@ class PaymentService
                 'plan' => $data['plan_code'],
                 'amount' => $data['amount'],
                 'reference' => $data['reference'],
-                'callback_url' => url('/api/v1/payments/paystack/'.$data['organisation_id'].'verify/'.$data['plan_id']),
+                'callback_url' => url('/api/v1/payments/paystack/'.$data['organisation_id'].'/verify/'.$data['plan_id']),
                 'metadata' => [
                     'cancel_action' => route('payment.cancel')
                 ]
@@ -63,7 +63,7 @@ class PaymentService
                 'amount' => $data['amount'], // Flutterwave still needs the amount
                 'currency' => 'USD',
                 'payment_plan' => $data['plan_code'],
-                'redirect_url' => url('/api/v1/payments/'.$data['organisation_id'].'flutterwave/verify/'.$data['plan_id']),
+                'redirect_url' => url('/api/v1/payments/flutterwave/'.$data['organisation_id'].'/verify/'.$data['plan_id']),
                 'customer' => [
                     'email' => $data['email'],
                     'name' => $data['full_name']
