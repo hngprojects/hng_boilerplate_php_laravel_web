@@ -12,10 +12,6 @@ class BlogSeeder extends Seeder
 {
     public function run(): void
     {
-        // Disable foreign key checks
-        DB::statement('SET FOREIGN_KEY_CHECKS=0');
-
-        // Clear the blogs table
         DB::table('blogs')->truncate();
 
         $categories = ['Business', 'Food', 'Lifestyle', 'World News'];
@@ -26,7 +22,7 @@ class BlogSeeder extends Seeder
             'https://free-images.com/lg/4275/penguin_funny_blue_water.jpg'
         ];
 
-        foreach($categories as $key=>$category){
+        foreach($categories as $key => $category) {
             $imageContents = file_get_contents($images[$key]);
             $imageName = Str::random(10) . '.jpg';
             Storage::disk('public')->put('images/' . $imageName, $imageContents);
@@ -34,8 +30,5 @@ class BlogSeeder extends Seeder
 
             Blog::factory()->create(['category' => $category, 'image_url' => $imagePath]);
         }
-
-        // Re-enable foreign key checks
-        DB::statement('SET FOREIGN_KEY_CHECKS=1');
     }
 }

@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class AdminMiddleware
+class AlwaysAcceptJson
 {
     /**
      * Handle an incoming request.
@@ -15,16 +15,7 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $user = auth()->user();
-
-        if (!$user || $user->role !== 'admin' || !$user->is_active) {
-            return response()->json([
-                'status_code' => 401,
-                'message' => 'Unauthorized, admin access only',
-                'error' => 'Bad Request'
-            ], 401);
-        }
-
+        $request->headers->set('Accept', 'application/json');
         return $next($request);
     }
 }

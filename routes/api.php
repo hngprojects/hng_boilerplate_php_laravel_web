@@ -57,7 +57,8 @@ use App\Http\Controllers\Api\V1\CookiePreferencesController;
 */
 
 Route::prefix('v1')->group(function () {
-    Route::get('/', function () {
+    Route::post('/', function (Request $request) {
+        // dd($request);
         return 'language Learning Ai Game';
     });
     Route::post('/auth/register', [AuthController::class, 'store']);
