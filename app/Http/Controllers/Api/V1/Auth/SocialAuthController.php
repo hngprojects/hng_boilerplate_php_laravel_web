@@ -50,7 +50,7 @@ class SocialAuthController extends Controller
         $token = JWTAuth::fromUser($user);
 
         $response = [
-            'status' => 'success',
+            'status_code' => 200,
             'message' => 'User successfully authenticated',
             'access_token' => $token,
             'data' => [
@@ -97,7 +97,7 @@ class SocialAuthController extends Controller
         $token = JWTAuth::fromUser($user);
 
         $response = [
-            'status' => 'success',
+            'status_code' => 201,
             'message' => 'User successfully authenticated',
             'access_token' => $token,
             'data' => [
@@ -148,7 +148,7 @@ class SocialAuthController extends Controller
         $token = JWTAuth::fromUser($user);
 
         $response = [
-            'status' => 'success',
+            'status_code' => 200,
             'message' => 'User successfully authenticated',
             'access_token' => $token,
             'data' => [
@@ -195,7 +195,7 @@ class SocialAuthController extends Controller
         $token = JWTAuth::fromUser($user);
 
         $response = [
-            'status' => 'success',
+            'status' => 201,
             'message' => 'User successfully authenticated',
             'access_token' => $token,
             'data' => [

@@ -42,7 +42,7 @@ class ProductControllerTest extends TestCase
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'message',
-            'data' => ['user' => ['id', 'email', 'role', 'signup_type', 'is_active', 'is_verified', 'created_at', 'updated_at'], 'access_token', 'refresh_token']
+            'data' => ['user' => ['id', 'first_name', 'last_name', 'email', 'role', 'avatar_url']]
         ]);
     }
 }
