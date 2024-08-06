@@ -43,7 +43,7 @@ class PaymentController extends Controller
         $userIsAnAdminInOrganisation = Organisation::where('user_id', auth()->user()->id)
                                             ->where('org_id', $request->organisation_id)
                                             ->exists();
-        if ($userIsAnAdminInOrganisation) {
+        if (!$userIsAnAdminInOrganisation) {
             return response()->json([
                 'status' => 403,
                 'message' => 'You do not have permission to initiate this payment'
@@ -151,7 +151,8 @@ class PaymentController extends Controller
         $userIsAnAdminInOrganisation = Organisation::where('user_id', auth()->user()->id)
                                             ->where('org_id', $request->organisation_id)
                                             ->exists();
-        if ($userIsAnAdminInOrganisation) {
+        // return response()->json(auth()->user()->id);
+        if (!$userIsAnAdminInOrganisation) {
             return response()->json([
                 'status' => 403,
                 'message' => 'You do not have permission to initiate this payment'
