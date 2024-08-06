@@ -71,4 +71,55 @@ class CookiePreferencesController extends Controller
             ], 500);
         }
     }
+    public function getPreferences(Request $request)
+    {
+        // Validation rules
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required|uuid|exists:users,id',
+        ]);
+
+        // If validation fails, return errors
+        if ($validator->fails()) {
+            return response()->json([
+                'status_code' => 400,
+                'success' => false,
+                'message' => 'Invalid user ID.',
+                'errors' => $validator->errors(),
+            ], 400);
+        }
+
+        $userId = $request->input('user_id');
+
+        try {
+            // Retrieve cookie preferences from the database
+            $cookiePreference = CookiePreference::where('user_id', $userId)->first();
+
+            // Check if preferences were found
+            if (!$cookiePreference) {
+                return response()->json([
+                    'status_code' => 404,
+                    'success' => false,
+                    'message' => 'No cookie preferences found for the given user ID.'
+                ], 404);
+            }
+
+            return response()->json([
+                'status_code' => 200,
+                'success' => true,
+                'data' => [
+                    'user_id' => $cookiePreference->user_id,
+                    'preferences' => $cookiePreference->preferences,
+                    'updated_at' => $cookiePreference->updated_at
+                ],
+            ], 200);
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'status_code' => 500,
+                'success' => false,
+                'message' => 'Failed to retrieve cookie preferences. Please try again later.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
 }
