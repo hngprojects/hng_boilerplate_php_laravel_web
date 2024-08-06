@@ -52,6 +52,12 @@ class PaymentController extends Controller
 
         // $gateway_id = Gateway::where('code', 'paystack')->first()->id;
         $subscriptionPlan = SubscriptionPlan::find($request->plan_id);
+        if(!$subscriptionPlan) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Subscription Plan not found'
+            ], 404);
+        }
         $data = $validator->validated();
         $data['email'] = auth()->user()->email;
         $data['reference'] = Str::uuid();
