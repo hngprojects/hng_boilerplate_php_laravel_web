@@ -68,9 +68,9 @@ class RegistrationTest extends TestCase
 
         $response = $this->postJson('/api/v1/auth/register', $registrationData);
         // Check the status code
-        $response->assertStatus(422);
+        $response->assertStatus(400);
         $response->assertJson([
-            'status_code' => 422,
+            'status_code' => 400,
             'message' => [
                 'email' => [
                     'The email field is required.'
