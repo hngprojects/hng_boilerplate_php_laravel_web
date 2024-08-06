@@ -72,9 +72,9 @@ class Organisation extends Model
         return $this->hasMany(Role::class, 'org_id');
     }
 
-    public function subscriptions()
+    public function subscription()
     {
-        return $this->hasMany(UserSubscription::class, 'org_id', 'org_id');
+        return $this->hasOne(UserSubscription::class, 'org_id', 'org_id');
     }
 
     public function subscriptionPlan()
