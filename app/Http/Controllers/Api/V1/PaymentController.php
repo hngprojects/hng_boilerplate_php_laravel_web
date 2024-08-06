@@ -90,8 +90,8 @@ class PaymentController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 500,
-                // 'message' => 'An unexpected error occurred. Please try again later.'
-                'message' => 'Payment Initialization Failed: ' . $e->getMessage()
+                'message' => 'An unexpected error occurred. Please try again later.'
+                // 'message' => 'Payment Initialization Failed: ' . $e->getMessage()
             ], 500);
         }
     }
@@ -205,7 +205,8 @@ class PaymentController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 500,
-                'message' => 'Payment Initialization Failed: ' . $e->getMessage()
+                'message' => 'An unexpected error occurred. Please try again later.'
+                // 'message' => 'Payment Initialization Failed: ' . $e->getMessage()
             ], 500);
         }
     }
