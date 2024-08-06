@@ -14,6 +14,7 @@ use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
+
 class ProfileController extends Controller
 {
     /**
@@ -98,75 +99,76 @@ class ProfileController extends Controller
 
 
     public function uploadImage(Request $request)
-{
-    $validator = Validator::make($request->all(), [
-        'file' => 'required|image|mimes:jpeg,png,jpg,gif'
-    ]);
-
-    if ($validator->fails()) {
-        return response()->json([
-            'Status' => 400,
-            'Message' => $validator->errors()
-        ], 400);
-    }
-
-    $file = $request->file('file');
-    $imagePath = $file->getRealPath();
-
-    $cloudinaryCloudName = env('CLOUDINARY_CLOUD_NAME');
-    $cloudinaryUploadPreset = env('CLOUDINARY_UPLOAD_PRESET');
-
-    if (!$cloudinaryCloudName || !$cloudinaryUploadPreset) {
-        return response()->json([
-            'Status' => 500,
-            'Message' => 'Cloudinary environment variables are not set correctly'
-        ], 500);
-    }
-
-    try {
-        // Using multipart form data to send the image to Cloudinary
-        $response = Http::asMultipart()->post('https://api.cloudinary.com/v1_1/' . $cloudinaryCloudName . '/image/upload', [
-            'file' => fopen($imagePath, 'r'),
-            'upload_preset' => $cloudinaryUploadPreset,
+    {
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|image|mimes:jpeg,png,jpg,gif'
         ]);
-
-        $data = $response->json();
-
-        if ($response->successful()) {
-            $uploadedFileUrl = $data['secure_url'];
-
-            $user = Auth::user();
-            $profile = $user->profile;
-
-            if (!$profile) {
-                return response()->json([
-                    'Status' => 404,
-                    'Message' => 'Profile not found'
-                ], 404);
-            }
-
-            $profile->update(['avatar_url' => $uploadedFileUrl]);
-
+    
+        if ($validator->fails()) {
             return response()->json([
-                'Status' => 200,
-                'Message' => 'Image uploaded and profile updated successfully',
-                'Data' => ['avatar_url' => $uploadedFileUrl]
-            ], 200);
-        } else {
+                'Status' => 400,
+                'Message' => $validator->errors()
+            ], 400);
+        }
+    
+        $file = $request->file('file');
+        $imagePath = $file->getRealPath();
+    
+        $cloudinaryCloudName = env('CLOUDINARY_CLOUD_NAME');
+        $cloudinaryUploadPreset = env('CLOUDINARY_UPLOAD_PRESET');
+    
+        if (!$cloudinaryCloudName || !$cloudinaryUploadPreset) {
             return response()->json([
                 'Status' => 500,
-                'Message' => 'Failed to upload image to Cloudinary',
-                'CloudinaryResponse' => $data
+                'Message' => 'Cloudinary environment variables are not set correctly'
             ], 500);
         }
-    } catch (\Exception $e) {
-        return response()->json([
-            'Status' => 500,
-            'Message' => 'Failed to upload image',
-            'Error' => $e->getMessage()
-        ], 500);
+    
+        try {
+           
+            $response = Http::asMultipart()->post('https://api.cloudinary.com/v1_1/' . $cloudinaryCloudName . '/image/upload', [
+                'file' => fopen($imagePath, 'r'),
+                'upload_preset' => $cloudinaryUploadPreset,
+            ]);
+    
+            $data = $response->json();
+    
+            if ($response->successful()) {
+                $uploadedFileUrl = $data['secure_url'];
+    
+                $user = Auth::user();
+                $profile = $user->profile;
+    
+                if (!$profile) {
+                    return response()->json([
+                        'Status' => 404,
+                        'Message' => 'Profile not found'
+                    ], 404);
+                }
+    
+                $profile->update(['avatar_url' => $uploadedFileUrl]);
+    
+                return response()->json([
+                    'Status' => 200,
+                    'Message' => 'Image uploaded and profile updated successfully',
+                    'Data' => ['avatar_url' => $uploadedFileUrl]
+                ], 200);
+            } else {
+                return response()->json([
+                    'Status' => 500,
+                    'Message' => 'Failed to upload image to Cloudinary',
+                    'CloudinaryResponse' => $data
+                ], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'Status' => 500,
+                'Message' => 'Failed to upload image',
+                'Error' => $e->getMessage()
+            ], 500);
+        }
     }
-}
+    
 
     
 
