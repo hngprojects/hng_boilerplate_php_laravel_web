@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\Admin\Plan\FeatureController;
 use App\Http\Controllers\Api\V1\Admin\Plan\SubscriptionController;
 use App\Http\Controllers\Api\V1\PaymentController;
 use App\Http\Controllers\Api\V1\Admin\FaqController;
+use App\Http\Controllers\NotificationSettingController;
 use App\Http\Controllers\UserNotificationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\JobController;
@@ -40,6 +41,9 @@ use App\Http\Controllers\BillingPlanController;
 use App\Http\Controllers\Api\V1\User\ProfileController;
 use App\Http\Controllers\Api\V1\JobSearchController;
 use App\Http\Controllers\Api\V1\WaitListController;
+use App\Http\Controllers\Api\V1\CookiePreferencesController;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -68,7 +72,7 @@ Route::prefix('v1')->group(function () {
     /* Forget and Reset Password using OTP */
     Route::post('/auth/forgot-password', [ForgetResetPasswordController::class, 'forgetPassword']);
     Route::post('/auth/reset-forgot-password', [ForgetResetPasswordController::class, 'resetPassword']);
-    Route::post('/auth/verify-forget-otp', [ForgetResetPasswordController::class, 'verifyUserOTP']);
+    Route::post('/auth/verify-forgot-otp', [ForgetResetPasswordController::class, 'verifyUserOTP']);
 
     Route::post('/roles', [RoleController::class, 'store']);
 
@@ -118,6 +122,10 @@ Route::prefix('v1')->group(function () {
     Route::get('/blogs/search', [BlogSearchController::class, 'search']);
 
     Route::post('/squeeze', [SqueezeController::class, 'store']);
+
+    //Cookies Preference
+    Route::post('/cookies/preferences', [CookiePreferencesController::class, 'update']);
+    Route::get('/cookies/preferences', [CookiePreferencesController::class, 'getPreferences']);
 
 
     // Help Articles
@@ -196,7 +204,11 @@ Route::prefix('v1')->group(function () {
         //profile Update
         Route::patch('/profile', [ProfileController::class, 'update']);
         Route::post('/profile/upload-image', [ProfileController::class, 'uploadImage']);
+
+        Route::get('/notification-settings', [NotificationSettingController::class, 'show']);
+        Route::patch('/notification-settings', [NotificationSettingController::class, 'update']);
     });
+    Route::get('/notification-settings', [NotificationSettingController::class, 'show']);
 
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
 
@@ -206,7 +218,6 @@ Route::prefix('v1')->group(function () {
         Route::patch('/blogs/edit/{id}', [BlogController::class, 'update'])->name('admin.blogs.update');
         Route::delete('/blogs/{id}', [BlogController::class, 'destroy']);
         Route::get('/waitlists', [WaitListController::class, 'index']);
-
     });
 
 
@@ -242,5 +253,3 @@ Route::prefix('v1')->group(function () {
     Route::post('/notifications', [UserNotificationController::class, 'create'])->middleware('auth.jwt');
     Route::get('/notifications', [UserNotificationController::class, 'getByUser'])->middleware('auth.jwt');
 });
-
-

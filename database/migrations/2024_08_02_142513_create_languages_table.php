@@ -11,8 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('blogs', function (Blueprint $table) {
-            $table->foreignUuid('blog_category_id')->references('id')->on('blog_categories')->constrained()->onDelete('cascade')->onUpdate('cascade')->nullable();
+        Schema::create('languages', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('name');
+            $table->timestamps();
         });
     }
 
@@ -21,9 +23,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        if (Schema::hasTable('blogs')) {
-            Schema::dropIfExists('blog_category_id');
+        // Schema::dropIfExists('languages');
+        if (Schema::hasTable('languages')) {
+            Schema::dropIfExists('languages');
         }
-        
     }
 };

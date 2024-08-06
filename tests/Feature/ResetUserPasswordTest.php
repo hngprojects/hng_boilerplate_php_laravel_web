@@ -125,7 +125,7 @@ class ResetUserPasswordTest extends TestCase
             ]
         );
 
-        $response = $this->postJson("/api/v1/auth/verify-forget-otp", [
+        $response = $this->postJson("/api/v1/auth/verify-forgot-otp", [
             'email' => $user->email,
             'otp' => $token
         ])

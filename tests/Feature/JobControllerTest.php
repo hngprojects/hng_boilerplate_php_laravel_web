@@ -32,13 +32,13 @@ class JobControllerTest extends TestCase
         Job::factory()->count(20)->create();
 
         $response = $this->withHeaders(['Authorization' => "Bearer $this->adminToken"])
-    ->getJson('/api/v1/jobs?page=1&size=15');
+            ->getJson('/api/v1/jobs?page=1&size=15');
 
         $response->assertStatus(200)
             ->assertJsonStructure([
                 'message',
                 'data' => [
-                    '*' => ['title', 'description', 'location', 'salary']
+                    '*' => ['id', 'created_at', 'updated_at', 'title', 'description', 'location', 'deadline', 'salary_range', 'job_type', 'job_mode', 'company_name', 'is_deleted']
                 ],
                 'pagination' => ['current_page', 'total_pages', 'page_size', 'total_items']
             ])
@@ -51,12 +51,12 @@ class JobControllerTest extends TestCase
             'title' => 'Software Engineer',
             'description' => 'Develop amazing software',
             'location' => 'New York',
-            'salary' => '100000',
+            'salary_range' => '100000',
             'job_type' => 'Full-time',
-            'experience_level' => 'Mid-level',
-            'work_mode' => 'Remote',
-            'benefits' => 'Health insurance, 401k',
+            'job_mode' => 'Remote',
             'deadline' => '2023-12-31',
+            'company_name' => 'Corp insurance',
+            'experience_level' => 'Mid-level',
             'key_responsibilities' => 'Develop and maintain software',
             'qualifications' => 'Bachelor\'s degree in Computer Science'
         ];
@@ -68,10 +68,22 @@ class JobControllerTest extends TestCase
             ->assertJsonStructure([
                 'success',
                 'message',
-                'data' => ['id', 'title', 'description', 'location', 'salary', 'job_type', 'experience_level', 'work_mode', 'benefits', 'deadline', 'key_responsibilities', 'qualifications', 'user_id', 'created_at', 'updated_at']
+                'data' => ['id', 'title', 'description', 'location', 'salary', 'job_type', 'work_mode', 'deadline', 'benefits', 'experience_level', 'key_responsibilities', 'qualifications', 'created_at', 'updated_at']
             ]);
 
-        $this->assertDatabaseHas('jobs', $jobData);
+        $this->assertDatabaseHas('jobs', [
+            'title' => 'Software Engineer',
+            'description' => 'Develop amazing software',
+            'location' => 'New York',
+            'salary' => '100000',
+            'job_type' => 'Full-time',
+            'work_mode' => 'Remote',
+            'deadline' => '2023-12-31',
+            'benefits' => 'Corp insurance',
+            'experience_level' => 'Mid-level',
+            'key_responsibilities' => 'Develop and maintain software',
+            'qualifications' => 'Bachelor\'s degree in Computer Science'
+        ]);
     }
 
     public function test_store_fails_for_non_admin_user()
@@ -94,12 +106,11 @@ class JobControllerTest extends TestCase
         $job = Job::factory()->create();
 
         $response = $this->withHeaders(['Authorization' => "Bearer $this->adminToken"])
-    ->getJson("/api/v1/jobs/{$job->id}");
-
+            ->getJson("/api/v1/jobs/{$job->id}");
 
         $response->assertStatus(200)
             ->assertJsonStructure([
-                'id', 'title', 'description', 'location', 'salary', 'job_type', 'experience_level', 'work_mode', 'benefits', 'deadline', 'key_responsibilities', 'qualifications', 'created_at', 'updated_at'
+                'id', 'created_at', 'updated_at', 'title', 'description', 'location', 'deadline', 'salary_range', 'job_type', 'job_mode', 'company_name', 'is_deleted'
             ]);
     }
 
@@ -108,7 +119,9 @@ class JobControllerTest extends TestCase
         $job = Job::factory()->create();
         $updatedData = [
             'title' => 'Updated Job Title',
-            'description' => 'Updated job description'
+            'description' => 'Updated job description',
+            'salary_range' => '110000',
+            'job_mode' => 'Hybrid'
         ];
 
         $response = $this->withHeaders(['Authorization' => "Bearer $this->adminToken"])
@@ -118,10 +131,16 @@ class JobControllerTest extends TestCase
             ->assertJsonStructure([
                 'success',
                 'message',
-                'data' => ['id', 'title', 'description']
+                'data' => ['id', 'title', 'description', 'salary', 'work_mode']
             ]);
 
-        $this->assertDatabaseHas('jobs', $updatedData);
+        $this->assertDatabaseHas('jobs', [
+            'id' => $job->id,
+            'title' => 'Updated Job Title',
+            'description' => 'Updated job description',
+            'salary' => '110000',
+            'work_mode' => 'Hybrid'
+        ]);
     }
 
     public function test_update_fails_for_non_admin_user()
@@ -163,5 +182,4 @@ class JobControllerTest extends TestCase
 
         $response->assertStatus(403);
     }
-     
 }

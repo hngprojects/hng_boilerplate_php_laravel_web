@@ -1278,7 +1278,7 @@
                 ]
             }
         },
-        "/api/v1/contact": {
+        "/api/v1/inquiries": {
             "post": {
                 "tags": [
                     "Contact"
@@ -1300,15 +1300,84 @@
                     "required": true
                 },
                 "responses": {
-                    "200": {
+                    "201": {
                         "description": "Inquiry sent successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/SuccessResponse"
-                                },
-                                "example": {
-                                    "message": "Your inquiry has been sent successfully"
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "inquiry successfully sent"
+                                        },
+                                        "status_code": {
+                                            "type": "integer",
+                                            "example": 201
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Contact"
+                ],
+                "summary": "Get all inquiries",
+                "description": "Retrieve all inquries.",
+                "responses": {
+                    "200": {
+                        "description": "A list of inquiries",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "inquiry successfully sent"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "uuid",
+                                                        "example": "syuay12-21322-3ass221-213232"
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "heeloo"
+                                                    },
+                                                    "email": {
+                                                        "type": "string",
+                                                        "example": "x@gmail.com"
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "we heard we've come"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "status_code": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/inline_response_500"
                                 }
                             }
                         }
@@ -2330,81 +2399,21 @@
                 ]
             }
         },
-        "/api/v1/organisations": {
-            "get": {
-                "tags": [
-                    "Organisations"
-                ],
-                "summary": "Get all organisations",
-                "responses": {
-                    "200": {
-                        "description": "Successful response",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/Organisation"
-                                    }
-                                },
-                                "example": [
-                                    {
-                                        "id": 1,
-                                        "name": "Acme Corp",
-                                        "email": "hello@acme.com,",
-                                        "industry": "Oil and gas,",
-                                        "type": "Message board,",
-                                        "country": "ng,",
-                                        "address": "44 crescent,",
-                                        "state": "lagos,",
-                                        "description": "Leading innovation company"
-                                    },
-                                    {
-                                        "id": 2,
-                                        "name": "Tech Innovators",
-                                        "email": "hello@acme.com,",
-                                        "industry": "Oil and gas,",
-                                        "type": "Message board,",
-                                        "country": "ng,",
-                                        "address": "44 crescent,",
-                                        "state": "lagos,",
-                                        "description": "Cutting-edge technology solutions"
-                                    }
-                                ]
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            },
+        "/api/v1/organizations": {
             "post": {
+                "summary": "Create a new organization",
                 "tags": [
-                    "Organisations"
+                    "Organizations"
                 ],
-                "summary": "Create a new organisation",
                 "requestBody": {
+                    "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/OrganisationInput"
-                            },
-                            "example": {
-                                "name": "Acme Corp",
-                                "email": "hello@acme.com,",
-                                "industry": "Oil and gas,",
-                                "type": "Message board,",
-                                "country": "ng,",
-                                "address": "44 crescent,",
-                                "state": "kkk,",
-                                "description": "Leading innovation company"
+                                "$ref": "#/components/schemas/StoreOrganisationRequest"
                             }
                         }
-                    },
-                    "required": true
+                    }
                 },
                 "responses": {
                     "201": {
@@ -2412,61 +2421,98 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/Organisation"
-                                },
-                                "example": {
-                                    "id": 1,
-                                    "name": "Acme Corp",
-                                    "email": "hello@acme.com,",
-                                    "industry": "Oil and gas,",
-                                    "type": "Message board,",
-                                    "country": "ng,",
-                                    "address": "44 crescent,",
-                                    "state": "kkk,",
-                                    "description": "Leading innovation company"
+                                    "$ref": "#/components/schemas/OrganisationResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Client error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         }
                     }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
+                }
+            },
+            "get": {
+                "summary": "Get a list of organizations",
+                "tags": [
+                    "Organizations"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Organizations retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OrganisationList"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "An error occurred",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
                     }
-                ]
+                }
             }
         },
-        "/api/v1/organisations/{org_id}": {
+        "/api/v1/organizations/{org_id}": {
             "put": {
+                "summary": "Update an organization",
                 "tags": [
-                    "Organisations"
+                    "Organizations"
                 ],
-                "summary": "Update an organisation",
                 "parameters": [
                     {
                         "name": "org_id",
                         "in": "path",
                         "required": true,
-                        "style": "simple",
-                        "explode": false,
                         "schema": {
-                            "type": "integer"
-                        }
+                            "type": "string"
+                        },
+                        "description": "Organisation ID"
                     }
                 ],
                 "requestBody": {
+                    "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/OrganisationInput"
-                            },
-                            "example": {
-                                "name": "Acme Corporation",
-                                "description": "Global leader in innovation"
+                                "$ref": "#/components/schemas/StoreOrganisationRequest"
                             }
                         }
-                    },
-                    "required": true
+                    }
                 },
                 "responses": {
                     "200": {
@@ -2474,170 +2520,221 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/Organisation"
-                                },
-                                "example": {
-                                    "id": 1,
-                                    "name": "Acme Corporation",
-                                    "description": "Global leader in innovation"
+                                    "$ref": "#/components/schemas/OrganisationResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "You are not authorized to perform this action",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Organisation not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Client error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         }
                     }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
+                }
             },
             "delete": {
+                "summary": "Delete an organization",
                 "tags": [
-                    "Organisations"
+                    "Organizations"
                 ],
-                "summary": "Delete an organisation",
                 "parameters": [
                     {
                         "name": "org_id",
                         "in": "path",
                         "required": true,
-                        "style": "simple",
-                        "explode": false,
                         "schema": {
-                            "type": "integer"
-                        }
+                            "type": "string"
+                        },
+                        "description": "Organisation ID"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Organisation deleted successfully",
+                        "description": "Organisation deleted successfully"
+                    },
+                    "401": {
+                        "description": "Authentication failed",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/SuccessResponse"
-                                },
-                                "example": {
-                                    "message": "Organisation deleted successfully"
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "You are not authorized to perform this action",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Organisation not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Client error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         }
                     }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
+                }
             }
         },
-        "/api/v1/organisations/{org_id}/users/{user_id}": {
+        "/api/v1/organizations/{org_id}/users/{user_id}": {
             "delete": {
+                "summary": "Remove a user from an organization",
                 "tags": [
-                    "Organisations"
+                    "Organizations"
                 ],
-                "summary": "Remove a user from an organisation",
                 "parameters": [
                     {
                         "name": "org_id",
                         "in": "path",
                         "required": true,
-                        "style": "simple",
-                        "explode": false,
                         "schema": {
-                            "type": "integer"
-                        }
+                            "type": "string"
+                        },
+                        "description": "Organisation ID"
                     },
                     {
                         "name": "user_id",
                         "in": "path",
                         "required": true,
-                        "style": "simple",
-                        "explode": false,
                         "schema": {
-                            "type": "integer"
-                        }
+                            "type": "string"
+                        },
+                        "description": "User ID"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "User removed from organisation successfully",
+                        "description": "User deleted successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/SuccessResponse"
-                                },
-                                "example": {
-                                    "message": "User removed from organisation successfully"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Only admin can remove users",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         }
                     }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
+                }
             }
         },
-        "/api/v1/organisations/{organisation}/members": {
+        "/api/v1/organizations/{organisation}/users": {
             "get": {
+                "summary": "Get a list of users in an organization",
                 "tags": [
-                    "Organisations"
+                    "Organization Members"
                 ],
-                "summary": "Get all members of an organisation",
                 "parameters": [
                     {
                         "name": "organisation",
                         "in": "path",
                         "required": true,
-                        "style": "simple",
-                        "explode": false,
                         "schema": {
-                            "type": "integer"
-                        }
+                            "type": "string"
+                        },
+                        "description": "Organisation ID"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successful response",
+                        "description": "Organization members fetched successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/User"
-                                    }
-                                },
-                                "example": [
-                                    {
-                                        "id": "31491b6a-a2f1-47d4-804c-0a705bbb73a8",
-                                        "first_name": "John",
-                                        "last_name": "Doe",
-                                        "email": "john@example.com"
-                                    },
-                                    {
-                                        "id": "31491b6a-a2f1-47d4-804c-0a705bbb73a8",
-                                        "first_name": "Jane",
-                                        "last_name": "Smith",
-                                        "email": "jane@example.com"
-                                    }
-                                ]
+                                    "$ref": "#/components/schemas/OrganizationMembers"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid organization ID or Unauthorized access",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
                             }
                         }
                     }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
+                }
             }
         },
         "/api/v1/members/{org_id}/search": {
             "get": {
                 "tags": [
-                    "Organisations"
+                    "Organizations"
                 ],
                 "summary": "Search members of an organization",
                 "description": "Retrieve a paginated list of users belonging to an organization and matching a search term.",
@@ -3425,7 +3522,7 @@
                         "bearerAuth": []
                     }
                 ]
-            },
+            }
         },
         "/api/v1/user/preferences": {
             "get": {
@@ -6425,6 +6522,162 @@
                     "status": {
                         "type": "boolean",
                         "example": true
+                    }
+                }
+            },
+            "StoreOrganisationRequest": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "industry": {
+                        "type": "string"
+                    },
+                    "country": {
+                        "type": "string"
+                    },
+                    "address": {
+                        "type": "string"
+                    },
+                    "state": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "type": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Organisation": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "industry": {
+                        "type": "string"
+                    },
+                    "country": {
+                        "type": "string"
+                    },
+                    "address": {
+                        "type": "string"
+                    },
+                    "state": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "type": {
+                        "type": "string"
+                    }
+                }
+            },
+            "OrganisationResponse": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "status_code": {
+                        "type": "integer"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/Organisation"
+                    }
+                }
+            },
+            "OrganisationList": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "status_code": {
+                        "type": "integer"
+                    },
+                    "data": {
+                        "type": "object",
+                        "properties": {
+                            "organisations": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/Organisation"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "OrganizationMembers": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "object",
+                        "properties": {
+                            "members": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "userId": {
+                                            "type": "string"
+                                        },
+                                        "firstName": {
+                                            "type": "string"
+                                        },
+                                        "email": {
+                                            "type": "string"
+                                        },
+                                        "phone": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            },
+                            "pagination": {
+                                "type": "object",
+                                "properties": {
+                                    "currentPage": {
+                                        "type": "integer"
+                                    },
+                                    "pageSize": {
+                                        "type": "integer"
+                                    },
+                                    "totalPages": {
+                                        "type": "integer"
+                                    },
+                                    "totalItems": {
+                                        "type": "integer"
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

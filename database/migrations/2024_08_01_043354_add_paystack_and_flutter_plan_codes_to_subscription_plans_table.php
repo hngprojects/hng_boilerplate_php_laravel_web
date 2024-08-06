@@ -25,7 +25,7 @@ return new class extends Migration
     {
         Schema::table('subscription_plans', function (Blueprint $table) {
             $table->dropColumn('paystack_plan_code');
-            $table->dropColumn('flutter_plan_code');
+            $table->dropColumn('flutterwave_plan_code');
             $table->decimal('price')->change();
 
         });
