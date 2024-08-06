@@ -41,6 +41,9 @@ use App\Http\Controllers\BillingPlanController;
 use App\Http\Controllers\Api\V1\User\ProfileController;
 use App\Http\Controllers\Api\V1\JobSearchController;
 use App\Http\Controllers\Api\V1\WaitListController;
+use App\Http\Controllers\Api\V1\CookiePreferencesController;
+
+
 
 /*
 |--------------------------------------------------------------------------
