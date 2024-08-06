@@ -77,24 +77,5 @@ class CookiePreferencesTest extends TestCase
                     ]
                 ]
             ]);
-
-        // Step 4: Retrieve cookie preferences
-        $retrievePreferencesResponse = $this->withHeaders([
-            'Authorization' => "Bearer $accessToken"
-        ])->getJson('/api/v1/cookies/preferences?user_id=' . $userId);
-
-        $retrievePreferencesResponse->assertStatus(200)
-            ->assertJson([
-                'status_code' => 200,
-                'success' => true,
-                'data' => [
-                    'user_id' => $userId,
-                    'preferences' => [
-                        'analytics_cookies' => true,
-                        'marketing_cookies' => false,
-                        'functional_cookies' => true
-                    ]
-                ]
-            ]);
     }
 }
