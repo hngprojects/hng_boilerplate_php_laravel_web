@@ -13,7 +13,7 @@ return new class extends Migration
     {
         //
         Schema::table('products', function (Blueprint $table) {
-            $table->foreignUuid('org_id')->references('org_id')->on('organisations')->constrained()->onDelete('cascade')->onUpdate('cascade')->nullable();
+            $table->foreignUuid('org_id')->nullable()->references('org_id')->on('organisations')->constrained()->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

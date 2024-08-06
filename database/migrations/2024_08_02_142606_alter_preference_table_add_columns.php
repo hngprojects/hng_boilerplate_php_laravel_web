@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('preferences', function (Blueprint $table) {
-            $table->foreignUuid('language_id')->constrained('languages')->onDelete('cascade')->nullable();
-            $table->foreignUuid('region_id')->constrained('regions')->onDelete('cascade')->nullable();
-            $table->foreignUuid('timezone_id')->constrained('timezones')->onDelete('cascade')->nullable();
+            $table->foreignUuid('language_id')->nullable()->constrained('languages')->onDelete('cascade');
+            $table->foreignUuid('region_id')->nullable()->constrained('regions')->onDelete('cascade');
+            $table->foreignUuid('timezone_id')->nullable()->constrained('timezones')->onDelete('cascade');
         });
         
     }
