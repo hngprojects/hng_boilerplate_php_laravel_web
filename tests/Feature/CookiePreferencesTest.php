@@ -29,7 +29,9 @@ class CookiePreferencesTest extends TestCase
 
         $loginResponse->assertStatus(200)
             ->assertJsonStructure([
+                'status_code',
                 'message',
+                'access_token',
                 'data' => [
                     'user' => [
                         'id',
@@ -37,14 +39,8 @@ class CookiePreferencesTest extends TestCase
                         'last_name',
                         'email',
                         'role',
-                        'signup_type',
-                        'is_active',
-                        'is_verified',
-                        'created_at',
-                        'updated_at'
+                        'avatar_url',
                     ],
-                    'access_token',
-                    'refresh_token'
                 ]
             ]);
 

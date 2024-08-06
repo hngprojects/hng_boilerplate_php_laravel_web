@@ -18,7 +18,7 @@ use App\Http\Controllers\Api\V1\Auth\ForgetPasswordRequestController;
 use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Controllers\Api\V1\Auth\ResetUserPasswordController;
 use App\Http\Controllers\Api\V1\Auth\SocialAuthController;
-use App\Http\Controllers\Api\V1\Auth\ForgetResetPasswordController;
+use App\Http\Controllers\Api\V1\Auth\ForgotResetPasswordController;
 use App\Http\Controllers\Api\V1\BlogSearchController;
 use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\ContactController;
@@ -71,9 +71,9 @@ Route::prefix('v1')->group(function () {
     Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
     Route::post('/auth/google/callback', [SocialAuthController::class, 'saveGoogleRequest']);
     /* Forget and Reset Password using OTP */
-    Route::post('/auth/forgot-password', [ForgetResetPasswordController::class, 'forgetPassword']);
-    Route::post('/auth/reset-forgot-password', [ForgetResetPasswordController::class, 'resetPassword']);
-    Route::post('/auth/verify-forgot-otp', [ForgetResetPasswordController::class, 'verifyUserOTP']);
+    Route::post('/auth/forgot-password', [ForgotResetPasswordController::class, 'forgetPassword']);
+    Route::post('/auth/reset-forgot-password', [ForgotResetPasswordController::class, 'resetPassword']);
+    Route::post('/auth/verify-otp', [ForgotResetPasswordController::class, 'verifyUserOTP']);
 
     Route::post('/roles', [RoleController::class, 'store']);
 
@@ -156,9 +156,9 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('/features', FeatureController::class);
         Route::apiResource('/plans', SubscriptionController::class);
         Route::post('/payments/paystack', [PaymentController::class, 'initiatePaymentForPayStack']);
-        Route::get('/payments/paystack/verify/{id}', [PaymentController::class, 'handlePaystackCallback']);
+        Route::get('/payments/paystack/{organisation_id}/verify/{id}', [PaymentController::class, 'handlePaystackCallback']);
         Route::post('/payments/flutterwave', [PaymentController::class, 'initiatePaymentForFlutterWave']);
-        Route::get('/payments/flutterwave/verify/{id}', [PaymentController::class, 'handleFlutterwaveCallback']);
+        Route::get('/payments/flutterwave/{organisation_id}/verify/{id}', [PaymentController::class, 'handleFlutterwaveCallback']);
         Route::get('/payments/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
         Route::post('/users/plans/{user_subscription}/cancel', [\App\Http\Controllers\Api\V1\User\SubscriptionController::class, 'destroy']);
         Route::get('/users/plan', [\App\Http\Controllers\Api\V1\User\SubscriptionController::class, 'userPlan']);

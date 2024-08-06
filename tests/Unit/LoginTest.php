@@ -34,20 +34,18 @@ class LoginTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJsonStructure([
+                'status_code',
                 'message',
+                'access_token',
                 'data' => [
                     'user' => [
                         'id',
+                        'first_name',
+                        'last_name',
                         'email',
                         'role',
-                        'signup_type',
-                        'is_active',
-                        'is_verified',
-                        'created_at',
-                        'updated_at',
+                        'avatar_url',
                     ],
-                    'access_token',
-                    'refresh_token',
                 ],
             ]);
     }
@@ -76,7 +74,6 @@ class LoginTest extends TestCase
             'email' => 'test@gmail.com',
         ]);
 
-        $response->assertStatus(422)
-            ->assertJsonValidationErrors(['password']);
+        $response->assertStatus(400);
     }
 }

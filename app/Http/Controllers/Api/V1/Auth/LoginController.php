@@ -20,9 +20,10 @@ class LoginController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'message' => 'Validation Error',
-                'errors' => $validator->errors()
-            ], 422);
+                'status_code' => 400,
+                'message' => $validator->errors(),
+                'errors' => 'Bad Request'
+            ], 400);
         }
 
         /* $key = 'login_attempts_' . $request->ip();
@@ -41,9 +42,8 @@ class LoginController extends Controller
             $key = 'login_attempts_'.request()->ip();
             RateLimiter::hit($key,3600);
             return response()->json([
-                'message' => 'Invalid credentials',
-                'error' => 'authentication_failed',
-                'status_code' => 401
+                'status_code' => 401,
+                'message' => 'Invalid credentials'
             ], 401);
         }
 
@@ -61,25 +61,21 @@ class LoginController extends Controller
         } else {
             $last_name = "";
         }
+        $profile = $user->profile();
 
         return response()->json([
+            'status_code' => 200,
             'message' => 'Login successful',
+            'access_token' => $token,
             'data' => [
                 'user' => [
                     'id' => $user->id,
-                    'first_name' => $first_name,
-                    'last_name' => $last_name,
+                    'first_name' => $profile->first_name ?? null,
+                    'last_name' => $profile->last_name ?? null,
                     'email' => $user->email,
                     'role' => $user->role,
-                    'signup_type' => $user->signup_type,
-                    'is_active' => $user->is_active,
-                    'is_verified' => $user->is_verified,
-                    'created_at' => $user->created_at,
-                    'updated_at' => $user->updated_at,
-                    // 'last_login_at' => $user->last_login_at,
-                ],
-                'access_token' => $token,
-                'refresh_token' => null // JWT does not inherently support refresh tokens; you might need to implement this yourself
+                    "avatar_url" => $profile->avatar_url ?? null
+                ]
             ]
         ], 200);
     }
@@ -89,14 +85,14 @@ class LoginController extends Controller
         try {
             JWTAuth::parseToken()->invalidate(true);
             return response()->json([
+                'status_code' => 200,
                 'message' => 'Logout successful',
-                'status_code' => 200
             ], 200);
         } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
             return response()->json([
+                'status_code' => 401,
                 'message' => $e->getMessage(),
-                'error' => $this->getErrorCode($e),
-                'status_code' => 401
+                'error' => $this->getErrorCode($e)
             ], 401);
         }
     }

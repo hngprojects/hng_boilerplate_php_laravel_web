@@ -29,6 +29,7 @@ class RegistrationTest extends TestCase
         ];
 
         $response = $this->postJson('/api/v1/auth/register', $registrationData);
+
         // Check the status code
         $response->assertStatus(201);
 
@@ -42,6 +43,9 @@ class RegistrationTest extends TestCase
                     'id',
                     'first_name',
                     'last_name',
+                    'id',
+                    'first_name',
+                    'last_name',
                     'email',
                     'avatar_url',
                     'role'
@@ -50,6 +54,7 @@ class RegistrationTest extends TestCase
         ]);
 
         // Optionally, decode and verify the token
+        $token = $response->json('access_token');
         $token = $response->json('access_token');
         $this->assertNotEmpty($token);
     }
@@ -66,14 +71,14 @@ class RegistrationTest extends TestCase
 
         $response = $this->postJson('/api/v1/auth/register', $registrationData);
         // Check the status code
-        $response->assertStatus(422);
+        $response->assertStatus(400);
         $response->assertJson([
+            'status_code' => 400,
             'message' => [
                 'email' => [
                     'The email field is required.'
                 ]
             ],
-            'status_code' => 422,
         ]);
     }
 
@@ -105,7 +110,7 @@ class RegistrationTest extends TestCase
         // Check for success response
         $response->assertStatus(200)
                  ->assertJson([
-                     'status' => 'success',
+                     'status_code' => 200,
                      'message' => 'User successfully authenticated',
                  ]);
 
@@ -195,7 +200,7 @@ class RegistrationTest extends TestCase
         // Check for success response
         $response->assertStatus(200)
                  ->assertJson([
-                     'status' => 'success',
+                     'status_code' => 200,
                      'message' => 'User successfully authenticated',
                  ]);
 
