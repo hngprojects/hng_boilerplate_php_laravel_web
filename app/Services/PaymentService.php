@@ -62,18 +62,15 @@ class PaymentService
                 'tx_ref' => $data['reference'],
                 'amount' => $data['amount'], // Flutterwave still needs the amount
                 'currency' => 'USD',
+                'payment_plan' => $data['plan_code'],
                 'redirect_url' => url('/api/v1/payments/'.$data['organisation_id'].'flutterwave/verify/'.$data['plan_id']),
                 'customer' => [
                     'email' => $data['email'],
                     'name' => $data['full_name']
                 ],
                 'customizations' => [
-                    'title' => 'Your Payment Title',
+                    'title' => $data['title'],
                     'billing_option' => $data['billing_option'] // Include billing_option in customizations
-                ],
-                'meta' => [
-                    'source' => 'laravel-flutterwave',
-                    'plan_code' => $data['plan_code'] // Include plan_code in meta
                 ]
             ]);
 

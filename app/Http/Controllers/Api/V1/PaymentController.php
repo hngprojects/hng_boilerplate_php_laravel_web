@@ -174,6 +174,7 @@ class PaymentController extends Controller
         $data['plan_code'] = $subscriptionPlan->flutterwave_plan_code;
         $data['plan_id'] = $subscriptionPlan->id;
         $data['amount'] = $subscriptionPlan->price;
+        $data['title'] = $subscriptionPlan->name;
         $data['organisation_id'] = $request->organisation_id;
         $data['title'] = $subscriptionPlan->name;
 
