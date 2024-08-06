@@ -94,10 +94,12 @@ class EmailTemplateControllerTest extends TestCase
         $response->assertStatus(401)
         ->assertJson([
             'status_code' => 401,
-            'message' => 'Unauthorized',
+            'message' => 'Unauthorized, admin access only',
             'error' => 'Bad Request'
         ]);
     }
+
+
     /** @test */
     public function only_super_admin_can_fetch_email_templates()
     {
@@ -140,7 +142,7 @@ class EmailTemplateControllerTest extends TestCase
 
         $response->assertStatus(401)
             ->assertJson([
-                'message' => 'Unauthorized'
+                'message' => 'Unauthorized, admin access only'
             ]);
     }
 
@@ -197,7 +199,7 @@ class EmailTemplateControllerTest extends TestCase
         ]);
 
         $response->assertStatus(401)
-            ->assertJson(['message' => 'Unauthorized']);
+            ->assertJson(['message' => 'Unauthorized, admin access only']);
     }
 
     public function test_update_with_invalid_data()
