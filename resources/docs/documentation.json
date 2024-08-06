@@ -1344,6 +1344,10 @@
                                             "type": "array",
                                             "items": {
                                                 "properties": {
+                                                    "id": {
+                                                        "type": "uuid",
+                                                        "example": "syuay12-21322-3ass221-213232"
+                                                    },
                                                     "name": {
                                                         "type": "string",
                                                         "example": "heeloo"
