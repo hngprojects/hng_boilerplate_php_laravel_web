@@ -1278,7 +1278,7 @@
                 ]
             }
         },
-        "/api/v1/contact": {
+        "/api/v1/inquiries": {
             "post": {
                 "tags": [
                     "Contact"
@@ -1300,15 +1300,80 @@
                     "required": true
                 },
                 "responses": {
-                    "200": {
+                    "201": {
                         "description": "Inquiry sent successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/SuccessResponse"
-                                },
-                                "example": {
-                                    "message": "Your inquiry has been sent successfully"
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "inquiry successfully sent"
+                                        },
+                                        "status_code": {
+                                            "type": "integer",
+                                            "example": 201
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Contact"
+                ],
+                "summary": "Get all inquiries",
+                "description": "Retrieve all inquries.",
+                "responses": {
+                    "200": {
+                        "description": "A list of inquiries",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "inquiry successfully sent"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "heeloo"
+                                                    },
+                                                    "email": {
+                                                        "type": "string",
+                                                        "example": "x@gmail.com"
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "we heard we've come"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "status_code": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/inline_response_500"
                                 }
                             }
                         }
