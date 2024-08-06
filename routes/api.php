@@ -42,6 +42,7 @@ use App\Http\Controllers\Api\V1\User\ProfileController;
 use App\Http\Controllers\Api\V1\JobSearchController;
 use App\Http\Controllers\Api\V1\WaitListController;
 use App\Http\Controllers\Api\V1\CookiePreferencesController;
+use App\Http\Controllers\AnalyticController;
 
 
 
@@ -95,6 +96,9 @@ Route::prefix('v1')->group(function () {
     Route::get('/billing-plans', [BillingPlanController::class, 'index']);
     Route::get('/billing-plans/{id}', [BillingPlanController::class, 'getBillingPlan']);
 
+    //Dashboard
+    Route::get('/analytics/summary', [AnalyticController::class, 'index']);
+    
     Route::middleware('throttle:10,1')->get('/topics/search', [ArticleController::class, 'search']);
 
     Route::middleware('auth:api')->group(function () {
@@ -102,6 +106,7 @@ Route::prefix('v1')->group(function () {
         Route::post('/organizations/{org_id}/products', [ProductController::class, 'store']);
         Route::patch('/organizations/{org_id}/products/{product_id}', [ProductController::class, 'update']);
         Route::delete('/products/{productId}', [ProductController::class, 'destroy']);
+
     });
 
     //comment
