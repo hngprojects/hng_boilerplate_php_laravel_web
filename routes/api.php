@@ -120,7 +120,6 @@ Route::prefix('v1')->group(function () {
     Route::post('/squeeze', [SqueezeController::class, 'store']);
 
 
-
     // Help Articles
     Route::post('/help-center/topics', [HelpArticleController::class, 'store']);
     Route::patch('/help-center/topics/{articleId}', [HelpArticleController::class, 'update']);
