@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Validator;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\File;
 
 
 class ProfileController extends Controller
@@ -100,6 +101,7 @@ class ProfileController extends Controller
 
     public function uploadImage(Request $request)
     {
+      
         $validator = Validator::make($request->all(), [
             'file' => 'required|image|mimes:jpeg,png,jpg,gif'
         ]);
@@ -111,62 +113,40 @@ class ProfileController extends Controller
             ], 400);
         }
     
+   
         $file = $request->file('file');
-        $imagePath = $file->getRealPath();
-    
-        $cloudinaryCloudName = env('CLOUDINARY_CLOUD_NAME');
-        $cloudinaryUploadPreset = env('CLOUDINARY_UPLOAD_PRESET');
-    
-        if (!$cloudinaryCloudName || !$cloudinaryUploadPreset) {
-            return response()->json([
-                'Status' => 500,
-                'Message' => 'Cloudinary environment variables are not set correctly'
-            ], 500);
+        $fileName = time() . '.' . $file->getClientOriginalExtension();
+        $filePath = public_path('uploads');
+        
+       
+        if (!File::exists($filePath)) {
+            File::makeDirectory($filePath, 0755, true);
         }
     
-        try {
-           
-            $response = Http::asMultipart()->post('https://api.cloudinary.com/v1_1/' . $cloudinaryCloudName . '/image/upload', [
-                'file' => fopen($imagePath, 'r'),
-                'upload_preset' => $cloudinaryUploadPreset,
-            ]);
+  
+        $file->move($filePath, $fileName);
     
-            $data = $response->json();
+       
+        $imageUrl = url('uploads/' . $fileName);
     
-            if ($response->successful()) {
-                $uploadedFileUrl = $data['secure_url'];
+       
+        $user = Auth::user();
+        $profile = $user->profile;
     
-                $user = Auth::user();
-                $profile = $user->profile;
-    
-                if (!$profile) {
-                    return response()->json([
-                        'Status' => 404,
-                        'Message' => 'Profile not found'
-                    ], 404);
-                }
-    
-                $profile->update(['avatar_url' => $uploadedFileUrl]);
-    
-                return response()->json([
-                    'Status' => 200,
-                    'Message' => 'Image uploaded and profile updated successfully',
-                    'Data' => ['avatar_url' => $uploadedFileUrl]
-                ], 200);
-            } else {
-                return response()->json([
-                    'Status' => 500,
-                    'Message' => 'Failed to upload image to Cloudinary',
-                    'CloudinaryResponse' => $data
-                ], 500);
-            }
-        } catch (\Exception $e) {
+        if (!$profile) {
             return response()->json([
-                'Status' => 500,
-                'Message' => 'Failed to upload image',
-                'Error' => $e->getMessage()
-            ], 500);
+                'Status' => 404,
+                'Message' => 'Profile not found'
+            ], 404);
         }
+    
+        $profile->update(['avatar_url' => $imageUrl]);
+    
+        return response()->json([
+            'Status' => 200,
+            'Message' => 'Image uploaded and profile updated successfully',
+            'Data' => ['avatar_url' => $imageUrl]
+        ], 200);
     }
     
 
