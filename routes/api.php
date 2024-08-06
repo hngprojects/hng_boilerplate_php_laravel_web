@@ -41,6 +41,9 @@ use App\Http\Controllers\BillingPlanController;
 use App\Http\Controllers\Api\V1\User\ProfileController;
 use App\Http\Controllers\Api\V1\JobSearchController;
 use App\Http\Controllers\Api\V1\WaitListController;
+use App\Http\Controllers\Api\V1\CookiePreferencesController;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -119,6 +122,10 @@ Route::prefix('v1')->group(function () {
     Route::get('/blogs/search', [BlogSearchController::class, 'search']);
 
     Route::post('/squeeze', [SqueezeController::class, 'store']);
+
+    //Cookies Preference
+    Route::post('/cookies/preferences', [CookiePreferencesController::class, 'update']);
+    Route::get('/cookies/preferences', [CookiePreferencesController::class, 'getPreferences']);
 
 
 
@@ -212,7 +219,6 @@ Route::prefix('v1')->group(function () {
         Route::patch('/blogs/edit/{id}', [BlogController::class, 'update'])->name('admin.blogs.update');
         Route::delete('/blogs/{id}', [BlogController::class, 'destroy']);
         Route::get('/waitlists', [WaitListController::class, 'index']);
-
     });
 
 
@@ -248,5 +254,3 @@ Route::prefix('v1')->group(function () {
     Route::post('/notifications', [UserNotificationController::class, 'create'])->middleware('auth.jwt');
     Route::get('/notifications', [UserNotificationController::class, 'getByUser'])->middleware('auth.jwt');
 });
-
-
