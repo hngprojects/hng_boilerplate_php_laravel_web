@@ -88,7 +88,7 @@ class PaymentController extends Controller
         }
     }
 
-    public function handlePaystackCallback($id, Request $request)
+    public function handlePaystackCallback($organisation_id, $id, Request $request)
     {
         $reference = $request->query('reference');
 
@@ -110,6 +110,7 @@ class PaymentController extends Controller
             $userSubscription = new UserSubscription;
             $userSubscription->user_id = auth()->user()->id;
             $userSubscription->subscription_plan_id = $id;
+            $userSubscription->org_id = $organisation_id;
             $userSubscription->save();
 
 
@@ -192,7 +193,7 @@ class PaymentController extends Controller
         }
     }
 
-    public function handleFlutterwaveCallback($id, Request $request)
+    public function handleFlutterwaveCallback($organisation_id, $id, Request $request)
     {
         $transaction_id = $request->query('transaction_id');
 
@@ -213,6 +214,7 @@ class PaymentController extends Controller
             $userSubscription = new UserSubscription;
             $userSubscription->user_id = auth()->user()->id;
             $userSubscription->subscription_plan_id = $id;
+            $userSubscription->org_id = $organisation_id;
             $userSubscription->save();
 
             // Redirect to the specified URL with status
