@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -103,6 +104,20 @@ class DashboardController extends Controller
                     'difference_an_hour_ago' => max(($activeUser - $activeUserAnHourAgo), 0),
                 ],
             ]
+        ]);
+    }
+
+    public function recent_sales()
+    {
+        $user = auth()->user();
+        $orders = Order::whereHas('product', function ($query) use ($user) {
+            $query->where('user_id', $user->id);
+        })->with('user')->get();
+
+        return response()->json([
+            'message' => 'Recent sales retrieved successfully',
+            'status_code' => Response::HTTP_OK,
+            'data' => $orders,
         ]);
     }
 
