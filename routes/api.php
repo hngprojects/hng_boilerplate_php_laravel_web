@@ -43,6 +43,7 @@ use App\Http\Controllers\Api\V1\JobSearchController;
 use App\Http\Controllers\Api\V1\WaitListController;
 use App\Http\Controllers\Api\V1\CookiePreferencesController;
 use App\Http\Controllers\Api\V1\SqueezePageCoontroller;
+use App\Http\Controllers\Api\V1\TimezoneController;
 
 /*
 |--------------------------------------------------------------------------
@@ -248,4 +249,7 @@ Route::prefix('v1')->group(function () {
     Route::delete('/notifications', [UserNotificationController::class, 'destroy']);
     Route::post('/notifications', [UserNotificationController::class, 'create'])->middleware('auth.jwt');
     Route::get('/notifications', [UserNotificationController::class, 'getByUser'])->middleware('auth.jwt');
+    //Timezone
+    Route::get('/timezones', [TimezoneController::class, 'index']);
+
 });
