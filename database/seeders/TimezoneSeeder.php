@@ -13,10 +13,15 @@ class TimezoneSeeder extends Seeder
         $timezones = DateTimeZone::listIdentifiers();
 
         foreach ($timezones as $timezone) {
+            $dateTimeZone = new DateTimeZone($timezone);
+            $gmtoffset = $dateTimeZone->getOffset(new \DateTime());
+            $description = "Description for {$timezone}";
+
             Timezone::create([
-                'name' => $timezone,
-                'offset' => (new DateTimeZone($timezone))->getOffset(new \DateTime()),
+                'timezone' => $timezone,
+                'gmtoffset' => $gmtoffset,
+                'description' => $description,
             ]);
-        }
     }
+}
 }
