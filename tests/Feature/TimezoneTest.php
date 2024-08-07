@@ -14,30 +14,29 @@ class TimezoneTest extends TestCase
 
     public function test_it_can_create_a_timezone()
     {
-        // Create and authenticate a user
+        
         $user = \App\Models\User::factory()->create();
         $this->actingAs($user);
 
-        // Define the timezone data to be sent in the request
+       
         $timezoneData = [
             'timezone' => 'America/New_York',
             'gmtoffset' => '-05:00',
             'description' => 'Eastern Standard Time',
         ];
 
-        // Send a POST request to create a new timezone
+        
         $response = $this->postJson('/api/v1/timezones', $timezoneData);
 
-        // Assert the response status is 201 Created
+       
         $response->assertStatus(201)
             ->assertJson([
                 'timezone' => 'America/New_York',
                 'gmtoffset' => '-05:00',
                 'description' => 'Eastern Standard Time',
-                'id' => $response->json('id'), // Dynamically assert the ID
+                'id' => $response->json('id'), 
             ]);
 
-        // Optionally, you can verify that the timezone was actually created in the database
         $this->assertDatabaseHas('timezones', $timezoneData);
     }
 
@@ -56,7 +55,7 @@ class TimezoneTest extends TestCase
 
         $response->assertStatus(201);
 
-        // Try to create the same timezone again
+   
         $response = $this->postJson('/api/v1/timezones', [
             'timezone' => 'America/New_York',
             'gmtoffset' => '-05:00',
@@ -72,7 +71,7 @@ class TimezoneTest extends TestCase
 
     public function test_it_can_get_all_timezones()
 {
-    // Create some timezones
+    
     $this->postJson('/api/v1/timezones', [
         'timezone' => 'America/New_York',
         'gmtoffset' => '-05:00',
@@ -110,7 +109,7 @@ class TimezoneTest extends TestCase
             'description' => 'Central Standard Time',
         ]);
 
-        // Assert the response status is 200 OK
+      
         $response->assertStatus(200)
             ->assertJson([
                 'timezone' => 'America/Chicago',

@@ -240,10 +240,10 @@ class ProfileController extends Controller
         'gmtoffset' => $timezone->gmtoffset,
         'description' => $timezone->description,
     ], 201);
-}
+}////end method
 
 
-public function getAllTimezones()
+       public function getAllTimezones()
 {
     $timezones = Timezone::latest()->get();
 
@@ -298,7 +298,7 @@ public function getAllTimezones()
         'description' => $timezone->description,
         
     ], 200);
-}
+}////end method
 
     
 

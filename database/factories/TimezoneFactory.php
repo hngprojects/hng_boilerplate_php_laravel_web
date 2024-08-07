@@ -12,9 +12,9 @@ class TimezoneFactory extends Factory
     public function definition()
     {
         return [
-            'timezone' => $this->faker->timezone,  // Corrected column name
-            'gmtoffset' => $this->faker->timezone, // Adjusted to reflect correct GMT offset format
-            'description' => $this->faker->sentence, // Added description
+            'timezone' => $this->faker->timezone, 
+            'gmtoffset' => $this->faker->timezone, 
+            'description' => $this->faker->sentence, 
         ];
     }
 }
