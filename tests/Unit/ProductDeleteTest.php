@@ -21,7 +21,9 @@ class ProductDeleteTest extends TestCase
     protected $org;
     protected $otherOrg;
     protected $product;
-
+    /**
+     * @test
+     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -74,7 +76,9 @@ class ProductDeleteTest extends TestCase
             'quantity' => 80
         ]);
     }
-
+    /**
+     * @test
+     */
     public function testUserCanDeleteProduct()
     {
 
@@ -86,7 +90,9 @@ class ProductDeleteTest extends TestCase
         $response->assertStatus(204);
         $this->assertDatabaseMissing('products', ['product_id' => $this->product->product_id]);
     }
-
+    /**
+     * @test
+     */
     public function testUserCannotDeleteProductIfNotOwner()
     {
 
