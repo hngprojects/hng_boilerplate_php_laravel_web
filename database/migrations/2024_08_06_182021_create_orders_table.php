@@ -21,7 +21,9 @@ return new class extends Migration
             $table->string('payment_method')->nullable();
             $table->string('shipping_address')->nullable();
             $table->string('billing_address')->nullable();
+            $table->unsignedInteger('quantity')->nullable();
             $table->text('notes')->nullable();
+            $table->foreignUuid('product_id')->nullable()->references('product_id')->on('products')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
 
