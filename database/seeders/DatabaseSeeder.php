@@ -83,7 +83,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call([
-            QuestsSeeder::class,
+            // QuestsSeeder::class,
             QuestSeeder::class,
             QuestMessageSeeder::class,
         ]);
