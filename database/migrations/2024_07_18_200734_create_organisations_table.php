@@ -15,13 +15,13 @@ return new class extends Migration
             $table->uuid('org_id')->primary();
             $table->foreignUuid('user_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->string('name');
-            $table->string('email')->unique();
+            $table->string('email')->nullable()->unique();
             $table->text('description')->nullable();
-            $table->string('industry');
+            $table->string('industry')->nullable();
             $table->string('type')->nullable();
-            $table->string('country');
-            $table->string('address');
-            $table->string('state');
+            $table->string('country')->nullable();
+            $table->string('address')->nullable();
+            $table->string('state')->nullable();
 
             $table->timestamps();
         });

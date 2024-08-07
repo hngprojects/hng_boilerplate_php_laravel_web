@@ -10,6 +10,7 @@ use App\Models\Profile;
 use Illuminate\Support\Str;
 use Illuminate\Http\Response;
 use Mockery;
+use Illuminate\Support\Facades\DB;
 
 class RegistrationTest extends TestCase
 {
@@ -26,6 +27,7 @@ class RegistrationTest extends TestCase
             'email' => 'testuser@gmail.com',
             'password' => 'Ed8M7s*)?e:hTb^#&;C!<y',
             'password_confirmation' => 'Ed8M7s*)?e:hTb^#&;C!<y',
+            'admin_secret' => '',
         ];
 
         $response = $this->postJson('/api/v1/auth/register', $registrationData);
@@ -35,7 +37,7 @@ class RegistrationTest extends TestCase
 
         // Check the response structure
         $response->assertJsonStructure([
-            'status_code',
+            'status',
             'message',
             'access_token',
             'data' => [
@@ -43,14 +45,18 @@ class RegistrationTest extends TestCase
                     'id',
                     'first_name',
                     'last_name',
+                    'id',
+                    'first_name',
+                    'last_name',
                     'email',
                     'avatar_url',
-                    'role',
+                    'role'
                 ]
             ]
         ]);
 
         // Optionally, decode and verify the token
+        $token = $response->json('access_token');
         $token = $response->json('access_token');
         $this->assertNotEmpty($token);
     }
@@ -59,7 +65,6 @@ class RegistrationTest extends TestCase
     {
         $registrationData = [
             'name' => 'Test User',
-            'email' => '',
             'password' => 'Ed8M7s*)?e:hTb^#&;C!<y',
             'password_confirmation' => 'Ed8M7s*)?e:hTb^#&;C!<y',
             'first_name' => 'Test',
@@ -67,6 +72,7 @@ class RegistrationTest extends TestCase
         ];
 
         $response = $this->postJson('/api/v1/auth/register', $registrationData);
+
         // Check the status code
         $response->assertStatus(400);
         $response->assertJson([
@@ -145,7 +151,7 @@ class RegistrationTest extends TestCase
         ]);
 
         $response->assertStatus(Response::HTTP_OK);
-        
+
         // Verify user in the database
         $user = User::where('email', $googleUser['email'])->first();
         $this->assertNotNull($user);
@@ -247,7 +253,7 @@ class RegistrationTest extends TestCase
         ]);
 
         $response->assertStatus(Response::HTTP_OK);
-        
+
         // Verify user in the database
         $user = User::where('email', $facebookUser['email'])->first();
         $this->assertNotNull($user);
