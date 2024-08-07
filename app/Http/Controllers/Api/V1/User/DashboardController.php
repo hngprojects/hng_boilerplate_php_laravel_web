@@ -85,17 +85,17 @@ class DashboardController extends Controller
             'data' => [
                 'revenue' => [
                     'current_month' => $currentMonthRevenue,
-                    'previous_month' => $lastMonthRevenue, // Assuming you have this data
+                    'previous_month' => $lastMonthRevenue,
                     'percentage_difference' => $percentageDifference . '%',
                 ],
                 'subscriptions' => [
                     'current_month' => 0,
-                    'previous_month' => 0, // Assuming you have this data
+                    'previous_month' => 0,
                     'percentage_difference' => 0 . '%',
                 ],
                 'orders' => [
                     'current_month' => $currentMonthOrders,
-                    'previous_month' => $lastMonthOrders, // Assuming you have this data
+                    'previous_month' => $lastMonthOrders,
                     'percentage_difference' => $percentageDifferenceOrders . '%',
                 ],
                 'active_users' => [
