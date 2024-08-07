@@ -96,6 +96,9 @@ Route::prefix('v1')->group(function () {
     Route::get('/products/{product_id}', [ProductController::class, 'show']);
     Route::get('/billing-plans', [BillingPlanController::class, 'index']);
     Route::get('/billing-plans/{id}', [BillingPlanController::class, 'getBillingPlan']);
+    Route::get('/payments/paystack/{organisation_id}/verify/{id}', [PaymentController::class, 'handlePaystackCallback']);
+    Route::get('/payments/flutterwave/{organisation_id}/verify/{id}', [PaymentController::class, 'handleFlutterwaveCallback']);
+    Route::post('/languages', [LanguageController::class, 'create']);
 
     Route::middleware('throttle:10,1')->get('/topics/search', [ArticleController::class, 'search']);
 
@@ -157,9 +160,8 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('/features', FeatureController::class);
         Route::apiResource('/plans', SubscriptionController::class);
         Route::post('/payments/paystack', [PaymentController::class, 'initiatePaymentForPayStack']);
-        Route::get('/payments/paystack/{organisation_id}/verify/{id}', [PaymentController::class, 'handlePaystackCallback']);
+        
         Route::post('/payments/flutterwave', [PaymentController::class, 'initiatePaymentForFlutterWave']);
-        Route::get('/payments/flutterwave/{organisation_id}/verify/{id}', [PaymentController::class, 'handleFlutterwaveCallback']);
         Route::get('/payments/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
         Route::post('/users/plans/{user_subscription}/cancel', [\App\Http\Controllers\Api\V1\User\SubscriptionController::class, 'destroy']);
         Route::get('/users/plan', [\App\Http\Controllers\Api\V1\User\SubscriptionController::class, 'userPlan']);
@@ -254,6 +256,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/notifications', [UserNotificationController::class, 'getByUser'])->middleware('auth.jwt');
     //Timezone
     Route::get('/timezones', [TimezoneController::class, 'index']);
+    
 
 
 

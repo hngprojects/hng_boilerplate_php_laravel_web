@@ -114,7 +114,14 @@ class PaymentController extends Controller
             }
 
             $payment->save();
-            $user_id = Organisation::find($organisation_id)->first()->user_id;
+            $user = Organisation::find($organisation_id)->first();
+            if(!$user) {
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'User Not found'
+                ], 404);
+            }
+            $user_id = $user->id;
 
             $userSubscription = new UserSubscription;
             $userSubscription->user_id = $user_id;
@@ -230,7 +237,14 @@ class PaymentController extends Controller
             }
 
             $payment->save();
-            $user_id = Organisation::find($organisation_id)->first()->user_id;
+            $user = Organisation::find($organisation_id)->first();
+            if(!$user) {
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'User Not found'
+                ], 404);
+            }
+            $user_id = $user->id;
 
             $userSubscription = new UserSubscription;
             $userSubscription->user_id = $user_id;
