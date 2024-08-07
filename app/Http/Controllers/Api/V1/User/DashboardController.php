@@ -109,6 +109,20 @@ class DashboardController extends Controller
         ]);
     }
 
+    public function recent_sales()
+    {
+        $user = auth()->user();
+        $orders = Order::whereHas('product', function ($query) use ($user) {
+            $query->where('user_id', $user->id);
+        })->with('user')->get();
+
+        return response()->json([
+            'message' => 'Recent sales retrieved successfully',
+            'status_code' => Response::HTTP_OK,
+            'data' => $orders,
+        ]);
+    }
+
     public function user_analytics()
     {
         $user = Auth::user();

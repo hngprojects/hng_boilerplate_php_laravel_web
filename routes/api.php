@@ -251,6 +251,7 @@ Route::prefix('v1')->group(function () {
         Route::delete('/user/preferences/{id}', [PreferenceController::class, 'delete']);
         Route::get('/user-statistics', [DashboardController::class, 'index']);
         Route::get('/user-analytics', [DashboardController::class, 'user_analytics']);
+        Route::get('/user-sales', [DashboardController::class, 'recent_sales']);
 
     });
 
