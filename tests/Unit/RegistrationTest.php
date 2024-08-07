@@ -10,6 +10,7 @@ use App\Models\Profile;
 use Illuminate\Support\Str;
 use Illuminate\Http\Response;
 use Mockery;
+use Illuminate\Support\Facades\DB;
 
 class RegistrationTest extends TestCase
 {
@@ -26,6 +27,7 @@ class RegistrationTest extends TestCase
             'email' => 'testuser@gmail.com',
             'password' => 'Ed8M7s*)?e:hTb^#&;C!<y',
             'password_confirmation' => 'Ed8M7s*)?e:hTb^#&;C!<y',
+            'admin_secret' => '',
         ];
 
         $response = $this->postJson('/api/v1/auth/register', $registrationData);
@@ -70,6 +72,7 @@ class RegistrationTest extends TestCase
         ];
 
         $response = $this->postJson('/api/v1/auth/register', $registrationData);
+
         // Check the status code
         $response->assertStatus(400);
         $response->assertJson([

@@ -84,6 +84,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             QuestsSeeder::class,
+            QuestSeeder::class,
             QuestMessageSeeder::class,
         ]);
 

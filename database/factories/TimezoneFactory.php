@@ -12,9 +12,9 @@ class TimezoneFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->timezone,
-            'offset' => (string) $this->faker->numberBetween(-43200, 50400),
-
+            'timezone' => $this->faker->timezone, 
+            'gmtoffset' => $this->faker->timezone, 
+            'description' => $this->faker->sentence, 
         ];
     }
 }
