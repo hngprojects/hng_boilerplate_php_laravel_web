@@ -44,7 +44,7 @@ class SuperAdminProductController extends Controller
             'quantity' => $request->quantity,
             'is_archived' => false,
             'org_id' => $request->org_id,
-            'category' => $request->imageUrl,
+            'category' => $request->category,
         ]);
 
         return response()->json([
