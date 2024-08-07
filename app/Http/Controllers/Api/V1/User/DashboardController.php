@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Api\V1\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -102,6 +105,38 @@ class DashboardController extends Controller
                     'current' => $activeUser,
                     'difference_an_hour_ago' => max(($activeUser - $activeUserAnHourAgo), 0),
                 ],
+            ]
+        ]);
+    }
+
+    public function user_analytics()
+    {
+        $user = Auth::user();
+
+        $monthlyRevenue = Order::whereHas('product', function ($query) use ($user) {
+            $query->where('user_id', $user->id);
+        })
+            ->select(
+                DB::raw('EXTRACT(MONTH FROM created_at) as month'),
+                DB::raw('SUM(total_amount) as total_revenue')
+            )
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get()
+            ->pluck('total_revenue', 'month')
+            ->toArray();
+
+        $revenueByMonth = collect(range(1, 12))->mapWithKeys(function ($month) use ($monthlyRevenue) {
+            $monthName = date('M', mktime(0, 0, 0, $month, 1));
+            $revenue = $monthlyRevenue[$month] ?? 0;
+            return [$monthName => $revenue];
+        });
+
+        return response()->json([
+            'message' => 'User analytics retrieved successfully',
+            'status_code' => Response::HTTP_OK,
+            'data' => [
+                $revenueByMonth,
             ]
         ]);
     }
