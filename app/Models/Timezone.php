@@ -12,11 +12,13 @@ class Timezone extends Model
 
     protected $guarded = [];
 
-    // Set the key type to string
     protected $keyType = 'string';
 
-    // Disable auto-incrementing IDs
     public $incrementing = false;
+    protected $casts = [
+        'offset' => 'string',
+    ];
+    
 
     public function preferences()
     {
