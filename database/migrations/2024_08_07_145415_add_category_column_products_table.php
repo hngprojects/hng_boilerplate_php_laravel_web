@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('blogs', function (Blueprint $table) {
-            $table->foreignUuid('blog_category_id')->nullable()->references('id')->on('blog_categories')->constrained()->onDelete('cascade')->onUpdate('cascade');
+        Schema::table('products', function (Blueprint $table) {
+            $table->string('category')->nullable();
         });
     }
 
@@ -21,9 +21,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        if (Schema::hasTable('blogs')) {
-            Schema::dropIfExists('blog_category_id');
-        }
-        
+
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropColumn('category');
+            //
+        });
     }
 };

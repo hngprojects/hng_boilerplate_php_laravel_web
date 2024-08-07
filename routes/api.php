@@ -1,53 +1,52 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\QuestController;
-use App\Http\Controllers\Api\V1\JobController;
-use App\Http\Controllers\Api\V1\RoleController;
-use App\Http\Controllers\BillingPlanController;
+use App\Http\Controllers\Api\V1\Admin\BlogController;
+use App\Http\Controllers\Api\V1\Admin\CustomerController;
+use App\Http\Controllers\Api\V1\Admin\EmailTemplateController;
+use App\Http\Controllers\Api\V1\Admin\FaqController;
+use App\Http\Controllers\Api\V1\Admin\Plan\FeatureController;
+use App\Http\Controllers\Api\V1\Admin\Plan\SubscriptionController;
 use App\Http\Controllers\Api\V1\ArticleController;
+use App\Http\Controllers\Api\V1\Auth\AuthController;
+use App\Http\Controllers\Api\V1\Auth\ForgetPasswordRequestController;
+use App\Http\Controllers\Api\V1\Auth\ForgotResetPasswordController;
+use App\Http\Controllers\Api\V1\Auth\LoginController;
+use App\Http\Controllers\Api\V1\Auth\ResetUserPasswordController;
+use App\Http\Controllers\Api\V1\Auth\SocialAuthController;
+use App\Http\Controllers\Api\V1\BlogSearchController;
+use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\CommentController;
 use App\Http\Controllers\Api\V1\ContactController;
-use App\Http\Controllers\Api\V1\PaymentController;
-use App\Http\Controllers\Api\V1\ProductController;
-use App\Http\Controllers\Api\V1\SqueezeController;
-use App\Http\Controllers\Api\V1\CategoryController;
-use App\Http\Controllers\Api\V1\TimezoneController;
-use App\Http\Controllers\Api\V1\WaitListController;
-use App\Http\Controllers\Api\V1\Admin\FaqController;
-use App\Http\Controllers\Api\V1\Auth\AuthController;
-use App\Http\Controllers\Api\V1\JobSearchController;
-use App\Http\Controllers\Api\V1\User\UserController;
-use App\Http\Controllers\UserNotificationController;
-use App\Http\Controllers\Api\V1\Admin\BlogController;
-use App\Http\Controllers\Api\V1\Auth\LoginController;
-use App\Http\Controllers\Api\V1\BlogSearchController;
-use App\Http\Controllers\Api\V1\PreferenceController;
-use App\Http\Controllers\Api\V1\HelpArticleController;
-use App\Http\Controllers\Api\V1\SqueezePageCoontroller;
-use App\Http\Controllers\Api\V1\User\AccountController;
-use App\Http\Controllers\Api\V1\User\ProfileController;
-use App\Http\Controllers\NotificationSettingController;
-use App\Http\Controllers\InvitationAcceptanceController;
-use App\Http\Controllers\Api\V1\Admin\CustomerController;
-use App\Http\Controllers\Api\V1\Admin\DashboardController;
-use App\Http\Controllers\Api\V1\Auth\SocialAuthController;
-use App\Http\Controllers\Api\V1\User\ExportUserController;
 use App\Http\Controllers\Api\V1\CookiePreferencesController;
-use App\Http\Controllers\Api\V1\Admin\Plan\FeatureController;
-
-
-use App\Http\Controllers\Api\V1\Admin\EmailTemplateController;
-use App\Http\Controllers\Api\V1\Auth\ResetUserPasswordController;
+use App\Http\Controllers\Api\V1\HelpArticleController;
+use App\Http\Controllers\Api\V1\JobController;
+use App\Http\Controllers\Api\V1\JobSearchController;
 use App\Http\Controllers\Api\V1\NotificationPreferenceController;
-use App\Http\Controllers\Api\V1\Admin\Plan\SubscriptionController;
-use App\Http\Controllers\Api\V1\Testimonial\TestimonialController;
-use App\Http\Controllers\Api\V1\Auth\ForgotResetPasswordController;
 use App\Http\Controllers\Api\V1\Organisation\OrganisationController;
-use App\Http\Controllers\Api\V1\Auth\ForgetPasswordRequestController;
-
-use App\Http\Controllers\Api\V1\SuperAdmin\SuperAdminProductController;
 use App\Http\Controllers\Api\V1\Organisation\OrganizationMemberController;
+use App\Http\Controllers\Api\V1\PaymentController;
+use App\Http\Controllers\Api\V1\PreferenceController;
+use App\Http\Controllers\Api\V1\ProductController;
+use App\Http\Controllers\Api\V1\RoleController;
+use App\Http\Controllers\Api\V1\SqueezeController;
+use App\Http\Controllers\Api\V1\SqueezePageCoontroller;
+use App\Http\Controllers\Api\V1\SuperAdmin\SuperAdminProductController;
+use App\Http\Controllers\Api\V1\Testimonial\TestimonialController;
+use App\Http\Controllers\Api\V1\TimezoneController;
+use App\Http\Controllers\Api\V1\User\AccountController;
+use App\Http\Controllers\Api\V1\User\DashboardController;
+use App\Http\Controllers\Api\V1\User\ExportUserController;
+use App\Http\Controllers\Api\V1\User\ProfileController;
+use App\Http\Controllers\Api\V1\User\UserController;
+use App\Http\Controllers\Api\V1\WaitListController;
+use App\Http\Controllers\BillingPlanController;
+use App\Http\Controllers\InvitationAcceptanceController;
+use App\Http\Controllers\NotificationSettingController;
+use App\Http\Controllers\QuestController;
+use App\Http\Controllers\UserNotificationController;
+use Illuminate\Support\Facades\Route;
+
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -60,7 +59,7 @@ use App\Http\Controllers\Api\V1\Organisation\OrganizationMemberController;
 */
 
 Route::prefix('v1')->group(function () {
-    Route::post('/', function (Request $request) {
+    Route::post('/', function () {
         // dd($request);
         return 'language Learning Ai Game';
     });
@@ -104,7 +103,7 @@ Route::prefix('v1')->group(function () {
 
         Route::post('/organizations/{org_id}/products', [ProductController::class, 'store']);
         Route::patch('/organizations/{org_id}/products/{product_id}', [ProductController::class, 'update']);
-        Route::delete('/products/{productId}', [ProductController::class, 'destroy']);
+        Route::delete('/organizations/{org_id}/products/{product_id}', [ProductController::class, 'destroy']);
     });
 
     //comment
@@ -214,6 +213,14 @@ Route::prefix('v1')->group(function () {
         Route::patch('/profile', [ProfileController::class, 'update']);
         Route::post('/profile/upload-image', [ProfileController::class, 'uploadImage']);
 
+
+        //Timezone Settings
+        Route::post('/timezones', [ProfileController::class, 'storeTimezones']);
+        Route::get('/timezones', [ProfileController::class, 'getAllTimezones']);
+        Route::put('/timezones/{id}', [ProfileController::class, 'updateTimezones']);
+
+
+
         Route::get('/notification-settings', [NotificationSettingController::class, 'show']);
         Route::patch('/notification-settings', [NotificationSettingController::class, 'update']);
     });
@@ -228,7 +235,6 @@ Route::prefix('v1')->group(function () {
         Route::delete('/blogs/{id}', [BlogController::class, 'destroy']);
         Route::get('/waitlists', [WaitListController::class, 'index']);
         Route::apiResource('squeeze-pages', SqueezePageCoontroller::class);
-        Route::get('/dashboard-cards', [DashboardController::class, 'index']);
     });
 
     Route::post('/waitlists', [WaitListController::class, 'store']);
@@ -243,6 +249,8 @@ Route::prefix('v1')->group(function () {
         Route::put('/user/preferences/{id}', [PreferenceController::class, 'update']);
         Route::get('/user/preferences', [PreferenceController::class, 'index']);
         Route::delete('/user/preferences/{id}', [PreferenceController::class, 'delete']);
+        Route::get('/user-statistics', [DashboardController::class, 'index']);
+
     });
 
     // Notification settings
