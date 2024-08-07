@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Api\V1\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Language;
+use App\Models\Preference;
 use App\Models\Profile;
+use App\Models\Timezone;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -190,6 +193,9 @@ class ProfileController extends Controller
 }
 
 
+
+
+
     /**
      * Remove the specified resource from storage.
      */
@@ -197,4 +203,125 @@ class ProfileController extends Controller
     {
         //
     }
+
+
+
+
+
+
+    public function storeTimezones(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'timezone' => 'required|string|unique:timezones,timezone',
+            'gmtoffset' => 'required|string',
+            'description' => 'required|string',
+        ]);
+    
+        if ($validator->fails()) {
+            return response()->json([
+                'Status' => 409,
+                'Message' => 'Timezone already exists',
+                'Errors' => $validator->errors(),
+            ], 409);
+        }
+    
+        $timezone = Timezone::create($request->only(['timezone', 'gmtoffset', 'description']));
+    
+        if (auth()->check()) {
+            $userId = auth()->id();
+            Preference::updateOrCreate(
+                ['user_id' => $userId],
+                [
+                    'timezone_id' => $timezone->id,
+                    'name' => $timezone->timezone,
+                    'value' => $timezone->timezone // Ensure the `value` column is populated
+                ]
+            );
+        }
+    
+        return response()->json([
+            'id' => $timezone->id,
+            'timezone' => $timezone->timezone,
+            'gmtoffset' => $timezone->gmtoffset,
+            'description' => $timezone->description,
+        ], 201);
+    }
+    
+    
+
+
+
+
+
+       public function getAllTimezones()
+{
+    $timezones = Timezone::latest()->get();
+
+    return response()->json([
+        'Status' => 200,
+        'Message' => 'List of supported timezones.',
+        'Data' => $timezones,
+    ], 200);
+}//End method  
+
+
+
+
+
+
+
+public function updateTimezones(Request $request, $id)
+{
+    $timezone = Timezone::find($id);
+
+    if (!$timezone) {
+        return response()->json([
+            'Status' => 404,
+            'Message' => 'Timezone not found',
+        ], 404);
+    }
+
+    $validator = Validator::make($request->all(), [
+        'timezone' => 'required|string|unique:timezones,timezone,' . $id,
+        'gmtoffset' => 'required|string',
+        'description' => 'required|string',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'Status' => 409,
+            'Message' => 'Timezone already exists',
+            'Errors' => $validator->errors(),
+        ], 409);
+    }
+
+    $timezone->update($request->only(['timezone', 'gmtoffset', 'description']));
+
+    if (auth()->check()) {
+        $userId = auth()->id();
+        Preference::updateOrCreate(
+            ['user_id' => $userId],
+            [
+                'timezone_id' => $timezone->id,
+                'name' => $timezone->timezone,
+                'value' => $timezone->timezone // Ensure the `value` column is populated
+            ]
+        );
+    }
+
+    return response()->json([
+        'id' => $timezone->id,
+        'timezone' => $timezone->timezone,
+        'gmtoffset' => $timezone->gmtoffset,
+        'description' => $timezone->description,
+    ], 200);
+}
+
+
+
+    
+
+
+
+
 }
