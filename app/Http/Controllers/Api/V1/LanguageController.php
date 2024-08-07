@@ -48,5 +48,25 @@ class LanguageController extends Controller
             'language' => $language
         ], 201);
     }
+
+    public function index()
+    {
+        // if (!auth()->check()) {
+        //     return response()->json([
+        //         'status' => 401,
+        //         'message' => 'Unauthorized'
+        //     ], 401);
+        // }
+
+       
+
+        $languages = Language::select('language', 'code')->get();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Languages fetched successfully',
+            'languages' => $languages
+        ], 200);
+    }
 }
 
