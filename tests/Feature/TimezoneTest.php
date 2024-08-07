@@ -12,33 +12,50 @@ class TimezoneTest extends TestCase
     use RefreshDatabase;
 
 
-    public function test_it_can_create_a_timezone()
+    public function test_it_can_store_timezone_and_preference()
     {
-        
         $user = \App\Models\User::factory()->create();
         $this->actingAs($user);
-
-       
+    
         $timezoneData = [
             'timezone' => 'America/New_York',
             'gmtoffset' => '-05:00',
             'description' => 'Eastern Standard Time',
         ];
-
-        
+    
         $response = $this->postJson('/api/v1/timezones', $timezoneData);
-
-       
+    
         $response->assertStatus(201)
             ->assertJson([
+                'id' => true,
                 'timezone' => 'America/New_York',
                 'gmtoffset' => '-05:00',
                 'description' => 'Eastern Standard Time',
-                'id' => $response->json('id'), 
             ]);
-
+    
         $this->assertDatabaseHas('timezones', $timezoneData);
+    
+        $this->assertDatabaseHas('preferences', [
+            'user_id' => $user->id,
+            'timezone_id' => $response->json('id'),
+            'name' => 'America/New_York', // Corrected value
+            'value' => 'America/New_York' // Corrected value
+        ]);
     }
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
 
     public function test_it_returns_error_when_timezone_already_exists()
     {
@@ -69,6 +86,15 @@ class TimezoneTest extends TestCase
             ]);
     }
 
+
+
+
+
+
+
+
+
+
     public function test_it_can_get_all_timezones()
 {
     
@@ -86,6 +112,8 @@ class TimezoneTest extends TestCase
             'message' => 'Timezones retrieved successfully',
         ]);
 }
+
+
 
 
 
@@ -121,42 +149,6 @@ class TimezoneTest extends TestCase
 
 
 
-
-    public function test_it_can_store_timezone_and_preference()
-{
-    // Create and authenticate a user
-    $user = \App\Models\User::factory()->create();
-    $this->actingAs($user);
-
-    // Define the timezone data to be sent in the request
-    $timezoneData = [
-        'timezone' => 'America/New_York',
-        'gmtoffset' => '-05:00',
-        'description' => 'Eastern Standard Time',
-        'user_id' => $user->id,  // Include user_id
-    ];
-
-    // Send a POST request to create a new timezone
-    $response = $this->postJson('/api/v1/timezones', $timezoneData);
-
-    // Assert the response status is 201 Created
-    $response->assertStatus(201)
-        ->assertJson([
-            'id' => true,  // Check if the id is present
-            'timezone' => 'America/New_York',
-            'gmtoffset' => '-05:00',
-            'description' => 'Eastern Standard Time',
-        ]);
-
-    // Verify that the timezone was actually created in the database
-    $this->assertDatabaseHas('timezones', $timezoneData);
-
-    // Verify that the preference was stored in the database
-    $this->assertDatabaseHas('preferences', [
-        'user_id' => $user->id,
-        'timezone_id' => $response->json('id'),
-    ]);
-}
 
 
 

@@ -210,37 +210,47 @@ class ProfileController extends Controller
 
 
     public function storeTimezones(Request $request)
-{
-    $validator = Validator::make($request->all(), [
-        'timezone' => 'required|string|unique:timezones,timezone',
-        'gmtoffset' => 'required|string',
-        'description' => 'required|string',
-    ]);
-
-    if ($validator->fails()) {
+    {
+        $validator = Validator::make($request->all(), [
+            'timezone' => 'required|string|unique:timezones,timezone',
+            'gmtoffset' => 'required|string',
+            'description' => 'required|string',
+        ]);
+    
+        if ($validator->fails()) {
+            return response()->json([
+                'Status' => 409,
+                'Message' => 'Timezone already exists',
+                'Errors' => $validator->errors(),
+            ], 409);
+        }
+    
+        $timezone = Timezone::create($request->only(['timezone', 'gmtoffset', 'description']));
+    
+        if (auth()->check()) {
+            $userId = auth()->id();
+            Preference::updateOrCreate(
+                ['user_id' => $userId],
+                [
+                    'timezone_id' => $timezone->id,
+                    'name' => $timezone->timezone,
+                    'value' => $timezone->timezone // Ensure the `value` column is populated
+                ]
+            );
+        }
+    
         return response()->json([
-            'Status' => 409,
-            'Message' => 'Timezone already exists',
-            'Errors' => $validator->errors(),
-        ], 409);
+            'id' => $timezone->id,
+            'timezone' => $timezone->timezone,
+            'gmtoffset' => $timezone->gmtoffset,
+            'description' => $timezone->description,
+        ], 201);
     }
+    
+    
 
-    $timezone = Timezone::create($request->all());
 
-    if ($request->user_id) {
-        Preference::updateOrCreate(
-            ['user_id' => $request->user_id],
-            ['timezone_id' => $timezone->id]
-        );
-    }
 
-    return response()->json([
-        'id' => $timezone->id,
-        'timezone' => $timezone->timezone,
-        'gmtoffset' => $timezone->gmtoffset,
-        'description' => $timezone->description,
-    ], 201);
-}////end method
 
 
        public function getAllTimezones()
@@ -256,7 +266,11 @@ class ProfileController extends Controller
 
 
 
-    public function updateTimezones(Request $request, $id)
+
+
+
+
+public function updateTimezones(Request $request, $id)
 {
     $timezone = Timezone::find($id);
 
@@ -283,11 +297,15 @@ class ProfileController extends Controller
 
     $timezone->update($request->only(['timezone', 'gmtoffset', 'description']));
 
-   
-    if ($request->user_id) {
+    if (auth()->check()) {
+        $userId = auth()->id();
         Preference::updateOrCreate(
-            ['user_id' => $request->user_id],
-            ['timezone_id' => $timezone->id]
+            ['user_id' => $userId],
+            [
+                'timezone_id' => $timezone->id,
+                'name' => $timezone->timezone,
+                'value' => $timezone->timezone // Ensure the `value` column is populated
+            ]
         );
     }
 
@@ -296,9 +314,10 @@ class ProfileController extends Controller
         'timezone' => $timezone->timezone,
         'gmtoffset' => $timezone->gmtoffset,
         'description' => $timezone->description,
-        
     ], 200);
-}////end method
+}
+
+
 
     
 
