@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\Admin\BlogController;
 use App\Http\Controllers\Api\V1\Admin\CustomerController;
+use App\Http\Controllers\Api\V1\Admin\DashboardController;
 use App\Http\Controllers\Api\V1\Admin\EmailTemplateController;
 use App\Http\Controllers\Api\V1\Admin\Plan\FeatureController;
 use App\Http\Controllers\Api\V1\Admin\Plan\SubscriptionController;
@@ -42,9 +43,10 @@ use App\Http\Controllers\Api\V1\User\ProfileController;
 use App\Http\Controllers\Api\V1\JobSearchController;
 use App\Http\Controllers\Api\V1\WaitListController;
 use App\Http\Controllers\Api\V1\CookiePreferencesController;
+use App\Http\Controllers\Api\V1\SqueezePageCoontroller;
+use App\Http\Controllers\Api\V1\TimezoneController;
 
-
-
+use App\Http\Controllers\QuestController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -129,7 +131,6 @@ Route::prefix('v1')->group(function () {
     Route::get('/cookies/preferences', [CookiePreferencesController::class, 'getPreferences']);
 
 
-
     // Help Articles
     Route::post('/help-center/topics', [HelpArticleController::class, 'store']);
     Route::patch('/help-center/topics/{articleId}', [HelpArticleController::class, 'update']);
@@ -156,9 +157,9 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('/features', FeatureController::class);
         Route::apiResource('/plans', SubscriptionController::class);
         Route::post('/payments/paystack', [PaymentController::class, 'initiatePaymentForPayStack']);
-        Route::get('/payments/paystack/verify/{id}', [PaymentController::class, 'handlePaystackCallback']);
+        Route::get('/payments/paystack/{organisation_id}/verify/{id}', [PaymentController::class, 'handlePaystackCallback']);
         Route::post('/payments/flutterwave', [PaymentController::class, 'initiatePaymentForFlutterWave']);
-        Route::get('/payments/flutterwave/verify/{id}', [PaymentController::class, 'handleFlutterwaveCallback']);
+        Route::get('/payments/flutterwave/{organisation_id}/verify/{id}', [PaymentController::class, 'handleFlutterwaveCallback']);
         Route::get('/payments/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
         Route::post('/users/plans/{user_subscription}/cancel', [\App\Http\Controllers\Api\V1\User\SubscriptionController::class, 'destroy']);
         Route::get('/users/plan', [\App\Http\Controllers\Api\V1\User\SubscriptionController::class, 'userPlan']);
@@ -220,12 +221,9 @@ Route::prefix('v1')->group(function () {
         Route::patch('/blogs/edit/{id}', [BlogController::class, 'update'])->name('admin.blogs.update');
         Route::delete('/blogs/{id}', [BlogController::class, 'destroy']);
         Route::get('/waitlists', [WaitListController::class, 'index']);
+        Route::apiResource('squeeze-pages', SqueezePageCoontroller::class);
+        Route::get('/dashboard-cards', [DashboardController::class, 'index']);
     });
-
-
-
-
-
 
     Route::post('/waitlists', [WaitListController::class, 'store']);
     Route::apiResource('faqs', FaqController::class);
@@ -254,4 +252,12 @@ Route::prefix('v1')->group(function () {
     Route::delete('/notifications', [UserNotificationController::class, 'destroy']);
     Route::post('/notifications', [UserNotificationController::class, 'create'])->middleware('auth.jwt');
     Route::get('/notifications', [UserNotificationController::class, 'getByUser'])->middleware('auth.jwt');
+    //Timezone
+    Route::get('/timezones', [TimezoneController::class, 'index']);
+
+
+
+//    quest
+    Route::get('/quests/{id}/messages', [QuestController::class, 'getQuestMessages']);
+
 });

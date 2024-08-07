@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Validator;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\File;
+
 
 class ProfileController extends Controller
 {
@@ -99,63 +101,57 @@ class ProfileController extends Controller
 
     public function uploadImage(Request $request)
     {
+      
         $validator = Validator::make($request->all(), [
-            'file' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'file' => 'required|image|mimes:jpeg,png,jpg,gif'
         ]);
-
+    
         if ($validator->fails()) {
-            return response()
-            ->json([
-                'Status' => 400, 
+            return response()->json([
+                'Status' => 400,
                 'Message' => $validator->errors()
             ], 400);
         }
-
+    
+   
         $file = $request->file('file');
-        $imagePath = $file->getRealPath();
-
-        try {
-            $response = Http::post('https://api.cloudinary.com/v1_1/' . env('CLOUDINARY_CLOUD_NAME') . '/image/upload', [
-                'file' => base64_encode(file_get_contents($imagePath)),
-                'upload_preset' => env('CLOUDINARY_UPLOAD_PRESET'),
-            ]);
-
-            $data = $response->json();
-
-            if ($response->successful()) {
-                $uploadedFileUrl = $data['secure_url'];
-
-                $user = Auth::user();
-                $profile = $user->profile;
-
-                if (!$profile) {
-                    return response()
-                    ->json([
-                        'Status' => 404, 
-                        'Message' => 'Profile not found'
-                    ], 404);
-                }
-
-                $profile->update(['avatar_url' => $uploadedFileUrl]);
-
-                return response()
-                ->json([
-                    'Status' => 200, 
-                    'Message' => 'Image uploaded and profile updated successfully', 
-                    'Data' => ['avatar_url' => $uploadedFileUrl]
-                ], 200);
-            } else {
-                return response()->json(['Status' => 500, 'Message' => 'Failed to upload image'], 500);
-            }
-        }  catch (\Exception $e) {
-           return response()
-           ->json([
-             'Status' => 500, 
-             'Message' => 'Failed to upload image'
-           ], 500);
-       }
-
+        $fileName = time() . '.' . $file->getClientOriginalExtension();
+        $filePath = public_path('uploads');
+        
+       
+        if (!File::exists($filePath)) {
+            File::makeDirectory($filePath, 0755, true);
+        }
+    
+  
+        $file->move($filePath, $fileName);
+    
+       
+        $imageUrl = url('uploads/' . $fileName);
+    
+       
+        $user = Auth::user();
+        $profile = $user->profile;
+    
+        if (!$profile) {
+            return response()->json([
+                'Status' => 404,
+                'Message' => 'Profile not found'
+            ], 404);
+        }
+    
+        $profile->update(['avatar_url' => $imageUrl]);
+    
+        return response()->json([
+            'Status' => 200,
+            'Message' => 'Image uploaded and profile updated successfully',
+            'Data' => ['avatar_url' => $imageUrl]
+        ], 200);
     }
+    
+
+    
+
 
 
     /**

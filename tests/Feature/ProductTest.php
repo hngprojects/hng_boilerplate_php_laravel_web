@@ -10,7 +10,7 @@ class ProductTest extends TestCase
 {
     use RefreshDatabase;
 
-    
+
 
     /**
      * Test that authenticated user can retrieve products with pagination.
@@ -108,5 +108,5 @@ class ProductTest extends TestCase
             ]);
     }
 
-    
+
 }
