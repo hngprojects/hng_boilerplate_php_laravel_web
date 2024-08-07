@@ -42,23 +42,28 @@ class AdminDashboardController extends Controller
             'status_code' => Response::HTTP_OK,
             'data' => [
                 'total_revenue' => [
-                    'amount' => $currentMonthRevenue,
-                    'difference' => round($revenuePercentageDifference, 2) . '%'
+                    'current_month' => $currentMonthRevenue,
+                    'previous_month' => $lastMonthRevenue,
+                    'percentage_difference' => round($revenuePercentageDifference, 2) . '%',
                 ],
                 'total_users' => [
-                    'count' => $totalUsers,
-                    'difference' => round($userPercentageDifference, 2) . '%'
+                    'current_month' => $totalUsers,
+                    'previous_month' => $lastMonthUsers,
+                    'percentage_difference' => round($userPercentageDifference, 2) . '%',
                 ],
                 'total_products' => [
-                    'count' => $totalProducts,
-                    'difference' => round($productPercentageDifference, 2) . '%'
+                    'current_month' => $totalProducts,
+                    'previous_month' => $lastMonthProducts,
+                    'percentage_difference' => round($productPercentageDifference, 2) . '%',
                 ],
                 'lifetime_sales' => [
-                    'amount' => $lifetimeSales,
-                    'difference' => round($salesPercentageDifference, 2) . '%'
+                    'current_month' => $lifetimeSales,
+                    'previous_month' => $lastMonthSales,
+                    'percentage_difference' => round($salesPercentageDifference, 2) . '%',
                 ],
             ]
         ]);
+        
     }
 
     private function calculatePercentageDifference($current, $previous)

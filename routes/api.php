@@ -45,26 +45,6 @@ use App\Http\Controllers\NotificationSettingController;
 use App\Http\Controllers\QuestController;
 use App\Http\Controllers\UserNotificationController;
 use Illuminate\Support\Facades\Route;
-
-
-use App\Http\Controllers\Api\V1\Admin\DashboardController;
-use App\Http\Controllers\Api\V1\Auth\SocialAuthController;
-use App\Http\Controllers\Api\V1\User\ExportUserController;
-use App\Http\Controllers\Api\V1\CookiePreferencesController;
-use App\Http\Controllers\Api\V1\Admin\Plan\FeatureController;
-
-
-use App\Http\Controllers\Api\V1\Admin\EmailTemplateController;
-use App\Http\Controllers\Api\V1\Auth\ResetUserPasswordController;
-use App\Http\Controllers\Api\V1\NotificationPreferenceController;
-use App\Http\Controllers\Api\V1\Admin\Plan\SubscriptionController;
-use App\Http\Controllers\Api\V1\Testimonial\TestimonialController;
-use App\Http\Controllers\Api\V1\Auth\ForgotResetPasswordController;
-use App\Http\Controllers\Api\V1\Organisation\OrganisationController;
-use App\Http\Controllers\Api\V1\Auth\ForgetPasswordRequestController;
-
-use App\Http\Controllers\Api\V1\SuperAdmin\SuperAdminProductController;
-use App\Http\Controllers\Api\V1\Organisation\OrganizationMemberController;
 use App\Http\Controllers\Api\V1\Admin\AdminDashboardController;
 /*
 |--------------------------------------------------------------------------
@@ -254,7 +234,7 @@ Route::prefix('v1')->group(function () {
         Route::delete('/blogs/{id}', [BlogController::class, 'destroy']);
         Route::get('/waitlists', [WaitListController::class, 'index']);
         Route::apiResource('squeeze-pages', SqueezePageCoontroller::class);
-        Route::get('/dashboard-cards', [DashboardController::class, 'index']);
+        Route::get('/statistics', [AdminDashboardController::class, 'getStatistics']);
     });
 
     Route::post('/waitlists', [WaitListController::class, 'store']);
