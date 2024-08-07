@@ -194,7 +194,7 @@ class ProductController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(CreateProductRequest $request, $org_id)
-    {        
+    {
         $isOwner = OrganisationUser::where('org_id', $org_id)->where('user_id', auth()->id())->exists();
 
         if (!$isOwner) {
@@ -202,7 +202,7 @@ class ProductController extends Controller
         }
 
         $imageUrl = null;
-        if($request->hasFile('image')) {
+        if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('product_images', 'public');
             $imageUrl = Storage::url($imagePath);
         }
@@ -323,7 +323,7 @@ class ProductController extends Controller
     {
 
         $isOwner = OrganisationUser::where('org_id', $org_id)->where('user_id', auth()->id())->exists();
-        // dd($isOwner);        // Check if the user's organization matches the org_id in the request
+        // Check if the user's organization matches the org_id in the request
         if (!$isOwner) {
             return response()->json(
                 [
