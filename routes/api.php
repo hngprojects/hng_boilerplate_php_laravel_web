@@ -48,6 +48,7 @@ use App\Http\Controllers\Api\V1\Auth\ForgetPasswordRequestController;
 
 use App\Http\Controllers\Api\V1\SuperAdmin\SuperAdminProductController;
 use App\Http\Controllers\Api\V1\Organisation\OrganizationMemberController;
+use App\Http\Controllers\Api\V1\Admin\AdminDashboardController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -229,6 +230,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/waitlists', [WaitListController::class, 'index']);
         Route::apiResource('squeeze-pages', SqueezePageCoontroller::class);
         Route::get('/dashboard-cards', [DashboardController::class, 'index']);
+        Route::get('/statistics', [AdminDashboardController::class, 'getStatistics']);
     });
 
     Route::post('/waitlists', [WaitListController::class, 'store']);
