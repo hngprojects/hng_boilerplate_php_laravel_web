@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\Admin\BlogController;
 use App\Http\Controllers\Api\V1\Admin\CustomerController;
+use App\Http\Controllers\Api\V1\Admin\DashboardController;
 use App\Http\Controllers\Api\V1\Admin\EmailTemplateController;
 use App\Http\Controllers\Api\V1\Admin\Plan\FeatureController;
 use App\Http\Controllers\Api\V1\Admin\Plan\SubscriptionController;
@@ -219,6 +220,7 @@ Route::prefix('v1')->group(function () {
         Route::delete('/blogs/{id}', [BlogController::class, 'destroy']);
         Route::get('/waitlists', [WaitListController::class, 'index']);
         Route::apiResource('squeeze-pages', SqueezePageCoontroller::class);
+        Route::get('/dashboard-cards', [DashboardController::class, 'index']);
     });
 
     Route::post('/waitlists', [WaitListController::class, 'store']);
