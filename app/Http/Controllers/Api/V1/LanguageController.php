@@ -22,7 +22,7 @@ class LanguageController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'status_code' => 400,
+                'status' => 400,
                 'message' => 'Validation Error',
                 'errors' => $validator->errors()
             ], 400);
@@ -36,7 +36,7 @@ class LanguageController extends Controller
         ]);
 
         return response()->json([
-            'status_code' => 201,
+            'status' => 201,
             'message' => 'Language Created Successfully',
             'language' => $language
         ], 201);
