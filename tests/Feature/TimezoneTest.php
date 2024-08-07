@@ -15,7 +15,7 @@ class TimezoneTest extends TestCase
     {
         Timezone::factory()->count(5)->create();
 
-        $response = $this->getJson('/timezones');
+        $response = $this->getJson('/api/v1/timezones');
 
         $response->assertStatus(200)
                  ->assertJsonStructure([
