@@ -51,12 +51,17 @@ class LanguageController extends Controller
     
     public function update(Request $request, $id)
     {
-       
+        if (!auth()->check()) {
+            return response()->json([
+                'status' => 401,
+                'message' => 'Unauthorized'
+            ], 401);
+        }
 
         $validator = Validator::make($request->all(), [
             'language' => 'required|string|unique:languages,language,' . $id,
             'code' => 'required|string|unique:languages,code,' . $id,
-            'description' => 'string|nullable|unique:languages,code,' . $id,
+            'description' => 'string|nullable',
         ]);
 
         if ($validator->fails()) {
@@ -92,16 +97,16 @@ class LanguageController extends Controller
 
     public function index()
     {
-        // if (!auth()->check()) {
-        //     return response()->json([
-        //         'status' => 401,
-        //         'message' => 'Unauthorized'
-        //     ], 401);
-        // }
+        if (!auth()->check()) {
+            return response()->json([
+                'status' => 401,
+                'message' => 'Unauthorized'
+            ], 401);
+        }
 
        
 
-        $languages = Language::select('id', 'language', 'code', 'description')->get();
+        $languages = Language::select('id', 'language', 'code')->get();
 
         return response()->json([
             'status' => 200,
