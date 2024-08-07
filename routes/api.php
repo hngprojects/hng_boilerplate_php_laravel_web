@@ -60,7 +60,7 @@ use App\Http\Controllers\Api\V1\Organisation\OrganizationMemberController;
 */
 
 Route::prefix('v1')->group(function () {
-    Route::post('/', function (Request $request) {
+    Route::post('/', function () {
         // dd($request);
         return 'language Learning Ai Game';
     });
@@ -104,7 +104,7 @@ Route::prefix('v1')->group(function () {
 
         Route::post('/organizations/{org_id}/products', [ProductController::class, 'store']);
         Route::patch('/organizations/{org_id}/products/{product_id}', [ProductController::class, 'update']);
-        Route::delete('/products/{productId}', [ProductController::class, 'destroy']);
+        Route::delete('/organizations/{org_id}/products/{product_id}', [ProductController::class, 'destroy']);
     });
 
     //comment
