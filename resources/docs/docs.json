@@ -12,7 +12,7 @@
     },
     {
       "url": "https://staging.api-php.boilerplate.hng.tech",
-      "description": "Staging server"
+      "description": "Deployment server"
     }
   ],
   "tags": [
@@ -1233,6 +1233,10 @@
                   "type": "string",
                   "description": "Required password with minimum 8 characters including letters, mixed case, numbers, and symbols",
                   "example": "P@ssw0rd123"
+                },
+                "admin_secret": {
+                  "type": "string",
+                  "example": ""
                 }
               }
             }
