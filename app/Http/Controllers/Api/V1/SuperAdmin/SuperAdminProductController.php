@@ -16,7 +16,7 @@ class SuperAdminProductController extends Controller
             'description' => 'required|string',
             'price' => 'required|numeric',
             'slug' => 'required|string|max:255',
-            'tags' => 'nullable|string',
+            'tags' => 'required|string',
             'imageUrl' => 'nullable|string|max:255',
             'status' => 'required|string|max:50',
             'quantity' => 'required|integer',
