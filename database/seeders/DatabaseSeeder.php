@@ -80,5 +80,10 @@ class DatabaseSeeder extends Seeder
             SqueezePageSeeder::class
         ]);
 
+        $this->call([
+            QuestsSeeder::class,
+            QuestMessageSeeder::class,
+        ]);
+
     }
 }
