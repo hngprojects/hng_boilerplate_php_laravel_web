@@ -25,6 +25,12 @@ class PaymentController extends Controller
 
     public function initiatePaymentForPayStack(Request $request)
     {
+        if (!auth()->check()) {
+            return response()->json([
+                'status_code' => 401,
+                'message' => 'Unauthorized'
+            ], 401);
+        }
         // return response()->json(['h'=> 'ng']);
         $validator = Validator::make($request->all(), [
             'organisation_id' => 'required',
@@ -142,6 +148,13 @@ class PaymentController extends Controller
 
     public function initiatePaymentForFlutterWave(Request $request)
     {
+        if (!auth()->check()) {
+            return response()->json([
+                'status_code' => 401,
+                'message' => 'Unauthorized'
+            ], 401);
+        }
+        
         $validator = Validator::make($request->all(), [
             'organisation_id' => 'required',
             'plan_id' =>'required',

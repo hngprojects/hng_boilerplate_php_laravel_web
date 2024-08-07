@@ -14,6 +14,13 @@ class LanguageController extends Controller
 {
     public function create(Request $request)
     {
+        if (!auth()->check()) {
+            return response()->json([
+                'status' => 401,
+                'message' => 'Unauthorized'
+            ], 401);
+        }
+
         $validator = Validator::make($request->all(), [
             'language' => 'required|string|unique:languages',
             'code' => 'required|string|unique:languages',
