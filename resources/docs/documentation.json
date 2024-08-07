@@ -2954,6 +2954,7 @@
                                 },
                                 "example": [
                                     {
+                                        "id": "31491b6a-a2f1-47d4-804c-0a705bbb73a8",
                                         "title": "software  Engineer",
                                         "description": "team bulldozer is seeking reliable enginner for",
                                         "location": "lagos, NG",
@@ -2967,6 +2968,7 @@
                                         "qualifications": "5+ years of experience in software development, proficiency in Python and JavaScript"
                                     },
                                     {
+                                        "id": "31491b6a-a2f1-47d4-804c-0a705bbb73a8",
                                         "title": "software  Engineer",
                                         "description": "team bulldozer is seeking reliable enginner for",
                                         "location": "lagos, NG",
@@ -3002,6 +3004,7 @@
                                 "$ref": "#/components/schemas/JobInput"
                             },
                             "example": {
+                                "id": "31491b6a-a2f1-47d4-804c-0a705bbb73a8",
                                 "title": "software  Engineer",
                                 "description": "team bulldozer is seeking reliable enginner for",
                                 "location": "lagos, NG",
@@ -3125,6 +3128,7 @@
                                 "$ref": "#/components/schemas/JobInput"
                             },
                             "example": {
+                                "id": "31491b6a-a2f1-47d4-804c-0a705bbb73a8",
                                 "title": "software  Engineer",
                                 "description": "team bulldozer is seeking reliable enginner for",
                                 "location": "lagos, NG",
