@@ -4397,6 +4397,95 @@
                     }
                 }
             }
+        },
+        "/api/v1/dashboard-cards": {
+            "get": {
+                "summary": "Get a dashboard card content",
+                "tags": [
+                    "User Dashboard"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Dashboard retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Dashboard retrieved successfully"
+                                        },
+                                        "status_code": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "current_month_revenue": {
+                                                        "type": "string",
+                                                        "example": "148"
+                                                    },
+                                                    "difference_in_revenue_percent": {
+                                                        "type": "string",
+                                                        "example": "20%"
+                                                    },
+                                                    "subscriptions": {
+                                                        "type": "string",
+                                                        "example": "2000"
+                                                    },
+                                                    "monthly_subscriptions_diff": {
+                                                        "type": "string",
+                                                        "example": "148"
+                                                    },
+                                                    "current_month_orders": {
+                                                        "type": "string",
+                                                        "example": "200"
+                                                    },
+                                                    "difference_in_orders_percent": {
+                                                        "type": "string",
+                                                        "example": "50%"
+                                                    },
+                                                    "active_users_count": {
+                                                        "type": "string",
+                                                        "example": "200"
+                                                    },
+                                                    "difference_an_hour_ago": {
+                                                        "type": "string",
+                                                        "example": "40"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "An error occurred",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {

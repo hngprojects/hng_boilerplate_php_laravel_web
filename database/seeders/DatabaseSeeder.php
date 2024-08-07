@@ -81,5 +81,10 @@ class DatabaseSeeder extends Seeder
             TimezoneSeeder::class,
         ]);
 
+        $this->call([
+            QuestsSeeder::class,
+            QuestMessageSeeder::class,
+        ]);
+
     }
 }
