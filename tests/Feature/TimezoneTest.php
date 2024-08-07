@@ -22,7 +22,7 @@ class TimezoneTest extends TestCase
                      'status',
                      'message',
                      'data' => [
-                         '*' => ['id', 'name', 'offset']
+                         '*' => ['id', 'name','offset']
                      ]
                  ]);
     }
