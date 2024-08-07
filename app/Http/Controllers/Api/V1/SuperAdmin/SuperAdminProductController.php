@@ -66,6 +66,7 @@ class SuperAdminProductController extends Controller
             'status' => 'sometimes|string|max:50',
             'quantity' => 'sometimes|integer',
             'org_id' => 'sometimes|uuid',
+            'category' => 'nullable|string|max:255',
         ]);
 
         if ($validator->fails()) {
