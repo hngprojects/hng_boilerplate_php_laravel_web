@@ -114,9 +114,10 @@ class PaymentController extends Controller
             }
 
             $payment->save();
+            $user_id = Organisation::find($organisation_id)->first()->user_id;
 
             $userSubscription = new UserSubscription;
-            $userSubscription->user_id = auth()->user()->id;
+            $userSubscription->user_id = $user_id;
             $userSubscription->subscription_plan_id = $id;
             $userSubscription->org_id = $organisation_id;
             $userSubscription->save();
@@ -229,8 +230,10 @@ class PaymentController extends Controller
             }
 
             $payment->save();
+            $user_id = Organisation::find($organisation_id)->first()->user_id;
+
             $userSubscription = new UserSubscription;
-            $userSubscription->user_id = auth()->user()->id;
+            $userSubscription->user_id = $user_id;
             $userSubscription->subscription_plan_id = $id;
             $userSubscription->org_id = $organisation_id;
             $userSubscription->save();
