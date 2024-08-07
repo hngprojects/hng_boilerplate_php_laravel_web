@@ -24,13 +24,17 @@ class RoleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreRoleRequest $request, $org_id)
+    public function store(StoreRoleRequest $request)
     {
+        Log::info('Incoming role creation request', $request->all());
+
         try {
             DB::beginTransaction();
 
-            // Validate the organisation ID
-            if (!is_numeric($org_id)) {
+            $org_id = $request->organisation_id;
+
+            // Validate the organisation ID as a UUID
+            if (!preg_match('/^[a-f0-9-]{36}$/', $org_id)) {
                 return response()->json([
                     'status_code' => Response::HTTP_BAD_REQUEST,
                     'error' => 'Invalid input',
@@ -49,7 +53,7 @@ class RoleController extends Controller
             }
 
             // Check for duplicate role name within the organisation
-            $existingRole = Role::where('org_id', $org_id)->where('name', $request->name)->first();
+            $existingRole = Role::where('org_id', $org_id)->where('name', $request->role_name)->first();
             if ($existingRole) {
                 return response()->json([
                     'status_code' => Response::HTTP_CONFLICT,
@@ -60,10 +64,13 @@ class RoleController extends Controller
 
             // Creating the role
             $role = Role::create([
-                'name' => $request->name,
+                'name' => $request->role_name,
                 'description' => $request->description,
                 'org_id' => $org_id,
             ]);
+
+            // Attach the permission to the role
+            $role->permissions()->attach($request->permissions_id);
 
             DB::commit();
 

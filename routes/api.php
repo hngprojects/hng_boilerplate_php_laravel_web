@@ -42,6 +42,7 @@ use App\Http\Controllers\Api\V1\User\ProfileController;
 use App\Http\Controllers\Api\V1\JobSearchController;
 use App\Http\Controllers\Api\V1\WaitListController;
 use App\Http\Controllers\Api\V1\CookiePreferencesController;
+use Illuminate\Http\Request;
 
 
 
@@ -75,7 +76,6 @@ Route::prefix('v1')->group(function () {
     Route::post('/auth/reset-forgot-password', [ForgetResetPasswordController::class, 'resetPassword']);
     Route::post('/auth/verify-forgot-otp', [ForgetResetPasswordController::class, 'verifyUserOTP']);
 
-    Route::post('/roles', [RoleController::class, 'store']);
 
     Route::get('/auth/login-facebook', [SocialAuthController::class, 'loginUsingFacebook']);
     Route::get('/auth/facebook/callback', [SocialAuthController::class, 'callbackFromFacebook']);
@@ -188,14 +188,13 @@ Route::prefix('v1')->group(function () {
         Route::put('/jobs/{id}', [JobController::class, 'update']);
         Route::delete('/jobs/{id}', [JobController::class, 'destroy']);
 
-
-
         Route::get('/user/export/{format}', [ExportUserController::class, 'export']);
 
         // Accounts
         Route::patch('/accounts/deactivate', [AccountController::class, 'deactivate']);
 
         // Roles
+        Route::post('/organisations/{org_id}/roles', [RoleController::class, 'store']);
         Route::put('/organisations/{org_id}/roles/{role_id}', [RoleController::class, 'update']);
         Route::put('/organisations/{org_id}/roles/{role_id}/disable', [RoleController::class, 'disableRole']);
         Route::get('/organisations/{org_id}/roles', [RoleController::class, 'index']);

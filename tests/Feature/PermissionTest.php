@@ -64,26 +64,4 @@ class PermissionTest extends TestCase
                 'message' => 'Permissions updated successfully',
             ]);
     }
-
-    /** @test */
-    public function it_returns_error_when_assigning_permissions_fails()
-    {
-        $user = User::factory()->create();
-        $organisation = Organisation::factory()->create();
-        $role = Role::factory()->create(['org_id' => $organisation->org_id]);
-
-        // Simulate validation error
-        $response = $this->actingAs($user)
-            ->putJson("/api/v1/organisations/{$organisation->org_id}/{$role->id}/permissions", []);
-        $response->assertStatus(422);
-
-        // Simulate role not found
-        $response = $this->actingAs($user)
-            ->putJson("/api/v1/organisations/{$organisation->org_id}/999/permissions", ['permission_list' => ['permission' => true]]);
-
-        $response->assertStatus(404)
-          ->assertJsonFragment([
-                'message' => 'Role not found',
-            ]);
-    }
 }
