@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\User;
+use App\Models\Organisation;
+use App\Models\OrganisationUser;
 use Illuminate\Support\Facades\Log;
 use App\Models\Validators\AuthValidator;
 use Illuminate\Support\Facades\Validator;
@@ -47,6 +49,7 @@ class AuthController extends Controller
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|email:rfc|max:255|unique:users',
+            'admin_secret' => 'nullable|string|max:255',
             'password' => ['required', 'string', Password::min(8)
             ->letters()
             ->mixedCase()
@@ -63,17 +66,37 @@ class AuthController extends Controller
         try {
             DB::beginTransaction();
 
+            $role = $request->admin_secret ? 'admin' : 'user';
+
             // Creating the user
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-                'role' => 'user'
+                'role' => $role
             ]);
 
             $profile = $user->profile()->create([
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name
+            ]);
+
+            $organization = $user->owned_organisations()->create([
+                'name' => $request->first_name."'s Organisation",
+            ]);
+
+            $organization_user = OrganisationUser::create([
+                'user_id' => $user->id,
+                'org_id' => $organization->org_id
+            ]);
+
+            $roles = $user->roles()->create([
+                'name' => $role,
+                'org_id' => $organization->org_id
+            ]);
+            DB::table('users_roles')->insert([
+                'user_id' => $user->id,
+                'role_id' => $roles->id
             ]);
 
             // Generate JWT token
@@ -82,7 +105,6 @@ class AuthController extends Controller
             DB::commit();
 
             return response()->json([
-
                 'status' => 201,
                 "message" => "User Created Successfully",
                 'access_token' => $token,
@@ -103,6 +125,7 @@ class AuthController extends Controller
 
             return $this->apiResponse('Registration unsuccessful', Response::HTTP_BAD_REQUEST);
         }
+
     }
 
     /**

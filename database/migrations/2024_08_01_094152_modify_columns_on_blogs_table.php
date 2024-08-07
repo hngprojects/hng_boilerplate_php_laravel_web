@@ -14,11 +14,8 @@ return new class extends Migration
         Schema::table('blogs', function (Blueprint $table) {
             $table->string('category')->nullable();
             $table->text('image_url')->nullable();
-            $table->dropForeign(['blog_category_id']);
-            $table->dropColumn('blog_category_id');
             $table->foreignUuid('author_id')->nullable()->constrained('users', 'id')->cascadeOnDelete()->cascadeOnUpdate();
         });
-        Schema::dropIfExists('blog_categories');
         Schema::dropIfExists('blog_images');
     }
 
@@ -29,7 +26,6 @@ return new class extends Migration
     {
         Schema::table('blogs', function (Blueprint $table) {
             $table->dropColumn('category');
-            $table->uuid('blog_category_id');
         });
 
         Schema::create('blog_images', function (Blueprint $table) {
@@ -39,12 +35,5 @@ return new class extends Migration
             $table->timestamps();
         });
 
-
-        Schema::create('blog_categories', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->string('name');
-            $table->string('description')->nullable();
-            $table->timestamps();
-        });
     }
 };

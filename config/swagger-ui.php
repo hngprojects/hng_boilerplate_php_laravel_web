@@ -8,13 +8,15 @@ return [
             /*
              * The path where the swagger file is served.
              */
-            'path' => 'documentation',
+            // 'path' => 'documentation',
+            'path' => 'docs',
 
             /*
              * The versions of the swagger file. The key is the version name and the value is the path to the file.
              */
             'versions' => [
-                'v1' => resource_path('docs/documentation.json'),
+                // 'v1' => resource_path('docs/documentation.json'),
+                'v1' => resource_path('docs/docs.json'),
             ],
 
             /*

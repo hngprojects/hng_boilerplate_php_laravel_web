@@ -12,8 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('blogs', function (Blueprint $table) {
-            $table->dropColumn('tags');
-            $table->dropColumn('imageUrl');
+            $table->dropColumn(['tags', 'imageUrl']);
         });
     }
 
@@ -23,8 +22,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('blogs', function (Blueprint $table) {
-            $table->string('tags');
-            $table->string('imageUrl');
+            $table->string('tags')->default('default_value');
+            $table->string('imageUrl')->default('default_value');
         });
     }
 };
