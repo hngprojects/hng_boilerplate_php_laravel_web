@@ -35,7 +35,7 @@ class SqueezePagesTest extends TestCase
                 'message',
                 'data' => [
                     '*' => [
-                        'uuid',
+                        'id',
                         'title',
                         'slug',
                         'created_at',

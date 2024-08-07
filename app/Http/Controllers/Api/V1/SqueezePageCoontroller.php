@@ -15,7 +15,7 @@ class SqueezePageCoontroller extends Controller
     public function index()
     {
         try {
-            $plans = SqueezePage::select(['uuid', 'title', 'slug', 'created_at', 'status', 'activate'])->get();
+            $plans = SqueezePage::select(['id', 'title', 'slug', 'created_at', 'status', 'activate'])->get();
             return response()->json([
                 'status' => Response::HTTP_OK,
                 'message' => 'Squeeze Pages retrieved successfully',
