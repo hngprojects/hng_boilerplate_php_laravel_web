@@ -1,0 +1,163 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "PHP Laravel API Boilerplate",
+      "description": "API documentation for the boilerplate",
+      "version": "1.0.0"
+    },
+    "servers": [
+      {
+        "url": "https://virtserver.swaggerhub.com/TULBADEX_1/HNG-Task-4/1.0.0",
+        "description": "SwaggerHub API Auto Mocking"
+      },
+      {
+        "url": "https://virtserver.swaggerhub.com/timiajayi/help-center-search/1.0.0",
+        "description": "SwaggerHub API Auto Mocking"
+      },
+      {
+        "url": "https://api-php.boilerplate.hng.tech/api/v1",
+        "description": "Production server"
+      },
+      {
+        "url": "https://deployment.api-php.boilerplate.hng.tech/api/v1",
+        "description": "Deployment server"
+      },
+      {
+        "url": "https://staging.api-php.boilerplate.hng.tech/api/v1",
+        "description": "Staging server"
+      }
+    ],
+    "paths": {
+      "/auth/register": {
+        "post": {
+          "summary": "Register a new user",
+          "description": "Endpoint to register a new user and return JWT token.",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/auth_register_body"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "201": {
+              "description": "User created successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/inline_response_201"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Validation or registration error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/inline_response_400"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "auth_register_body": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "description": "Required email address",
+              "example": "john.doe@example.com"
+            },
+            "first_name": {
+              "type": "string",
+              "description": "Required first name",
+              "example": "John"
+            },
+            "last_name": {
+              "type": "string",
+              "description": "Required last name",
+              "example": "Doe"
+            },
+            "password": {
+              "type": "string",
+              "description": "Required password with minimum 8 characters including letters, mixed case, numbers, and symbols",
+              "example": "P@ssw0rd123"
+            }
+          }
+        },
+        "inline_response_201": {
+          "type": "object",
+          "properties": {
+            "status_code": {
+              "type": "integer",
+              "example": 201
+            },
+            "message": {
+              "type": "string",
+              "example": "User Created Successfully"
+            },
+            "token": {
+              "type": "string",
+              "example": "jwt_token_string"
+            },
+            "data": {
+              "type": "object",
+              "properties": {
+                "user": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "first_name": {
+                      "type": "string",
+                      "example": "John"
+                    },
+                    "last_name": {
+                      "type": "string",
+                      "example": "Doe"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "john.doe@example.com"
+                    },
+                    "avatar_url": {
+                      "type": "string",
+                      "example": "http://example.com/avatar.jpg"
+                    },
+                    "role": {
+                      "type": "string",
+                      "example": "user"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "inline_response_400": {
+          "type": "object",
+          "properties": {
+            "status_code": {
+              "type": "integer",
+              "example": 400
+            },
+            "message": {
+              "type": "string",
+              "example": "Registration unsuccessful"
+            }
+          }
+        }
+      }
+    }
+  }

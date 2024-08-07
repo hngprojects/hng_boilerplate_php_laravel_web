@@ -67,6 +67,7 @@ class RegistrationTest extends TestCase
         ];
 
         $response = $this->postJson('/api/v1/auth/register', $registrationData);
+
         // Check the status code
         $response->assertStatus(400);
         $response->assertJson([
