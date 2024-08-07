@@ -16,7 +16,9 @@ class Timezone extends Model
 
     public $incrementing = false;
     protected $casts = [
-        'offset' => 'string',
+        'gmtoffset' => 'string',
+        'timezone' => 'string',
+        'description' => 'string',
     ];
     
 
@@ -25,3 +27,4 @@ class Timezone extends Model
         return $this->hasMany(Preference::class);
     }
 }
+ 
