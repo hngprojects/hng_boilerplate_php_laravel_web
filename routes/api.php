@@ -208,6 +208,14 @@ Route::prefix('v1')->group(function () {
         Route::patch('/profile', [ProfileController::class, 'update']);
         Route::post('/profile/upload-image', [ProfileController::class, 'uploadImage']);
 
+
+        //Timezone Settings
+        Route::post('/timezones', [ProfileController::class, 'storeTimezones']);
+        Route::get('/timezones', [ProfileController::class, 'getAllTimezones']);
+        Route::put('/timezones/{id}', [ProfileController::class, 'updateTimezones']);
+
+
+
         Route::get('/notification-settings', [NotificationSettingController::class, 'show']);
         Route::patch('/notification-settings', [NotificationSettingController::class, 'update']);
     });
