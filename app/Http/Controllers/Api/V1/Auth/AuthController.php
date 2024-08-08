@@ -81,18 +81,18 @@ class AuthController extends Controller
                 'last_name' => $request->last_name
             ]);
 
-            $organization = $user->owned_organisations()->create([
+            $organisation = $user->owned_organisations()->create([
                 'name' => $request->first_name."'s Organisation",
             ]);
 
-            $organization_user = OrganisationUser::create([
+            $organisation_user = OrganisationUser::create([
                 'user_id' => $user->id,
-                'org_id' => $organization->org_id
+                'org_id' => $organisation->org_id
             ]);
 
             $roles = $user->roles()->create([
                 'name' => $role,
-                'org_id' => $organization->org_id
+                'org_id' => $organisation->org_id
             ]);
             DB::table('users_roles')->insert([
                 'user_id' => $user->id,
@@ -105,7 +105,7 @@ class AuthController extends Controller
             DB::commit();
 
             return response()->json([
-                'status' => 201,
+                'status_code' => 201,
                 "message" => "User Created Successfully",
                 'access_token' => $token,
                 'data' => [

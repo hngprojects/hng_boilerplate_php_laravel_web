@@ -20,6 +20,7 @@ class SuperAdminProductController extends Controller
             'imageUrl' => 'nullable|string|max:255',
             'status' => 'required|string|max:50',
             'quantity' => 'required|integer',
+            'category' => 'nullable|string|max:255',
             'org_id' => 'required|uuid',
         ]);
 
@@ -95,6 +96,18 @@ class SuperAdminProductController extends Controller
             'status_code' => 200,
             'message' => 'Product updated successfully',
             'data' => $product,
+        ]);
+    }
+
+    public function destroy($productId)
+    {
+        $product = Product::findOrFail($productId);
+        $product->delete();
+
+        return response()->json([
+            'success' => true,
+            'status_code' => 200,
+            'message' => 'Product deleted successfully',
         ]);
     }
 }

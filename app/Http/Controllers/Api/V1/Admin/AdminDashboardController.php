@@ -75,4 +75,49 @@ class AdminDashboardController extends Controller
         }
         return 0;
     }
+
+    public function getTopProducts($limit = 6)
+    {
+        $topProducts = Product::withCount('orders')
+            ->orderByDesc('orders_count')
+            ->take($limit)
+            ->get()
+            ->map(function ($product) {
+                return [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'total_sales' => $product->orders_count
+                ];
+            });
+
+        return response()->json([
+            'message' => 'Top products retrieved successfully',
+            'status_code' => Response::HTTP_OK,
+            'data' => [
+                'top_products' => $topProducts,
+                'total_products' => Product::count()
+            ]
+        ]);
+    }
+
+    public function getAllProductsSortedBySales()
+    {
+        $allProducts = Product::withCount('orders')
+            ->orderByDesc('orders_count')
+            ->get()
+            ->map(function ($product) {
+                return [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'total_sales' => $product->orders_count
+                ];
+            });
+
+        return response()->json([
+            'message' => 'All products sorted by sales retrieved successfully',
+            'status_code' => Response::HTTP_OK,
+            'data' => $allProducts
+        ]);
+    }
+
 }

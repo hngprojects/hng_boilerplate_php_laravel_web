@@ -62,9 +62,9 @@ class Invitation extends Model
     ];
 
     /**
-     * Get the organization associated with the invitation.
+     * Get the organisation associated with the invitation.
      */
-    public function organization()
+    public function organisation()
     {
         return $this->belongsTo(Organisation::class, 'org_id', 'org_id'); // Ensure the key matches
     }

@@ -164,11 +164,11 @@
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-GETapi-v1-topics-search">
                                 <a href="#endpoints-GETapi-v1-topics-search">GET api/v1/topics/search</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-v1-organizations--org_id--products">
-                                <a href="#endpoints-POSTapi-v1-organizations--org_id--products">Store a newly created resource in storage.</a>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-v1-organisations--org_id--products">
+                                <a href="#endpoints-POSTapi-v1-organisations--org_id--products">Store a newly created resource in storage.</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-PATCHapi-v1-organizations--org_id--products--product_id-">
-                                <a href="#endpoints-PATCHapi-v1-organizations--org_id--products--product_id-">Update the specified resource in storage.</a>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-PATCHapi-v1-organisations--org_id--products--product_id-">
+                                <a href="#endpoints-PATCHapi-v1-organisations--org_id--products--product_id-">Update the specified resource in storage.</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-DELETEapi-v1-products--productId-">
                                 <a href="#endpoints-DELETEapi-v1-products--productId-">Remove the specified resource from storage.</a>
@@ -299,23 +299,23 @@
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-POSTapi-v1-users-plans--user_subscription--cancel">
                                 <a href="#endpoints-POSTapi-v1-users-plans--user_subscription--cancel">cancel user subscription</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-v1-organizations">
-                                <a href="#endpoints-POSTapi-v1-organizations">Store a newly created resource in storage.</a>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-v1-organisations">
+                                <a href="#endpoints-POSTapi-v1-organisations">Store a newly created resource in storage.</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-v1-organizations">
-                                <a href="#endpoints-GETapi-v1-organizations">Display a listing of the resource.</a>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-v1-organisations">
+                                <a href="#endpoints-GETapi-v1-organisations">Display a listing of the resource.</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-PUTapi-v1-organizations--org_id-">
-                                <a href="#endpoints-PUTapi-v1-organizations--org_id-">Update the specified resource in storage.</a>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-PUTapi-v1-organisations--org_id-">
+                                <a href="#endpoints-PUTapi-v1-organisations--org_id-">Update the specified resource in storage.</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-DELETEapi-v1-organizations--org_id-">
-                                <a href="#endpoints-DELETEapi-v1-organizations--org_id-">Remove the specified resource from storage.</a>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-DELETEapi-v1-organisations--org_id-">
+                                <a href="#endpoints-DELETEapi-v1-organisations--org_id-">Remove the specified resource from storage.</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-DELETEapi-v1-organizations--org_id--users--user_id-">
-                                <a href="#endpoints-DELETEapi-v1-organizations--org_id--users--user_id-">DELETE api/v1/organizations/{org_id}/users/{user_id}</a>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-DELETEapi-v1-organisations--org_id--users--user_id-">
+                                <a href="#endpoints-DELETEapi-v1-organisations--org_id--users--user_id-">DELETE api/v1/organisations/{org_id}/users/{user_id}</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-v1-organizations--organisation--users">
-                                <a href="#endpoints-GETapi-v1-organizations--organisation--users">GET api/v1/organizations/{organisation}/users</a>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-v1-organisations--organisation--users">
+                                <a href="#endpoints-GETapi-v1-organisations--organisation--users">GET api/v1/organisations/{organisation}/users</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-GETapi-v1-members--org_id--search">
                                 <a href="#endpoints-GETapi-v1-members--org_id--search">GET api/v1/members/{org_id}/search</a>
@@ -5344,20 +5344,20 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                         </form>
 
-                    <h2 id="endpoints-POSTapi-v1-organizations--org_id--products">Store a newly created resource in storage.</h2>
+                    <h2 id="endpoints-POSTapi-v1-organisations--org_id--products">Store a newly created resource in storage.</h2>
 
 <p>
 </p>
 
 
 
-<span id="example-requests-POSTapi-v1-organizations--org_id--products">
+<span id="example-requests-POSTapi-v1-organisations--org_id--products">
 <blockquote>Example request:</blockquote>
 
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost/api/v1/organizations/voluptatem/products" \
+    "http://localhost/api/v1/organisations/voluptatem/products" \
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
     --form "title=jqwhnsjufxbbndcjgwgqirh"\
@@ -5370,7 +5370,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/organizations/voluptatem/products"
+    "http://localhost/api/v1/organisations/voluptatem/products"
 );
 
 const headers = {
@@ -5394,45 +5394,45 @@ fetch(url, {
 
 </span>
 
-<span id="example-responses-POSTapi-v1-organizations--org_id--products">
+<span id="example-responses-POSTapi-v1-organisations--org_id--products">
 </span>
-<span id="execution-results-POSTapi-v1-organizations--org_id--products" hidden>
+<span id="execution-results-POSTapi-v1-organisations--org_id--products" hidden>
     <blockquote>Received response<span
-                id="execution-response-status-POSTapi-v1-organizations--org_id--products"></span>:
+                id="execution-response-status-POSTapi-v1-organisations--org_id--products"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-POSTapi-v1-organizations--org_id--products"
+    <pre class="json"><code id="execution-response-content-POSTapi-v1-organisations--org_id--products"
       data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
 </span>
-<span id="execution-error-POSTapi-v1-organizations--org_id--products" hidden>
+<span id="execution-error-POSTapi-v1-organisations--org_id--products" hidden>
     <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-POSTapi-v1-organizations--org_id--products">
+    <pre><code id="execution-error-message-POSTapi-v1-organisations--org_id--products">
 
 Tip: Check that you&#039;re properly connected to the network.
 If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
 You can check the Dev Tools console for debugging information.</code></pre>
 </span>
-<form id="form-POSTapi-v1-organizations--org_id--products" data-method="POST"
-      data-path="api/v1/organizations/{org_id}/products"
+<form id="form-POSTapi-v1-organisations--org_id--products" data-method="POST"
+      data-path="api/v1/organisations/{org_id}/products"
       data-authed="0"
       data-hasfiles="1"
       data-isarraybody="0"
       autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('POSTapi-v1-organizations--org_id--products', this);">
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-v1-organisations--org_id--products', this);">
     <h3>
         Request&nbsp;&nbsp;&nbsp;
                     <button type="button"
                     style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-POSTapi-v1-organizations--org_id--products"
-                    onclick="tryItOut('POSTapi-v1-organizations--org_id--products');">Try it out ⚡
+                    id="btn-tryout-POSTapi-v1-organisations--org_id--products"
+                    onclick="tryItOut('POSTapi-v1-organisations--org_id--products');">Try it out ⚡
             </button>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-POSTapi-v1-organizations--org_id--products"
-                    onclick="cancelTryOut('POSTapi-v1-organizations--org_id--products');" hidden>Cancel 🛑
+                    id="btn-canceltryout-POSTapi-v1-organisations--org_id--products"
+                    onclick="cancelTryOut('POSTapi-v1-organisations--org_id--products');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-POSTapi-v1-organizations--org_id--products"
+                    id="btn-executetryout-POSTapi-v1-organisations--org_id--products"
                     data-initial-text="Send Request 💥"
                     data-loading-text="⏱ Sending..."
                     hidden>Send Request 💥
@@ -5440,7 +5440,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </h3>
             <p>
             <small class="badge badge-black">POST</small>
-            <b><code>api/v1/organizations/{org_id}/products</code></b>
+            <b><code>api/v1/organisations/{org_id}/products</code></b>
         </p>
                 <h4 class="fancy-heading-panel"><b>Headers</b></h4>
                                 <div style="padding-left: 28px; clear: unset;">
@@ -5448,7 +5448,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="POSTapi-v1-organizations--org_id--products"
+                              name="Content-Type"                data-endpoint="POSTapi-v1-organisations--org_id--products"
                value="multipart/form-data"
                data-component="header">
     <br>
@@ -5459,7 +5459,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="POSTapi-v1-organizations--org_id--products"
+                              name="Accept"                data-endpoint="POSTapi-v1-organisations--org_id--products"
                value="application/json"
                data-component="header">
     <br>
@@ -5471,7 +5471,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="org_id"                data-endpoint="POSTapi-v1-organizations--org_id--products"
+                              name="org_id"                data-endpoint="POSTapi-v1-organisations--org_id--products"
                value="voluptatem"
                data-component="url">
     <br>
@@ -5483,7 +5483,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="title"                data-endpoint="POSTapi-v1-organizations--org_id--products"
+                              name="title"                data-endpoint="POSTapi-v1-organisations--org_id--products"
                value="jqwhnsjufxbbndcjgwgqirh"
                data-component="body">
     <br>
@@ -5494,7 +5494,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="description"                data-endpoint="POSTapi-v1-organizations--org_id--products"
+                              name="description"                data-endpoint="POSTapi-v1-organisations--org_id--products"
                value="Eos veniam et exercitationem beatae similique."
                data-component="body">
     <br>
@@ -5505,7 +5505,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="category"                data-endpoint="POSTapi-v1-organizations--org_id--products"
+                              name="category"                data-endpoint="POSTapi-v1-organisations--org_id--products"
                value="8cd85132-ed44-3864-84e3-1cc9403bf864"
                data-component="body">
     <br>
@@ -5516,7 +5516,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>number</small>&nbsp;
  &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="price"                data-endpoint="POSTapi-v1-organizations--org_id--products"
+               step="any"               name="price"                data-endpoint="POSTapi-v1-organisations--org_id--products"
                value="5475336.7"
                data-component="body">
     <br>
@@ -5527,7 +5527,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>integer</small>&nbsp;
  &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="stock"                data-endpoint="POSTapi-v1-organizations--org_id--products"
+               step="any"               name="stock"                data-endpoint="POSTapi-v1-organisations--org_id--products"
                value="2"
                data-component="body">
     <br>
@@ -5538,7 +5538,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>file</small>&nbsp;
  &nbsp;
                 <input type="file" style="display: none"
-                              name="image"                data-endpoint="POSTapi-v1-organizations--org_id--products"
+                              name="image"                data-endpoint="POSTapi-v1-organisations--org_id--products"
                value=""
                data-component="body">
     <br>
@@ -5546,20 +5546,20 @@ You can check the Dev Tools console for debugging information.</code></pre>
         </div>
         </form>
 
-                    <h2 id="endpoints-PATCHapi-v1-organizations--org_id--products--product_id-">Update the specified resource in storage.</h2>
+                    <h2 id="endpoints-PATCHapi-v1-organisations--org_id--products--product_id-">Update the specified resource in storage.</h2>
 
 <p>
 </p>
 
 
 
-<span id="example-requests-PATCHapi-v1-organizations--org_id--products--product_id-">
+<span id="example-requests-PATCHapi-v1-organisations--org_id--products--product_id-">
 <blockquote>Example request:</blockquote>
 
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PATCH \
-    "http://localhost/api/v1/organizations/quas/products/9cb402e7-36c2-4a1d-9d19-b04efe6ae83d" \
+    "http://localhost/api/v1/organisations/quas/products/9cb402e7-36c2-4a1d-9d19-b04efe6ae83d" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -5582,7 +5582,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/organizations/quas/products/9cb402e7-36c2-4a1d-9d19-b04efe6ae83d"
+    "http://localhost/api/v1/organisations/quas/products/9cb402e7-36c2-4a1d-9d19-b04efe6ae83d"
 );
 
 const headers = {
@@ -5614,45 +5614,45 @@ fetch(url, {
 
 </span>
 
-<span id="example-responses-PATCHapi-v1-organizations--org_id--products--product_id-">
+<span id="example-responses-PATCHapi-v1-organisations--org_id--products--product_id-">
 </span>
-<span id="execution-results-PATCHapi-v1-organizations--org_id--products--product_id-" hidden>
+<span id="execution-results-PATCHapi-v1-organisations--org_id--products--product_id-" hidden>
     <blockquote>Received response<span
-                id="execution-response-status-PATCHapi-v1-organizations--org_id--products--product_id-"></span>:
+                id="execution-response-status-PATCHapi-v1-organisations--org_id--products--product_id-"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-PATCHapi-v1-organizations--org_id--products--product_id-"
+    <pre class="json"><code id="execution-response-content-PATCHapi-v1-organisations--org_id--products--product_id-"
       data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
 </span>
-<span id="execution-error-PATCHapi-v1-organizations--org_id--products--product_id-" hidden>
+<span id="execution-error-PATCHapi-v1-organisations--org_id--products--product_id-" hidden>
     <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-PATCHapi-v1-organizations--org_id--products--product_id-">
+    <pre><code id="execution-error-message-PATCHapi-v1-organisations--org_id--products--product_id-">
 
 Tip: Check that you&#039;re properly connected to the network.
 If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
 You can check the Dev Tools console for debugging information.</code></pre>
 </span>
-<form id="form-PATCHapi-v1-organizations--org_id--products--product_id-" data-method="PATCH"
-      data-path="api/v1/organizations/{org_id}/products/{product_id}"
+<form id="form-PATCHapi-v1-organisations--org_id--products--product_id-" data-method="PATCH"
+      data-path="api/v1/organisations/{org_id}/products/{product_id}"
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('PATCHapi-v1-organizations--org_id--products--product_id-', this);">
+      onsubmit="event.preventDefault(); executeTryOut('PATCHapi-v1-organisations--org_id--products--product_id-', this);">
     <h3>
         Request&nbsp;&nbsp;&nbsp;
                     <button type="button"
                     style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-PATCHapi-v1-organizations--org_id--products--product_id-"
-                    onclick="tryItOut('PATCHapi-v1-organizations--org_id--products--product_id-');">Try it out ⚡
+                    id="btn-tryout-PATCHapi-v1-organisations--org_id--products--product_id-"
+                    onclick="tryItOut('PATCHapi-v1-organisations--org_id--products--product_id-');">Try it out ⚡
             </button>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-PATCHapi-v1-organizations--org_id--products--product_id-"
-                    onclick="cancelTryOut('PATCHapi-v1-organizations--org_id--products--product_id-');" hidden>Cancel 🛑
+                    id="btn-canceltryout-PATCHapi-v1-organisations--org_id--products--product_id-"
+                    onclick="cancelTryOut('PATCHapi-v1-organisations--org_id--products--product_id-');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-PATCHapi-v1-organizations--org_id--products--product_id-"
+                    id="btn-executetryout-PATCHapi-v1-organisations--org_id--products--product_id-"
                     data-initial-text="Send Request 💥"
                     data-loading-text="⏱ Sending..."
                     hidden>Send Request 💥
@@ -5660,7 +5660,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </h3>
             <p>
             <small class="badge badge-purple">PATCH</small>
-            <b><code>api/v1/organizations/{org_id}/products/{product_id}</code></b>
+            <b><code>api/v1/organisations/{org_id}/products/{product_id}</code></b>
         </p>
                 <h4 class="fancy-heading-panel"><b>Headers</b></h4>
                                 <div style="padding-left: 28px; clear: unset;">
@@ -5668,7 +5668,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="PATCHapi-v1-organizations--org_id--products--product_id-"
+                              name="Content-Type"                data-endpoint="PATCHapi-v1-organisations--org_id--products--product_id-"
                value="application/json"
                data-component="header">
     <br>
@@ -5679,7 +5679,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="PATCHapi-v1-organizations--org_id--products--product_id-"
+                              name="Accept"                data-endpoint="PATCHapi-v1-organisations--org_id--products--product_id-"
                value="application/json"
                data-component="header">
     <br>
@@ -5691,7 +5691,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="org_id"                data-endpoint="PATCHapi-v1-organizations--org_id--products--product_id-"
+                              name="org_id"                data-endpoint="PATCHapi-v1-organisations--org_id--products--product_id-"
                value="quas"
                data-component="url">
     <br>
@@ -5702,7 +5702,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="product_id"                data-endpoint="PATCHapi-v1-organizations--org_id--products--product_id-"
+                              name="product_id"                data-endpoint="PATCHapi-v1-organisations--org_id--products--product_id-"
                value="9cb402e7-36c2-4a1d-9d19-b04efe6ae83d"
                data-component="url">
     <br>
@@ -5714,7 +5714,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="name"                data-endpoint="PATCHapi-v1-organizations--org_id--products--product_id-"
+                              name="name"                data-endpoint="PATCHapi-v1-organisations--org_id--products--product_id-"
                value="akyedjhcihdogqejv"
                data-component="body">
     <br>
@@ -5725,7 +5725,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="description"                data-endpoint="PATCHapi-v1-organizations--org_id--products--product_id-"
+                              name="description"                data-endpoint="PATCHapi-v1-organisations--org_id--products--product_id-"
                value="Quasi nemo enim provident maxime omnis aliquid et porro."
                data-component="body">
     <br>
@@ -5736,7 +5736,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>number</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="price"                data-endpoint="PATCHapi-v1-organizations--org_id--products--product_id-"
+               step="any"               name="price"                data-endpoint="PATCHapi-v1-organisations--org_id--products--product_id-"
                value="10"
                data-component="body">
     <br>
@@ -5747,7 +5747,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>integer</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="stock"                data-endpoint="PATCHapi-v1-organizations--org_id--products--product_id-"
+               step="any"               name="stock"                data-endpoint="PATCHapi-v1-organisations--org_id--products--product_id-"
                value="53"
                data-component="body">
     <br>
@@ -5758,7 +5758,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="image"                data-endpoint="PATCHapi-v1-organizations--org_id--products--product_id-"
+                              name="image"                data-endpoint="PATCHapi-v1-organisations--org_id--products--product_id-"
                value="http://www.sauer.com/aut-omnis-nulla-dicta-id-incidunt-sit.html"
                data-component="body">
     <br>
@@ -5768,17 +5768,17 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <b style="line-height: 2;"><code>is_archived</code></b>&nbsp;&nbsp;
 <small>boolean</small>&nbsp;
 <i>optional</i> &nbsp;
-                <label data-endpoint="PATCHapi-v1-organizations--org_id--products--product_id-" style="display: none">
+                <label data-endpoint="PATCHapi-v1-organisations--org_id--products--product_id-" style="display: none">
             <input type="radio" name="is_archived"
                    value="true"
-                   data-endpoint="PATCHapi-v1-organizations--org_id--products--product_id-"
+                   data-endpoint="PATCHapi-v1-organisations--org_id--products--product_id-"
                    data-component="body"             >
             <code>true</code>
         </label>
-        <label data-endpoint="PATCHapi-v1-organizations--org_id--products--product_id-" style="display: none">
+        <label data-endpoint="PATCHapi-v1-organisations--org_id--products--product_id-" style="display: none">
             <input type="radio" name="is_archived"
                    value="false"
-                   data-endpoint="PATCHapi-v1-organizations--org_id--products--product_id-"
+                   data-endpoint="PATCHapi-v1-organisations--org_id--products--product_id-"
                    data-component="body"             >
             <code>false</code>
         </label>
@@ -5799,7 +5799,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="productsVariant.0.size_id"                data-endpoint="PATCHapi-v1-organizations--org_id--products--product_id-"
+                              name="productsVariant.0.size_id"                data-endpoint="PATCHapi-v1-organisations--org_id--products--product_id-"
                value="debe7c41-53c9-304a-a612-8a61baa948cc"
                data-component="body">
     <br>
@@ -5810,7 +5810,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>integer</small>&nbsp;
  &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="productsVariant.0.stock"                data-endpoint="PATCHapi-v1-organizations--org_id--products--product_id-"
+               step="any"               name="productsVariant.0.stock"                data-endpoint="PATCHapi-v1-organisations--org_id--products--product_id-"
                value="84"
                data-component="body">
     <br>
@@ -5821,7 +5821,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>number</small>&nbsp;
  &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="productsVariant.0.price"                data-endpoint="PATCHapi-v1-organizations--org_id--products--product_id-"
+               step="any"               name="productsVariant.0.price"                data-endpoint="PATCHapi-v1-organisations--org_id--products--product_id-"
                value="40"
                data-component="body">
     <br>
@@ -9513,7 +9513,7 @@ access-control-allow-origin: *
     &quot;errors&quot;: [
         &quot;Invalid invitation link format&quot;,
         &quot;Expired invitation link&quot;,
-        &quot;Organization not found&quot;
+        &quot;organisation not found&quot;
     ],
     &quot;status_code&quot;: 400
 }</code>
@@ -11942,20 +11942,20 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                     </form>
 
-                    <h2 id="endpoints-POSTapi-v1-organizations">Store a newly created resource in storage.</h2>
+                    <h2 id="endpoints-POSTapi-v1-organisations">Store a newly created resource in storage.</h2>
 
 <p>
 </p>
 
 
 
-<span id="example-requests-POSTapi-v1-organizations">
+<span id="example-requests-POSTapi-v1-organisations">
 <blockquote>Example request:</blockquote>
 
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost/api/v1/organizations" \
+    "http://localhost/api/v1/organisations" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -11973,7 +11973,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/organizations"
+    "http://localhost/api/v1/organisations"
 );
 
 const headers = {
@@ -12000,45 +12000,45 @@ fetch(url, {
 
 </span>
 
-<span id="example-responses-POSTapi-v1-organizations">
+<span id="example-responses-POSTapi-v1-organisations">
 </span>
-<span id="execution-results-POSTapi-v1-organizations" hidden>
+<span id="execution-results-POSTapi-v1-organisations" hidden>
     <blockquote>Received response<span
-                id="execution-response-status-POSTapi-v1-organizations"></span>:
+                id="execution-response-status-POSTapi-v1-organisations"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-POSTapi-v1-organizations"
+    <pre class="json"><code id="execution-response-content-POSTapi-v1-organisations"
       data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
 </span>
-<span id="execution-error-POSTapi-v1-organizations" hidden>
+<span id="execution-error-POSTapi-v1-organisations" hidden>
     <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-POSTapi-v1-organizations">
+    <pre><code id="execution-error-message-POSTapi-v1-organisations">
 
 Tip: Check that you&#039;re properly connected to the network.
 If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
 You can check the Dev Tools console for debugging information.</code></pre>
 </span>
-<form id="form-POSTapi-v1-organizations" data-method="POST"
-      data-path="api/v1/organizations"
+<form id="form-POSTapi-v1-organisations" data-method="POST"
+      data-path="api/v1/organisations"
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('POSTapi-v1-organizations', this);">
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-v1-organisations', this);">
     <h3>
         Request&nbsp;&nbsp;&nbsp;
                     <button type="button"
                     style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-POSTapi-v1-organizations"
-                    onclick="tryItOut('POSTapi-v1-organizations');">Try it out ⚡
+                    id="btn-tryout-POSTapi-v1-organisations"
+                    onclick="tryItOut('POSTapi-v1-organisations');">Try it out ⚡
             </button>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-POSTapi-v1-organizations"
-                    onclick="cancelTryOut('POSTapi-v1-organizations');" hidden>Cancel 🛑
+                    id="btn-canceltryout-POSTapi-v1-organisations"
+                    onclick="cancelTryOut('POSTapi-v1-organisations');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-POSTapi-v1-organizations"
+                    id="btn-executetryout-POSTapi-v1-organisations"
                     data-initial-text="Send Request 💥"
                     data-loading-text="⏱ Sending..."
                     hidden>Send Request 💥
@@ -12046,7 +12046,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </h3>
             <p>
             <small class="badge badge-black">POST</small>
-            <b><code>api/v1/organizations</code></b>
+            <b><code>api/v1/organisations</code></b>
         </p>
                 <h4 class="fancy-heading-panel"><b>Headers</b></h4>
                                 <div style="padding-left: 28px; clear: unset;">
@@ -12054,7 +12054,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="POSTapi-v1-organizations"
+                              name="Content-Type"                data-endpoint="POSTapi-v1-organisations"
                value="application/json"
                data-component="header">
     <br>
@@ -12065,7 +12065,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="POSTapi-v1-organizations"
+                              name="Accept"                data-endpoint="POSTapi-v1-organisations"
                value="application/json"
                data-component="header">
     <br>
@@ -12077,7 +12077,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="name"                data-endpoint="POSTapi-v1-organizations"
+                              name="name"                data-endpoint="POSTapi-v1-organisations"
                value="ex"
                data-component="body">
     <br>
@@ -12088,7 +12088,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="description"                data-endpoint="POSTapi-v1-organizations"
+                              name="description"                data-endpoint="POSTapi-v1-organisations"
                value="Et iure fugit quos adipisci expedita recusandae corporis."
                data-component="body">
     <br>
@@ -12099,7 +12099,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="email"                data-endpoint="POSTapi-v1-organizations"
+                              name="email"                data-endpoint="POSTapi-v1-organisations"
                value="goyette.shyanne@example.net"
                data-component="body">
     <br>
@@ -12110,7 +12110,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="industry"                data-endpoint="POSTapi-v1-organizations"
+                              name="industry"                data-endpoint="POSTapi-v1-organisations"
                value="eius"
                data-component="body">
     <br>
@@ -12121,7 +12121,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="type"                data-endpoint="POSTapi-v1-organizations"
+                              name="type"                data-endpoint="POSTapi-v1-organisations"
                value="debitis"
                data-component="body">
     <br>
@@ -12132,7 +12132,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="country"                data-endpoint="POSTapi-v1-organizations"
+                              name="country"                data-endpoint="POSTapi-v1-organisations"
                value="et"
                data-component="body">
     <br>
@@ -12143,7 +12143,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="address"                data-endpoint="POSTapi-v1-organizations"
+                              name="address"                data-endpoint="POSTapi-v1-organisations"
                value="velit"
                data-component="body">
     <br>
@@ -12154,7 +12154,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="state"                data-endpoint="POSTapi-v1-organizations"
+                              name="state"                data-endpoint="POSTapi-v1-organisations"
                value="nam"
                data-component="body">
     <br>
@@ -12162,27 +12162,27 @@ You can check the Dev Tools console for debugging information.</code></pre>
         </div>
         </form>
 
-                    <h2 id="endpoints-GETapi-v1-organizations">Display a listing of the resource.</h2>
+                    <h2 id="endpoints-GETapi-v1-organisations">Display a listing of the resource.</h2>
 
 <p>
 </p>
 
 
 
-<span id="example-requests-GETapi-v1-organizations">
+<span id="example-requests-GETapi-v1-organisations">
 <blockquote>Example request:</blockquote>
 
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/v1/organizations" \
+    --get "http://localhost/api/v1/organisations" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/organizations"
+    "http://localhost/api/v1/organisations"
 );
 
 const headers = {
@@ -12197,7 +12197,7 @@ fetch(url, {
 
 </span>
 
-<span id="example-responses-GETapi-v1-organizations">
+<span id="example-responses-GETapi-v1-organisations">
             <blockquote>
             <p>Example response (401):</p>
         </blockquote>
@@ -12215,43 +12215,43 @@ access-control-allow-origin: *
 }</code>
  </pre>
     </span>
-<span id="execution-results-GETapi-v1-organizations" hidden>
+<span id="execution-results-GETapi-v1-organisations" hidden>
     <blockquote>Received response<span
-                id="execution-response-status-GETapi-v1-organizations"></span>:
+                id="execution-response-status-GETapi-v1-organisations"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-v1-organizations"
+    <pre class="json"><code id="execution-response-content-GETapi-v1-organisations"
       data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
 </span>
-<span id="execution-error-GETapi-v1-organizations" hidden>
+<span id="execution-error-GETapi-v1-organisations" hidden>
     <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-GETapi-v1-organizations">
+    <pre><code id="execution-error-message-GETapi-v1-organisations">
 
 Tip: Check that you&#039;re properly connected to the network.
 If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
 You can check the Dev Tools console for debugging information.</code></pre>
 </span>
-<form id="form-GETapi-v1-organizations" data-method="GET"
-      data-path="api/v1/organizations"
+<form id="form-GETapi-v1-organisations" data-method="GET"
+      data-path="api/v1/organisations"
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-organizations', this);">
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-organisations', this);">
     <h3>
         Request&nbsp;&nbsp;&nbsp;
                     <button type="button"
                     style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-GETapi-v1-organizations"
-                    onclick="tryItOut('GETapi-v1-organizations');">Try it out ⚡
+                    id="btn-tryout-GETapi-v1-organisations"
+                    onclick="tryItOut('GETapi-v1-organisations');">Try it out ⚡
             </button>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-GETapi-v1-organizations"
-                    onclick="cancelTryOut('GETapi-v1-organizations');" hidden>Cancel 🛑
+                    id="btn-canceltryout-GETapi-v1-organisations"
+                    onclick="cancelTryOut('GETapi-v1-organisations');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-GETapi-v1-organizations"
+                    id="btn-executetryout-GETapi-v1-organisations"
                     data-initial-text="Send Request 💥"
                     data-loading-text="⏱ Sending..."
                     hidden>Send Request 💥
@@ -12259,7 +12259,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </h3>
             <p>
             <small class="badge badge-green">GET</small>
-            <b><code>api/v1/organizations</code></b>
+            <b><code>api/v1/organisations</code></b>
         </p>
                 <h4 class="fancy-heading-panel"><b>Headers</b></h4>
                                 <div style="padding-left: 28px; clear: unset;">
@@ -12267,7 +12267,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="GETapi-v1-organizations"
+                              name="Content-Type"                data-endpoint="GETapi-v1-organisations"
                value="application/json"
                data-component="header">
     <br>
@@ -12278,7 +12278,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="GETapi-v1-organizations"
+                              name="Accept"                data-endpoint="GETapi-v1-organisations"
                value="application/json"
                data-component="header">
     <br>
@@ -12286,20 +12286,20 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                         </form>
 
-                    <h2 id="endpoints-PUTapi-v1-organizations--org_id-">Update the specified resource in storage.</h2>
+                    <h2 id="endpoints-PUTapi-v1-organisations--org_id-">Update the specified resource in storage.</h2>
 
 <p>
 </p>
 
 
 
-<span id="example-requests-PUTapi-v1-organizations--org_id-">
+<span id="example-requests-PUTapi-v1-organisations--org_id-">
 <blockquote>Example request:</blockquote>
 
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "http://localhost/api/v1/organizations/ex" \
+    "http://localhost/api/v1/organisations/ex" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -12316,7 +12316,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/organizations/ex"
+    "http://localhost/api/v1/organisations/ex"
 );
 
 const headers = {
@@ -12342,45 +12342,45 @@ fetch(url, {
 
 </span>
 
-<span id="example-responses-PUTapi-v1-organizations--org_id-">
+<span id="example-responses-PUTapi-v1-organisations--org_id-">
 </span>
-<span id="execution-results-PUTapi-v1-organizations--org_id-" hidden>
+<span id="execution-results-PUTapi-v1-organisations--org_id-" hidden>
     <blockquote>Received response<span
-                id="execution-response-status-PUTapi-v1-organizations--org_id-"></span>:
+                id="execution-response-status-PUTapi-v1-organisations--org_id-"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-PUTapi-v1-organizations--org_id-"
+    <pre class="json"><code id="execution-response-content-PUTapi-v1-organisations--org_id-"
       data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
 </span>
-<span id="execution-error-PUTapi-v1-organizations--org_id-" hidden>
+<span id="execution-error-PUTapi-v1-organisations--org_id-" hidden>
     <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-PUTapi-v1-organizations--org_id-">
+    <pre><code id="execution-error-message-PUTapi-v1-organisations--org_id-">
 
 Tip: Check that you&#039;re properly connected to the network.
 If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
 You can check the Dev Tools console for debugging information.</code></pre>
 </span>
-<form id="form-PUTapi-v1-organizations--org_id-" data-method="PUT"
-      data-path="api/v1/organizations/{org_id}"
+<form id="form-PUTapi-v1-organisations--org_id-" data-method="PUT"
+      data-path="api/v1/organisations/{org_id}"
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('PUTapi-v1-organizations--org_id-', this);">
+      onsubmit="event.preventDefault(); executeTryOut('PUTapi-v1-organisations--org_id-', this);">
     <h3>
         Request&nbsp;&nbsp;&nbsp;
                     <button type="button"
                     style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-PUTapi-v1-organizations--org_id-"
-                    onclick="tryItOut('PUTapi-v1-organizations--org_id-');">Try it out ⚡
+                    id="btn-tryout-PUTapi-v1-organisations--org_id-"
+                    onclick="tryItOut('PUTapi-v1-organisations--org_id-');">Try it out ⚡
             </button>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-PUTapi-v1-organizations--org_id-"
-                    onclick="cancelTryOut('PUTapi-v1-organizations--org_id-');" hidden>Cancel 🛑
+                    id="btn-canceltryout-PUTapi-v1-organisations--org_id-"
+                    onclick="cancelTryOut('PUTapi-v1-organisations--org_id-');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-PUTapi-v1-organizations--org_id-"
+                    id="btn-executetryout-PUTapi-v1-organisations--org_id-"
                     data-initial-text="Send Request 💥"
                     data-loading-text="⏱ Sending..."
                     hidden>Send Request 💥
@@ -12388,7 +12388,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </h3>
             <p>
             <small class="badge badge-darkblue">PUT</small>
-            <b><code>api/v1/organizations/{org_id}</code></b>
+            <b><code>api/v1/organisations/{org_id}</code></b>
         </p>
                 <h4 class="fancy-heading-panel"><b>Headers</b></h4>
                                 <div style="padding-left: 28px; clear: unset;">
@@ -12396,7 +12396,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="PUTapi-v1-organizations--org_id-"
+                              name="Content-Type"                data-endpoint="PUTapi-v1-organisations--org_id-"
                value="application/json"
                data-component="header">
     <br>
@@ -12407,7 +12407,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="PUTapi-v1-organizations--org_id-"
+                              name="Accept"                data-endpoint="PUTapi-v1-organisations--org_id-"
                value="application/json"
                data-component="header">
     <br>
@@ -12419,7 +12419,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="org_id"                data-endpoint="PUTapi-v1-organizations--org_id-"
+                              name="org_id"                data-endpoint="PUTapi-v1-organisations--org_id-"
                value="ex"
                data-component="url">
     <br>
@@ -12431,7 +12431,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="name"                data-endpoint="PUTapi-v1-organizations--org_id-"
+                              name="name"                data-endpoint="PUTapi-v1-organisations--org_id-"
                value="et"
                data-component="body">
     <br>
@@ -12442,7 +12442,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="description"                data-endpoint="PUTapi-v1-organizations--org_id-"
+                              name="description"                data-endpoint="PUTapi-v1-organisations--org_id-"
                value="In voluptatem reiciendis sint et."
                data-component="body">
     <br>
@@ -12453,7 +12453,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="email"                data-endpoint="PUTapi-v1-organizations--org_id-"
+                              name="email"                data-endpoint="PUTapi-v1-organisations--org_id-"
                value=""
                data-component="body">
     <br>
@@ -12464,7 +12464,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="industry"                data-endpoint="PUTapi-v1-organizations--org_id-"
+                              name="industry"                data-endpoint="PUTapi-v1-organisations--org_id-"
                value="magnam"
                data-component="body">
     <br>
@@ -12475,7 +12475,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="type"                data-endpoint="PUTapi-v1-organizations--org_id-"
+                              name="type"                data-endpoint="PUTapi-v1-organisations--org_id-"
                value="aspernatur"
                data-component="body">
     <br>
@@ -12486,7 +12486,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="country"                data-endpoint="PUTapi-v1-organizations--org_id-"
+                              name="country"                data-endpoint="PUTapi-v1-organisations--org_id-"
                value="cupiditate"
                data-component="body">
     <br>
@@ -12497,7 +12497,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="address"                data-endpoint="PUTapi-v1-organizations--org_id-"
+                              name="address"                data-endpoint="PUTapi-v1-organisations--org_id-"
                value="unde"
                data-component="body">
     <br>
@@ -12508,7 +12508,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="state"                data-endpoint="PUTapi-v1-organizations--org_id-"
+                              name="state"                data-endpoint="PUTapi-v1-organisations--org_id-"
                value="pariatur"
                data-component="body">
     <br>
@@ -12516,27 +12516,27 @@ You can check the Dev Tools console for debugging information.</code></pre>
         </div>
         </form>
 
-                    <h2 id="endpoints-DELETEapi-v1-organizations--org_id-">Remove the specified resource from storage.</h2>
+                    <h2 id="endpoints-DELETEapi-v1-organisations--org_id-">Remove the specified resource from storage.</h2>
 
 <p>
 </p>
 
 
 
-<span id="example-requests-DELETEapi-v1-organizations--org_id-">
+<span id="example-requests-DELETEapi-v1-organisations--org_id-">
 <blockquote>Example request:</blockquote>
 
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://localhost/api/v1/organizations/tenetur" \
+    "http://localhost/api/v1/organisations/tenetur" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/organizations/tenetur"
+    "http://localhost/api/v1/organisations/tenetur"
 );
 
 const headers = {
@@ -12551,45 +12551,45 @@ fetch(url, {
 
 </span>
 
-<span id="example-responses-DELETEapi-v1-organizations--org_id-">
+<span id="example-responses-DELETEapi-v1-organisations--org_id-">
 </span>
-<span id="execution-results-DELETEapi-v1-organizations--org_id-" hidden>
+<span id="execution-results-DELETEapi-v1-organisations--org_id-" hidden>
     <blockquote>Received response<span
-                id="execution-response-status-DELETEapi-v1-organizations--org_id-"></span>:
+                id="execution-response-status-DELETEapi-v1-organisations--org_id-"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-DELETEapi-v1-organizations--org_id-"
+    <pre class="json"><code id="execution-response-content-DELETEapi-v1-organisations--org_id-"
       data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
 </span>
-<span id="execution-error-DELETEapi-v1-organizations--org_id-" hidden>
+<span id="execution-error-DELETEapi-v1-organisations--org_id-" hidden>
     <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-DELETEapi-v1-organizations--org_id-">
+    <pre><code id="execution-error-message-DELETEapi-v1-organisations--org_id-">
 
 Tip: Check that you&#039;re properly connected to the network.
 If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
 You can check the Dev Tools console for debugging information.</code></pre>
 </span>
-<form id="form-DELETEapi-v1-organizations--org_id-" data-method="DELETE"
-      data-path="api/v1/organizations/{org_id}"
+<form id="form-DELETEapi-v1-organisations--org_id-" data-method="DELETE"
+      data-path="api/v1/organisations/{org_id}"
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('DELETEapi-v1-organizations--org_id-', this);">
+      onsubmit="event.preventDefault(); executeTryOut('DELETEapi-v1-organisations--org_id-', this);">
     <h3>
         Request&nbsp;&nbsp;&nbsp;
                     <button type="button"
                     style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-DELETEapi-v1-organizations--org_id-"
-                    onclick="tryItOut('DELETEapi-v1-organizations--org_id-');">Try it out ⚡
+                    id="btn-tryout-DELETEapi-v1-organisations--org_id-"
+                    onclick="tryItOut('DELETEapi-v1-organisations--org_id-');">Try it out ⚡
             </button>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-DELETEapi-v1-organizations--org_id-"
-                    onclick="cancelTryOut('DELETEapi-v1-organizations--org_id-');" hidden>Cancel 🛑
+                    id="btn-canceltryout-DELETEapi-v1-organisations--org_id-"
+                    onclick="cancelTryOut('DELETEapi-v1-organisations--org_id-');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-DELETEapi-v1-organizations--org_id-"
+                    id="btn-executetryout-DELETEapi-v1-organisations--org_id-"
                     data-initial-text="Send Request 💥"
                     data-loading-text="⏱ Sending..."
                     hidden>Send Request 💥
@@ -12597,7 +12597,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </h3>
             <p>
             <small class="badge badge-red">DELETE</small>
-            <b><code>api/v1/organizations/{org_id}</code></b>
+            <b><code>api/v1/organisations/{org_id}</code></b>
         </p>
                 <h4 class="fancy-heading-panel"><b>Headers</b></h4>
                                 <div style="padding-left: 28px; clear: unset;">
@@ -12605,7 +12605,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="DELETEapi-v1-organizations--org_id-"
+                              name="Content-Type"                data-endpoint="DELETEapi-v1-organisations--org_id-"
                value="application/json"
                data-component="header">
     <br>
@@ -12616,7 +12616,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="DELETEapi-v1-organizations--org_id-"
+                              name="Accept"                data-endpoint="DELETEapi-v1-organisations--org_id-"
                value="application/json"
                data-component="header">
     <br>
@@ -12628,7 +12628,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="org_id"                data-endpoint="DELETEapi-v1-organizations--org_id-"
+                              name="org_id"                data-endpoint="DELETEapi-v1-organisations--org_id-"
                value="tenetur"
                data-component="url">
     <br>
@@ -12636,27 +12636,27 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                     </form>
 
-                    <h2 id="endpoints-DELETEapi-v1-organizations--org_id--users--user_id-">DELETE api/v1/organizations/{org_id}/users/{user_id}</h2>
+                    <h2 id="endpoints-DELETEapi-v1-organisations--org_id--users--user_id-">DELETE api/v1/organisations/{org_id}/users/{user_id}</h2>
 
 <p>
 </p>
 
 
 
-<span id="example-requests-DELETEapi-v1-organizations--org_id--users--user_id-">
+<span id="example-requests-DELETEapi-v1-organisations--org_id--users--user_id-">
 <blockquote>Example request:</blockquote>
 
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://localhost/api/v1/organizations/provident/users/9cb402e5-e983-4696-9bc4-74d7bfc255a1" \
+    "http://localhost/api/v1/organisations/provident/users/9cb402e5-e983-4696-9bc4-74d7bfc255a1" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/organizations/provident/users/9cb402e5-e983-4696-9bc4-74d7bfc255a1"
+    "http://localhost/api/v1/organisations/provident/users/9cb402e5-e983-4696-9bc4-74d7bfc255a1"
 );
 
 const headers = {
@@ -12671,45 +12671,45 @@ fetch(url, {
 
 </span>
 
-<span id="example-responses-DELETEapi-v1-organizations--org_id--users--user_id-">
+<span id="example-responses-DELETEapi-v1-organisations--org_id--users--user_id-">
 </span>
-<span id="execution-results-DELETEapi-v1-organizations--org_id--users--user_id-" hidden>
+<span id="execution-results-DELETEapi-v1-organisations--org_id--users--user_id-" hidden>
     <blockquote>Received response<span
-                id="execution-response-status-DELETEapi-v1-organizations--org_id--users--user_id-"></span>:
+                id="execution-response-status-DELETEapi-v1-organisations--org_id--users--user_id-"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-DELETEapi-v1-organizations--org_id--users--user_id-"
+    <pre class="json"><code id="execution-response-content-DELETEapi-v1-organisations--org_id--users--user_id-"
       data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
 </span>
-<span id="execution-error-DELETEapi-v1-organizations--org_id--users--user_id-" hidden>
+<span id="execution-error-DELETEapi-v1-organisations--org_id--users--user_id-" hidden>
     <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-DELETEapi-v1-organizations--org_id--users--user_id-">
+    <pre><code id="execution-error-message-DELETEapi-v1-organisations--org_id--users--user_id-">
 
 Tip: Check that you&#039;re properly connected to the network.
 If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
 You can check the Dev Tools console for debugging information.</code></pre>
 </span>
-<form id="form-DELETEapi-v1-organizations--org_id--users--user_id-" data-method="DELETE"
-      data-path="api/v1/organizations/{org_id}/users/{user_id}"
+<form id="form-DELETEapi-v1-organisations--org_id--users--user_id-" data-method="DELETE"
+      data-path="api/v1/organisations/{org_id}/users/{user_id}"
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('DELETEapi-v1-organizations--org_id--users--user_id-', this);">
+      onsubmit="event.preventDefault(); executeTryOut('DELETEapi-v1-organisations--org_id--users--user_id-', this);">
     <h3>
         Request&nbsp;&nbsp;&nbsp;
                     <button type="button"
                     style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-DELETEapi-v1-organizations--org_id--users--user_id-"
-                    onclick="tryItOut('DELETEapi-v1-organizations--org_id--users--user_id-');">Try it out ⚡
+                    id="btn-tryout-DELETEapi-v1-organisations--org_id--users--user_id-"
+                    onclick="tryItOut('DELETEapi-v1-organisations--org_id--users--user_id-');">Try it out ⚡
             </button>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-DELETEapi-v1-organizations--org_id--users--user_id-"
-                    onclick="cancelTryOut('DELETEapi-v1-organizations--org_id--users--user_id-');" hidden>Cancel 🛑
+                    id="btn-canceltryout-DELETEapi-v1-organisations--org_id--users--user_id-"
+                    onclick="cancelTryOut('DELETEapi-v1-organisations--org_id--users--user_id-');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-DELETEapi-v1-organizations--org_id--users--user_id-"
+                    id="btn-executetryout-DELETEapi-v1-organisations--org_id--users--user_id-"
                     data-initial-text="Send Request 💥"
                     data-loading-text="⏱ Sending..."
                     hidden>Send Request 💥
@@ -12717,7 +12717,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </h3>
             <p>
             <small class="badge badge-red">DELETE</small>
-            <b><code>api/v1/organizations/{org_id}/users/{user_id}</code></b>
+            <b><code>api/v1/organisations/{org_id}/users/{user_id}</code></b>
         </p>
                 <h4 class="fancy-heading-panel"><b>Headers</b></h4>
                                 <div style="padding-left: 28px; clear: unset;">
@@ -12725,7 +12725,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="DELETEapi-v1-organizations--org_id--users--user_id-"
+                              name="Content-Type"                data-endpoint="DELETEapi-v1-organisations--org_id--users--user_id-"
                value="application/json"
                data-component="header">
     <br>
@@ -12736,7 +12736,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="DELETEapi-v1-organizations--org_id--users--user_id-"
+                              name="Accept"                data-endpoint="DELETEapi-v1-organisations--org_id--users--user_id-"
                value="application/json"
                data-component="header">
     <br>
@@ -12748,7 +12748,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="org_id"                data-endpoint="DELETEapi-v1-organizations--org_id--users--user_id-"
+                              name="org_id"                data-endpoint="DELETEapi-v1-organisations--org_id--users--user_id-"
                value="provident"
                data-component="url">
     <br>
@@ -12759,7 +12759,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="user_id"                data-endpoint="DELETEapi-v1-organizations--org_id--users--user_id-"
+                              name="user_id"                data-endpoint="DELETEapi-v1-organisations--org_id--users--user_id-"
                value="9cb402e5-e983-4696-9bc4-74d7bfc255a1"
                data-component="url">
     <br>
@@ -12767,27 +12767,27 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                     </form>
 
-                    <h2 id="endpoints-GETapi-v1-organizations--organisation--users">GET api/v1/organizations/{organisation}/users</h2>
+                    <h2 id="endpoints-GETapi-v1-organisations--organisation--users">GET api/v1/organisations/{organisation}/users</h2>
 
 <p>
 </p>
 
 
 
-<span id="example-requests-GETapi-v1-organizations--organisation--users">
+<span id="example-requests-GETapi-v1-organisations--organisation--users">
 <blockquote>Example request:</blockquote>
 
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/v1/organizations/rerum/users" \
+    --get "http://localhost/api/v1/organisations/rerum/users" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/organizations/rerum/users"
+    "http://localhost/api/v1/organisations/rerum/users"
 );
 
 const headers = {
@@ -12802,7 +12802,7 @@ fetch(url, {
 
 </span>
 
-<span id="example-responses-GETapi-v1-organizations--organisation--users">
+<span id="example-responses-GETapi-v1-organisations--organisation--users">
             <blockquote>
             <p>Example response (401):</p>
         </blockquote>
@@ -12820,43 +12820,43 @@ access-control-allow-origin: *
 }</code>
  </pre>
     </span>
-<span id="execution-results-GETapi-v1-organizations--organisation--users" hidden>
+<span id="execution-results-GETapi-v1-organisations--organisation--users" hidden>
     <blockquote>Received response<span
-                id="execution-response-status-GETapi-v1-organizations--organisation--users"></span>:
+                id="execution-response-status-GETapi-v1-organisations--organisation--users"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-v1-organizations--organisation--users"
+    <pre class="json"><code id="execution-response-content-GETapi-v1-organisations--organisation--users"
       data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
 </span>
-<span id="execution-error-GETapi-v1-organizations--organisation--users" hidden>
+<span id="execution-error-GETapi-v1-organisations--organisation--users" hidden>
     <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-GETapi-v1-organizations--organisation--users">
+    <pre><code id="execution-error-message-GETapi-v1-organisations--organisation--users">
 
 Tip: Check that you&#039;re properly connected to the network.
 If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
 You can check the Dev Tools console for debugging information.</code></pre>
 </span>
-<form id="form-GETapi-v1-organizations--organisation--users" data-method="GET"
-      data-path="api/v1/organizations/{organisation}/users"
+<form id="form-GETapi-v1-organisations--organisation--users" data-method="GET"
+      data-path="api/v1/organisations/{organisation}/users"
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-organizations--organisation--users', this);">
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-organisations--organisation--users', this);">
     <h3>
         Request&nbsp;&nbsp;&nbsp;
                     <button type="button"
                     style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-GETapi-v1-organizations--organisation--users"
-                    onclick="tryItOut('GETapi-v1-organizations--organisation--users');">Try it out ⚡
+                    id="btn-tryout-GETapi-v1-organisations--organisation--users"
+                    onclick="tryItOut('GETapi-v1-organisations--organisation--users');">Try it out ⚡
             </button>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-GETapi-v1-organizations--organisation--users"
-                    onclick="cancelTryOut('GETapi-v1-organizations--organisation--users');" hidden>Cancel 🛑
+                    id="btn-canceltryout-GETapi-v1-organisations--organisation--users"
+                    onclick="cancelTryOut('GETapi-v1-organisations--organisation--users');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-GETapi-v1-organizations--organisation--users"
+                    id="btn-executetryout-GETapi-v1-organisations--organisation--users"
                     data-initial-text="Send Request 💥"
                     data-loading-text="⏱ Sending..."
                     hidden>Send Request 💥
@@ -12864,7 +12864,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </h3>
             <p>
             <small class="badge badge-green">GET</small>
-            <b><code>api/v1/organizations/{organisation}/users</code></b>
+            <b><code>api/v1/organisations/{organisation}/users</code></b>
         </p>
                 <h4 class="fancy-heading-panel"><b>Headers</b></h4>
                                 <div style="padding-left: 28px; clear: unset;">
@@ -12872,7 +12872,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="GETapi-v1-organizations--organisation--users"
+                              name="Content-Type"                data-endpoint="GETapi-v1-organisations--organisation--users"
                value="application/json"
                data-component="header">
     <br>
@@ -12883,7 +12883,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="GETapi-v1-organizations--organisation--users"
+                              name="Accept"                data-endpoint="GETapi-v1-organisations--organisation--users"
                value="application/json"
                data-component="header">
     <br>
@@ -12895,7 +12895,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="organisation"                data-endpoint="GETapi-v1-organizations--organisation--users"
+                              name="organisation"                data-endpoint="GETapi-v1-organisations--organisation--users"
                value="rerum"
                data-component="url">
     <br>
