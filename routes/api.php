@@ -247,6 +247,10 @@ Route::prefix('v1')->group(function () {
         Route::get('/statistics', [AdminDashboardController::class, 'getStatistics']);
         Route::apiResource('faqs', FaqController::class);       
         Route::get('/dashboard/top-products', [AdminDashboardController::class, 'getTopProducts']);        
+        Route::get('/all-products-by-sales', [AdminDashboardController::class, 'getAllProductsSortedBySales']);
+
+
+       
     });
 
     Route::post('/waitlists', [WaitListController::class, 'store']);
