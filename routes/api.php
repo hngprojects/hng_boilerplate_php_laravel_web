@@ -81,7 +81,6 @@ Route::prefix('v1')->group(function () {
     Route::post('/auth/reset-forgot-password', [ForgotResetPasswordController::class, 'resetPassword']);
     Route::post('/auth/verify-otp', [ForgotResetPasswordController::class, 'verifyUserOTP']);
 
-    Route::post('/roles', [RoleController::class, 'store']);
 
     Route::get('/auth/login-facebook', [SocialAuthController::class, 'loginUsingFacebook']);
     Route::get('/auth/facebook/callback', [SocialAuthController::class, 'callbackFromFacebook']);
@@ -204,18 +203,17 @@ Route::prefix('v1')->group(function () {
         Route::put('/jobs/{id}', [JobController::class, 'update']);
         Route::delete('/jobs/{id}', [JobController::class, 'destroy']);
 
-
-
         Route::get('/user/export/{format}', [ExportUserController::class, 'export']);
 
         // Accounts
         Route::patch('/accounts/deactivate', [AccountController::class, 'deactivate']);
 
         // Roles
+        Route::post('/organisations/{org_id}/roles', [RoleController::class, 'store']);
         Route::put('/organisations/{org_id}/roles/{role_id}', [RoleController::class, 'update']);
         Route::put('/organisations/{org_id}/roles/{role_id}/disable', [RoleController::class, 'disableRole']);
-        Route::put('/organisations/{org_id}/users/{user_id}/roles', [RoleController::class, 'assignRole']);
-        Route::put('/organisations/{org_id}/{role_id}/permissions', [RoleController::class, 'assignPermissions']);
+        Route::get('/organisations/{org_id}/roles', [RoleController::class, 'index']);
+        Route::get('/organisations/{org_id}/roles/{role_id}', [RoleController::class, 'show']);
 
         //Update Password
         Route::post('/password-update', [ProfileController::class, 'updatePassword']);
@@ -245,9 +243,18 @@ Route::prefix('v1')->group(function () {
         Route::delete('/blogs/{id}', [BlogController::class, 'destroy']);
         Route::get('/waitlists', [WaitListController::class, 'index']);
         Route::apiResource('squeeze-pages', SqueezePageCoontroller::class);
+<<<<<<< HEAD
         Route::get('/statistics', [AdminDashboardController::class, 'getStatistics']);
         Route::apiResource('faqs', FaqController::class);
+=======
+        Route::get('/dashboard/statistics', [AdminDashboardController::class, 'getStatistics']);
+        Route::apiResource('faqs', FaqController::class);       
+>>>>>>> 7984e5634e0e683fb17276994e232f6c61f0daa2
         Route::get('/dashboard/top-products', [AdminDashboardController::class, 'getTopProducts']);        
+        Route::get('/dashboard/all-top-products', [AdminDashboardController::class, 'getAllProductsSortedBySales']);
+
+
+       
     });
 
     Route::post('/waitlists', [WaitListController::class, 'store']);
