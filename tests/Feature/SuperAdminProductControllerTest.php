@@ -10,11 +10,10 @@ class SuperAdminProductControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testSuperAdminCanCreateAndUpdateProduct()
+    public function testSuperAdminCanCreateUpdateAndDeleteProduct()
     {
         $this->artisan('migrate:fresh --seed');
 
-        // Log in as Super Admin
         $loginResponse = $this->postJson('/api/v1/auth/login', [
             'email' => 'bulldozeradmin@hng.com',
             'password' => 'bulldozer',
@@ -37,10 +36,8 @@ class SuperAdminProductControllerTest extends TestCase
         $accessToken = $loginResponse->json('access_token');
         $userId = $loginResponse->json('data.user.id');
 
-        // Fetch a valid organization ID from the seeded data
         $validOrgId = Product::first()->org_id;
 
-        // Create a product
         $productResponse = $this->withHeaders([
             'Authorization' => 'Bearer ' . $accessToken,
         ])->postJson('/api/v1/products', [
@@ -54,7 +51,6 @@ class SuperAdminProductControllerTest extends TestCase
             'org_id' => $validOrgId,
         ]);
 
-        // Assert product creation was successful
         $productResponse->assertStatus(201);
         $productResponse->assertJson([
             'success' => true,
@@ -89,7 +85,6 @@ class SuperAdminProductControllerTest extends TestCase
             'Authorization' => 'Bearer ' . $accessToken,
         ])->patchJson("/api/v1/products/{$productId}", $updateData);
 
-
         $updateResponse->assertStatus(200);
         $updateResponse->assertJson([
             'success' => true,
@@ -103,5 +98,18 @@ class SuperAdminProductControllerTest extends TestCase
                 'quantity' => 100,
             ],
         ]);
+
+        $deleteResponse = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $accessToken,
+        ])->deleteJson("/api/v1/products/{$productId}");
+
+        $deleteResponse->assertStatus(200);
+        $deleteResponse->assertJson([
+            'success' => true,
+            'status_code' => 200,
+            'message' => 'Product deleted successfully',
+        ]);
+
+        $this->assertDatabaseMissing('products', ['product_id' => $productId]);
     }
 }
