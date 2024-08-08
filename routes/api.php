@@ -147,6 +147,7 @@ Route::prefix('v1')->group(function () {
     //Super Admin Add Products
     Route::middleware(['auth:api', 'admin'])->group(function () {
         Route::post('/products', [SuperAdminProductController::class, 'store']);
+        Route::patch('/products/{productId}', [SuperAdminProductController::class, 'update']);
     });
 
     Route::middleware(['auth:api', 'admin'])->group(function () {
