@@ -45,20 +45,20 @@ class InvitationAcceptanceController extends Controller
             ], 400);
         }
 
-        // Validate that the user belongs to the specified organization
-        $organization = Organisation::where('org_id', $data['org_id'])->first();
-        if (!$organization) {
+        // Validate that the user belongs to the specified organisation
+        $organisation = Organisation::where('org_id', $data['org_id'])->first();
+        if (!$organisation) {
             return response()->json([
-                'message' => 'Organization not found',
-                'errors' => ['Organization not found'],
+                'message' => 'organisation not found',
+                'errors' => ['organisation not found'],
                 'status_code' => 400
             ], 400);
         }
 
-        if (!$organization->users->contains($user->id)) {
+        if (!$organisation->users->contains($user->id)) {
             return response()->json([
-                'message' => 'User is not associated with the specified organization',
-                'errors' => ['User does not belong to the specified organization'],
+                'message' => 'User is not associated with the specified organisation',
+                'errors' => ['User does not belong to the specified organisation'],
                 'status_code' => 400
             ], 400);
         }
@@ -97,25 +97,25 @@ class InvitationAcceptanceController extends Controller
         if (!$invitation) {
             return response()->json([
                 'message' => 'Invalid or expired invitation link',
-                'errors' => ['Invalid invitation link format', 'Expired invitation link', 'Organization not found'],
+                'errors' => ['Invalid invitation link format', 'Expired invitation link', 'organisation not found'],
                 'status_code' => 400
             ], 400);
         }
 
-        // Get the organization associated with the invitation
-        $organization = $invitation->organization;
+        // Get the organisation associated with the invitation
+        $organisation = $invitation->organisation;
 
-        if (!$organization) {
+        if (!$organisation) {
             return response()->json([
-                'message' => 'Organization not found',
-                'errors' => ['Organization not found'],
+                'message' => 'organisation not found',
+                'errors' => ['organisation not found'],
                 'status_code' => 400
             ], 400);
         }
 
         // Success response
         return response()->json([
-            'message' => 'Invitation accepted, you have been added to the organization',
+            'message' => 'Invitation accepted, you have been added to the organisation',
             'status' => 200
         ], 200);
     }
@@ -170,7 +170,7 @@ class InvitationAcceptanceController extends Controller
 
         // If the invitation link is valid, return success response
         return response()->json([
-            'message' => 'Invitation accepted, you have been added to the organization',
+            'message' => 'Invitation accepted, you have been added to the organisation',
             'status' => 200
         ], 200);
     }

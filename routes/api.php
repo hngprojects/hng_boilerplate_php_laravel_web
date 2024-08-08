@@ -24,7 +24,7 @@ use App\Http\Controllers\Api\V1\JobController;
 use App\Http\Controllers\Api\V1\JobSearchController;
 use App\Http\Controllers\Api\V1\NotificationPreferenceController;
 use App\Http\Controllers\Api\V1\Organisation\OrganisationController;
-use App\Http\Controllers\Api\V1\Organisation\OrganizationMemberController;
+use App\Http\Controllers\Api\V1\Organisation\OrganisationMemberController;
 use App\Http\Controllers\Api\V1\PaymentController;
 use App\Http\Controllers\Api\V1\PreferenceController;
 use App\Http\Controllers\Api\V1\ProductController;
@@ -109,9 +109,9 @@ Route::prefix('v1')->group(function () {
 
     Route::middleware('auth:api')->group(function () {
 
-        Route::post('/organizations/{org_id}/products', [ProductController::class, 'store']);
-        Route::patch('/organizations/{org_id}/products/{product_id}', [ProductController::class, 'update']);
-        Route::delete('/organizations/{org_id}/products/{product_id}', [ProductController::class, 'destroy']);
+        Route::post('/organisations/{org_id}/products', [ProductController::class, 'store']);
+        Route::patch('/organisations/{org_id}/products/{product_id}', [ProductController::class, 'update']);
+        Route::delete('/organisations/{org_id}/products/{product_id}', [ProductController::class, 'destroy']);
     });
 
     //comment
@@ -180,18 +180,18 @@ Route::prefix('v1')->group(function () {
 
 
         // Organisations
-        Route::post('/organizations', [OrganisationController::class, 'store']);
-        Route::get('/organizations', [OrganisationController::class, 'index']);
-        Route::put('/organizations/{org_id}', [OrganisationController::class, 'update']);
-        Route::delete('/organizations/{org_id}', [OrganisationController::class, 'destroy']);
-        Route::delete('/organizations/{org_id}/users/{user_id}', [OrganisationController::class, 'removeUser']);
-        Route::get('/organizations/{organisation}/users', [OrganizationMemberController::class, 'index']);
+        Route::post('/organisations', [OrganisationController::class, 'store']);
+        Route::get('/{user_id}/organisations', [OrganisationController::class, 'index']);
+        Route::put('/organisations/{org_id}', [OrganisationController::class, 'update']);
+        Route::delete('/organisations/{org_id}', [OrganisationController::class, 'destroy']);
+        Route::delete('/organisations/{org_id}/users/{user_id}', [OrganisationController::class, 'removeUser']);
+        Route::get('/organisations/{organisation}/users', [organisationMemberController::class, 'index']);
 
         // members
-        Route::get('/members/{org_id}/search', [OrganizationMemberController::class, 'searchMembers']);
-        Route::get('/members/{org_id}/export', [OrganizationMemberController::class, 'download']);
+        Route::get('/members/{org_id}/search', [OrganisationMemberController::class, 'searchMembers']);
+        Route::get('/members/{org_id}/export', [OrganisationMemberController::class, 'download']);
 
-        Route::delete('/organizations/{org_id}', [OrganisationController::class, 'destroy']);
+        Route::delete('/organisations/{org_id}', [OrganisationController::class, 'destroy']);
 
         // Testimonials
         Route::post('/testimonials', [TestimonialController::class, 'store']);

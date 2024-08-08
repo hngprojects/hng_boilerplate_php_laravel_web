@@ -18,7 +18,7 @@ class OrganisationDeletionTest extends TestCase
 public function it_requires_authentication(){
     $org = Organisation::factory()->create();
 
-    $response = $this->deleteJson('/api/v1/organizations/'. $org->org_id);
+    $response = $this->deleteJson('/api/v1/organisations/'. $org->org_id);
 
     $response->assertStatus(401);
 }
@@ -32,13 +32,13 @@ public function it_requires_authentication(){
 
     $token = JWTAuth::fromUser($user);
     $response = $this->withHeaders(['Authorization' => "Bearer $token"])
-    ->deleteJson('/api/v1/organizations/' . $org->org_id);
+    ->deleteJson('/api/v1/organisations/' . $org->org_id);
 
     $response->assertStatus(401);
 }
 
     /** @test */
-    public function it_marks_the_organization_as_deleted()
+    public function it_marks_the_organisation_as_deleted()
     {
         $user = User::factory()->create();
         $org = Organisation::factory()->create();
@@ -46,7 +46,7 @@ public function it_requires_authentication(){
 
         $token = JWTAuth::fromUser($user);
         $response = $this->withHeaders(['Authorization' => "Bearer $token"])
-        ->deleteJson('/api/v1/organizations/' . $org->org_id);
+        ->deleteJson('/api/v1/organisations/' . $org->org_id);
 
         $response->assertStatus(204);
 

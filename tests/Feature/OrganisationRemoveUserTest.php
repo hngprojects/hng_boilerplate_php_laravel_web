@@ -19,7 +19,7 @@ class OrganisationRemoveUserTest extends TestCase
     /** @test */
     public function it_test_unauthenticated_user_cannot_remove_user()
     {
-        $response = $this->delete('/api/v1/organizations/44572ad3-2efe-463c-9531-8b879ef2bfa5/users/44572ad3-2efe-463c-9531-8b879ef2bfa5', [], [
+        $response = $this->delete('/api/v1/organisations/44572ad3-2efe-463c-9531-8b879ef2bfa5/users/44572ad3-2efe-463c-9531-8b879ef2bfa5', [], [
             'accept' => 'application/json',
         ]);
         $response->assertStatus(401)
@@ -32,13 +32,13 @@ class OrganisationRemoveUserTest extends TestCase
     public function it_test_unauthorized_user_cannot_remove_user()
     {
         $user = User::factory()->create();
-        $organization = Organisation::factory()->create();
+        $organisation = Organisation::factory()->create();
 
         $anotherUser = User::factory()->create();
         $token = JWTAuth::fromUser($anotherUser);
 
         $response = $this->withHeaders(['Authorization' => "Bearer $token"])
-            ->deleteJson("/api/v1/organizations/{$organization->org_id}/users/{$user->id}");
+            ->deleteJson("/api/v1/organisations/{$organisation->org_id}/users/{$user->id}");
 
         $response->assertStatus(403)
             ->assertJson([
@@ -61,7 +61,7 @@ class OrganisationRemoveUserTest extends TestCase
         $token = JWTAuth::fromUser($superadmin);
 
         $response = $this->withHeaders(['Authorization' => "Bearer $token"])
-            ->deleteJson("/api/v1/organizations/{$org->org_id}/users/{$user->id}");
+            ->deleteJson("/api/v1/organisations/{$org->org_id}/users/{$user->id}");
 
         $response->assertStatus(200)
             ->assertJson([
@@ -82,14 +82,14 @@ class OrganisationRemoveUserTest extends TestCase
         $role = Role::create(['name' => 'superadmin', 'org_id' => $org->org_id]);
         $superadmin->roles()->attach($role);
 
-        // Add user to the organization
+        // Add user to the organisation
         $org->users()->attach($user);
 
         // Generate a JWT token for the superadmin
         $token = JWTAuth::fromUser($superadmin);
 
         $response = $this->withHeaders(['Authorization' => "Bearer $token"])
-            ->deleteJson("/api/v1/organizations/{$org->org_id}/users/{$user->id}");
+            ->deleteJson("/api/v1/organisations/{$org->org_id}/users/{$user->id}");
 
         $response->assertStatus(200)
             ->assertJson([
@@ -98,7 +98,7 @@ class OrganisationRemoveUserTest extends TestCase
                 'status_code' => 200,
             ]);
 
-        // Assert the user has been removed from the organization
+        // Assert the user has been removed from the organisation
         $this->assertDatabaseMissing('users_roles', [
             'user_id' => $user->id,
             'role_id' => $role->id,
@@ -116,14 +116,14 @@ class OrganisationRemoveUserTest extends TestCase
         // Set the admin role
         $admin->roles()->create(['name' => 'admin', 'org_id' => $org->org_id]);
 
-        // Add user to the organization
+        // Add user to the organisation
         $org->users()->attach($user);
 
         // Generate a JWT token for the admin
         $token = JWTAuth::fromUser($admin);
 
         $response = $this->withHeaders(['Authorization' => "Bearer $token"])
-            ->delete("/api/v1/organizations/{$org->org_id}/users/{$user->id}");
+            ->delete("/api/v1/organisations/{$org->org_id}/users/{$user->id}");
 
         $response->assertStatus(200)
             ->assertJson([
@@ -136,16 +136,16 @@ class OrganisationRemoveUserTest extends TestCase
     public function it_test_remove_non_existent_user()
     {
         $orgAdmin = User::factory()->create();
-        $organization = Organisation::factory()->create();
+        $organisation = Organisation::factory()->create();
 
-        $orgAdmin->roles()->create(['name' => 'superadmin', 'org_id' => $organization->org_id]);
+        $orgAdmin->roles()->create(['name' => 'superadmin', 'org_id' => $organisation->org_id]);
 
         $token = JWTAuth::fromUser($orgAdmin);
 
         $nonExistentUserId = '44572ad3-2efe-463c-9531-8b879ef2bfa5';
 
         $response = $this->withHeaders(['Authorization' => "Bearer $token"])
-            ->delete("/api/v1/organizations/{$organization->org_id}/users/{$nonExistentUserId}");
+            ->delete("/api/v1/organisations/{$organisation->org_id}/users/{$nonExistentUserId}");
 
         $response->assertStatus(404)
             ->assertJson([
