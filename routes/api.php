@@ -244,7 +244,7 @@ Route::prefix('v1')->group(function () {
         Route::delete('/blogs/{id}', [BlogController::class, 'destroy']);
         Route::get('/waitlists', [WaitListController::class, 'index']);
         Route::apiResource('squeeze-pages', SqueezePageCoontroller::class);
-        Route::get('/statistics', [AdminDashboardController::class, 'getStatistics']);
+        Route::get('/dashboard/statistics', [AdminDashboardController::class, 'getStatistics']);
         Route::apiResource('faqs', FaqController::class);       
         Route::get('/dashboard/top-products', [AdminDashboardController::class, 'getTopProducts']);        
         Route::get('/dashboard/all-products-by-sales', [AdminDashboardController::class, 'getAllProductsSortedBySales']);
