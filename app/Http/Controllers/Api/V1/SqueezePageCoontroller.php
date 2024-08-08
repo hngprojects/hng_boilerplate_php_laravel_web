@@ -48,7 +48,7 @@ class SqueezePageCoontroller extends Controller
             $squeeze_page = SqueezePage::create($validated);
 
             return response()->json([
-                'status_code' => Response::HTTP_OK,
+                'status_code' => Response::HTTP_CREATED,
                 'message' => 'Squeeze page created successfully',
                 'data' => [
                     'id' => $squeeze_page->id,
@@ -58,7 +58,7 @@ class SqueezePageCoontroller extends Controller
                     'status' => $squeeze_page->status,
                     'activate' => $squeeze_page->activate
                 ]
-            ], Response::HTTP_OK);
+            ], Response::HTTP_CREATED);
 
         } catch (\Exception $e) {
             return response()->json([
