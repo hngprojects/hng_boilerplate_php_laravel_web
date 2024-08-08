@@ -268,6 +268,8 @@ Route::prefix('v1')->group(function () {
 
         Route::post('/regions', [RegionController::class, 'store']);
 
+        Route::get('/regions', [RegionController::class, 'index']);
+
     });
 
 

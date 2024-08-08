@@ -3,8 +3,10 @@
 namespace Tests\Feature;
 
 use App\Models\Region;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Tymon\JWTAuth\Facades\JWTAuth;
 use Tests\TestCase;
 
 class RegionControllerTest extends TestCase
@@ -47,4 +49,53 @@ class RegionControllerTest extends TestCase
                      'status_code' => 422,
                  ]);
     }
+
+ /** @test */
+    public function it_can_fetch_all_regions()
+    {
+        // Create some regions
+        $regions = Region::factory()->count(3)->create();
+
+        // Create a regular user (does not have to be an admin)
+        $user = User::factory()->create();
+
+        // Generate a JWT token for the user
+        $token = $this->generateJwtTokenForUser($user);
+
+        // Debugging: Check token validity
+        $this->assertNotEmpty($token, 'Token should not be empty.');
+
+        // Act as the authenticated user with the generated token
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->getJson('/api/v1/regions');
+
+        // Debugging: Output response for inspection
+        $response->dump();
+
+        // Assert that the response status is 200
+        $response->assertStatus(200)
+                ->assertJson([
+                    'status' => "success",
+                    'status_code' => 200,
+                    'data' => $regions->map(function ($region) {
+                        return [
+                            'id' => $region->id,
+                            'name' => $region->name,
+                        ];
+                    })->toArray(),
+                ]);
+    }
+
+    protected function generateJwtTokenForUser(User $user)
+    {
+        // Generate a token for the user
+        return JWTAuth::fromUser($user);
+    }
+
+
+
+
+
+
 }

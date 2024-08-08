@@ -11,6 +11,19 @@ class RegionController extends Controller
 {
 
 
+    public function index()
+    {
+
+        $regions = Region::all();
+
+        return response()->json([
+            'status' => "success",
+            'status_code' => 200,
+            'data' => $regions
+        ], 200);
+    }
+
+
     public function store (Request $request){
 
         $validator = Validator::make($request->all(), [
