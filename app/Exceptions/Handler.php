@@ -10,6 +10,9 @@ use Prometheus\CollectorRegistry;
 use Illuminate\Support\Facades\App;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Illuminate\Auth\AuthenticationException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 
 class Handler extends ExceptionHandler
 {
@@ -56,6 +59,31 @@ class Handler extends ExceptionHandler
                     "message" => "$method Method not allowed"
                 ], 405);
             }
+        });
+        $this->renderable(function (MethodNotAllowedException $e, Request $request) {
+          if ($request->is('api/*')) {
+              $method = $request->method();
+              return response()->json([
+                  "error" => "Bad request",
+                  "message" => "$method Method not allowed"
+              ], 405);
+          }
+        });
+        $this->renderable(function (NotFoundHttpException $e, Request $request) {
+          if ($request->is('api/*')) {
+              return response()->json([
+                  "error" => "Not found",
+                  "message" => "Route not found"
+              ], 404);
+          }
+        });
+        $this->renderable(function (AuthenticationException $e, Request $request) {
+          if ($request->is('api/*')) {
+              return response()->json([
+                  "error" => "Unauthorized",
+                  'message' => $e->getMessage(),
+              ], 401);
+          }
         });
     }
 }
