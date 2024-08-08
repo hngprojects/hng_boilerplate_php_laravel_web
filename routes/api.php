@@ -86,7 +86,10 @@ Route::prefix('v1')->group(function () {
     Route::get('/auth/facebook/callback', [SocialAuthController::class, 'callbackFromFacebook']);
     Route::post('/auth/facebook/callback', [SocialAuthController::class, 'saveFacebookRequest']);
 
+
+    Route::get('/users/stats', [UserController::class, 'stats']);
     Route::apiResource('/users', UserController::class);
+
 
     //jobs
     Route::get('/jobs', [JobController::class, 'index']);
@@ -103,7 +106,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/payments/flutterwave/{organisation_id}/verify/{id}', [PaymentController::class, 'handleFlutterwaveCallback']);
     Route::post('/languages', [LanguageController::class, 'create']);
     Route::get('/languages', [LanguageController::class, 'index']);
-    Route::put('/languages/{id}', [LanguageController::class, 'update']); 
+    Route::put('/languages/{id}', [LanguageController::class, 'update']);
 
     Route::middleware('throttle:10,1')->get('/topics/search', [ArticleController::class, 'search']);
 
@@ -245,8 +248,8 @@ Route::prefix('v1')->group(function () {
         Route::get('/waitlists', [WaitListController::class, 'index']);
         Route::apiResource('squeeze-pages', SqueezePageCoontroller::class);
         Route::get('/statistics', [AdminDashboardController::class, 'getStatistics']);
-        Route::apiResource('faqs', FaqController::class);       
-        Route::get('/dashboard/top-products', [AdminDashboardController::class, 'getTopProducts']);        
+        Route::apiResource('faqs', FaqController::class);
+        Route::get('/dashboard/top-products', [AdminDashboardController::class, 'getTopProducts']);
     });
 
     Route::post('/waitlists', [WaitListController::class, 'store']);
