@@ -2477,11 +2477,11 @@
                 ]
             }
         },
-        "/api/v1/organizations": {
+        "/api/v1/organisations": {
             "post": {
-                "summary": "Create a new organization",
+                "summary": "Create a new organisation",
                 "tags": [
-                    "Organizations"
+                    "organisations"
                 ],
                 "requestBody": {
                     "required": true,
@@ -2527,13 +2527,13 @@
                 }
             },
             "get": {
-                "summary": "Get a list of organizations",
+                "summary": "Get a list of organisations",
                 "tags": [
-                    "Organizations"
+                    "organisations"
                 ],
                 "responses": {
                     "200": {
-                        "description": "Organizations retrieved successfully",
+                        "description": "organisations retrieved successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2565,11 +2565,11 @@
                 }
             }
         },
-        "/api/v1/organizations/{org_id}": {
+        "/api/v1/organisations/{org_id}": {
             "put": {
-                "summary": "Update an organization",
+                "summary": "Update an organisation",
                 "tags": [
-                    "Organizations"
+                    "organisations"
                 ],
                 "parameters": [
                     {
@@ -2646,9 +2646,9 @@
                 }
             },
             "delete": {
-                "summary": "Delete an organization",
+                "summary": "Delete an organisation",
                 "tags": [
-                    "Organizations"
+                    "organisations"
                 ],
                 "parameters": [
                     {
@@ -2708,11 +2708,11 @@
                 }
             }
         },
-        "/api/v1/organizations/{org_id}/users/{user_id}": {
+        "/api/v1/organisations/{org_id}/users/{user_id}": {
             "delete": {
-                "summary": "Remove a user from an organization",
+                "summary": "Remove a user from an organisation",
                 "tags": [
-                    "Organizations"
+                    "organisations"
                 ],
                 "parameters": [
                     {
@@ -2768,11 +2768,11 @@
                 }
             }
         },
-        "/api/v1/organizations/{organisation}/users": {
+        "/api/v1/organisations/{organisation}/users": {
             "get": {
-                "summary": "Get a list of users in an organization",
+                "summary": "Get a list of users in an organisation",
                 "tags": [
-                    "Organization Members"
+                    "organisation Members"
                 ],
                 "parameters": [
                     {
@@ -2787,17 +2787,17 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Organization members fetched successfully",
+                        "description": "organisation members fetched successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/OrganizationMembers"
+                                    "$ref": "#/components/schemas/organisationMembers"
                                 }
                             }
                         }
                     },
                     "400": {
-                        "description": "Invalid organization ID or Unauthorized access",
+                        "description": "Invalid organisation ID or Unauthorized access",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2812,15 +2812,15 @@
         "/api/v1/members/{org_id}/search": {
             "get": {
                 "tags": [
-                    "Organizations"
+                    "organisations"
                 ],
-                "summary": "Search members of an organization",
-                "description": "Retrieve a paginated list of users belonging to an organization and matching a search term.",
+                "summary": "Search members of an organisation",
+                "description": "Retrieve a paginated list of users belonging to an organisation and matching a search term.",
                 "parameters": [
                     {
                         "name": "org_id",
                         "in": "path",
-                        "description": "UUID of the organization",
+                        "description": "UUID of the organisation",
                         "required": true,
                         "style": "simple",
                         "explode": false,
@@ -2865,7 +2865,7 @@
                         }
                     },
                     "400": {
-                        "description": "Invalid organization ID",
+                        "description": "Invalid organisation ID",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2875,7 +2875,7 @@
                         }
                     },
                     "404": {
-                        "description": "Organization does not exist",
+                        "description": "organisation does not exist",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6220,7 +6220,7 @@
                 "properties": {
                     "message": {
                         "type": "string",
-                        "example": "Invalid organization ID"
+                        "example": "Invalid organisation ID"
                     },
                     "status_code": {
                         "type": "integer",
@@ -6233,7 +6233,7 @@
                 "properties": {
                     "message": {
                         "type": "string",
-                        "example": "Organization does not exist"
+                        "example": "organisation does not exist"
                     },
                     "status_code": {
                         "type": "integer",
@@ -6839,7 +6839,7 @@
                     }
                 }
             },
-            "OrganizationMembers": {
+            "organisationMembers": {
                 "type": "object",
                 "properties": {
                     "status": {
