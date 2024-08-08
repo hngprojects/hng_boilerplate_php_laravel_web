@@ -264,6 +264,10 @@ Route::prefix('v1')->group(function () {
         Route::get('/user-sales', [DashboardController::class, 'recent_sales']);
     });
 
+        //region get and update
+        Route::group(['middleware' => ['auth:api']], function () {
+            Route::get('/regions/{user_id}', [PreferenceController::class, 'showRegion']);
+    });
     // Notification settings
     Route::patch('/notification-settings/{user_id}', [NotificationPreferenceController::class, 'update']);
 
