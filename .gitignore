@@ -17,3 +17,7 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+docker-compose.yml
+/public/uploads
+ResponseHTTP_OK,
+can
