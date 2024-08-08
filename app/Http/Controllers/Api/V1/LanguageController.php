@@ -30,7 +30,7 @@ class LanguageController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status' => 400,
-                'message' => 'Validation Error',
+                'message' => 'Bad Request',
                 'errors' => $validator->errors()
             ], 400);
         }
