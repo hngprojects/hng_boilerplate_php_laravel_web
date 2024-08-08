@@ -11,6 +11,9 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class FaqControllerTest extends TestCase
 {
+    use RefreshDatabase;
+
+
     protected $adminUser;
     protected $adminToken;
 
