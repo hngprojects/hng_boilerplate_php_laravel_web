@@ -54,4 +54,47 @@ class SuperAdminProductController extends Controller
             'data' => $product,
         ], 201);
     }
+    public function update(Request $request, $productId)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'sometimes|string|max:255',
+            'description' => 'sometimes|string',
+            'price' => 'sometimes|numeric',
+            'slug' => 'sometimes|string|max:255',
+            'tags' => 'sometimes|string',
+            'imageUrl' => 'nullable|string|max:255',
+            'status' => 'sometimes|string|max:50',
+            'quantity' => 'sometimes|integer',
+            'org_id' => 'sometimes|uuid',
+            'category' => 'nullable|string|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'status_code' => 422,
+                'message' => 'Validation errors',
+                'data' => $validator->errors(),
+            ], 422);
+        }
+
+        $product = Product::findOrFail($productId);
+
+        $product->fill($request->only([
+            'name', 'description', 'price', 'slug', 'tags',
+            'imageUrl', 'status', 'quantity', 'org_id'
+        ]));
+
+
+        $product->user_id = $product->user_id;
+
+        $product->save();
+
+        return response()->json([
+            'success' => true,
+            'status_code' => 200,
+            'message' => 'Product updated successfully',
+            'data' => $product,
+        ]);
+    }
 }
