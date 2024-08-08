@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('email_requests', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('template_id')->constrained('email_templates')->onDelete('cascade');
+            $table->string('subject');
             $table->string('recipient');
-            $table->json('variables')->nullable();
+            $table->jsonb('variables')->nullable();
             $table->string('status');
             $table->timestamps();
         });

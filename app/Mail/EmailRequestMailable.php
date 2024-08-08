@@ -3,51 +3,42 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
-class EmailRequestMailable extends Mailable implements ShouldQueue
+class EmailRequestMailable extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $emailRequest;
+    public $variables;
+    public $htmlContent;
+    public $subject;
+
     /**
      * Create a new message instance.
      */
-    public function __construct($emailRequest)
+    public function __construct($variables, $htmlContent, $subject)
     {
-        // Log::info("Email request $emailRequest");
-        $this->emailRequest = $emailRequest;
+        $this->variables = $variables;
+        $this->htmlContent = $htmlContent;
+        $this->subject = $subject;
     }
 
     /**
      * Build the message.
-     *
-     * @return $this
      */
-    
     public function build()
     {
-        $template = $this->emailRequest->template;
-        return $this->view('emails.dynamic_template')
-        ->with(['content' => $this->replaceVariables($template->template, $this->emailRequest->variables)]);
-    }
-
-    /**
-     * Replace variables in the email content.
-     *
-     * @param  string  $content
-     * @param  array  $variables
-     * @return string
-     */
-    protected function replaceVariables($content, $variables)
-    {
-        foreach ($variables as $key => $value) {
-            $content = str_replace("{{ $key }}", $value, $content);
+        // Replace placeholders in the email content with variables
+        foreach ($this->variables as $key => $value) {
+            $placeholder = '{{' . $key . '}}';
+            if (strpos($this->htmlContent, $placeholder) !== false) {
+                $this->htmlContent = str_replace($placeholder, $value, $this->htmlContent);
+            }
         }
 
-        return $content;
+        return $this->view('emails.generic') // Assume you have a generic view
+                    ->with(['content' => $this->htmlContent])
+                    ->subject($this->subject);
     }
 }

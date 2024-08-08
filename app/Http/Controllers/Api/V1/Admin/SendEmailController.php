@@ -14,45 +14,33 @@ class SendEmailController extends Controller
 {
     public function createEmailRequest(Request $request)
     {
-        // $validator = Validator::make($request->all(), [
-        //     'template_id' => 'integer|min:1',
-        //     'variables' => 'integer|min:1|max:100',
-        // ]);
-
-        // if ($validator->fails()) {
-        //     return response()->json([
-        //         'error' => 'Invalid pagination parameters'
-        //     ], 400);
-        // }
-
-        EmailRequest::create([
-            $request->all(),
+        $validator = Validator::make($request->all(), [
+            'template_id' => 'required|uuid|exists:email_templates,id',
+            'subject' => 'required|string|max:255',
+            'recipient' => 'required|email',
+            'variables' => 'nullable|string',
+            'status' => 'required|in:pending,sent,failed'
         ]);
 
-        return response()->json(['message' => 'Email requests are being processed.']);
+        if ($validator->fails()) {
+            return response()->json([
+                'error' => $validator->errors()
+            ], 400);
+        }
+
+        // Create a new email request
+        $emailRequest = EmailRequest::create([
+            'template_id' => $request->input('template_id'),
+            'subject' => $request->input('subject'),
+            'recipient' => $request->input('recipient'),
+            'variables' => $request->input('variables', '{}'),
+            'status' => $request->input('status', 'pending'),
+        ]);
+
+        return response()->json(['message' => 'Email request is queued.']);
     }
     public function triggerEmailSending(Request $request)
     {
-        // $validator = Validator::make($request->all(), [
-        //     'template_id' => 'integer|min:1',
-        //     'variables' => 'integer|min:1|max:100',
-        // ]);
-
-        // if ($validator->fails()) {
-        //     return response()->json([
-        //         'error' => 'Invalid pagination parameters'
-        //     ], 400);
-        // }
-
-        //template id
-        //variables
-
-        // $emailrequests = EmailRequest::with('template')->where('status', 'pending')->get();
-
-        // foreach ($emailrequests as $emailrequest) {
-        //     Mail::to($emailrequest->receipient)->send(new EmailRequestMailable($emailrequest->template->content));
-        // }
-        // Dispatch the job
         SendEmailRequestsJob::dispatch();
         
         return response()->json(['message' => 'Email requests are being processed.']);

@@ -4,24 +4,28 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class EmailRequest extends Model
 {
     use HasFactory;
+    
+    protected $table = 'email_requests';
+    protected $keyType = 'uuid';
+    public $incrementing = false;
     protected $fillable = [
         "template_id",
+        "subject",
         "recipient",
         "variables",
         "status"
     ];
-    protected $primaryKey = 'id';
-    public $incrementing = false;
-    protected $keyType = 'string';
 
-    // Relationships
-    public function sender()
+    protected static function booted()
     {
-        return $this->belongsTo(User::class, 'sender_id');
+        static::creating(function ($model) {
+            $model->id = (string) Str::uuid();
+        });
     }
 
     public function template()
