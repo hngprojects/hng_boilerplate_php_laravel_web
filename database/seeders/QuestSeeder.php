@@ -7,7 +7,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
-class QuestsSeeder extends Seeder
+class QuestSeeder extends Seeder
 {
     public function run()
     {
