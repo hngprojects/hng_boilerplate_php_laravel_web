@@ -46,8 +46,7 @@ use App\Http\Controllers\NotificationSettingController;
 use App\Http\Controllers\QuestController;
 use App\Http\Controllers\UserNotificationController;
 use Illuminate\Support\Facades\Route;
-
-
+use App\Http\Controllers\Api\V1\Admin\AdminDashboardController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -241,6 +240,7 @@ Route::prefix('v1')->group(function () {
         Route::delete('/blogs/{id}', [BlogController::class, 'destroy']);
         Route::get('/waitlists', [WaitListController::class, 'index']);
         Route::apiResource('squeeze-pages', SqueezePageCoontroller::class);
+        Route::get('/statistics', [AdminDashboardController::class, 'getStatistics']);
         Route::apiResource('faqs', FaqController::class);
     });
 
