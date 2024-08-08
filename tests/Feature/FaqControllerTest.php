@@ -105,13 +105,11 @@ class FaqControllerTest extends TestCase
         $response->assertStatus(400)
             ->assertJsonStructure([
                 'status_code',
-                'data' => [
-                    'errors' => [
-                        '*' => [
-                            'field',
-                            'message'
-                        ],
-                    ]
+                'errors' => [
+                    '*' => [
+                        'field',
+                        'message'
+                    ],
                 ]
             ]);
     }
