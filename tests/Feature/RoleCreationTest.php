@@ -46,9 +46,6 @@ class RoleCreationTest extends TestCase
             'permissions_id' => $this->test_permission->id,
         ]);
 
-        // Print the response content to see the validation errors
-        $response->dump();
-
         $response->assertStatus(201)
                  ->assertJsonStructure([
                      'status_code',
