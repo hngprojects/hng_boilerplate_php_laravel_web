@@ -16,8 +16,9 @@ class PaymentService
             ])->post('https://api.paystack.co/transaction/initialize', [
                 'email' => $data['email'],
                 'plan' => $data['plan_code'],
+                'amount' => $data['amount'],
                 'reference' => $data['reference'],
-                'callback_url' => url('/api/v1/payments/paystack/verify/'.$data['plan_id']),
+                'callback_url' => url('/api/v1/payments/paystack/'.$data['organisation_id'].'/verify/'.$data['plan_id']),
                 'metadata' => [
                     'cancel_action' => route('payment.cancel')
                 ]
@@ -61,18 +62,15 @@ class PaymentService
                 'tx_ref' => $data['reference'],
                 'amount' => $data['amount'], // Flutterwave still needs the amount
                 'currency' => 'USD',
-                'redirect_url' => url('/api/v1/payments/flutterwave/verify/'.$data['plan_id']),
+                'payment_plan' => $data['plan_code'],
+                'redirect_url' => url('/api/v1/payments/flutterwave/'.$data['organisation_id'].'/verify/'.$data['plan_id']),
                 'customer' => [
                     'email' => $data['email'],
                     'name' => $data['full_name']
                 ],
                 'customizations' => [
-                    'title' => 'Your Payment Title',
+                    'title' => $data['title'],
                     'billing_option' => $data['billing_option'] // Include billing_option in customizations
-                ],
-                'meta' => [
-                    'source' => 'laravel-flutterwave',
-                    'plan_code' => $data['plan_code'] // Include plan_code in meta
                 ]
             ]);
 

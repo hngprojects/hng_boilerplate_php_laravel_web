@@ -105,6 +105,11 @@ class User extends Authenticatable  implements JWTSubject, CanResetPasswordContr
         return $this->belongsToMany(Organisation::class, 'organisation_user', 'user_id', 'org_id')->using(OrganisationUser::class);
     }
 
+    public function owned_organisations(): hasMany
+    {
+        return $this->hasMany(Organisation::class, 'user_id', 'id');
+    }
+
     public function jobs(): BelongsToMany
     {
         return $this->belongsToMany(Job::class, 'job_users', 'user_id', 'job_id')->using(JobUser::class);
