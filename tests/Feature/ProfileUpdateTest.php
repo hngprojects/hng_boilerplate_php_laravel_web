@@ -56,21 +56,27 @@ class ProfileUpdateTest extends TestCase
     /** @test */
     public function it_can_upload_image()
     {
-        // Mocking Cloudinary API response
-        Http::fake([
-            'https://api.cloudinary.com/v1_1/*' => Http::response([
-                'secure_url' => 'https://example.com/new-avatar.png'
-            ], 200)
-        ]);
-    
+       
         $file = UploadedFile::fake()->image('avatar.jpg');
     
         $response = $this->post('/api/v1/profile/upload-image', [
             'file' => $file
         ]);
-    
+ 
         $response->assertStatus(200);
-        $response->assertJsonStructure(['Status', 'Message', 'Data' => ['avatar_url']]);
+    
+        $response->assertJsonStructure([
+            'Status',
+            'Message',
+            'Data' => ['avatar_url']
+        ]);
+
+        $uploadedFileUrl = $response->json('Data.avatar_url');
+
+        $this->assertFileExists(public_path('uploads/' . basename($uploadedFileUrl)));
+
+        $this->assertStringStartsWith(url('uploads/'), $uploadedFileUrl);
     }
+    
     
 }

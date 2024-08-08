@@ -12,14 +12,19 @@ class Timezone extends Model
 
     protected $guarded = [];
 
-    // Set the key type to string
     protected $keyType = 'string';
 
-    // Disable auto-incrementing IDs
     public $incrementing = false;
+    protected $casts = [
+        'gmtoffset' => 'string',
+        'timezone' => 'string',
+        'description' => 'string',
+    ];
+    
 
     public function preferences()
     {
         return $this->hasMany(Preference::class);
     }
 }
+ 

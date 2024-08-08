@@ -112,12 +112,12 @@ class ForgetPasswordRequestTest extends TestCase
         $response = $this->postJson('/api/v1/auth/forgot-password', []);
         $response->assertStatus(422)
                 ->assertJson([
+                    'status_code' => 422,
                     'message' => [
                         'email' => [
                             'The email field is required.'
                         ]
                     ],
-                    'status_code' => 422
                 ]);
     }
 
@@ -131,8 +131,8 @@ class ForgetPasswordRequestTest extends TestCase
  
          $response->assertStatus(400)
                  ->assertJson([
-                     'message' => 'User does not exist',
-                     'status_code' => 400
+                    'status_code' => 400,
+                     'message' => 'Account with the specified email doesn\'t exist',
                  ]);
      }
 
@@ -146,8 +146,8 @@ class ForgetPasswordRequestTest extends TestCase
 
         $response->assertStatus(400)
                 ->assertJson([
-                    'message' => 'User does not exist',
-                    'status_code' => 400
+                    'status_code' => 400,
+                    'message' => 'Account with the specified email doesn\'t exist',
                 ]);
     }
 
@@ -161,12 +161,12 @@ class ForgetPasswordRequestTest extends TestCase
 
         $response->assertStatus(422)  // Expect validation error for invalid email format
                 ->assertJson([
+                    'status_code' => 422,
                     'message' => [
                         'email' => [
                             'The email field must be a valid email address.'
                         ]
-                    ],
-                    'status_code' => 422
+                    ]
                 ]);
     }
 
@@ -180,12 +180,12 @@ class ForgetPasswordRequestTest extends TestCase
 
         $response->assertStatus(422)  // Expect validation error for empty email
                 ->assertJson([
+                    'status_code' => 422,
                     'message' => [
                         'email' => [
                             'The email field is required.'
                         ]
                     ],
-                    'status_code' => 422
                 ]);
     }
 
@@ -215,7 +215,8 @@ class ForgetPasswordRequestTest extends TestCase
 
         $response->assertStatus(200)
                  ->assertJson([
-                     'message' => 'Password reset link sent',
+                    'status_code' => 200,
+                     'message' => 'Email sent successfully',
                  ]);
     }
 }

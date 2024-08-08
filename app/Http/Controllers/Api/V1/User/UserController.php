@@ -21,6 +21,13 @@ class UserController extends Controller
         $totalActiveUsers = User::where('is_active', 1)->count() - $totalDeletedUsers;
         $totalInActiveUsers = User::where('is_active', 0)->count();
 
+        dd($users);
+
+        // $users = [
+        //     'name' =>
+        // ];
+
+
         return response()->json(
             [
                 "status_code" => 200,
@@ -29,7 +36,7 @@ class UserController extends Controller
                 "total_deleted_users" => $totalDeletedUsers,
                 "total_active_users" => $totalActiveUsers,
                 "total_inActive_users" => $totalInActiveUsers,
-                "data" => $users
+                "data" =>$users
             ],
             200
         );
@@ -59,6 +66,8 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(), [
             "name" => 'nullable|string',
+            'first_name' => 'nullable|string|max:255',
+            'last_name' => 'nullable|string|max:255',
             "email" => 'nullable|string|email|max:255|unique:users,email,' . $id,
             "phone" => 'nullable|string'
         ]);
@@ -88,6 +97,18 @@ class UserController extends Controller
         }, $data);
 
         $user->update($data);
+
+        if ($user->profile) {
+            $user->profile()->update([
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name
+            ]);
+        } else {
+            $user->profile()->create([
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name
+            ]);
+        }
 
 
         return response()->json(

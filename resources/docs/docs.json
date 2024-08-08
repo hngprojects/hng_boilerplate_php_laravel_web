@@ -1,0 +1,2612 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "PHP Laravel API Boilerplate",
+    "description": "API documentation for the boilerplate",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://virtserver.swaggerhub.com/TULBADEX_1/HNG-Task-4/1.0.0",
+      "description": "SwaggerHub API Auto Mocking"
+    },
+    {
+      "url": "https://staging.api-php.boilerplate.hng.tech",
+      "description": "Deployment server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Authentication"
+    },
+    {
+      "name": "Users"
+    },
+    {
+      "name": "User Dashboard"
+    },
+    {
+      "name": "Organisations"
+    },
+    {
+      "name": "Testimonials"
+    },
+    {
+      "name": "Jobs"
+    },
+    {
+      "name": "Customers"
+    },
+    {
+      "name": "Roles"
+    },
+    {
+      "name": "Products"
+    },
+    {
+      "name": "Articles"
+    },
+    {
+      "name": "Contact"
+    },
+    {
+      "name": "Blogs"
+    },
+    {
+      "name": "Squeeze"
+    },
+    {
+      "name": "Features"
+    },
+    {
+      "name": "Plans"
+    }
+  ],
+  "paths": {
+    "/api/v1/auth/register": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Register a new user",
+        "description": "Endpoint to register a new user and return JWT token.",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/RegisterRequest"
+        },
+        "responses": {
+          "201": {
+            "description": "User created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_201"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation or registration error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "User login",
+        "description": "Endpoint for user login and returning an access token.",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/LoginRequest"
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request, validation errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400_1"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid credentials provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/logout": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Logout a user",
+        "description": "Endpoint to invalidate the user’s JWT token.",
+        "responses": {
+          "200": {
+            "description": "Logout successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_1"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error during logout, e.g., token issues",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401_1"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/forgot-password": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Request a password reset token",
+        "description": "Endpoint to request a password reset token by providing the user's email address.",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/ForgotPasswordRequest"
+        },
+        "responses": {
+          "200": {
+            "description": "Success response for forgot password request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_2"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error response for forgot password request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400_2"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_422"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/verify-otp": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Verify OTP for password reset",
+        "description": "Endpoint to verify OTP (token) sent to the user for password reset.",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/VerifyOtpRequest"
+        },
+        "responses": {
+          "200": {
+            "description": "Success response for OTP verification",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_3"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid OTP or email response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400_3"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Validation error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401_2"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/reset-forgot-password": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Reset password after OTP verification",
+        "description": "Endpoint to reset a user’s password after verifying the OTP.",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/ResetPasswordRequest"
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_4"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error response for password reset request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400_4"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/google": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Authenticate a user using Google token",
+        "description": "This endpoint validates the provided Google token and email, creates or updates the user, and returns a JWT token upon successful authentication.",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/GoogleResponseProcess"
+        },
+        "responses": {
+          "200": {
+            "description": "Successful authentication and user creation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_5"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request due to invalid token or mismatched email",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400_5"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation error for missing or invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_422_1"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/login-google": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Redirect to Google for authentication",
+        "description": "This endpoint redirects the user to Google for authentication. It is intended to be accessed via a browser. This endpoint initiates the OAuth 2.0 authentication process with Google.",
+        "responses": {
+          "302": {
+            "description": "Redirects the user to Google for authentication",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_302"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/google/callback": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Handle Google authentication callback",
+        "description": "This endpoint is called by Google after successful authentication. It handles user data from Google, creates or updates a user in the database, and returns a JWT token for authentication.",
+        "responses": {
+          "200": {
+            "description": "Successful Google authentication",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_6"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Save Google user data",
+        "description": "Alternative endpoint to handle Google authentication via POST when the redirect is not available. It updates or creates a user in the database and returns a JWT token for authentication.",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/GoogleUserRequest"
+        },
+        "responses": {
+          "201": {
+            "description": "User successfully authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_201_1"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request, invalid data provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400_6"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized error, invalid credentials or missing data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401_3"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/login-facebook": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Redirect to Facebook for login",
+        "description": "Redirects the user to Facebook for authentication. This endpoint cannot be tested directly via Postman or documentation tools as it performs a redirect.",
+        "responses": {
+          "302": {
+            "description": "Redirects to Facebook for authentication",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FacebookRedirectResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/facebook/callback": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Handle Facebook callback and authenticate user",
+        "description": "This endpoint handles the callback from Facebook after successful authentication, updates or creates the user, and returns a JWT token.",
+        "responses": {
+          "200": {
+            "description": "Successful authentication and token generation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FacebookCallbackResponseSchema"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Handle Facebook data submission and authenticate user",
+        "description": "This endpoint processes Facebook user data sent via POST request, updates or creates the user, and returns a JWT token. It is used as an alternative to the GET callback for cases where direct data processing is needed.",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/FacebookUserRequest"
+        },
+        "responses": {
+          "201": {
+            "description": "Successful authentication and token generation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FacebookCallbackPostResponseSchema"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request error due to invalid data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400_7"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/user-analytics": {
+      "get": {
+        "tags": [
+          "User Dashboard"
+        ],
+        "summary": "Revenue by months of the year",
+        "responses": {
+          "200": {
+            "description": "User Analytics",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserAnalyticsResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An error occurred",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/payments/flutterwave": {
+      "post": {
+        "tags": [
+          "Payments"
+        ],
+        "summary": "Initiate a payment using Flutterwave",
+        "description": "Allows authenticated users with appropriate permissions to initiate a payment through Flutterwave.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Payment initiated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Authorization error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthzError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/payments/paystack": {
+      "post": {
+        "tags": [
+          "Payments"
+        ],
+        "summary": "Initiate a payment using Paystack",
+        "description": "Allows authenticated users with appropriate permissions to initiate a payment through Paystack.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Payment initiated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Authorization error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthzError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/languages": {
+      "get": {
+        "tags": [
+          "Languages"
+        ],
+        "summary": "Get all supported languages",
+        "responses": {
+          "200": {
+            "description": "List of supported languages",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LanguagesListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Languages"
+        ],
+        "summary": "Create a new language",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateLanguageRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Language Created Successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateLanguageResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LanguageValidationError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Language already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LanguageConflictError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/languages/{id}": {
+      "patch": {
+        "tags": [
+          "Languages"
+        ],
+        "summary": "Update a language",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Language ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "example": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateLanguageRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Language successfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateLanguageResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LanguageValidationError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Language not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LanguageNotFoundError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/billing-plans/{id}": {
+      "get": {
+        "tags": [
+          "Billing Plans"
+        ],
+        "summary": "Retrieve a billing plan",
+        "description": "Fetch the details of a single billing plan.",
+        "operationId": "getBillingPlan",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The ID of the billing plan to retrieve",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Billing plan retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BillingPlanResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid billing plan ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BillingPlanErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BillingPlanErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Billing plan not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BillingPlanErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BillingPlanErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "FacebookRedirectResponse": {
+        "type": "object",
+        "properties": {
+          "status_code": {
+            "type": "integer",
+            "example": 302
+          },
+          "message": {
+            "type": "string",
+            "example": "Redirecting to Facebook for authentication"
+          }
+        }
+      },
+      "FacebookCallbackResponseSchema": {
+        "type": "object",
+        "properties": {
+          "status_code": {
+            "type": "integer",
+            "example": 200
+          },
+          "message": {
+            "type": "string",
+            "example": "User successfully authenticated"
+          },
+          "access_token": {
+            "type": "string",
+            "example": "your_jwt_token_here"
+          },
+          "data": {
+            "$ref": "#/components/schemas/FacebookCallbackResponseSchema_data"
+          }
+        }
+      },
+      "FacebookCallbackPostResponseSchema": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "example": 201
+          },
+          "message": {
+            "type": "string",
+            "example": "User successfully authenticated"
+          },
+          "access_token": {
+            "type": "string",
+            "example": "your_jwt_token_here"
+          },
+          "data": {
+            "$ref": "#/components/schemas/FacebookCallbackResponseSchema_data"
+          }
+        }
+      },
+      "UserAnalyticsResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "User analytics retrieved successfully"
+          },
+          "status_code": {
+            "type": "integer",
+            "example": 200
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserAnalyticsResponse_data"
+            }
+          }
+        }
+      },
+      "PaymentRequest": {
+        "required": [
+          "billing_option",
+          "full_name",
+          "organization_id",
+          "plan_id",
+          "redirect_url"
+        ],
+        "type": "object",
+        "properties": {
+          "organization_id": {
+            "type": "string",
+            "description": "ID of the organization making the payment"
+          },
+          "plan_id": {
+            "type": "string",
+            "description": "ID of the plan being purchased"
+          },
+          "full_name": {
+            "type": "string",
+            "description": "Full name of the payer"
+          },
+          "billing_option": {
+            "type": "string",
+            "description": "Billing option for the payment",
+            "enum": [
+              "monthly",
+              "yearly"
+            ]
+          },
+          "redirect_url": {
+            "type": "string",
+            "description": "URL to redirect to after payment completion",
+            "format": "uri"
+          }
+        }
+      },
+      "SuccessResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "example": 200
+          },
+          "message": {
+            "type": "string",
+            "example": "Payment initiated successfully"
+          },
+          "data": {
+            "$ref": "#/components/schemas/SuccessResponse_data"
+          }
+        }
+      },
+      "ValidationError": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "example": 400
+          },
+          "message": {
+            "type": "string",
+            "example": "Validation error: amount must be a positive number"
+          }
+        }
+      },
+      "AuthError": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "example": 401
+          },
+          "message": {
+            "type": "string",
+            "example": "Authentication required"
+          }
+        }
+      },
+      "AuthzError": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "example": 403
+          },
+          "message": {
+            "type": "string",
+            "example": "You do not have permission to initiate this payment"
+          }
+        }
+      },
+      "ServerError": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "example": 500
+          },
+          "message": {
+            "type": "string",
+            "example": "An unexpected error occurred. Please try again later."
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "status_code": {
+            "type": "integer",
+            "example": 500
+          },
+          "message": {
+            "type": "string",
+            "example": "Error message"
+          }
+        }
+      },
+      "LanguagesListResponse": {
+        "required": [
+          "languages",
+          "message",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "example": 200
+          },
+          "message": {
+            "type": "string",
+            "example": "Languages retrieved successfully"
+          },
+          "languages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LanguagesListResponse_languages"
+            }
+          }
+        }
+      },
+      "CreateLanguageRequest": {
+        "required": [
+          "code",
+          "language"
+        ],
+        "type": "object",
+        "properties": {
+          "language": {
+            "type": "string",
+            "example": "English"
+          },
+          "code": {
+            "type": "string",
+            "example": "en"
+          },
+          "description": {
+            "type": "string",
+            "example": "English Language"
+          }
+        }
+      },
+      "CreateLanguageResponse": {
+        "required": [
+          "language",
+          "message",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "example": 201
+          },
+          "message": {
+            "type": "string",
+            "example": "Language Created Successfully"
+          },
+          "language": {
+            "$ref": "#/components/schemas/LanguagesListResponse_languages"
+          }
+        }
+      },
+      "UpdateLanguageRequest": {
+        "required": [
+          "code",
+          "language"
+        ],
+        "type": "object",
+        "properties": {
+          "language": {
+            "type": "string",
+            "example": "English"
+          },
+          "code": {
+            "type": "string",
+            "example": "en"
+          },
+          "description": {
+            "type": "string",
+            "example": "English Language"
+          }
+        }
+      },
+      "UpdateLanguageResponse": {
+        "required": [
+          "language",
+          "message",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "example": 200
+          },
+          "message": {
+            "type": "string",
+            "example": "Language successfully updated"
+          },
+          "language": {
+            "$ref": "#/components/schemas/LanguagesListResponse_languages"
+          }
+        }
+      },
+      "LanguageValidationError": {
+        "required": [
+          "message",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "example": 400
+          },
+          "message": {
+            "type": "string",
+            "example": "Validation Error"
+          },
+          "errors": {
+            "$ref": "#/components/schemas/LanguageValidationError_errors"
+          }
+        }
+      },
+      "LanguageConflictError": {
+        "required": [
+          "message",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "example": 409
+          },
+          "message": {
+            "type": "string",
+            "example": "Language already exists"
+          }
+        }
+      },
+      "LanguageNotFoundError": {
+        "required": [
+          "message",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "example": 404
+          },
+          "message": {
+            "type": "string",
+            "example": "Language not found"
+          }
+        }
+      },
+      "UnauthorizedResponse": {
+        "required": [
+          "message",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "example": 401
+          },
+          "message": {
+            "type": "string",
+            "example": "Unauthorized"
+          }
+        }
+      },
+      "BillingPlanResponse": {
+        "required": [
+          "data",
+          "message",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "example": 200
+          },
+          "message": {
+            "type": "string",
+            "example": "Billing plan retrieved successfully"
+          },
+          "data": {
+            "$ref": "#/components/schemas/BillingPlanResponse_data"
+          }
+        }
+      },
+      "BillingPlanErrorResponse": {
+        "required": [
+          "message",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "example": 400
+          },
+          "message": {
+            "type": "string",
+            "example": "Error occurred"
+          }
+        }
+      },
+      "inline_response_201": {
+        "type": "object",
+        "properties": {
+          "status_code": {
+            "type": "integer",
+            "example": 201
+          },
+          "message": {
+            "type": "string",
+            "example": "User Created Successfully"
+          },
+          "token": {
+            "type": "string",
+            "example": "jwt_token_string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/inline_response_201_data"
+          }
+        }
+      },
+      "inline_response_400": {
+        "type": "object",
+        "properties": {
+          "status_code": {
+            "type": "integer",
+            "example": 400
+          },
+          "message": {
+            "type": "string",
+            "example": "Registration unsuccessful"
+          }
+        }
+      },
+      "inline_response_200": {
+        "type": "object",
+        "properties": {
+          "status_code": {
+            "type": "integer",
+            "example": 200
+          },
+          "message": {
+            "type": "string",
+            "example": "Login successful"
+          },
+          "access_token": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjMwZTMwZWUzLTYxZjUtNDkyMi1iZjcyLTc2YjFmMDE0NTc5NyIsInN1YiI6IjMwZTMwZWUzLTYxZjUtNDkyMi1iZjcyLTc2YjFmMDE0NTc5NyIsImlhdCI6MTcyMjk3MzgxMiwiZXhwIjoxNzIyOTk1NDEyfQ.D8kt6U6Icctlyg78Y8FFIlIr96bwONQs5hN_sCO2SHc"
+          },
+          "data": {
+            "$ref": "#/components/schemas/inline_response_200_data"
+          }
+        }
+      },
+      "inline_response_401": {
+        "type": "object",
+        "properties": {
+          "status_code": {
+            "type": "integer",
+            "example": 401
+          },
+          "message": {
+            "type": "string",
+            "example": "Invalid credentials"
+          }
+        }
+      },
+      "inline_response_400_1": {
+        "type": "object",
+        "properties": {
+          "status_code": {
+            "type": "integer",
+            "example": 400
+          },
+          "message": {
+            "type": "array",
+            "example": [
+              "password should not be empty"
+            ],
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "inline_response_200_1": {
+        "type": "object",
+        "properties": {
+          "status_code": {
+            "type": "integer",
+            "example": 200
+          },
+          "message": {
+            "type": "string",
+            "example": "Logout successful"
+          }
+        }
+      },
+      "inline_response_401_1": {
+        "type": "object",
+        "properties": {
+          "status_code": {
+            "type": "integer",
+            "example": 401
+          },
+          "message": {
+            "type": "string",
+            "example": "Invalid token or other error"
+          },
+          "error": {
+            "type": "string",
+            "example": "Token invalidation error"
+          }
+        }
+      },
+      "inline_response_200_2": {
+        "type": "object",
+        "properties": {
+          "status_code": {
+            "type": "integer",
+            "example": 200
+          },
+          "message": {
+            "type": "string",
+            "example": "Email sent successfully"
+          }
+        }
+      },
+      "inline_response_400_2": {
+        "type": "object",
+        "properties": {
+          "status_code": {
+            "type": "integer",
+            "example": 400
+          },
+          "message": {
+            "type": "string",
+            "example": "Account with the specified email doesn't exist"
+          }
+        }
+      },
+      "inline_response_422": {
+        "type": "object",
+        "properties": {
+          "status_code": {
+            "type": "integer",
+            "example": 422
+          },
+          "message": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "example": {
+              "email": "The email field is required."
+            }
+          }
+        }
+      },
+      "inline_response_200_3": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Token Validated Successfully"
+          },
+          "status_code": {
+            "type": "integer",
+            "example": 200
+          }
+        }
+      },
+      "inline_response_400_3": {
+        "type": "object",
+        "properties": {
+          "status_code": {
+            "type": "integer",
+            "example": 401
+          },
+          "message": {
+            "type": "string",
+            "example": "Invalid token or email"
+          }
+        }
+      },
+      "inline_response_401_2": {
+        "type": "object",
+        "properties": {
+          "status_code": {
+            "type": "integer",
+            "example": 400
+          },
+          "message": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "example": {
+              "email": "The email field is required."
+            }
+          }
+        }
+      },
+      "inline_response_200_4": {
+        "type": "object",
+        "properties": {
+          "status_code": {
+            "type": "integer",
+            "example": 200
+          },
+          "message": {
+            "type": "string",
+            "example": "Password reset successfully"
+          }
+        }
+      },
+      "inline_response_400_4": {
+        "type": "object",
+        "properties": {
+          "status_code": {
+            "type": "integer",
+            "example": 400
+          },
+          "message": {
+            "type": "string",
+            "example": "User does not exist or validation errors occurred"
+          }
+        }
+      },
+      "inline_response_200_5": {
+        "type": "object",
+        "properties": {
+          "status_code": {
+            "type": "integer",
+            "example": 200
+          },
+          "message": {
+            "type": "string",
+            "example": "User Created Successfully"
+          },
+          "access_token": {
+            "type": "string",
+            "description": "JWT token for authenticated user.",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          },
+          "data": {
+            "$ref": "#/components/schemas/inline_response_200_5_data"
+          }
+        }
+      },
+      "inline_response_400_5": {
+        "type": "object",
+        "properties": {
+          "status_code": {
+            "type": "integer",
+            "example": 400
+          },
+          "error": {
+            "type": "string",
+            "example": "Bad Request"
+          },
+          "message": {
+            "type": "string",
+            "example": "Invalid Google token"
+          }
+        }
+      },
+      "inline_response_422_1": {
+        "type": "object",
+        "properties": {
+          "status_code": {
+            "type": "integer",
+            "example": 422
+          },
+          "message": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "inline_response_500": {
+        "type": "object",
+        "properties": {
+          "status_code": {
+            "type": "integer",
+            "example": 500
+          },
+          "message": {
+            "type": "string",
+            "example": "Error message"
+          }
+        }
+      },
+      "inline_response_302": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Indicates the user is being redirected to Google for authentication.",
+            "example": "Redirecting"
+          }
+        }
+      },
+      "inline_response_200_6": {
+        "type": "object",
+        "properties": {
+          "status_code": {
+            "type": "integer",
+            "example": 200
+          },
+          "message": {
+            "type": "string",
+            "example": "User successfully authenticated"
+          },
+          "access_token": {
+            "type": "string",
+            "example": "jwt_token_string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/inline_response_200_6_data"
+          }
+        }
+      },
+      "inline_response_201_1": {
+        "type": "object",
+        "properties": {
+          "status_code": {
+            "type": "integer",
+            "example": 201
+          },
+          "message": {
+            "type": "string",
+            "example": "User successfully authenticated"
+          },
+          "access_token": {
+            "type": "string",
+            "example": "jwt_token_string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/inline_response_201_1_data"
+          }
+        }
+      },
+      "inline_response_400_6": {
+        "type": "object",
+        "properties": {
+          "status_code": {
+            "type": "integer",
+            "example": 400
+          },
+          "message": {
+            "type": "string",
+            "example": "Invalid data provided"
+          }
+        }
+      },
+      "inline_response_401_3": {
+        "type": "object",
+        "properties": {
+          "status_code": {
+            "type": "integer",
+            "example": 401
+          },
+          "message": {
+            "type": "string",
+            "example": "Unauthorized"
+          }
+        }
+      },
+      "inline_response_400_7": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "example": 400
+          },
+          "message": {
+            "type": "string",
+            "example": "Bad request"
+          }
+        }
+      },
+      "FacebookCallbackResponseSchema_data": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "email": {
+            "type": "string",
+            "example": "user@example.com"
+          },
+          "first_name": {
+            "type": "string",
+            "example": "John"
+          },
+          "last_name": {
+            "type": "string",
+            "example": "Doe"
+          }
+        }
+      },
+      "UserAnalyticsResponse_data": {
+        "type": "object",
+        "properties": {
+          "jan": {
+            "type": "string",
+            "example": "1000"
+          },
+          "feb": {
+            "type": "string",
+            "example": "10000"
+          },
+          "mar": {
+            "type": "string",
+            "example": "1000"
+          },
+          "apr": {
+            "type": "string",
+            "example": "10000"
+          },
+          "may": {
+            "type": "string",
+            "example": "1000"
+          },
+          "jun": {
+            "type": "string",
+            "example": "500"
+          },
+          "jul": {
+            "type": "string",
+            "example": "5000"
+          },
+          "aug": {
+            "type": "string",
+            "example": "1000"
+          },
+          "sep": {
+            "type": "string",
+            "example": "10"
+          },
+          "oct": {
+            "type": "string",
+            "example": "12000"
+          },
+          "nov": {
+            "type": "string",
+            "example": "11000"
+          },
+          "dec": {
+            "type": "string",
+            "example": "5000"
+          }
+        }
+      },
+      "SuccessResponse_data": {
+        "type": "object",
+        "properties": {
+          "payment_url": {
+            "type": "string",
+            "example": "https://example.com/checkout?paymentId=pay_abc123"
+          }
+        }
+      },
+      "LanguagesListResponse_languages": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "uuid"
+          },
+          "language": {
+            "type": "string",
+            "example": "English"
+          },
+          "code": {
+            "type": "string",
+            "example": "en"
+          },
+          "description": {
+            "type": "string",
+            "example": "English Language"
+          }
+        }
+      },
+      "LanguageValidationError_errors": {
+        "type": "object",
+        "properties": {
+          "language": {
+            "type": "array",
+            "example": [
+              "The language field is required."
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "code": {
+            "type": "array",
+            "example": [
+              "The code field is required."
+            ],
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "BillingPlanResponse_data": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          },
+          "name": {
+            "type": "string",
+            "example": "Premium Plan"
+          },
+          "price": {
+            "type": "number",
+            "format": "float",
+            "example": 49.99
+          },
+          "features": {
+            "type": "array",
+            "example": [
+              "Feature 1",
+              "Feature 2",
+              "Feature 3"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "description": {
+            "type": "string",
+            "example": "A comprehensive plan for premium users"
+          }
+        }
+      },
+      "inline_response_201_data_user": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "first_name": {
+            "type": "string",
+            "example": "John"
+          },
+          "last_name": {
+            "type": "string",
+            "example": "Doe"
+          },
+          "email": {
+            "type": "string",
+            "example": "john.doe@example.com"
+          },
+          "avatar_url": {
+            "type": "string",
+            "example": "http://example.com/avatar.jpg"
+          },
+          "role": {
+            "type": "string",
+            "example": "user"
+          }
+        }
+      },
+      "inline_response_201_data": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/inline_response_201_data_user"
+          }
+        }
+      },
+      "inline_response_200_data_user": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "30e30ee3-61f5-4922-bf72-76b1f0145797"
+          },
+          "first_name": {
+            "type": "string",
+            "example": "string"
+          },
+          "last_name": {
+            "type": "string",
+            "example": "string"
+          },
+          "email": {
+            "type": "string",
+            "example": "tulbadex@gmail.com"
+          },
+          "role": {
+            "type": "string",
+            "example": "super-admin"
+          },
+          "avatar_url": {
+            "type": "string"
+          }
+        }
+      },
+      "inline_response_200_data": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/inline_response_200_data_user"
+          }
+        }
+      },
+      "inline_response_200_5_data_user": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "email": {
+            "type": "string",
+            "example": "user@example.com"
+          },
+          "first_name": {
+            "type": "string",
+            "example": "John"
+          },
+          "last_name": {
+            "type": "string",
+            "example": "Doe"
+          },
+          "fullname": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "role": {
+            "type": "string",
+            "example": "user"
+          }
+        }
+      },
+      "inline_response_200_5_data": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/inline_response_200_5_data_user"
+          }
+        }
+      },
+      "inline_response_200_6_data": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "30e30ee3-61f5-4922-bf72-76b1f0145797"
+          },
+          "email": {
+            "type": "string",
+            "example": "user@example.com"
+          },
+          "first_name": {
+            "type": "string",
+            "example": "John"
+          },
+          "last_name": {
+            "type": "string",
+            "example": "Doe"
+          }
+        }
+      },
+      "inline_response_201_1_data": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "email": {
+            "type": "string",
+            "example": "john.doe@gmail.com"
+          },
+          "first_name": {
+            "type": "string",
+            "example": "John"
+          },
+          "last_name": {
+            "type": "string",
+            "example": "Doe"
+          }
+        }
+      }
+    },
+    "responses": {
+      "RegisterationSuccessResponse": {
+        "description": "User created successfully",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/inline_response_201"
+            }
+          }
+        }
+      },
+      "RegisterationErrorResponse": {
+        "description": "Validation or registration error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/inline_response_400"
+            }
+          }
+        }
+      },
+      "LoginResponse": {
+        "description": "Login successful",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/inline_response_200"
+            }
+          }
+        }
+      },
+      "LoginErrorInvalidCredentials": {
+        "description": "Invalid credentials provided",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/inline_response_401"
+            }
+          }
+        }
+      },
+      "LoginErrorBadRequest": {
+        "description": "Bad request, validation errors",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/inline_response_400_1"
+            }
+          }
+        }
+      },
+      "LogoutSuccessResponse": {
+        "description": "Logout successful",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/inline_response_200_1"
+            }
+          }
+        }
+      },
+      "LogoutErrorResponse": {
+        "description": "Error during logout, e.g., token issues",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/inline_response_401_1"
+            }
+          }
+        }
+      },
+      "ForgotPasswordSuccessResponse": {
+        "description": "Success response for forgot password request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/inline_response_200_2"
+            }
+          }
+        }
+      },
+      "ForgotPasswordErrorResponse": {
+        "description": "Error response for forgot password request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/inline_response_400_2"
+            }
+          }
+        }
+      },
+      "ForgotEmailPasswordValidationErrorResponse": {
+        "description": "Validation error response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/inline_response_422"
+            }
+          }
+        }
+      },
+      "VerifyOtpSuccessResponse": {
+        "description": "Success response for OTP verification",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/inline_response_200_3"
+            }
+          }
+        }
+      },
+      "VerifyOtpErrorResponse": {
+        "description": "Invalid OTP or email response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/inline_response_400_3"
+            }
+          }
+        }
+      },
+      "InvalidTokenErrorResponse": {
+        "description": "Validation error response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/inline_response_401_2"
+            }
+          }
+        }
+      },
+      "ResetPasswordSuccessResponse": {
+        "description": "Password reset successfully",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/inline_response_200_4"
+            }
+          }
+        }
+      },
+      "ResetPasswordErrorResponse": {
+        "description": "Error response for password reset request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/inline_response_400_4"
+            }
+          }
+        }
+      },
+      "GoogleRedirectResponse": {
+        "description": "Redirects the user to Google for authentication",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/inline_response_302"
+            }
+          }
+        }
+      },
+      "GoogleLoginSuccessResponse": {
+        "description": "Successful Google authentication",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/inline_response_200_6"
+            }
+          }
+        }
+      },
+      "GoogleSuccessfulAuthentication": {
+        "description": "User successfully authenticated",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/inline_response_201_1"
+            }
+          }
+        }
+      },
+      "GoogleBadRequest": {
+        "description": "Bad request, invalid data provided",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/inline_response_400_6"
+            }
+          }
+        }
+      },
+      "GoogleUnauthorizedError": {
+        "description": "Unauthorized error, invalid credentials or missing data",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/inline_response_401_3"
+            }
+          }
+        }
+      },
+      "FacebookRedirectResponse": {
+        "description": "Redirects to Facebook for authentication",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/FacebookRedirectResponse"
+            }
+          }
+        }
+      },
+      "FacebookCallbackResponse": {
+        "description": "Successful authentication and token generation",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/FacebookCallbackResponseSchema"
+            }
+          }
+        }
+      },
+      "FacebookCallbackPostResponse": {
+        "description": "Successful authentication and token generation",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/FacebookCallbackPostResponseSchema"
+            }
+          }
+        }
+      },
+      "BadRequestResponse": {
+        "description": "Bad request error due to invalid data",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/inline_response_400_7"
+            }
+          }
+        }
+      },
+      "GoogleRequest200": {
+        "description": "Successful authentication and user creation",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/inline_response_200_5"
+            }
+          }
+        }
+      },
+      "GoogleRequest400": {
+        "description": "Bad request due to invalid token or mismatched email",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/inline_response_400_5"
+            }
+          }
+        }
+      },
+      "GoogleRequest422": {
+        "description": "Validation error for missing or invalid parameters",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/inline_response_422_1"
+            }
+          }
+        }
+      },
+      "GoogleRequest500": {
+        "description": "Internal server error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/inline_response_500"
+            }
+          }
+        }
+      }
+    },
+    "requestBodies": {
+      "RegisterRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "required": [
+                "email",
+                "first_name",
+                "last_name",
+                "password"
+              ],
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "description": "Required email address",
+                  "example": "john.doe@example.com"
+                },
+                "first_name": {
+                  "type": "string",
+                  "description": "Required first name",
+                  "example": "John"
+                },
+                "last_name": {
+                  "type": "string",
+                  "description": "Required last name",
+                  "example": "Doe"
+                },
+                "password": {
+                  "type": "string",
+                  "description": "Required password with minimum 8 characters including letters, mixed case, numbers, and symbols",
+                  "example": "P@ssw0rd123"
+                },
+                "admin_secret": {
+                  "type": "string",
+                  "example": ""
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "LoginRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "required": [
+                "email",
+                "password"
+              ],
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "description": "Email address for login",
+                  "example": "example@example.com"
+                },
+                "password": {
+                  "type": "string",
+                  "description": "Password for login",
+                  "example": "P@ssw0rd123"
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "ForgotPasswordRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "required": [
+                "email"
+              ],
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "description": "Email address to send the password reset token",
+                  "example": "example@example.com"
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "VerifyOtpRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "required": [
+                "email",
+                "token"
+              ],
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "description": "Email address associated with the OTP",
+                  "example": "example@gmail.com"
+                },
+                "token": {
+                  "type": "string",
+                  "description": "OTP token for verification",
+                  "example": "123456"
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "ResetPasswordRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "required": [
+                "email",
+                "password"
+              ],
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "description": "Email address of the user requesting the password reset",
+                  "example": "example@gmail.com"
+                },
+                "password": {
+                  "type": "string",
+                  "description": "New password for the user, must meet security requirements",
+                  "example": "NewP@ssw0rd123"
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "GoogleUserRequest": {
+        "description": "Google user data to authenticate and create or update the user",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "google_user": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "Google user ID",
+                      "example": "1234567890"
+                    },
+                    "email": {
+                      "type": "string",
+                      "description": "Email address from Google",
+                      "example": "john.doe@gmail.com"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "given_name": {
+                          "type": "string",
+                          "description": "Google user's given name",
+                          "example": "John"
+                        },
+                        "family_name": {
+                          "type": "string",
+                          "description": "Google user's family name",
+                          "example": "Doe"
+                        }
+                      }
+                    },
+                    "attributes": {
+                      "type": "object",
+                      "properties": {
+                        "avatar_original": {
+                          "type": "string",
+                          "description": "URL of the Google user's avatar",
+                          "example": "http://example.com/avatar.jpg"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "FacebookUserRequest": {
+        "description": "The Facebook user data submitted to authenticate and create or update the user.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "facebook_user": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string",
+                      "example": "user@example.com"
+                    },
+                    "id": {
+                      "type": "string",
+                      "example": "facebook_user_id"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "John Doe"
+                    },
+                    "avatar": {
+                      "type": "string",
+                      "example": "https://example.com/avatar.jpg"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "GoogleResponseProcess": {
+        "description": "The request payload for Google authentication.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "required": [
+                "email",
+                "token"
+              ],
+              "type": "object",
+              "properties": {
+                "token": {
+                  "type": "string",
+                  "description": "The Google access token received from the client.",
+                  "example": "ya29.A0ARrdaM9o0NT1-..."
+                },
+                "email": {
+                  "type": "string",
+                  "description": "The email associated with the Google token.",
+                  "example": "user@example.com"
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
