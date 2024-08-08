@@ -80,11 +80,11 @@ class FaqControllerTest extends TestCase
                 'message',
                 'data' => [
                     'id',
-                    'created_at',
-                    'updated_at',
                     'question',
                     'answer',
                     'category',
+                    'createdAt',
+                    'updatedAt',
                     'createdBy'
                 ]
             ]);
@@ -104,9 +104,8 @@ class FaqControllerTest extends TestCase
 
         $response->assertStatus(400)
             ->assertJsonStructure([
-                'message',
+                'status_code',
                 'data' => [
-                    'status_code',
                     'errors' => [
                         '*' => [
                             'field',

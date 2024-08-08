@@ -65,18 +65,18 @@ class FaqController extends Controller
             $faq = Faq::create($data);
 
             return response()->json([
-                'status_code' => 201,
+                'status_code' => Response::HTTP_CREATED,
                 'message' => "The FAQ has been successfully created.",
                 'data' => [
                     'id' => $faq->id,
-                    'created_at' => $faq->created_at,
-                    'updated_at' => $faq->updated_at,
                     'question' => $faq->question,
                     'answer' => $faq->answer,
                     'category' => $faq->category,
                     'createdBy' => "",
+                    'createdAt' => $faq->created_at,
+                    'updatedAt' => $faq->updated_at,
                 ]
-            ]);
+            ], Response::HTTP_CREATED);
 
         } catch (\Exception $e) {
             return response()->json([
