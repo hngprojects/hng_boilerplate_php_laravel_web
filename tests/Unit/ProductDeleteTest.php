@@ -32,7 +32,7 @@ class ProductDeleteTest extends TestCase
         $this->user = User::factory()->create();
         $this->otherUser = User::factory()->create();
 
-        // Create organizations
+        // Create organisations
         $this->org = Organisation::create([
             'name' => 'Bamo',
             'description' => 'Bamo\'s Organisation',
@@ -48,7 +48,7 @@ class ProductDeleteTest extends TestCase
 
         $this->otherOrg = Organisation::create([
             'name' => 'Other Org',
-            'description' => 'Another organization',
+            'description' => 'Another organisation',
             'email' => 'other@example.com',
             'industry' => 'Finance',
             'type' => 'parttime',
@@ -58,7 +58,7 @@ class ProductDeleteTest extends TestCase
             'user_id' => $this->otherUser->id,
 
         ]);
-        // Assign users as owners of the organizations
+        // Assign users as owners of the organisations
         $this->org->users()->attach($this->user->id);
         $this->otherOrg->users()->attach($this->otherUser->id);
 
@@ -84,7 +84,7 @@ class ProductDeleteTest extends TestCase
 
         $token = JWTAuth::fromUser($this->user);
         $response = $this->withHeaders(['Authorization' => "Bearer $token"])
-            ->deleteJson("api/v1/organizations/{$this->org->org_id}/products/{$this->product->product_id}");
+            ->deleteJson("api/v1/organisations/{$this->org->org_id}/products/{$this->product->product_id}");
 
 
         $response->assertStatus(204);
@@ -98,12 +98,12 @@ class ProductDeleteTest extends TestCase
 
         $token = JWTAuth::fromUser($this->otherUser);
         $response = $this->withHeaders(['Authorization' => "Bearer $token"])
-            ->deleteJson("api/v1/organizations/{$this->org->org_id}/products/{$this->product->product_id}");
+            ->deleteJson("api/v1/organisations/{$this->org->org_id}/products/{$this->product->product_id}");
 
         $response->assertStatus(403);
         $response->assertJson([
             'status' => 'Forbidden',
-            'message' => 'You do not have permission to delete a product from this organization.',
+            'message' => 'You do not have permission to delete a product from this organisation.',
             'status_code' => 403
         ]);
     }
