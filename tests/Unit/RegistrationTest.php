@@ -37,7 +37,7 @@ class RegistrationTest extends TestCase
 
         // Check the response structure
         $response->assertJsonStructure([
-            'status',
+            'status_code',
             'message',
             'access_token',
             'data' => [

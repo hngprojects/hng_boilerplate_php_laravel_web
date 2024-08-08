@@ -23,6 +23,9 @@
       "name": "Users"
     },
     {
+      "name": "User Dashboard"
+    },
+    {
       "name": "Organisations"
     },
     {
@@ -291,6 +294,60 @@
         }
       }
     },
+    "/api/v1/auth/google": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Authenticate a user using Google token",
+        "description": "This endpoint validates the provided Google token and email, creates or updates the user, and returns a JWT token upon successful authentication.",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/GoogleResponseProcess"
+        },
+        "responses": {
+          "200": {
+            "description": "Successful authentication and user creation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_5"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request due to invalid token or mismatched email",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400_5"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation error for missing or invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_422_1"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/auth/login-google": {
       "get": {
         "tags": [
@@ -325,7 +382,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/inline_response_200_5"
+                  "$ref": "#/components/schemas/inline_response_200_6"
                 }
               }
             }
@@ -357,7 +414,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/inline_response_400_5"
+                  "$ref": "#/components/schemas/inline_response_400_6"
                 }
               }
             }
@@ -441,7 +498,456 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/inline_response_400_6"
+                  "$ref": "#/components/schemas/inline_response_400_7"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/user-analytics": {
+      "get": {
+        "tags": [
+          "User Dashboard"
+        ],
+        "summary": "Revenue by months of the year",
+        "responses": {
+          "200": {
+            "description": "User Analytics",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserAnalyticsResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An error occurred",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/payments/flutterwave": {
+      "post": {
+        "tags": [
+          "Payments"
+        ],
+        "summary": "Initiate a payment using Flutterwave",
+        "description": "Allows authenticated users with appropriate permissions to initiate a payment through Flutterwave.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Payment initiated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Authorization error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthzError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/payments/paystack": {
+      "post": {
+        "tags": [
+          "Payments"
+        ],
+        "summary": "Initiate a payment using Paystack",
+        "description": "Allows authenticated users with appropriate permissions to initiate a payment through Paystack.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Payment initiated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Authorization error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthzError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/languages": {
+      "get": {
+        "tags": [
+          "Languages"
+        ],
+        "summary": "Get all supported languages",
+        "responses": {
+          "200": {
+            "description": "List of supported languages",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LanguagesListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Languages"
+        ],
+        "summary": "Create a new language",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateLanguageRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Language Created Successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateLanguageResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LanguageValidationError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Language already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LanguageConflictError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/languages/{id}": {
+      "patch": {
+        "tags": [
+          "Languages"
+        ],
+        "summary": "Update a language",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Language ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "example": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateLanguageRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Language successfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateLanguageResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LanguageValidationError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Language not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LanguageNotFoundError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/billing-plans/{id}": {
+      "get": {
+        "tags": [
+          "Billing Plans"
+        ],
+        "summary": "Retrieve a billing plan",
+        "description": "Fetch the details of a single billing plan.",
+        "operationId": "getBillingPlan",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The ID of the billing plan to retrieve",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Billing plan retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BillingPlanResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid billing plan ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BillingPlanErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BillingPlanErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Billing plan not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BillingPlanErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BillingPlanErrorResponse"
                 }
               }
             }
@@ -502,6 +1008,360 @@
           },
           "data": {
             "$ref": "#/components/schemas/FacebookCallbackResponseSchema_data"
+          }
+        }
+      },
+      "UserAnalyticsResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "User analytics retrieved successfully"
+          },
+          "status_code": {
+            "type": "integer",
+            "example": 200
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserAnalyticsResponse_data"
+            }
+          }
+        }
+      },
+      "PaymentRequest": {
+        "required": [
+          "billing_option",
+          "full_name",
+          "organization_id",
+          "plan_id",
+          "redirect_url"
+        ],
+        "type": "object",
+        "properties": {
+          "organization_id": {
+            "type": "string",
+            "description": "ID of the organization making the payment"
+          },
+          "plan_id": {
+            "type": "string",
+            "description": "ID of the plan being purchased"
+          },
+          "full_name": {
+            "type": "string",
+            "description": "Full name of the payer"
+          },
+          "billing_option": {
+            "type": "string",
+            "description": "Billing option for the payment",
+            "enum": [
+              "monthly",
+              "yearly"
+            ]
+          },
+          "redirect_url": {
+            "type": "string",
+            "description": "URL to redirect to after payment completion",
+            "format": "uri"
+          }
+        }
+      },
+      "SuccessResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "example": 200
+          },
+          "message": {
+            "type": "string",
+            "example": "Payment initiated successfully"
+          },
+          "data": {
+            "$ref": "#/components/schemas/SuccessResponse_data"
+          }
+        }
+      },
+      "ValidationError": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "example": 400
+          },
+          "message": {
+            "type": "string",
+            "example": "Validation error: amount must be a positive number"
+          }
+        }
+      },
+      "AuthError": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "example": 401
+          },
+          "message": {
+            "type": "string",
+            "example": "Authentication required"
+          }
+        }
+      },
+      "AuthzError": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "example": 403
+          },
+          "message": {
+            "type": "string",
+            "example": "You do not have permission to initiate this payment"
+          }
+        }
+      },
+      "ServerError": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "example": 500
+          },
+          "message": {
+            "type": "string",
+            "example": "An unexpected error occurred. Please try again later."
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "status_code": {
+            "type": "integer",
+            "example": 500
+          },
+          "message": {
+            "type": "string",
+            "example": "Error message"
+          }
+        }
+      },
+      "LanguagesListResponse": {
+        "required": [
+          "languages",
+          "message",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "example": 200
+          },
+          "message": {
+            "type": "string",
+            "example": "Languages retrieved successfully"
+          },
+          "languages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LanguagesListResponse_languages"
+            }
+          }
+        }
+      },
+      "CreateLanguageRequest": {
+        "required": [
+          "code",
+          "language"
+        ],
+        "type": "object",
+        "properties": {
+          "language": {
+            "type": "string",
+            "example": "English"
+          },
+          "code": {
+            "type": "string",
+            "example": "en"
+          },
+          "description": {
+            "type": "string",
+            "example": "English Language"
+          }
+        }
+      },
+      "CreateLanguageResponse": {
+        "required": [
+          "language",
+          "message",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "example": 201
+          },
+          "message": {
+            "type": "string",
+            "example": "Language Created Successfully"
+          },
+          "language": {
+            "$ref": "#/components/schemas/LanguagesListResponse_languages"
+          }
+        }
+      },
+      "UpdateLanguageRequest": {
+        "required": [
+          "code",
+          "language"
+        ],
+        "type": "object",
+        "properties": {
+          "language": {
+            "type": "string",
+            "example": "English"
+          },
+          "code": {
+            "type": "string",
+            "example": "en"
+          },
+          "description": {
+            "type": "string",
+            "example": "English Language"
+          }
+        }
+      },
+      "UpdateLanguageResponse": {
+        "required": [
+          "language",
+          "message",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "example": 200
+          },
+          "message": {
+            "type": "string",
+            "example": "Language successfully updated"
+          },
+          "language": {
+            "$ref": "#/components/schemas/LanguagesListResponse_languages"
+          }
+        }
+      },
+      "LanguageValidationError": {
+        "required": [
+          "message",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "example": 400
+          },
+          "message": {
+            "type": "string",
+            "example": "Validation Error"
+          },
+          "errors": {
+            "$ref": "#/components/schemas/LanguageValidationError_errors"
+          }
+        }
+      },
+      "LanguageConflictError": {
+        "required": [
+          "message",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "example": 409
+          },
+          "message": {
+            "type": "string",
+            "example": "Language already exists"
+          }
+        }
+      },
+      "LanguageNotFoundError": {
+        "required": [
+          "message",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "example": 404
+          },
+          "message": {
+            "type": "string",
+            "example": "Language not found"
+          }
+        }
+      },
+      "UnauthorizedResponse": {
+        "required": [
+          "message",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "example": 401
+          },
+          "message": {
+            "type": "string",
+            "example": "Unauthorized"
+          }
+        }
+      },
+      "BillingPlanResponse": {
+        "required": [
+          "data",
+          "message",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "example": 200
+          },
+          "message": {
+            "type": "string",
+            "example": "Billing plan retrieved successfully"
+          },
+          "data": {
+            "$ref": "#/components/schemas/BillingPlanResponse_data"
+          }
+        }
+      },
+      "BillingPlanErrorResponse": {
+        "required": [
+          "message",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "example": 400
+          },
+          "message": {
+            "type": "string",
+            "example": "Error occurred"
           }
         }
       },
@@ -733,6 +1593,75 @@
           }
         }
       },
+      "inline_response_200_5": {
+        "type": "object",
+        "properties": {
+          "status_code": {
+            "type": "integer",
+            "example": 200
+          },
+          "message": {
+            "type": "string",
+            "example": "User Created Successfully"
+          },
+          "access_token": {
+            "type": "string",
+            "description": "JWT token for authenticated user.",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          },
+          "data": {
+            "$ref": "#/components/schemas/inline_response_200_5_data"
+          }
+        }
+      },
+      "inline_response_400_5": {
+        "type": "object",
+        "properties": {
+          "status_code": {
+            "type": "integer",
+            "example": 400
+          },
+          "error": {
+            "type": "string",
+            "example": "Bad Request"
+          },
+          "message": {
+            "type": "string",
+            "example": "Invalid Google token"
+          }
+        }
+      },
+      "inline_response_422_1": {
+        "type": "object",
+        "properties": {
+          "status_code": {
+            "type": "integer",
+            "example": 422
+          },
+          "message": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "inline_response_500": {
+        "type": "object",
+        "properties": {
+          "status_code": {
+            "type": "integer",
+            "example": 500
+          },
+          "message": {
+            "type": "string",
+            "example": "Error message"
+          }
+        }
+      },
       "inline_response_302": {
         "type": "object",
         "properties": {
@@ -743,7 +1672,7 @@
           }
         }
       },
-      "inline_response_200_5": {
+      "inline_response_200_6": {
         "type": "object",
         "properties": {
           "status_code": {
@@ -759,7 +1688,7 @@
             "example": "jwt_token_string"
           },
           "data": {
-            "$ref": "#/components/schemas/inline_response_200_5_data"
+            "$ref": "#/components/schemas/inline_response_200_6_data"
           }
         }
       },
@@ -783,7 +1712,7 @@
           }
         }
       },
-      "inline_response_400_5": {
+      "inline_response_400_6": {
         "type": "object",
         "properties": {
           "status_code": {
@@ -809,7 +1738,7 @@
           }
         }
       },
-      "inline_response_400_6": {
+      "inline_response_400_7": {
         "type": "object",
         "properties": {
           "status": {
@@ -840,6 +1769,145 @@
           "last_name": {
             "type": "string",
             "example": "Doe"
+          }
+        }
+      },
+      "UserAnalyticsResponse_data": {
+        "type": "object",
+        "properties": {
+          "jan": {
+            "type": "string",
+            "example": "1000"
+          },
+          "feb": {
+            "type": "string",
+            "example": "10000"
+          },
+          "mar": {
+            "type": "string",
+            "example": "1000"
+          },
+          "apr": {
+            "type": "string",
+            "example": "10000"
+          },
+          "may": {
+            "type": "string",
+            "example": "1000"
+          },
+          "jun": {
+            "type": "string",
+            "example": "500"
+          },
+          "jul": {
+            "type": "string",
+            "example": "5000"
+          },
+          "aug": {
+            "type": "string",
+            "example": "1000"
+          },
+          "sep": {
+            "type": "string",
+            "example": "10"
+          },
+          "oct": {
+            "type": "string",
+            "example": "12000"
+          },
+          "nov": {
+            "type": "string",
+            "example": "11000"
+          },
+          "dec": {
+            "type": "string",
+            "example": "5000"
+          }
+        }
+      },
+      "SuccessResponse_data": {
+        "type": "object",
+        "properties": {
+          "payment_url": {
+            "type": "string",
+            "example": "https://example.com/checkout?paymentId=pay_abc123"
+          }
+        }
+      },
+      "LanguagesListResponse_languages": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "uuid"
+          },
+          "language": {
+            "type": "string",
+            "example": "English"
+          },
+          "code": {
+            "type": "string",
+            "example": "en"
+          },
+          "description": {
+            "type": "string",
+            "example": "English Language"
+          }
+        }
+      },
+      "LanguageValidationError_errors": {
+        "type": "object",
+        "properties": {
+          "language": {
+            "type": "array",
+            "example": [
+              "The language field is required."
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "code": {
+            "type": "array",
+            "example": [
+              "The code field is required."
+            ],
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "BillingPlanResponse_data": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          },
+          "name": {
+            "type": "string",
+            "example": "Premium Plan"
+          },
+          "price": {
+            "type": "number",
+            "format": "float",
+            "example": 49.99
+          },
+          "features": {
+            "type": "array",
+            "example": [
+              "Feature 1",
+              "Feature 2",
+              "Feature 3"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "description": {
+            "type": "string",
+            "example": "A comprehensive plan for premium users"
           }
         }
       },
@@ -916,7 +1984,44 @@
           }
         }
       },
+      "inline_response_200_5_data_user": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "email": {
+            "type": "string",
+            "example": "user@example.com"
+          },
+          "first_name": {
+            "type": "string",
+            "example": "John"
+          },
+          "last_name": {
+            "type": "string",
+            "example": "Doe"
+          },
+          "fullname": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "role": {
+            "type": "string",
+            "example": "user"
+          }
+        }
+      },
       "inline_response_200_5_data": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/inline_response_200_5_data_user"
+          }
+        }
+      },
+      "inline_response_200_6_data": {
         "type": "object",
         "properties": {
           "id": {
@@ -1125,7 +2230,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/inline_response_200_5"
+              "$ref": "#/components/schemas/inline_response_200_6"
             }
           }
         }
@@ -1145,7 +2250,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/inline_response_400_5"
+              "$ref": "#/components/schemas/inline_response_400_6"
             }
           }
         }
@@ -1195,7 +2300,47 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/inline_response_400_6"
+              "$ref": "#/components/schemas/inline_response_400_7"
+            }
+          }
+        }
+      },
+      "GoogleRequest200": {
+        "description": "Successful authentication and user creation",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/inline_response_200_5"
+            }
+          }
+        }
+      },
+      "GoogleRequest400": {
+        "description": "Bad request due to invalid token or mismatched email",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/inline_response_400_5"
+            }
+          }
+        }
+      },
+      "GoogleRequest422": {
+        "description": "Validation error for missing or invalid parameters",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/inline_response_422_1"
+            }
+          }
+        }
+      },
+      "GoogleRequest500": {
+        "description": "Internal server error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/inline_response_500"
             }
           }
         }
@@ -1427,6 +2572,40 @@
           }
         },
         "required": true
+      },
+      "GoogleResponseProcess": {
+        "description": "The request payload for Google authentication.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "required": [
+                "email",
+                "token"
+              ],
+              "type": "object",
+              "properties": {
+                "token": {
+                  "type": "string",
+                  "description": "The Google access token received from the client.",
+                  "example": "ya29.A0ARrdaM9o0NT1-..."
+                },
+                "email": {
+                  "type": "string",
+                  "description": "The email associated with the Google token.",
+                  "example": "user@example.com"
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }

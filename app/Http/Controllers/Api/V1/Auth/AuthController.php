@@ -105,7 +105,7 @@ class AuthController extends Controller
             DB::commit();
 
             return response()->json([
-                'status' => 201,
+                'status_code' => 201,
                 "message" => "User Created Successfully",
                 'access_token' => $token,
                 'data' => [
