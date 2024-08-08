@@ -18,4 +18,4 @@ yarn-error.log
 /.idea
 /.vscode
 docker-compose.yml
-public/uploads
+/public/uploads
