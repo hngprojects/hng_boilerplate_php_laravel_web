@@ -80,11 +80,11 @@ class ProductController extends Controller
             });
         }
 
-    
+
         $page = $request->input('page', 1);
         $limit = $request->input('limit', 10);
         $products = $query->with(['productsVariant', 'categories'])
-                      ->paginate($limit, ['*'], 'page', $page);
+            ->paginate($limit, ['*'], 'page', $page);
 
         $transformedProducts = $products->map(function ($product) {
             return [
@@ -94,9 +94,9 @@ class ProductController extends Controller
                 'description' => $product->description,
                 'product_id' => $product->product_id,
                 'quantity' => $product->quantity,
-                'category' => $product->categories->isNotEmpty() ? $product->categories->map->name : [], 
-                'stock' => $product->productsVariant->isNotEmpty() ? $product->productsVariant->first()->stock : null, 
-                'status' => $product->productsVariant->isNotEmpty() ? $product->productsVariant->first()->stock_status : null, 
+                'category' => $product->categories->isNotEmpty() ? $product->categories->map->name : [],
+                'stock' => $product->productsVariant->isNotEmpty() ? $product->productsVariant->first()->stock : null,
+                'status' => $product->productsVariant->isNotEmpty() ? $product->productsVariant->first()->stock_status : null,
                 'date_added' => $product->created_at
             ];
         });
@@ -109,7 +109,7 @@ class ProductController extends Controller
                 'totalPages' => $products->lastPage(),
                 'currentPage' => $products->currentPage(),
                 'perPage' => $products->perPage(),
-             ],
+            ],
             'status_code' => 200
         ], 200);
     }
@@ -195,15 +195,18 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CreateProductRequest $request)
+    public function store(CreateProductRequest $request, $org_id)
     {
-
-        $org_id = $request->route('org_id');
-
         $isOwner = OrganisationUser::where('org_id', $org_id)->where('user_id', auth()->id())->exists();
 
         if (!$isOwner) {
             return response()->json(['message' => 'You are not authorized to create products for this organization.'], 403);
+        }
+
+        $imageUrl = null;
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('product_images', 'public');
+            $imageUrl = Storage::url($imagePath);
         }
 
         $product = Product::create([
@@ -212,8 +215,7 @@ class ProductController extends Controller
             'slug' => Carbon::now(),
             'tags' => $request->input('category'),
             'price' => $request->input('price'),
-            // 'imageUrl' => $imageUrl,
-            'imageUrl' => $request->input('image'),
+            'imageUrl' => $imageUrl,
             'user_id' => auth()->id(),
             'org_id' => $org_id
         ]);
@@ -239,7 +241,6 @@ class ProductController extends Controller
         ]);
 
         return response()->json(['message' => 'Product created successfully', 'product' => $product], 201);
-
     }
 
     /**
@@ -320,28 +321,43 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($productId)
+    public function destroy($org_id, $product_id)
     {
-        if (!Auth::check()) {
-            return response()->json([
-                'error' => 'Unauthorized',
-                'message' => 'You must be authenticated to delete a product.'
-            ], 401);
+
+        $isOwner = OrganisationUser::where('org_id', $org_id)->where('user_id', auth()->id())->exists();
+        // Check if the user's organization matches the org_id in the request
+        if (!$isOwner) {
+            return response()->json(
+                [
+                    'status' => 'Forbidden',
+                    'message' => 'You do not have permission to delete a product from this organization.',
+                    'status_code' => 403
+                ],
+                403
+            );
         }
 
-        $product = Product::find($productId);
+        $product = Product::find($product_id);
 
         if (!$product) {
             return response()->json([
                 'error' => 'Product not found',
-                'message' => "The product with ID $productId does not exist."
+                'message' => "The product with ID $product_id does not exist."
             ], 404);
+        }
+
+        // Check if the product belongs to the organization
+        if ($product->org_id !== $org_id) {
+            return response()->json([
+                'error' => 'Forbidden',
+                'message' => 'You do not have permission to delete this product.'
+            ], 403);
         }
 
         $product->delete();
 
         return response()->json([
             'message' => 'Product deleted successfully.'
-        ], 200);
+        ], 204);
     }
 }

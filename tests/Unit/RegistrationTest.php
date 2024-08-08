@@ -10,6 +10,7 @@ use App\Models\Profile;
 use Illuminate\Support\Str;
 use Illuminate\Http\Response;
 use Mockery;
+use Illuminate\Support\Facades\DB;
 
 class RegistrationTest extends TestCase
 {
@@ -26,30 +27,37 @@ class RegistrationTest extends TestCase
             'email' => 'testuser@gmail.com',
             'password' => 'Ed8M7s*)?e:hTb^#&;C!<y',
             'password_confirmation' => 'Ed8M7s*)?e:hTb^#&;C!<y',
+            'admin_secret' => '',
         ];
 
         $response = $this->postJson('/api/v1/auth/register', $registrationData);
+
         // Check the status code
         $response->assertStatus(201);
 
         // Check the response structure
         $response->assertJsonStructure([
+            'status',
             'message',
-            'status_code',
+            'access_token',
             'data' => [
-                'accessToken',
                 'user' => [
-                    'name',
-                    'email',
                     'id',
-                    'updated_at',
-                    'created_at',
+                    'first_name',
+                    'last_name',
+                    'id',
+                    'first_name',
+                    'last_name',
+                    'email',
+                    'avatar_url',
+                    'role'
                 ]
             ]
         ]);
 
         // Optionally, decode and verify the token
-        $token = $response->json('data.accessToken');
+        $token = $response->json('access_token');
+        $token = $response->json('access_token');
         $this->assertNotEmpty($token);
     }
 
@@ -57,7 +65,6 @@ class RegistrationTest extends TestCase
     {
         $registrationData = [
             'name' => 'Test User',
-            'email' => '',
             'password' => 'Ed8M7s*)?e:hTb^#&;C!<y',
             'password_confirmation' => 'Ed8M7s*)?e:hTb^#&;C!<y',
             'first_name' => 'Test',
@@ -65,15 +72,16 @@ class RegistrationTest extends TestCase
         ];
 
         $response = $this->postJson('/api/v1/auth/register', $registrationData);
+
         // Check the status code
-        $response->assertStatus(422);
+        $response->assertStatus(400);
         $response->assertJson([
+            'status_code' => 400,
             'message' => [
                 'email' => [
                     'The email field is required.'
                 ]
             ],
-            'status_code' => 422,
         ]);
     }
 
@@ -105,7 +113,7 @@ class RegistrationTest extends TestCase
         // Check for success response
         $response->assertStatus(200)
                  ->assertJson([
-                     'status' => 'success',
+                     'status_code' => 200,
                      'message' => 'User successfully authenticated',
                  ]);
 
@@ -143,7 +151,7 @@ class RegistrationTest extends TestCase
         ]);
 
         $response->assertStatus(Response::HTTP_OK);
-        
+
         // Verify user in the database
         $user = User::where('email', $googleUser['email'])->first();
         $this->assertNotNull($user);
@@ -195,7 +203,7 @@ class RegistrationTest extends TestCase
         // Check for success response
         $response->assertStatus(200)
                  ->assertJson([
-                     'status' => 'success',
+                     'status_code' => 200,
                      'message' => 'User successfully authenticated',
                  ]);
 
@@ -245,7 +253,7 @@ class RegistrationTest extends TestCase
         ]);
 
         $response->assertStatus(Response::HTTP_OK);
-        
+
         // Verify user in the database
         $user = User::where('email', $facebookUser['email'])->first();
         $this->assertNotNull($user);

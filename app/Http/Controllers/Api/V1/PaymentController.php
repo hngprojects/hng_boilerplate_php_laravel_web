@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Payment;
 use App\Services\PaymentService;
+use App\Models\Organisation;
 use App\Models\SubscriptionPlan;
 use App\Models\UserSubscription;
 use Illuminate\Support\Str;
@@ -26,7 +27,7 @@ class PaymentController extends Controller
     {
         // return response()->json(['h'=> 'ng']);
         $validator = Validator::make($request->all(), [
-            // 'organisation_id' => 'required',
+            'organisation_id' => 'required',
             'plan_id' =>'required',
             'billing_option' => 'required|in:monthly,yearly',
             'full_name' => 'required',
@@ -39,14 +40,31 @@ class PaymentController extends Controller
                 'message' => 'Validation error: ' . $validator->errors()->first()
             ], 400);
         }
+        $userIsAnAdminInOrganisation = Organisation::where('user_id', auth()->user()->id)
+                                            ->where('org_id', $request->organisation_id)
+                                            ->exists();
+        if (!$userIsAnAdminInOrganisation) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'You do not have permission to initiate this payment'
+            ], 403);
+        }
 
         // $gateway_id = Gateway::where('code', 'paystack')->first()->id;
         $subscriptionPlan = SubscriptionPlan::find($request->plan_id);
+        if(!$subscriptionPlan) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Subscription Plan not found'
+            ], 404);
+        }
         $data = $validator->validated();
         $data['email'] = auth()->user()->email;
         $data['reference'] = Str::uuid();
         $data['plan_code'] = $subscriptionPlan->paystack_plan_code;
         $data['plan_id'] = $subscriptionPlan->id;
+        $data['amount'] = $subscriptionPlan->price;
+        $data['organisation_id'] = $request->organisation_id;
 
         try {
 
@@ -72,12 +90,13 @@ class PaymentController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 500,
-                'message' => 'Payment Initialization Failed: ' . $e->getMessage()
+                'message' => 'An unexpected error occurred. Please try again later.'
+                // 'message' => 'Payment Initialization Failed: ' . $e->getMessage()
             ], 500);
         }
     }
 
-    public function handlePaystackCallback($id, Request $request)
+    public function handlePaystackCallback($organisation_id, $id, Request $request)
     {
         $reference = $request->query('reference');
 
@@ -99,6 +118,7 @@ class PaymentController extends Controller
             $userSubscription = new UserSubscription;
             $userSubscription->user_id = auth()->user()->id;
             $userSubscription->subscription_plan_id = $id;
+            $userSubscription->org_id = $organisation_id;
             $userSubscription->save();
 
 
@@ -115,7 +135,7 @@ class PaymentController extends Controller
     public function initiatePaymentForFlutterWave(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            // 'organisation_id' => 'required',
+            'organisation_id' => 'required',
             'plan_id' =>'required',
             'billing_option' => 'required|in:monthly,yearly',
             'full_name' => 'required',
@@ -128,8 +148,25 @@ class PaymentController extends Controller
                 'message' => 'Validation error: ' . $validator->errors()->first()
             ], 400);
         }
+
+        $userIsAnAdminInOrganisation = Organisation::where('user_id', auth()->user()->id)
+                                            ->where('org_id', $request->organisation_id)
+                                            ->exists();
+        // return response()->json(auth()->user()->id);
+        if (!$userIsAnAdminInOrganisation) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'You do not have permission to initiate this payment'
+            ], 403);
+        }
         // $gateway_id = Gateway::where('code', 'flutterwave')->first()->id;
         $subscriptionPlan = SubscriptionPlan::find($request->plan_id);
+        if(!$subscriptionPlan) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Subscription Plan not found'
+            ], 404);
+        }
 
         $data = $validator->validated();
         $data['email'] = auth()->user()->email;
@@ -137,6 +174,8 @@ class PaymentController extends Controller
         $data['plan_code'] = $subscriptionPlan->flutterwave_plan_code;
         $data['plan_id'] = $subscriptionPlan->id;
         $data['amount'] = $subscriptionPlan->price;
+        $data['title'] = $subscriptionPlan->name;
+        $data['organisation_id'] = $request->organisation_id;
         $data['title'] = $subscriptionPlan->name;
 
         try {
@@ -166,12 +205,13 @@ class PaymentController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 500,
-                'message' => 'Payment Initialization Failed: ' . $e->getMessage()
+                'message' => 'An unexpected error occurred. Please try again later.'
+                // 'message' => 'Payment Initialization Failed: ' . $e->getMessage()
             ], 500);
         }
     }
 
-    public function handleFlutterwaveCallback($id, Request $request)
+    public function handleFlutterwaveCallback($organisation_id, $id, Request $request)
     {
         $transaction_id = $request->query('transaction_id');
 
@@ -192,6 +232,7 @@ class PaymentController extends Controller
             $userSubscription = new UserSubscription;
             $userSubscription->user_id = auth()->user()->id;
             $userSubscription->subscription_plan_id = $id;
+            $userSubscription->org_id = $organisation_id;
             $userSubscription->save();
 
             // Redirect to the specified URL with status

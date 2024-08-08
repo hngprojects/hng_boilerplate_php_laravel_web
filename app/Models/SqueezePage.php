@@ -9,4 +9,18 @@ use Illuminate\Database\Eloquent\Model;
 class SqueezePage extends Model
 {
     use HasFactory, HasUuids;
+
+
+    protected $fillable = [
+        'title',
+        'slug',
+        'status',
+        'activate',
+        'headline',
+        'sub_headline',
+        'hero_image',
+        'content',
+    ];
+
+
 }

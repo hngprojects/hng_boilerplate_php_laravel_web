@@ -3,49 +3,50 @@
 use App\Http\Controllers\Api\V1\Admin\BlogController;
 use App\Http\Controllers\Api\V1\Admin\CustomerController;
 use App\Http\Controllers\Api\V1\Admin\EmailTemplateController;
+use App\Http\Controllers\Api\V1\Admin\FaqController;
 use App\Http\Controllers\Api\V1\Admin\Plan\FeatureController;
 use App\Http\Controllers\Api\V1\Admin\Plan\SubscriptionController;
-use App\Http\Controllers\Api\V1\PaymentController;
-use App\Http\Controllers\Api\V1\Admin\FaqController;
-use App\Http\Controllers\NotificationSettingController;
-use App\Http\Controllers\UserNotificationController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\V1\JobController;
-use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Controllers\Api\V1\ArticleController;
+use App\Http\Controllers\Api\V1\LanguageController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\Auth\ForgetPasswordRequestController;
+use App\Http\Controllers\Api\V1\Auth\ForgotResetPasswordController;
 use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Controllers\Api\V1\Auth\ResetUserPasswordController;
 use App\Http\Controllers\Api\V1\Auth\SocialAuthController;
-use App\Http\Controllers\Api\V1\Auth\ForgetResetPasswordController;
 use App\Http\Controllers\Api\V1\BlogSearchController;
 use App\Http\Controllers\Api\V1\CategoryController;
+use App\Http\Controllers\Api\V1\CommentController;
 use App\Http\Controllers\Api\V1\ContactController;
+use App\Http\Controllers\Api\V1\CookiePreferencesController;
 use App\Http\Controllers\Api\V1\HelpArticleController;
+use App\Http\Controllers\Api\V1\JobController;
+use App\Http\Controllers\Api\V1\JobSearchController;
 use App\Http\Controllers\Api\V1\NotificationPreferenceController;
 use App\Http\Controllers\Api\V1\Organisation\OrganisationController;
-use App\Http\Controllers\Api\V1\CommentController;
 use App\Http\Controllers\Api\V1\Organisation\OrganizationMemberController;
+use App\Http\Controllers\Api\V1\PaymentController;
 use App\Http\Controllers\Api\V1\PreferenceController;
 use App\Http\Controllers\Api\V1\ProductController;
+use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Controllers\Api\V1\SqueezeController;
-use App\Http\Controllers\Api\V1\User\UserController;
-use App\Http\Controllers\Api\V1\User\AccountController;
-use App\Http\Controllers\InvitationAcceptanceController;
-use App\Http\Controllers\Api\V1\User\ExportUserController;
-
-
+use App\Http\Controllers\Api\V1\SqueezePageCoontroller;
+use App\Http\Controllers\Api\V1\SuperAdmin\SuperAdminProductController;
 use App\Http\Controllers\Api\V1\Testimonial\TestimonialController;
-use App\Http\Controllers\BillingPlanController;
+use App\Http\Controllers\Api\V1\TimezoneController;
+use App\Http\Controllers\Api\V1\User\AccountController;
+use App\Http\Controllers\Api\V1\User\DashboardController;
+use App\Http\Controllers\Api\V1\User\ExportUserController;
 use App\Http\Controllers\Api\V1\User\ProfileController;
-use App\Http\Controllers\Api\V1\JobSearchController;
+use App\Http\Controllers\Api\V1\User\UserController;
 use App\Http\Controllers\Api\V1\WaitListController;
-use App\Http\Controllers\Api\V1\CookiePreferencesController;
-use App\Http\Controllers\AnalyticController;
-
-
-
+use App\Http\Controllers\BillingPlanController;
+use App\Http\Controllers\InvitationAcceptanceController;
+use App\Http\Controllers\NotificationSettingController;
+use App\Http\Controllers\QuestController;
+use App\Http\Controllers\UserNotificationController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\Admin\AdminDashboardController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -56,11 +57,13 @@ use App\Http\Controllers\AnalyticController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+Route::any('/', function () {
+  return 'Language Learning AI Game';
+});
 
 Route::prefix('v1')->group(function () {
-    Route::post('/', function (Request $request) {
-        // dd($request);
-        return 'language Learning Ai Game';
+    Route::any('/', function () {
+        return 'Language Learning AI Game Version 1';
     });
     Route::post('/auth/register', [AuthController::class, 'store']);
     Route::post('/auth/login', [LoginController::class, 'login']);
@@ -71,10 +74,11 @@ Route::prefix('v1')->group(function () {
     Route::get('/auth/login-google', [SocialAuthController::class, 'redirectToGoogle']);
     Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
     Route::post('/auth/google/callback', [SocialAuthController::class, 'saveGoogleRequest']);
+    Route::post('/auth/google', [SocialAuthController::class, 'saveGoogleRequestPost']);
     /* Forget and Reset Password using OTP */
-    Route::post('/auth/forgot-password', [ForgetResetPasswordController::class, 'forgetPassword']);
-    Route::post('/auth/reset-forgot-password', [ForgetResetPasswordController::class, 'resetPassword']);
-    Route::post('/auth/verify-forgot-otp', [ForgetResetPasswordController::class, 'verifyUserOTP']);
+    Route::post('/auth/forgot-password', [ForgotResetPasswordController::class, 'forgetPassword']);
+    Route::post('/auth/reset-forgot-password', [ForgotResetPasswordController::class, 'resetPassword']);
+    Route::post('/auth/verify-otp', [ForgotResetPasswordController::class, 'verifyUserOTP']);
 
     Route::post('/roles', [RoleController::class, 'store']);
 
@@ -95,18 +99,19 @@ Route::prefix('v1')->group(function () {
     Route::get('/products/{product_id}', [ProductController::class, 'show']);
     Route::get('/billing-plans', [BillingPlanController::class, 'index']);
     Route::get('/billing-plans/{id}', [BillingPlanController::class, 'getBillingPlan']);
+    Route::get('/payments/paystack/{organisation_id}/verify/{id}', [PaymentController::class, 'handlePaystackCallback']);
+    Route::get('/payments/flutterwave/{organisation_id}/verify/{id}', [PaymentController::class, 'handleFlutterwaveCallback']);
+    Route::post('/languages', [LanguageController::class, 'create']);
+    Route::get('/languages', [LanguageController::class, 'index']);
+    Route::put('/languages/{id}', [LanguageController::class, 'update']); 
 
-    //Dashboard
-    Route::get('/analytics/summary', [AnalyticController::class, 'getSummary']);
-    
     Route::middleware('throttle:10,1')->get('/topics/search', [ArticleController::class, 'search']);
 
     Route::middleware('auth:api')->group(function () {
 
         Route::post('/organizations/{org_id}/products', [ProductController::class, 'store']);
         Route::patch('/organizations/{org_id}/products/{product_id}', [ProductController::class, 'update']);
-        Route::delete('/products/{productId}', [ProductController::class, 'destroy']);
-
+        Route::delete('/organizations/{org_id}/products/{product_id}', [ProductController::class, 'destroy']);
     });
 
     //comment
@@ -134,13 +139,19 @@ Route::prefix('v1')->group(function () {
     Route::get('/cookies/preferences', [CookiePreferencesController::class, 'getPreferences']);
 
 
-
     // Help Articles
     Route::post('/help-center/topics', [HelpArticleController::class, 'store']);
     Route::patch('/help-center/topics/{articleId}', [HelpArticleController::class, 'update']);
     Route::delete('/help-center/topics/{articleId}', [HelpArticleController::class, 'destroy']);
     Route::get('/help-center/topics', [HelpArticleController::class, 'getArticles']);
     Route::get('/help-center/topics/search', [HelpArticleController::class, 'search']);
+
+    //Super Admin Add Products
+    Route::middleware(['auth:api', 'admin'])->group(function () {
+        Route::post('/products', [SuperAdminProductController::class, 'store']);
+        Route::patch('/products/{productId}', [SuperAdminProductController::class, 'update']);
+        Route::delete('/products/{productId}', [SuperAdminProductController::class, 'destroy']);
+    });
 
     Route::middleware(['auth:api', 'admin'])->group(function () {
         Route::get('/email-templates', [EmailTemplateController::class, 'index']);
@@ -161,9 +172,8 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('/features', FeatureController::class);
         Route::apiResource('/plans', SubscriptionController::class);
         Route::post('/payments/paystack', [PaymentController::class, 'initiatePaymentForPayStack']);
-        Route::get('/payments/paystack/verify/{id}', [PaymentController::class, 'handlePaystackCallback']);
+
         Route::post('/payments/flutterwave', [PaymentController::class, 'initiatePaymentForFlutterWave']);
-        Route::get('/payments/flutterwave/verify/{id}', [PaymentController::class, 'handleFlutterwaveCallback']);
         Route::get('/payments/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
         Route::post('/users/plans/{user_subscription}/cancel', [\App\Http\Controllers\Api\V1\User\SubscriptionController::class, 'destroy']);
         Route::get('/users/plan', [\App\Http\Controllers\Api\V1\User\SubscriptionController::class, 'userPlan']);
@@ -212,6 +222,14 @@ Route::prefix('v1')->group(function () {
         Route::patch('/profile', [ProfileController::class, 'update']);
         Route::post('/profile/upload-image', [ProfileController::class, 'uploadImage']);
 
+
+        //Timezone Settings
+        Route::post('/timezones', [ProfileController::class, 'storeTimezones']);
+        Route::get('/timezones', [ProfileController::class, 'getAllTimezones']);
+        Route::put('/timezones/{id}', [ProfileController::class, 'updateTimezones']);
+
+
+
         Route::get('/notification-settings', [NotificationSettingController::class, 'show']);
         Route::patch('/notification-settings', [NotificationSettingController::class, 'update']);
     });
@@ -225,15 +243,12 @@ Route::prefix('v1')->group(function () {
         Route::patch('/blogs/edit/{id}', [BlogController::class, 'update'])->name('admin.blogs.update');
         Route::delete('/blogs/{id}', [BlogController::class, 'destroy']);
         Route::get('/waitlists', [WaitListController::class, 'index']);
+        Route::apiResource('squeeze-pages', SqueezePageCoontroller::class);
+        Route::get('/statistics', [AdminDashboardController::class, 'getStatistics']);
+        Route::apiResource('faqs', FaqController::class);
     });
 
-
-
-
-
-
     Route::post('/waitlists', [WaitListController::class, 'store']);
-    Route::apiResource('faqs', FaqController::class);
 
 
     Route::get('/blogs/{id}', [BlogController::class, 'show']);
@@ -244,6 +259,9 @@ Route::prefix('v1')->group(function () {
         Route::put('/user/preferences/{id}', [PreferenceController::class, 'update']);
         Route::get('/user/preferences', [PreferenceController::class, 'index']);
         Route::delete('/user/preferences/{id}', [PreferenceController::class, 'delete']);
+        Route::get('/user-statistics', [DashboardController::class, 'index']);
+        Route::get('/user-analytics', [DashboardController::class, 'user_analytics']);
+        Route::get('/user-sales', [DashboardController::class, 'recent_sales']);
     });
 
     // Notification settings
@@ -259,4 +277,12 @@ Route::prefix('v1')->group(function () {
     Route::delete('/notifications', [UserNotificationController::class, 'destroy']);
     Route::post('/notifications', [UserNotificationController::class, 'create'])->middleware('auth.jwt');
     Route::get('/notifications', [UserNotificationController::class, 'getByUser'])->middleware('auth.jwt');
+    //Timezone
+    Route::get('/timezones', [TimezoneController::class, 'index']);
+
+
+
+
+    //    quest
+    Route::get('/quests/{id}/messages', [QuestController::class, 'getQuestMessages']);
 });
