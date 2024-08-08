@@ -7,7 +7,6 @@ use App\Models\User;
 use Database\Seeders\FaqSeeder;
 use Illuminate\Support\Str;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
