@@ -72,6 +72,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/auth/login-google', [SocialAuthController::class, 'redirectToGoogle']);
     Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
     Route::post('/auth/google/callback', [SocialAuthController::class, 'saveGoogleRequest']);
+    Route::post('/auth/google', [SocialAuthController::class, 'saveGoogleRequestPost']);
     /* Forget and Reset Password using OTP */
     Route::post('/auth/forgot-password', [ForgotResetPasswordController::class, 'forgetPassword']);
     Route::post('/auth/reset-forgot-password', [ForgotResetPasswordController::class, 'resetPassword']);
