@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\Admin\EmailTemplateController;
 use App\Http\Controllers\Api\V1\Admin\FaqController;
 use App\Http\Controllers\Api\V1\Admin\Plan\FeatureController;
 use App\Http\Controllers\Api\V1\Admin\Plan\SubscriptionController;
+use App\Http\Controllers\Api\V1\Admin\SendEmailController;
 use App\Http\Controllers\Api\V1\ArticleController;
 use App\Http\Controllers\Api\V1\LanguageController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
@@ -160,6 +161,9 @@ Route::prefix('v1')->group(function () {
         Route::patch('/email-templates/{id}', [EmailTemplateController::class, 'update']);
         Route::delete('/email-templates/{id}', [EmailTemplateController::class, 'destroy']);
     });
+
+    Route::post('/email-requests', [SendEmailController::class, 'createEmailRequest']);
+    Route::post('/email-requests/send', [SendEmailController::class, 'triggerEmailSending']);
 
 
     Route::post('/invitations/generate', [InvitationAcceptanceController::class, 'generateInvitation']);
