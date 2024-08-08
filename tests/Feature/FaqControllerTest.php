@@ -50,4 +50,12 @@ class FaqControllerTest extends TestCase
                 ],
             ]);
     }
+
+
+    public function test_if_it_fails_for_unathorised_access_to_faqs()
+    {
+
+        $response = $this->getJson('/api/v1/faqs');
+        $response->assertStatus(401);
+    }
 }
