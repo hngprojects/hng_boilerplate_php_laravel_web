@@ -52,4 +52,59 @@ class SqueezePagesTest extends TestCase
         $response = $this->getJson('/api/v1/squeeze-pages');
         $response->assertStatus(401);
     }
+
+
+
+    public function test_if_admin_can_create_squeeze_page()
+    {
+        $payload = [
+            'title' => 'Email Mastery',
+            'slug' => 'email-mastery',
+            'status' => 'online',
+            'activate' => true,
+            'headline' => 'Master the Art of Email Marketing',
+            'sub_headline' => 'Unlock the Secrets to Email Campaign Success',
+            'hero_image' => 'email_marketing_hero.jpg',
+            'content' => 'This is a comprehensive guide to mastering email marketing...',
+        ];
+
+        $response = $this->withHeaders(['Authorization' => "Bearer $this->adminToken"])
+            ->postJson('/api/v1/squeeze-pages', $payload);
+
+        $response->assertStatus(201)
+            ->assertJsonStructure([
+                'status_code',
+                'message',
+                'data' => ['id', 'title', 'slug', 'created_at', 'status', 'activate']
+            ]);
+
+        $this->assertDatabaseHas('faqs', $payload);
+    }
+
+    public function test_if_create_squeeze_page_missing_field_fails()
+    {
+        $payload = [
+            'slug' => 'email-mastery',
+            'status' => 'online',
+            'activate' => true,
+            'headline' => 'Master the Art of Email Marketing',
+            'sub_headline' => 'Unlock the Secrets to Email Campaign Success',
+            'hero_image' => 'email_marketing_hero.jpg',
+            'content' => 'This is a comprehensive guide to mastering email marketing...',
+        ];
+
+        $response = $this->withHeaders(['Authorization' => "Bearer $this->adminToken"])
+            ->postJson('/api/v1/squeeze-pages', $payload);
+
+        $response->assertStatus(400)
+            ->assertJsonStructure([
+                'status_code',
+                'errors' => [
+                    '*' => [
+                        'field',
+                        'message'
+                    ],
+                ]
+            ]);
+    }
 }
