@@ -25,6 +25,12 @@ class PaymentController extends Controller
 
     public function initiatePaymentForPayStack(Request $request)
     {
+        if (!auth()->check()) {
+            return response()->json([
+                'status_code' => 401,
+                'message' => 'Unauthorized'
+            ], 401);
+        }
         // return response()->json(['h'=> 'ng']);
         $validator = Validator::make($request->all(), [
             'organisation_id' => 'required',
@@ -114,9 +120,17 @@ class PaymentController extends Controller
             }
 
             $payment->save();
+            $user = Organisation::find($organisation_id)->first();
+            if(!$user) {
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'User Not found'
+                ], 404);
+            }
+            $user_id = $user->id;
 
             $userSubscription = new UserSubscription;
-            $userSubscription->user_id = auth()->user()->id;
+            $userSubscription->user_id = $user_id;
             $userSubscription->subscription_plan_id = $id;
             $userSubscription->org_id = $organisation_id;
             $userSubscription->save();
@@ -134,6 +148,13 @@ class PaymentController extends Controller
 
     public function initiatePaymentForFlutterWave(Request $request)
     {
+        if (!auth()->check()) {
+            return response()->json([
+                'status_code' => 401,
+                'message' => 'Unauthorized'
+            ], 401);
+        }
+        
         $validator = Validator::make($request->all(), [
             'organisation_id' => 'required',
             'plan_id' =>'required',
@@ -229,8 +250,17 @@ class PaymentController extends Controller
             }
 
             $payment->save();
+            $user = Organisation::find($organisation_id)->first();
+            if(!$user) {
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'User Not found'
+                ], 404);
+            }
+            $user_id = $user->id;
+
             $userSubscription = new UserSubscription;
-            $userSubscription->user_id = auth()->user()->id;
+            $userSubscription->user_id = $user_id;
             $userSubscription->subscription_plan_id = $id;
             $userSubscription->org_id = $organisation_id;
             $userSubscription->save();
