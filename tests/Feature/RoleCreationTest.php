@@ -19,50 +19,44 @@ class RoleCreationTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->test_user = User::create([
-            'name' => 'Test User',
-            'email' => 'testuser@example.com',
-            'password' => 'Ed8M7s*)?e:hTb^#&;C!<y',
-        ]);
+        
+        $this->test_user = User::factory()->create();
 
-        $this->test_org = Organisation::create([
-            "name" => 'Test organisation',
-            "user_id" => $this->test_user->id,
-            "email" => "test email",
-            "description" => "test description",
-            "industry" => "test industry",
-            "type" => "test type",
-            "country" => "test country",
-            "address" => "test address",
-            "state" => "test state",
+        $this->test_org = Organisation::factory()->create([
+            'user_id' => $this->test_user->id,
         ]);
 
         $this->test_permission = Permission::create([
             'name' => 'test permission 1',
         ]);
 
-        $this->assertDatabaseHas('users', ['name'=>'Test User']);
-        $this->assertDatabaseHas('organisations', ['name'=>'Test organisation']);
-        $this->assertDatabaseHas('permissions', ['name'=>'test permission 1']);
+        $this->assertDatabaseHas('users', ['name' => $this->test_user->name]);
+        $this->assertDatabaseHas('organisations', ['name' => $this->test_org->name]);
+        $this->assertDatabaseHas('permissions', ['name' => 'test permission 1']);
     }
 
     public function test_role_creation_is_successful()
     {
+        // Authenticate the test user
+        $this->actingAs($this->test_user, 'api');
 
-        $this->postJson('/api/v1/roles', [
+        $response = $this->postJson('/api/v1/organisations/' . $this->test_org->org_id . '/roles', [
             'role_name' => 'Test role',
             'organisation_id' => $this->test_org->org_id,
             'permissions_id' => $this->test_permission->id,
-        ])
-            ->assertStatus(201)
-            ->assertJsonStructure([
-                'status_code',
-                'message'
-            ]);
+        ]);
+
+        // Print the response content to see the validation errors
+        $response->dump();
+
+        $response->assertStatus(201)
+                 ->assertJsonStructure([
+                     'status_code',
+                     'message'
+                 ]);
 
         $this->assertDatabaseHas('roles', [
             'name' => 'Test role',
         ])->assertDatabaseCount('roles_permissions', 1);
     }
-
 }
