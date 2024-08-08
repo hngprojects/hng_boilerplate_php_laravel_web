@@ -4402,7 +4402,7 @@
                 }
             }
         },
-        "/api/v1/dashboard-cards": {
+        "/api/v1/user-statistics": {
             "get": {
                 "summary": "Get a dashboard card content",
                 "tags": [
