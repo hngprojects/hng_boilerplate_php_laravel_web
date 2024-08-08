@@ -148,6 +148,7 @@ Route::prefix('v1')->group(function () {
     Route::middleware(['auth:api', 'admin'])->group(function () {
         Route::post('/products', [SuperAdminProductController::class, 'store']);
         Route::patch('/products/{productId}', [SuperAdminProductController::class, 'update']);
+        Route::delete('/products/{productId}', [SuperAdminProductController::class, 'destroy']);
     });
 
     Route::middleware(['auth:api', 'admin'])->group(function () {
@@ -169,7 +170,7 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('/features', FeatureController::class);
         Route::apiResource('/plans', SubscriptionController::class);
         Route::post('/payments/paystack', [PaymentController::class, 'initiatePaymentForPayStack']);
-        
+
         Route::post('/payments/flutterwave', [PaymentController::class, 'initiatePaymentForFlutterWave']);
         Route::get('/payments/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
         Route::post('/users/plans/{user_subscription}/cancel', [\App\Http\Controllers\Api\V1\User\SubscriptionController::class, 'destroy']);
@@ -258,7 +259,6 @@ Route::prefix('v1')->group(function () {
         Route::get('/user-statistics', [DashboardController::class, 'index']);
         Route::get('/user-analytics', [DashboardController::class, 'user_analytics']);
         Route::get('/user-sales', [DashboardController::class, 'recent_sales']);
-
     });
 
     // Notification settings
@@ -276,7 +276,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/notifications', [UserNotificationController::class, 'getByUser'])->middleware('auth.jwt');
     //Timezone
     Route::get('/timezones', [TimezoneController::class, 'index']);
-    
+
 
 
 
