@@ -46,8 +46,7 @@ use App\Http\Controllers\NotificationSettingController;
 use App\Http\Controllers\QuestController;
 use App\Http\Controllers\UserNotificationController;
 use Illuminate\Support\Facades\Route;
-
-
+use App\Http\Controllers\Api\V1\Admin\AdminDashboardController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -73,6 +72,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/auth/login-google', [SocialAuthController::class, 'redirectToGoogle']);
     Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
     Route::post('/auth/google/callback', [SocialAuthController::class, 'saveGoogleRequest']);
+    Route::post('/auth/google', [SocialAuthController::class, 'saveGoogleRequestPost']);
     /* Forget and Reset Password using OTP */
     Route::post('/auth/forgot-password', [ForgotResetPasswordController::class, 'forgetPassword']);
     Route::post('/auth/reset-forgot-password', [ForgotResetPasswordController::class, 'resetPassword']);
@@ -147,6 +147,7 @@ Route::prefix('v1')->group(function () {
     //Super Admin Add Products
     Route::middleware(['auth:api', 'admin'])->group(function () {
         Route::post('/products', [SuperAdminProductController::class, 'store']);
+        Route::patch('/products/{productId}', [SuperAdminProductController::class, 'update']);
     });
 
     Route::middleware(['auth:api', 'admin'])->group(function () {
@@ -240,10 +241,11 @@ Route::prefix('v1')->group(function () {
         Route::delete('/blogs/{id}', [BlogController::class, 'destroy']);
         Route::get('/waitlists', [WaitListController::class, 'index']);
         Route::apiResource('squeeze-pages', SqueezePageCoontroller::class);
+        Route::get('/statistics', [AdminDashboardController::class, 'getStatistics']);
+        Route::apiResource('faqs', FaqController::class);
     });
 
     Route::post('/waitlists', [WaitListController::class, 'store']);
-    Route::apiResource('faqs', FaqController::class);
 
 
     Route::get('/blogs/{id}', [BlogController::class, 'show']);
@@ -255,6 +257,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/user/preferences', [PreferenceController::class, 'index']);
         Route::delete('/user/preferences/{id}', [PreferenceController::class, 'delete']);
         Route::get('/user-statistics', [DashboardController::class, 'index']);
+        Route::get('/user-analytics', [DashboardController::class, 'user_analytics']);
         Route::get('/user-sales', [DashboardController::class, 'recent_sales']);
 
     });
