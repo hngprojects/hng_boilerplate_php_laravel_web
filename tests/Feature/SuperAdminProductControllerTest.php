@@ -10,7 +10,7 @@ class SuperAdminProductControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testSuperAdminCanCreateProduct()
+    public function testSuperAdminCanCreateUpdateAndDeleteProduct()
     {
         $this->artisan('migrate:fresh --seed');
 
@@ -70,5 +70,46 @@ class SuperAdminProductControllerTest extends TestCase
                 'user_id' => $userId,
             ],
         ]);
+
+        $productId = $productResponse->json('data.product_id');
+
+        $updateData = [
+            'name' => 'Updated Name',
+            'description' => 'Updated Description',
+            'price' => 200,
+            'status' => 'active',
+            'quantity' => 100,
+        ];
+
+        $updateResponse = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $accessToken,
+        ])->patchJson("/api/v1/products/{$productId}", $updateData);
+
+        $updateResponse->assertStatus(200);
+        $updateResponse->assertJson([
+            'success' => true,
+            'status_code' => 200,
+            'message' => 'Product updated successfully',
+            'data' => [
+                'name' => 'Updated Name',
+                'description' => 'Updated Description',
+                'price' => 200,
+                'status' => 'active',
+                'quantity' => 100,
+            ],
+        ]);
+
+        $deleteResponse = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $accessToken,
+        ])->deleteJson("/api/v1/products/{$productId}");
+
+        $deleteResponse->assertStatus(200);
+        $deleteResponse->assertJson([
+            'success' => true,
+            'status_code' => 200,
+            'message' => 'Product deleted successfully',
+        ]);
+
+        $this->assertDatabaseMissing('products', ['product_id' => $productId]);
     }
 }
