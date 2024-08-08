@@ -6,11 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
-use App\Models\Profile;
-use Illuminate\Support\Str;
 use Illuminate\Http\Response;
-use Mockery;
-use Illuminate\Support\Facades\DB;
 
 class RegistrationTest extends TestCase
 {
@@ -186,7 +182,7 @@ class RegistrationTest extends TestCase
                 'avatar_original' => 'https://graph.facebook.com/v3.3/1022097350/picture?width=1920',
                 'profileUrl' => null
             ],
-            'token' => 'EAAXSQSZAEan4BO48hdLYs84YGRXkTzBCZC5Pkpx3J6TlrmakX3SiMRJoYR2FYwb5hR1otRJxuGglfBVRJc9J9LgcDBOmHdsdblKZAFmPo6ZAwex6KN3DuRN9cyRM7ZCKGNdOWgvZCBmp0qUjhkaFUCr71L43ExxSc8ZAHQalcEDQqar9mXeg3EzuBasQFnFxOqFw3ZBbZBM3O91wENlK4YwZDZD',
+            'token' => env('TOKEN_AUTH'),
             'refreshToken' => null,
             'expiresIn' => 5169882,
             'approvedScopes' => [""]
@@ -242,7 +238,7 @@ class RegistrationTest extends TestCase
                 'avatar_original' => 'https://graph.facebook.com/v3.3/1022097350/picture?width=1920',
                 'profileUrl' => null
             ],
-            'token' => 'EAAXSQSZAEan4BO48hdLYs84YGRXkTzBCZC5Pkpx3J6TlrmakX3SiMRJoYR2FYwb5hR1otRJxuGglfBVRJc9J9LgcDBOmHdsdblKZAFmPo6ZAwex6KN3DuRN9cyRM7ZCKGNdOWgvZCBmp0qUjhkaFUCr71L43ExxSc8ZAHQalcEDQqar9mXeg3EzuBasQFnFxOqFw3ZBbZBM3O91wENlK4YwZDZD',
+            'token' => env('TOKEN_AUTH'),
             'refreshToken' => null,
             'expiresIn' => 5169882,
             'approvedScopes' => [""]
