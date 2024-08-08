@@ -2955,17 +2955,31 @@
                                 "example": [
                                     {
                                         "id": "31491b6a-a2f1-47d4-804c-0a705bbb73a8",
-                                        "title": "Software Engineer",
-                                        "description": "We're looking for a talented software engineer to join our team.",
-                                        "location": "Remote",
-                                        "salary": 100000
+                                        "title": "software  Engineer",
+                                        "description": "team bulldozer is seeking reliable enginner for",
+                                        "location": "lagos, NG",
+                                        "deadline": "2024-12-31",
+                                        "salary_range": "1200000-1500000",
+                                        "job_type": "Full-time",
+                                        "job_mode": "remote",
+                                        "experience_level": "Senior",
+                                        "company_name": "life insurance",
+                                        "key_responsibilities": "Lead development projects, mentor junior developers, implement best practices",
+                                        "qualifications": "5+ years of experience in software development, proficiency in Python and JavaScript"
                                     },
                                     {
                                         "id": "31491b6a-a2f1-47d4-804c-0a705bbb73a8",
-                                        "title": "Product Manager",
-                                        "description": "Seeking an experienced product manager to lead our team.",
-                                        "location": "New York, NY",
-                                        "salary": 120000
+                                        "title": "software  Engineer",
+                                        "description": "team bulldozer is seeking reliable enginner for",
+                                        "location": "lagos, NG",
+                                        "deadline": "2024-12-31",
+                                        "salary_range": "1200000-1500000",
+                                        "job_type": "Full-time",
+                                        "job_mode": "remote",
+                                        "experience_level": "Senior",
+                                        "company_name": "life insurance",
+                                        "key_responsibilities": "Lead development projects, mentor junior developers, implement best practices",
+                                        "qualifications": "5+ years of experience in software development, proficiency in Python and JavaScript"
                                     }
                                 ]
                             }
@@ -2990,17 +3004,18 @@
                                 "$ref": "#/components/schemas/JobInput"
                             },
                             "example": {
-                                "title": "Software Engineer",
-                                "description": "We're looking for a talented software engineer to join our team.",
-                                "location": "Remote",
-                                "job_type": "full-time,",
-                                "experience_level": "10years,",
-                                "Deadline": "2204-4-31,",
-                                "Benefits": "lol,",
-                                "Key_responsibilities": "remote,",
-                                "Company_name": "remote,",
-                                "work_mode": "remote",
-                                "salary": 100000
+                                "id": "31491b6a-a2f1-47d4-804c-0a705bbb73a8",
+                                "title": "software  Engineer",
+                                "description": "team bulldozer is seeking reliable enginner for",
+                                "location": "lagos, NG",
+                                "deadline": "2024-12-31",
+                                "salary_range": "1200000-1500000",
+                                "job_type": "Full-time",
+                                "job_mode": "remote",
+                                "experience_level": "Senior",
+                                "company_name": "life insurance",
+                                "key_responsibilities": "Lead development projects, mentor junior developers, implement best practices",
+                                "qualifications": "5+ years of experience in software development, proficiency in Python and JavaScript"
                             }
                         }
                     },
@@ -3016,17 +3031,17 @@
                                 },
                                 "example": {
                                     "id": "1fbgvjfbvjcnjvjdnvdnkkdnvk",
-                                    "title": "Software Engineer",
-                                    "description": "We're looking for a talented software engineer to join our team.",
-                                    "location": "Remote",
-                                    "job_type": "full-time,",
-                                    "experience_level": "10years,",
-                                    "Deadline": "2204-4-31,",
-                                    "Benefits": "lol,",
-                                    "Key_responsibilities": "remote,",
-                                    "Company_name": "remote,",
-                                    "work_mode": "remote",
-                                    "salary": 100000
+                                    "title": "software  Engineer",
+                                    "description": "team bulldozer is seeking reliable enginner for",
+                                    "location": "lagos, NG",
+                                    "deadline": "2024-12-31",
+                                    "salary_range": "1200000-1500000",
+                                    "job_type": "Full-time",
+                                    "job_mode": "remote",
+                                    "experience_level": "Senior",
+                                    "company_name": "life insurance",
+                                    "key_responsibilities": "Lead development projects, mentor junior developers, implement best practices",
+                                    "qualifications": "5+ years of experience in software development, proficiency in Python and JavaScript"
                                 }
                             }
                         }
@@ -3053,7 +3068,7 @@
                         "style": "simple",
                         "explode": false,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     }
                 ],
@@ -3067,10 +3082,17 @@
                                 },
                                 "example": {
                                     "id": "31491b6a-a2f1-47d4-804c-0a705bbb73a8",
-                                    "title": "Senior Software Engineer",
-                                    "description": "We're looking for a senior software engineer to lead our development team.",
-                                    "location": "Remote",
-                                    "salary": 130000
+                                    "title": "software  Engineer",
+                                    "description": "team bulldozer is seeking reliable enginner for",
+                                    "location": "lagos, NG",
+                                    "deadline": "2024-12-31",
+                                    "salary_range": "1200000-1500000",
+                                    "job_type": "Full-time",
+                                    "job_mode": "remote",
+                                    "experience_level": "Senior",
+                                    "company_name": "life insurance",
+                                    "key_responsibilities": "Lead development projects, mentor junior developers, implement best practices",
+                                    "qualifications": "5+ years of experience in software development, proficiency in Python and JavaScript"
                                 }
                             }
                         }
@@ -3095,7 +3117,7 @@
                         "style": "simple",
                         "explode": false,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     }
                 ],
@@ -3106,10 +3128,18 @@
                                 "$ref": "#/components/schemas/JobInput"
                             },
                             "example": {
-                                "title": "Senior Software Engineer",
-                                "description": "We're looking for a senior software engineer to lead our development team.",
-                                "location": "Remote",
-                                "salary": 130000
+                                "id": "31491b6a-a2f1-47d4-804c-0a705bbb73a8",
+                                "title": "software  Engineer",
+                                "description": "team bulldozer is seeking reliable enginner for",
+                                "location": "lagos, NG",
+                                "deadline": "2024-12-31",
+                                "salary_range": "1200000-1500000",
+                                "job_type": "Full-time",
+                                "job_mode": "remote",
+                                "experience_level": "Senior",
+                                "company_name": "life insurance",
+                                "key_responsibilities": "Lead development projects, mentor junior developers, implement best practices",
+                                "qualifications": "5+ years of experience in software development, proficiency in Python and JavaScript"
                             }
                         }
                     },
@@ -3125,10 +3155,17 @@
                                 },
                                 "example": {
                                     "id": "31491b6a-a2f1-47d4-804c-0a705bbb73a8",
-                                    "title": "Senior Software Engineer",
-                                    "description": "We're looking for a senior software engineer to lead our development team.",
-                                    "location": "Remote",
-                                    "salary": 130000
+                                    "title": "software  Engineer",
+                                    "description": "team bulldozer is seeking reliable enginner for",
+                                    "location": "lagos, NG",
+                                    "deadline": "2024-12-31",
+                                    "salary_range": "1200000-1500000",
+                                    "job_type": "Full-time",
+                                    "job_mode": "remote",
+                                    "experience_level": "Senior",
+                                    "company_name": "life insurance",
+                                    "key_responsibilities": "Lead development projects, mentor junior developers, implement best practices",
+                                    "qualifications": "5+ years of experience in software development, proficiency in Python and JavaScript"
                                 }
                             }
                         }
@@ -3210,11 +3247,18 @@
                                 },
                                 "example": [
                                     {
-                                        "id": 1,
-                                        "title": "Senior Software Engineer",
-                                        "description": "We're looking for a senior software engineer to lead our development team.",
-                                        "location": "Remote",
-                                        "salary": 130000
+                                        "id": "31491b6a-a2f1-47d4-804c-0a705bbb73a8",
+                                        "title": "software  Engineer",
+                                        "description": "team bulldozer is seeking reliable enginner for",
+                                        "location": "lagos, NG",
+                                        "deadline": "2024-12-31",
+                                        "salary_range": "1200000-1500000",
+                                        "job_type": "Full-time",
+                                        "job_mode": "remote",
+                                        "experience_level": "Senior",
+                                        "company_name": "life insurance",
+                                        "key_responsibilities": "Lead development projects, mentor junior developers, implement best practices",
+                                        "qualifications": "5+ years of experience in software development, proficiency in Python and JavaScript"
                                     }
                                 ]
                             }
@@ -3312,7 +3356,7 @@
                         "style": "simple",
                         "explode": false,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     },
                     {
@@ -3322,7 +3366,7 @@
                         "style": "simple",
                         "explode": false,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     }
                 ],
@@ -3376,7 +3420,7 @@
                         "style": "simple",
                         "explode": false,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     },
                     {
@@ -3386,7 +3430,7 @@
                         "style": "simple",
                         "explode": false,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     }
                 ],
@@ -3623,7 +3667,7 @@
                         "style": "simple",
                         "explode": false,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     }
                 ],
@@ -3678,7 +3722,7 @@
                         "style": "simple",
                         "explode": false,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     }
                 ],
@@ -3931,7 +3975,7 @@
                         "style": "simple",
                         "explode": false,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     }
                 ],
@@ -4357,6 +4401,95 @@
                     }
                 }
             }
+        },
+        "/api/v1/user-statistics": {
+            "get": {
+                "summary": "Get a dashboard card content",
+                "tags": [
+                    "User Dashboard"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Dashboard retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Dashboard retrieved successfully"
+                                        },
+                                        "status_code": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "current_month_revenue": {
+                                                        "type": "string",
+                                                        "example": "148"
+                                                    },
+                                                    "difference_in_revenue_percent": {
+                                                        "type": "string",
+                                                        "example": "20%"
+                                                    },
+                                                    "subscriptions": {
+                                                        "type": "string",
+                                                        "example": "2000"
+                                                    },
+                                                    "monthly_subscriptions_diff": {
+                                                        "type": "string",
+                                                        "example": "148"
+                                                    },
+                                                    "current_month_orders": {
+                                                        "type": "string",
+                                                        "example": "200"
+                                                    },
+                                                    "difference_in_orders_percent": {
+                                                        "type": "string",
+                                                        "example": "50%"
+                                                    },
+                                                    "active_users_count": {
+                                                        "type": "string",
+                                                        "example": "200"
+                                                    },
+                                                    "difference_an_hour_ago": {
+                                                        "type": "string",
+                                                        "example": "40"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "An error occurred",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -4418,7 +4551,7 @@
                 "type": "object",
                 "properties": {
                     "id": {
-                        "type": "integer"
+                        "type": "string"
                     },
                     "first_name": {
                         "type": "string"
@@ -4510,7 +4643,7 @@
                 "type": "object",
                 "properties": {
                     "id": {
-                        "type": "integer"
+                        "type": "string"
                     },
                     "name": {
                         "type": "string"
@@ -4521,7 +4654,7 @@
                 "type": "object",
                 "properties": {
                     "id": {
-                        "type": "integer"
+                        "type": "string"
                     },
                     "name": {
                         "type": "string"
@@ -4583,7 +4716,7 @@
                 "type": "object",
                 "properties": {
                     "id": {
-                        "type": "integer"
+                        "type": "string"
                     },
                     "stock": {
                         "type": "integer"
@@ -4646,7 +4779,7 @@
                 "type": "object",
                 "properties": {
                     "id": {
-                        "type": "integer"
+                        "type": "string"
                     },
                     "title": {
                         "type": "string"

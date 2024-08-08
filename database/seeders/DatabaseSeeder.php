@@ -77,7 +77,10 @@ class DatabaseSeeder extends Seeder
             UserNotificationSeeder::class,
             NotificationSettingSeeder::class,
             OrderSeeder::class,
-            SqueezePageSeeder::class
+            SqueezePageSeeder::class,
+            TimezoneSeeder::class,
+            QuestSeeder::class,
+            QuestMessageSeeder::class,
         ]);
 
     }

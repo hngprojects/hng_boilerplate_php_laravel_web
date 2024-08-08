@@ -6,6 +6,7 @@ use App\Models\SubscriptionPlan;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Organisation;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\UserSubscription>
@@ -32,6 +33,7 @@ class UserSubscriptionFactory extends Factory
                     return $now->addYear();
                 }
             },
+            'org_id' => Organisation::inRandomOrder()->first()->id ?? Organisation::factory(),
         ];
     }
 }
