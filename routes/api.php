@@ -57,11 +57,13 @@ use App\Http\Controllers\Api\V1\Admin\AdminDashboardController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+Route::any('/', function () {
+  return 'Language Learning AI Game';
+});
 
 Route::prefix('v1')->group(function () {
-    Route::post('/', function () {
-        // dd($request);
-        return 'language Learning Ai Game';
+    Route::any('/', function () {
+        return 'Language Learning AI Game Version 1';
     });
     Route::post('/auth/register', [AuthController::class, 'store']);
     Route::post('/auth/login', [LoginController::class, 'login']);
