@@ -9,4 +9,6 @@ use Illuminate\Database\Eloquent\Model;
 class WaitList extends Model
 {
     use HasFactory, HasUuids;
+
+    protected $fillable = ['name', 'email'];
 }

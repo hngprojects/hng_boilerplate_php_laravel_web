@@ -20,7 +20,7 @@ class AdminMiddleware
         if (!$user || $user->role !== 'admin' || !$user->is_active) {
             return response()->json([
                 'status_code' => 401,
-                'message' => 'Unauthorized',
+                'message' => 'Unauthorized, admin access only',
                 'error' => 'Bad Request'
             ], 401);
         }

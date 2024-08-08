@@ -25,8 +25,26 @@ endpoints:
       name:
         name: name
         description: 'Must not be greater than 255 characters.'
+        required: false
+        example: vzjhkcivnbfkxoukeydez
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      first_name:
+        name: first_name
+        description: 'Must not be greater than 255 characters.'
         required: true
-        example: kyqjicowiqcvbipmclenjzwa
+        example: cy
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      last_name:
+        name: last_name
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: ytrj
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -35,7 +53,7 @@ endpoints:
         name: email
         description: 'Must be a valid email address. Must not be greater than 255 characters.'
         required: true
-        example: mante.carmel@example.net
+        example: roxane.koelpin@example.net
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -44,15 +62,17 @@ endpoints:
         name: password
         description: ''
         required: true
-        example: quos
+        example: 'riPguZ''*;47V8]`:5"'
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      name: kyqjicowiqcvbipmclenjzwa
-      email: mante.carmel@example.net
-      password: quos
+      name: vzjhkcivnbfkxoukeydez
+      first_name: cy
+      last_name: ytrj
+      email: roxane.koelpin@example.net
+      password: 'riPguZ''*;47V8]`:5"'
     fileParameters: []
     responses: []
     responseFields: []
@@ -86,7 +106,7 @@ endpoints:
         name: email
         description: 'Must be a valid email address. Must not be greater than 255 characters.'
         required: true
-        example: anderson.alex@example.net
+        example: karlie.welch@example.net
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -95,14 +115,466 @@ endpoints:
         name: password
         description: 'Must be at least 8 characters.'
         required: true
-        example: hTGB64
+        example: "j%('l+FPa@WYmF82oYP"
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      email: anderson.alex@example.net
-      password: hTGB64
+      email: karlie.welch@example.net
+      password: "j%('l+FPa@WYmF82oYP"
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/auth/logout
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/auth/password-reset-email
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Handle the incoming request.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      email:
+        name: email
+        description: 'Must be a valid email address.'
+        required: true
+        example: eileen79@example.net
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      email: eileen79@example.net
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/auth/request-password-request/{token}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Handle the incoming request.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      token:
+        name: token
+        description: ''
+        required: true
+        example: aut
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      token: aut
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      email:
+        name: email
+        description: 'Must be a valid email address.'
+        required: true
+        example: danika74@example.net
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      password:
+        name: password
+        description: ''
+        required: true
+        example: '3Nq(,V$L$h8PFD4?Y!'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      email: danika74@example.net
+      password: '3Nq(,V$L$h8PFD4?Y!'
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/auth/google
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 302
+        content: |-
+          <!DOCTYPE html>
+          <html>
+              <head>
+                  <meta charset="UTF-8" />
+                  <meta http-equiv="refresh" content="0;url='https://accounts.google.com/o/oauth2/auth?scope=openid+profile+email&amp;response_type=code'" />
+
+                  <title>Redirecting to https://accounts.google.com/o/oauth2/auth?scope=openid+profile+email&amp;response_type=code</title>
+              </head>
+              <body>
+                  Redirecting to <a href="https://accounts.google.com/o/oauth2/auth?scope=openid+profile+email&amp;response_type=code">https://accounts.google.com/o/oauth2/auth?scope=openid+profile+email&amp;response_type=code</a>.
+              </body>
+          </html>
+        headers:
+          cache-control: 'no-cache, private'
+          location: 'https://accounts.google.com/o/oauth2/auth?scope=openid+profile+email&response_type=code'
+          content-type: 'text/html; charset=utf-8'
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '59'
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/auth/login-google
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 302
+        content: |-
+          <!DOCTYPE html>
+          <html>
+              <head>
+                  <meta charset="UTF-8" />
+                  <meta http-equiv="refresh" content="0;url='https://accounts.google.com/o/oauth2/auth?scope=openid+profile+email&amp;response_type=code'" />
+
+                  <title>Redirecting to https://accounts.google.com/o/oauth2/auth?scope=openid+profile+email&amp;response_type=code</title>
+              </head>
+              <body>
+                  Redirecting to <a href="https://accounts.google.com/o/oauth2/auth?scope=openid+profile+email&amp;response_type=code">https://accounts.google.com/o/oauth2/auth?scope=openid+profile+email&amp;response_type=code</a>.
+              </body>
+          </html>
+        headers:
+          cache-control: 'no-cache, private'
+          location: 'https://accounts.google.com/o/oauth2/auth?scope=openid+profile+email&response_type=code'
+          content-type: 'text/html; charset=utf-8'
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '58'
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/auth/google/callback
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 500
+        content: |-
+          {
+              "message": "Server Error"
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '57'
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/auth/google/callback
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/auth/forgot-password
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Handle the incoming request.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      email:
+        name: email
+        description: 'Must be a valid email address.'
+        required: true
+        example: ghuel@example.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      email: ghuel@example.com
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/auth/reset-forgot-password
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Handle the incoming request.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      email:
+        name: email
+        description: 'Must be a valid email address.'
+        required: true
+        example: brody42@example.net
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      password:
+        name: password
+        description: ''
+        required: true
+        example: "d-'uAz"
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      email: brody42@example.net
+      password: "d-'uAz"
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/auth/verify-otp
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Handle the incoming request.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      email:
+        name: email
+        description: 'Must be a valid email address.'
+        required: true
+        example: qyundt@example.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      token:
+        name: token
+        description: 'Must be 6 digits.'
+        required: true
+        example: 4
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      email: qyundt@example.com
+      token: 4
     fileParameters: []
     responses: []
     responseFields: []
@@ -136,7 +608,7 @@ endpoints:
         name: role_name
         description: 'Must not be greater than 255 characters.'
         required: true
-        example: kmub
+        example: mttdibbvatesznjhbp
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -145,7 +617,7 @@ endpoints:
         name: organisation_id
         description: 'Must not be greater than 255 characters.'
         required: true
-        example: v
+        example: fibies
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -154,15 +626,143 @@ endpoints:
         name: permissions_id
         description: ''
         required: true
-        example: tenetur
+        example: perspiciatis
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      role_name: kmub
-      organisation_id: v
-      permissions_id: tenetur
+      role_name: mttdibbvatesznjhbp
+      organisation_id: fibies
+      permissions_id: perspiciatis
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/auth/login-facebook
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 302
+        content: |-
+          <!DOCTYPE html>
+          <html>
+              <head>
+                  <meta charset="UTF-8" />
+                  <meta http-equiv="refresh" content="0;url='https://www.facebook.com/v3.3/dialog/oauth?scope=email&amp;response_type=code'" />
+
+                  <title>Redirecting to https://www.facebook.com/v3.3/dialog/oauth?scope=email&amp;response_type=code</title>
+              </head>
+              <body>
+                  Redirecting to <a href="https://www.facebook.com/v3.3/dialog/oauth?scope=email&amp;response_type=code">https://www.facebook.com/v3.3/dialog/oauth?scope=email&amp;response_type=code</a>.
+              </body>
+          </html>
+        headers:
+          cache-control: 'no-cache, private'
+          location: 'https://www.facebook.com/v3.3/dialog/oauth?scope=email&response_type=code'
+          content-type: 'text/html; charset=utf-8'
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '56'
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/auth/facebook/callback
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 500
+        content: |-
+          {
+              "message": "Server Error"
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '55'
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/auth/facebook/callback
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
     fileParameters: []
     responses: []
     responseFields: []
@@ -197,12 +797,12 @@ endpoints:
     responses:
       -
         status: 200
-        content: '{"current_page":1,"data":[],"first_page_url":"http:\/\/localhost\/api\/v1\/users?page=1","from":null,"last_page":1,"last_page_url":"http:\/\/localhost\/api\/v1\/users?page=1","links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"http:\/\/localhost\/api\/v1\/users?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"next_page_url":null,"path":"http:\/\/localhost\/api\/v1\/users","per_page":15,"prev_page_url":null,"to":null,"total":0}'
+        content: '{"status_code":200,"message":"Users returned successfully","total_users":149,"total_deleted_users":0,"total_active_users":149,"total_inActive_users":0,"data":{"current_page":1,"data":[{"id":"9cb402fc-cba8-46cd-acf6-7a6ed3826eaa","name":"Christine Lemke","email":"sdach@example.net","phone":null,"role":"user","email_verified_at":"2024-08-06T18:39:41.000000Z","is_active":true,"is_verified":false,"signup_type":"user","social_id":null,"created_at":"2024-08-06T18:39:41.000000Z","updated_at":"2024-08-06T18:39:41.000000Z","deleted_at":null},{"id":"9cb402fc-b94f-4615-a96a-f37ed6f38690","name":"Zoey Nienow","email":"earlene.becker@example.org","phone":null,"role":"user","email_verified_at":"2024-08-06T18:39:41.000000Z","is_active":true,"is_verified":false,"signup_type":"user","social_id":null,"created_at":"2024-08-06T18:39:41.000000Z","updated_at":"2024-08-06T18:39:41.000000Z","deleted_at":null},{"id":"9cb402fc-c2f6-4236-91ab-beb4254b5ac3","name":"Sunny Harvey","email":"armstrong.stephania@example.net","phone":null,"role":"user","email_verified_at":"2024-08-06T18:39:41.000000Z","is_active":true,"is_verified":false,"signup_type":"user","social_id":null,"created_at":"2024-08-06T18:39:41.000000Z","updated_at":"2024-08-06T18:39:41.000000Z","deleted_at":null},{"id":"9cb402fc-dfc1-4a33-a216-ecb45fe4b645","name":"Deshawn Cartwright","email":"blanda.oswaldo@example.net","phone":null,"role":"user","email_verified_at":"2024-08-06T18:39:41.000000Z","is_active":true,"is_verified":false,"signup_type":"user","social_id":null,"created_at":"2024-08-06T18:39:41.000000Z","updated_at":"2024-08-06T18:39:41.000000Z","deleted_at":null},{"id":"9cb402fc-c717-4407-967a-dcd4f16ac3e4","name":"Jessika Hand","email":"casey.lakin@example.com","phone":null,"role":"user","email_verified_at":"2024-08-06T18:39:41.000000Z","is_active":true,"is_verified":false,"signup_type":"user","social_id":null,"created_at":"2024-08-06T18:39:41.000000Z","updated_at":"2024-08-06T18:39:41.000000Z","deleted_at":null},{"id":"9cb402fc-bef0-4858-b959-530c092f8db3","name":"Okey Heaney","email":"koelpin.deontae@example.org","phone":null,"role":"user","email_verified_at":"2024-08-06T18:39:41.000000Z","is_active":true,"is_verified":false,"signup_type":"user","social_id":null,"created_at":"2024-08-06T18:39:41.000000Z","updated_at":"2024-08-06T18:39:41.000000Z","deleted_at":null},{"id":"9cb402fb-9fec-4610-a8b2-910cc4de4ee6","name":"Nikita Ullrich","email":"brice57@example.org","phone":null,"role":"user","email_verified_at":"2024-08-06T18:39:40.000000Z","is_active":true,"is_verified":false,"signup_type":"user","social_id":null,"created_at":"2024-08-06T18:39:40.000000Z","updated_at":"2024-08-06T18:39:40.000000Z","deleted_at":null},{"id":"9cb402fb-97e2-4743-aa0b-e0c96e4ff0d0","name":"Alexandre Parisian","email":"axel95@example.org","phone":null,"role":"user","email_verified_at":"2024-08-06T18:39:40.000000Z","is_active":true,"is_verified":false,"signup_type":"user","social_id":null,"created_at":"2024-08-06T18:39:40.000000Z","updated_at":"2024-08-06T18:39:40.000000Z","deleted_at":null},{"id":"9cb402fb-a35e-4011-8896-c770e79de91f","name":"Vicky Kirlin","email":"ruthe04@example.org","phone":null,"role":"user","email_verified_at":"2024-08-06T18:39:40.000000Z","is_active":true,"is_verified":false,"signup_type":"user","social_id":null,"created_at":"2024-08-06T18:39:40.000000Z","updated_at":"2024-08-06T18:39:40.000000Z","deleted_at":null},{"id":"9cb402fb-6d3b-4199-b887-2555f423ae27","name":"Gregory Collins","email":"rodriguez.julius@example.net","phone":null,"role":"user","email_verified_at":"2024-08-06T18:39:40.000000Z","is_active":true,"is_verified":false,"signup_type":"user","social_id":null,"created_at":"2024-08-06T18:39:40.000000Z","updated_at":"2024-08-06T18:39:40.000000Z","deleted_at":null},{"id":"9cb402fb-91f0-4b53-8286-2892f78ad855","name":"Amos Crist","email":"imorissette@example.net","phone":null,"role":"user","email_verified_at":"2024-08-06T18:39:40.000000Z","is_active":true,"is_verified":false,"signup_type":"user","social_id":null,"created_at":"2024-08-06T18:39:40.000000Z","updated_at":"2024-08-06T18:39:40.000000Z","deleted_at":null},{"id":"9cb402fb-9474-4d44-b32a-9f43225912ad","name":"Orville Koch","email":"nhackett@example.com","phone":null,"role":"user","email_verified_at":"2024-08-06T18:39:40.000000Z","is_active":true,"is_verified":false,"signup_type":"user","social_id":null,"created_at":"2024-08-06T18:39:40.000000Z","updated_at":"2024-08-06T18:39:40.000000Z","deleted_at":null},{"id":"9cb402fb-9a52-420e-b3bc-af43d457be6f","name":"Dustin Wisoky","email":"janick79@example.com","phone":null,"role":"user","email_verified_at":"2024-08-06T18:39:40.000000Z","is_active":true,"is_verified":false,"signup_type":"user","social_id":null,"created_at":"2024-08-06T18:39:40.000000Z","updated_at":"2024-08-06T18:39:40.000000Z","deleted_at":null},{"id":"9cb402fb-9d92-43b1-b5c4-53ad3754a9ad","name":"Francisca Hyatt","email":"ljenkins@example.com","phone":null,"role":"user","email_verified_at":"2024-08-06T18:39:40.000000Z","is_active":true,"is_verified":false,"signup_type":"user","social_id":null,"created_at":"2024-08-06T18:39:40.000000Z","updated_at":"2024-08-06T18:39:40.000000Z","deleted_at":null},{"id":"9cb402fb-4168-4929-b35e-76274548250d","name":"Dorian Powlowski","email":"mwilkinson@example.net","phone":null,"role":"admin","email_verified_at":"2024-08-06T18:39:40.000000Z","is_active":true,"is_verified":false,"signup_type":"user","social_id":null,"created_at":"2024-08-06T18:39:40.000000Z","updated_at":"2024-08-06T18:39:40.000000Z","deleted_at":null}],"first_page_url":"http:\/\/localhost\/api\/v1\/users?page=1","from":1,"last_page":10,"last_page_url":"http:\/\/localhost\/api\/v1\/users?page=10","links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"http:\/\/localhost\/api\/v1\/users?page=1","label":"1","active":true},{"url":"http:\/\/localhost\/api\/v1\/users?page=2","label":"2","active":false},{"url":"http:\/\/localhost\/api\/v1\/users?page=3","label":"3","active":false},{"url":"http:\/\/localhost\/api\/v1\/users?page=4","label":"4","active":false},{"url":"http:\/\/localhost\/api\/v1\/users?page=5","label":"5","active":false},{"url":"http:\/\/localhost\/api\/v1\/users?page=6","label":"6","active":false},{"url":"http:\/\/localhost\/api\/v1\/users?page=7","label":"7","active":false},{"url":"http:\/\/localhost\/api\/v1\/users?page=8","label":"8","active":false},{"url":"http:\/\/localhost\/api\/v1\/users?page=9","label":"9","active":false},{"url":"http:\/\/localhost\/api\/v1\/users?page=10","label":"10","active":false},{"url":"http:\/\/localhost\/api\/v1\/users?page=2","label":"Next &raquo;","active":false}],"next_page_url":"http:\/\/localhost\/api\/v1\/users?page=2","path":"http:\/\/localhost\/api\/v1\/users","per_page":15,"prev_page_url":null,"to":15,"total":149}}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
           x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '59'
+          x-ratelimit-remaining: '54'
           access-control-allow-origin: '*'
         description: null
         custom: []
@@ -263,13 +863,13 @@ endpoints:
         name: id
         description: 'The ID of the user.'
         required: true
-        example: consequuntur
+        example: 9cb402e5-e983-4696-9bc4-74d7bfc255a1
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: consequuntur
+      id: 9cb402e5-e983-4696-9bc4-74d7bfc255a1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -277,16 +877,13 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 404
-        content: |-
-          {
-              "message": "No query results for model [App\\Models\\User] consequuntur"
-          }
+        status: 200
+        content: '{"id":"9cb402e5-e983-4696-9bc4-74d7bfc255a1","name":"Super Admin","email":"bulldozeradmin@hng.com","phone":null,"role":"admin","email_verified_at":null,"is_active":true,"is_verified":true,"signup_type":"Token","social_id":null,"created_at":"2024-08-06T18:39:26.000000Z","updated_at":"2024-08-06T18:39:26.000000Z","deleted_at":null,"profile":{"profile_id":"9cb402e5-f584-4727-af8d-d3e561978279","user_id":"9cb402e5-e983-4696-9bc4-74d7bfc255a1","first_name":"Super","last_name":"Admin","job_title":"Super Admin","pronoun":null,"bio":"Super Admin bio","avatar_url":null,"display_image":null,"created_at":"2024-08-06T18:39:26.000000Z","updated_at":"2024-08-06T18:39:26.000000Z"},"products":[],"organisations":[]}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
           x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '58'
+          x-ratelimit-remaining: '53'
           access-control-allow-origin: '*'
         description: null
         custom: []
@@ -318,17 +915,66 @@ endpoints:
         name: id
         description: 'The ID of the user.'
         required: true
-        example: sed
+        example: 9cb402e5-e983-4696-9bc4-74d7bfc255a1
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: sed
+      id: 9cb402e5-e983-4696-9bc4-74d7bfc255a1
     queryParameters: []
     cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
+    bodyParameters:
+      name:
+        name: name
+        description: ''
+        required: false
+        example: deserunt
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      first_name:
+        name: first_name
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: e
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      last_name:
+        name: last_name
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: raduppterqexmk
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      email:
+        name: email
+        description: ''
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      phone:
+        name: phone
+        description: ''
+        required: false
+        example: quod
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      name: deserunt
+      first_name: e
+      last_name: raduppterqexmk
+      phone: quod
     fileParameters: []
     responses: []
     responseFields: []
@@ -358,19 +1004,202 @@ endpoints:
         name: id
         description: 'The ID of the user.'
         required: true
-        example: non
+        example: 9cb402e5-e983-4696-9bc4-74d7bfc255a1
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: non
+      id: 9cb402e5-e983-4696-9bc4-74d7bfc255a1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
     responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/jobs
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      page:
+        name: page
+        description: 'Must be at least 1.'
+        required: false
+        example: 2
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      size:
+        name: size
+        description: 'Must be at least 1.'
+        required: false
+        example: 86
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      page: 2
+      size: 86
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '{"message":"Job listings retrieved successfully.","data":[],"pagination":{"current_page":2,"total_pages":1,"page_size":86,"total_items":52}}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '52'
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/jobs/search
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      query:
+        name: query
+        description: 'Must be at least 3 characters.'
+        required: true
+        example: sutvlocbquteeithkxitmyhnuvbrvwckogpwmnjfnukxtvqnsdmhbnxpwaisaiftwyn
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      page:
+        name: page
+        description: 'Must be at least 1.'
+        required: false
+        example: 82
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      size:
+        name: size
+        description: 'Must be at least 1.'
+        required: false
+        example: 64
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      query: sutvlocbquteeithkxitmyhnuvbrvwckogpwmnjfnukxtvqnsdmhbnxpwaisaiftwyn
+      page: 82
+      size: 64
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '{"message":"Job search results retrieved successfully.","data":[],"pagination":{"current_page":82,"total_pages":1,"page_size":64,"total_items":0}}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '51'
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/jobs/{id}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the job.'
+        required: true
+        example: 9cb402e7-79e4-46d5-9dbd-02b95ffa8d4e
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      id: 9cb402e7-79e4-46d5-9dbd-02b95ffa8d4e
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '{"id":"9cb402e7-79e4-46d5-9dbd-02b95ffa8d4e","created_at":"2024-08-06T18:39:27.000000Z","updated_at":"2024-08-06T18:39:27.000000Z","title":"Food Service Manager","description":"Repellat dolor quia cumque voluptatem vel. Non consequatur reprehenderit commodi impedit ut. Voluptate id debitis similique nam.","location":"Hammesfurt","deadline":null,"salary_range":"128744 per year","job_type":"Contract","job_mode":null,"company_name":null,"is_deleted":false}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '50'
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
     responseFields: []
     auth: []
     controller: null
@@ -402,13 +1231,311 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 200
-        content: '{"status_code":200,"categories":[]}'
+        status: 500
+        content: '{"status_code":500,"error":{"code":"INTERNAL_SERVER_ERROR","message":"An unexpected error occurred while processing your request.","details":{"support_email":"support@example.com"}}}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
           x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '57'
+          x-ratelimit-remaining: '49'
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/products/search
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        name: name
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: llcydxrrnsvk
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      category:
+        name: category
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: rytxwnvfof
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      minPrice:
+        name: minPrice
+        description: 'Must be at least 0.'
+        required: false
+        example: 62
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      maxPrice:
+        name: maxPrice
+        description: 'Must be at least 0.'
+        required: false
+        example: 45
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      status:
+        name: status
+        description: ''
+        required: false
+        example: low_on_stock
+        type: string
+        enumValues:
+          - in_stock
+          - out_of_stock
+          - low_on_stock
+        exampleWasSpecified: false
+        custom: []
+      page:
+        name: page
+        description: 'Must be at least 1.'
+        required: false
+        example: 60
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      limit:
+        name: limit
+        description: 'Must be at least 1. Must not be greater than 100.'
+        required: false
+        example: 20
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      name: llcydxrrnsvk
+      category: rytxwnvfof
+      minPrice: 62
+      maxPrice: 45
+      status: low_on_stock
+      page: 60
+      limit: 20
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '{"success":true,"products":[],"pagination":{"totalItems":0,"totalPages":1,"currentPage":60,"perPage":20},"status_code":200}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '48'
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/products
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Display a listing of the resource.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '{"success":true,"message":"Products retrieved successfully","products":[{"name":"ad''s product","price":"738.30","imageUrl":"https:\/\/via.placeholder.com\/640x480.png\/002222?text=laborum","description":"Consequatur consequatur soluta ut sunt a ut aspernatur. Consectetur deleniti iusto ut eum at aut. Aliquam recusandae iure quia similique vitae aut.","product_id":"9cb402e7-36c2-4a1d-9d19-b04efe6ae83d","quantity":"78","category":[],"stock":48,"status":"low_on_stock","date_added":"2024-08-06T18:39:27.000000Z"},{"name":"sit''s product","price":"706.17","imageUrl":"https:\/\/via.placeholder.com\/640x480.png\/003333?text=aut","description":"Illum voluptas minus cumque pariatur ea. Laudantium rerum et quo beatae suscipit debitis ut. Nihil eligendi non eligendi autem dolorum. Dolorem rerum hic et iste voluptas voluptatem.","product_id":"9cb402e7-39b4-46f4-b1f3-4ac102280b61","quantity":"59","category":[],"stock":33,"status":"low_on_stock","date_added":"2024-08-06T18:39:27.000000Z"},{"name":"qui''s product","price":"352.28","imageUrl":"https:\/\/via.placeholder.com\/640x480.png\/008822?text=dolor","description":"Numquam fuga qui non omnis dolor aperiam accusantium tempore. Adipisci consectetur omnis est expedita nam pariatur. Necessitatibus et enim facilis earum consequatur.","product_id":"9cb402e7-508d-4a1d-984f-853dd1fd1633","quantity":"44","category":[],"stock":1,"status":"out_of_stock","date_added":"2024-08-06T18:39:27.000000Z"},{"name":"earum''s product","price":"44.92","imageUrl":"https:\/\/via.placeholder.com\/640x480.png\/001166?text=illo","description":"Sunt eaque accusamus voluptate aut. Perspiciatis exercitationem reprehenderit voluptatibus laboriosam maxime dolore recusandae iste. Et sed et perspiciatis soluta.","product_id":"9cb402e7-522e-49b8-8fba-a95935c16aa3","quantity":"32","category":[],"stock":83,"status":"out_of_stock","date_added":"2024-08-06T18:39:27.000000Z"},{"name":"soluta''s product","price":"498.42","imageUrl":"https:\/\/via.placeholder.com\/640x480.png\/005500?text=blanditiis","description":"Molestias a voluptatem consequatur enim et. Consectetur sapiente consequatur voluptas beatae asperiores dicta autem.","product_id":"9cb402fb-a8f1-4761-a035-2ba9042ec2ba","quantity":"23","category":[],"stock":41,"status":"in_stock","date_added":"2024-08-06T18:39:40.000000Z"},{"name":"aperiam''s product","price":"362.32","imageUrl":"https:\/\/via.placeholder.com\/640x480.png\/00ee22?text=architecto","description":"Perspiciatis quia ut eos ratione. Culpa amet voluptas aliquid suscipit debitis rerum error. Nulla harum cum dolores sint est omnis asperiores. Nam et eum est alias reiciendis corrupti non.","product_id":"9cb402fb-aa66-4413-bbee-81530272f256","quantity":"62","category":[],"stock":24,"status":"low_on_stock","date_added":"2024-08-06T18:39:40.000000Z"},{"name":"illum''s product","price":"586.54","imageUrl":"https:\/\/via.placeholder.com\/640x480.png\/005555?text=rem","description":"Voluptatibus et maxime pariatur reiciendis. Voluptates labore aperiam voluptatum quis earum odit. Recusandae impedit id error rem voluptatem ad vitae.","product_id":"9cb402fb-abcc-467b-bc18-f464ca010d45","quantity":"18","category":[],"stock":75,"status":"in_stock","date_added":"2024-08-06T18:39:40.000000Z"},{"name":"dolore''s product","price":"631.88","imageUrl":"https:\/\/via.placeholder.com\/640x480.png\/00bb88?text=facere","description":"Architecto consequuntur quo commodi aperiam ea rem aperiam sapiente. Vel sapiente non et voluptatem rerum. Optio accusantium quidem id iusto sunt.","product_id":"9cb402fb-ad2b-404d-8220-72c0eacf8b5d","quantity":"68","category":[],"stock":21,"status":"in_stock","date_added":"2024-08-06T18:39:40.000000Z"},{"name":"ut''s product","price":"315.79","imageUrl":"https:\/\/via.placeholder.com\/640x480.png\/00cc44?text=et","description":"Ducimus ipsum facere et cum sed eum. Non minima eaque maiores nemo ut. Ut enim quia dolor expedita. Consectetur molestiae quia eaque. Blanditiis qui ut amet.","product_id":"9cb402fb-ae80-4466-8a43-a8e977a8a597","quantity":"44","category":[],"stock":24,"status":"low_on_stock","date_added":"2024-08-06T18:39:40.000000Z"}],"pagination":{"totalItems":9,"totalPages":1,"currentPage":1},"status_code":200}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '47'
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/products/{product_id}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Display the specified resource.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      product_id:
+        name: product_id
+        description: 'The ID of the product.'
+        required: true
+        example: 9cb402e7-36c2-4a1d-9d19-b04efe6ae83d
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      product_id: 9cb402e7-36c2-4a1d-9d19-b04efe6ae83d
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '{"status":"success","message":"Product retrieve ","status_code":200,"data":{"product_id":"9cb402e7-36c2-4a1d-9d19-b04efe6ae83d","name":"ad''s product","description":"Consequatur consequatur soluta ut sunt a ut aspernatur. Consectetur deleniti iusto ut eum at aut. Aliquam recusandae iure quia similique vitae aut.","price":"738.30","imageUrl":"https:\/\/via.placeholder.com\/640x480.png\/002222?text=laborum","sock":"78","date_added":"2024-08-06T18:39:27.000000Z","category":[]}}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '46'
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/billing-plans
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Display a listing of the resource.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '{"status":200,"message":"Billing plans retrieved successfully","data":[{"id":"9cb402fb-6a92-4de4-a230-de1dfd5dcbfb","name":"premium","price":1524,"created_at":"2024-08-06T18:39:40.000000Z"},{"id":"256d949b-1ec0-4b46-9045-664acf39f5ab","name":"Free","price":0,"created_at":"2024-08-06T18:39:40.000000Z"},{"id":"49ff2db3-5ba8-4280-84c9-05037fb63ac6","name":"Basic","price":20,"created_at":"2024-08-06T18:39:40.000000Z"},{"id":"889817cd-4f22-4671-a494-4eb29bdfa6cc","name":"Advanced","price":50,"created_at":"2024-08-06T18:39:40.000000Z"},{"id":"bfba079f-bed7-4e63-ab3c-686dd9d3f6a5","name":"Premium","price":100,"created_at":"2024-08-06T18:39:40.000000Z"}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '45'
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/billing-plans/{id}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Display the specified resource.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the billing plan.'
+        required: true
+        example: enim
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      id: enim
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 500
+        content: '{"status":500,"message":"Internal server error"}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '44'
           access-control-allow-origin: '*'
         description: null
         custom: []
@@ -462,7 +1589,7 @@ endpoints:
   -
     httpMethods:
       - POST
-    uri: api/v1/products
+    uri: 'api/v1/organizations/{org_id}/products'
     metadata:
       groupName: Endpoints
       groupDescription: ''
@@ -473,18 +1600,28 @@ endpoints:
       authenticated: false
       custom: []
     headers:
-      Content-Type: application/json
+      Content-Type: multipart/form-data
       Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
+    urlParameters:
+      org_id:
+        name: org_id
+        description: 'The ID of the org.'
+        required: true
+        example: voluptatem
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      org_id: voluptatem
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      name:
-        name: name
+      title:
+        name: title
         description: 'Must not be greater than 255 characters.'
         required: true
-        example: tvzfqfvqihaycqsdmrt
+        example: jqwhnsjufxbbndcjgwgqirh
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -493,16 +1630,537 @@ endpoints:
         name: description
         description: ''
         required: true
-        example: 'Praesentium laborum error impedit autem.'
+        example: 'Eos veniam et exercitationem beatae similique.'
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
+      category:
+        name: category
+        description: 'Must be a valid UUID.'
+        required: true
+        example: 8cd85132-ed44-3864-84e3-1cc9403bf864
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      price:
+        name: price
+        description: ''
+        required: true
+        example: 5475336.7
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      stock:
+        name: stock
+        description: ''
+        required: true
+        example: 2
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      image:
+        name: image
+        description: 'Must be an image. Must not be greater than 1024 kilobytes.'
+        required: true
+        example: null
+        type: file
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
     cleanBodyParameters:
-      name: tvzfqfvqihaycqsdmrt
-      description: 'Praesentium laborum error impedit autem.'
+      title: jqwhnsjufxbbndcjgwgqirh
+      description: 'Eos veniam et exercitationem beatae similique.'
+      category: 8cd85132-ed44-3864-84e3-1cc9403bf864
+      price: 5475336.7
+      stock: 2
+    fileParameters:
+      image: null
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PATCH
+    uri: 'api/v1/organizations/{org_id}/products/{product_id}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Update the specified resource in storage.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      org_id:
+        name: org_id
+        description: 'The ID of the org.'
+        required: true
+        example: quas
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      product_id:
+        name: product_id
+        description: 'The ID of the product.'
+        required: true
+        example: 9cb402e7-36c2-4a1d-9d19-b04efe6ae83d
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      org_id: quas
+      product_id: 9cb402e7-36c2-4a1d-9d19-b04efe6ae83d
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        name: name
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: akyedjhcihdogqejv
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      description:
+        name: description
+        description: ''
+        required: false
+        example: 'Quasi nemo enim provident maxime omnis aliquid et porro.'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      price:
+        name: price
+        description: 'Must be at least 0.'
+        required: false
+        example: 10
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      stock:
+        name: stock
+        description: 'Must be at least 0.'
+        required: false
+        example: 53
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      image:
+        name: image
+        description: 'Must be a valid URL.'
+        required: false
+        example: 'http://www.sauer.com/aut-omnis-nulla-dicta-id-incidunt-sit.html'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      is_archived:
+        name: is_archived
+        description: ''
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      productsVariant:
+        name: productsVariant
+        description: ''
+        required: true
+        example:
+          - []
+        type: 'object[]'
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      'productsVariant[].size_id':
+        name: 'productsVariant[].size_id'
+        description: 'Must be a valid UUID.'
+        required: true
+        example: debe7c41-53c9-304a-a612-8a61baa948cc
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      'productsVariant[].stock':
+        name: 'productsVariant[].stock'
+        description: 'Must be at least 0.'
+        required: true
+        example: 84
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      'productsVariant[].price':
+        name: 'productsVariant[].price'
+        description: 'Must be at least 0.'
+        required: true
+        example: 40
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      name: akyedjhcihdogqejv
+      description: 'Quasi nemo enim provident maxime omnis aliquid et porro.'
+      price: 10
+      stock: 53
+      image: 'http://www.sauer.com/aut-omnis-nulla-dicta-id-incidunt-sit.html'
+      is_archived: false
+      productsVariant:
+        -
+          size_id: debe7c41-53c9-304a-a612-8a61baa948cc
+          stock: 84
+          price: 40
     fileParameters: []
     responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/products/{productId}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Remove the specified resource from storage.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      productId:
+        name: productId
+        description: ''
+        required: true
+        example: 9cb402e7-36c2-4a1d-9d19-b04efe6ae83d
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      productId: 9cb402e7-36c2-4a1d-9d19-b04efe6ae83d
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/blogs/{blogId}/comments'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      blogId:
+        name: blogId
+        description: ''
+        required: true
+        example: sed
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      blogId: sed
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/comments/{commentId}/reply'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      commentId:
+        name: commentId
+        description: ''
+        required: true
+        example: quidem
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      commentId: quidem
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/comments/{commentId}/like'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      commentId:
+        name: commentId
+        description: ''
+        required: true
+        example: ut
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      commentId: ut
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/comments/{commentId}/dislike'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      commentId:
+        name: commentId
+        description: ''
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      commentId: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PATCH
+    uri: 'api/v1/comments/edit/{commentId}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      commentId:
+        name: commentId
+        description: ''
+        required: true
+        example: sunt
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      commentId: sunt
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/comments/{commentId}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      commentId:
+        name: commentId
+        description: ''
+        required: true
+        example: minus
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      commentId: minus
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/blogs/{blogId}/comments'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      blogId:
+        name: blogId
+        description: ''
+        required: true
+        example: in
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      blogId: in
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
     responseFields: []
     auth: []
     controller: null
@@ -529,18 +2187,28 @@ endpoints:
     cleanUrlParameters: []
     queryParameters: []
     cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
+    bodyParameters:
+      title:
+        name: title
+        description: 'Must be at least 3 characters.'
+        required: true
+        example: iowyfnqddhjanetnxx
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      title: iowyfnqddhjanetnxx
     fileParameters: []
     responses:
       -
-        status: 400
-        content: '{"success":false,"message":"Title query parameter is required","status_code":400}'
+        status: 200
+        content: '{"success":true,"message":"Articles retrieved successfully.","status_code":200,"topics":[{"article_id":"b368979f-e7ed-46eb-b5c4-44a06dbe0e76","title":"How to reset your password","content":"To reset your password, follow these steps...","user_id":"9cb402e7-4131-4e7d-a381-5bc2d5db4ce3","author":" "},{"article_id":"703c6521-7d6c-48e8-93e2-01d5378a064d","title":"How to update your profile","content":"To update your profile, go to the settings page...","user_id":"9cb402e7-32e0-421d-b0f1-afd95021228b","author":" "},{"article_id":"93f1edb5-154f-4c4f-9ff1-a83b6bc6f638","title":"How to delete your account","content":"To delete your account, please contact support...","user_id":"9cb402e7-8006-4a16-a911-40fb1787ec6b","author":" "}]}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-ratelimit-limit: '10'
-          x-ratelimit-remaining: '8'
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '42'
           access-control-allow-origin: '*'
         description: null
         custom: []
@@ -553,7 +2221,7 @@ endpoints:
   -
     httpMethods:
       - POST
-    uri: api/v1/contact
+    uri: api/v1/inquiries
     metadata:
       groupName: Endpoints
       groupDescription: ''
@@ -575,7 +2243,7 @@ endpoints:
         name: name
         description: ''
         required: true
-        example: odit
+        example: sunt
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -584,7 +2252,7 @@ endpoints:
         name: email
         description: 'Must be a valid email address.'
         required: true
-        example: boehm.vidal@example.net
+        example: mlindgren@example.com
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -593,17 +2261,58 @@ endpoints:
         name: message
         description: ''
         required: true
-        example: accusamus
+        example: sint
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      name: odit
-      email: boehm.vidal@example.net
-      message: accusamus
+      name: sunt
+      email: mlindgren@example.com
+      message: sint
     fileParameters: []
     responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/inquiries
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '{"status_code":200,"message":"Inquiries returned successfully","data":[]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '41'
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
     responseFields: []
     auth: []
     controller: null
@@ -636,12 +2345,53 @@ endpoints:
     responses:
       -
         status: 200
-        content: '{"count":0,"next":null,"previous":null,"results":[]}'
+        content: '{"count":4,"next":null,"previous":null,"results":[{"id":"71eb8a33-c1ef-4526-9c13-0e57e84e3454","title":"Maiores nulla quis qui aut id iusto voluptatibus.","content":"Unde nihil vel perspiciatis tempore beatae. Iusto velit amet ipsa dolores. Ab eos quis rerum ipsa dolorum. Cumque eos velit est voluptatem.\n\nQui qui magni iure delectus expedita quibusdam. Consectetur sit sit accusantium enim dolore ut. Aspernatur omnis ipsum voluptatibus amet tempore fugiat.\n\nId nihil autem iusto maxime sed ipsa repudiandae. Iusto eligendi ipsam dolor minus corporis. Expedita maxime suscipit soluta excepturi eum facere.","author":"Dorian Powlowski","created_at":"2024-08-06T18:39:40.000000Z","category":"World News","image_url":"storage\/images\/MTm0TdKKdV.jpg"},{"id":"4beb4480-9a7e-4d40-9913-2222c0d4000a","title":"Et dolores qui et quod qui a.","content":"Deserunt voluptatem pariatur aut explicabo voluptas sapiente alias similique. Quos necessitatibus est facere et voluptatibus mollitia sint est. Accusantium dicta adipisci est eum enim ut ratione. Nostrum mollitia tempora repellendus voluptatibus.\n\nVoluptas nulla ut voluptatem et quo. Deserunt cumque odio ipsam sapiente velit inventore. Porro consectetur qui et est occaecati.\n\nDeserunt est voluptate et aut neque quis praesentium. Maiores ut ex eaque et illum. Rerum aperiam illum sit. Architecto dolorem provident accusamus illum perspiciatis non.","author":"Ilene Klein","created_at":"2024-08-06T18:39:38.000000Z","category":"Lifestyle","image_url":"storage\/images\/BzVOnNLQ89.jpg"},{"id":"bf6252d8-1ae7-4fac-bbe1-533a4d5d49ba","title":"Culpa quis repellat consequuntur explicabo autem aspernatur debitis.","content":"Asperiores officia fuga et quas. Et adipisci exercitationem et aut a quasi. Vel voluptas ad consectetur hic accusantium ut voluptatem.\n\nReprehenderit sed nostrum facilis sit quia. Et voluptates voluptatum consectetur est unde. Vitae necessitatibus optio voluptatem cum.\n\nQuo eligendi nihil laborum atque doloremque sunt. Ea voluptates eius dolores quis quisquam dolorem fuga. Modi sapiente expedita dignissimos et.","author":"Mina Schimmel","created_at":"2024-08-06T18:39:35.000000Z","category":"Food","image_url":"storage\/images\/BCYawtsLx6.jpg"},{"id":"fad7d874-61f9-40f0-ad3e-8bafdc6daf7b","title":"Ut odio ipsam illo vel fuga.","content":"Et quidem culpa culpa vel quam velit. Velit numquam aspernatur vero quis iure expedita. Dicta quia facere consectetur.\n\nVoluptatem eos dolorem aut reprehenderit numquam. Quis ut doloribus quo quasi voluptatem vero officiis sunt. Voluptate a eum ut. Tempore facere ducimus corporis accusamus aspernatur et.\n\nRerum quis modi quia. Sit voluptate et similique ea quia. Et non magni atque quia molestiae. Ratione velit perferendis quos vitae.","author":"Rafael Schowalter","created_at":"2024-08-06T18:39:32.000000Z","category":"Business","image_url":"storage\/images\/QZsSJjeCnS.jpg"}],"status_code":200}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
           x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '54'
+          x-ratelimit-remaining: '40'
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/blogs/search
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '{"current_page":1,"total_pages":1,"total_results":4,"blogs":[{"id":"fad7d874-61f9-40f0-ad3e-8bafdc6daf7b","content":"Et quidem culpa culpa vel quam velit. Velit numquam aspernatur vero quis iure expedita. Dicta quia facere consectetur.\n\nVoluptatem eos dolorem aut reprehenderit numquam. Quis ut doloribus quo quasi voluptatem vero officiis sunt. Voluptate a eum ut. Tempore facere ducimus corporis accusamus aspernatur et.\n\nRerum quis modi quia. Sit voluptate et similique ea quia. Et non magni atque quia molestiae. Ratione velit perferendis quos vitae.","author":"Rafael Schowalter","created_at":"2024-08-06T18:39:32.000000Z","updated_at":"2024-08-06T18:39:32.000000Z","title":"Ut odio ipsam illo vel fuga.","deleted_at":null,"category":"Business","image_url":"storage\/images\/QZsSJjeCnS.jpg","author_id":"9cb402ef-36e7-459b-9f23-ef9c9f105ca9"},{"id":"bf6252d8-1ae7-4fac-bbe1-533a4d5d49ba","content":"Asperiores officia fuga et quas. Et adipisci exercitationem et aut a quasi. Vel voluptas ad consectetur hic accusantium ut voluptatem.\n\nReprehenderit sed nostrum facilis sit quia. Et voluptates voluptatum consectetur est unde. Vitae necessitatibus optio voluptatem cum.\n\nQuo eligendi nihil laborum atque doloremque sunt. Ea voluptates eius dolores quis quisquam dolorem fuga. Modi sapiente expedita dignissimos et.","author":"Mina Schimmel","created_at":"2024-08-06T18:39:35.000000Z","updated_at":"2024-08-06T18:39:35.000000Z","title":"Culpa quis repellat consequuntur explicabo autem aspernatur debitis.","deleted_at":null,"category":"Food","image_url":"storage\/images\/BCYawtsLx6.jpg","author_id":"9cb402f4-1294-408f-ba03-f763631af8fb"},{"id":"4beb4480-9a7e-4d40-9913-2222c0d4000a","content":"Deserunt voluptatem pariatur aut explicabo voluptas sapiente alias similique. Quos necessitatibus est facere et voluptatibus mollitia sint est. Accusantium dicta adipisci est eum enim ut ratione. Nostrum mollitia tempora repellendus voluptatibus.\n\nVoluptas nulla ut voluptatem et quo. Deserunt cumque odio ipsam sapiente velit inventore. Porro consectetur qui et est occaecati.\n\nDeserunt est voluptate et aut neque quis praesentium. Maiores ut ex eaque et illum. Rerum aperiam illum sit. Architecto dolorem provident accusamus illum perspiciatis non.","author":"Ilene Klein","created_at":"2024-08-06T18:39:38.000000Z","updated_at":"2024-08-06T18:39:38.000000Z","title":"Et dolores qui et quod qui a.","deleted_at":null,"category":"Lifestyle","image_url":"storage\/images\/BzVOnNLQ89.jpg","author_id":"9cb402f7-f864-4d13-bd34-f90e3d1d02eb"},{"id":"71eb8a33-c1ef-4526-9c13-0e57e84e3454","content":"Unde nihil vel perspiciatis tempore beatae. Iusto velit amet ipsa dolores. Ab eos quis rerum ipsa dolorum. Cumque eos velit est voluptatem.\n\nQui qui magni iure delectus expedita quibusdam. Consectetur sit sit accusantium enim dolore ut. Aspernatur omnis ipsum voluptatibus amet tempore fugiat.\n\nId nihil autem iusto maxime sed ipsa repudiandae. Iusto eligendi ipsam dolor minus corporis. Expedita maxime suscipit soluta excepturi eum facere.","author":"Dorian Powlowski","created_at":"2024-08-06T18:39:40.000000Z","updated_at":"2024-08-06T18:39:40.000000Z","title":"Maiores nulla quis qui aut id iusto voluptatibus.","deleted_at":null,"category":"World News","image_url":"storage\/images\/MTm0TdKKdV.jpg","author_id":"9cb402fb-4168-4929-b35e-76274548250d"}],"meta":{"has_next":false,"total":4,"next_page":null,"prev_page":null}}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '39'
           access-control-allow-origin: '*'
         description: null
         custom: []
@@ -673,6 +2423,738 @@ endpoints:
     cleanQueryParameters: []
     bodyParameters: []
     cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/cookies/preferences
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      user_id:
+        name: user_id
+        description: 'Must be a valid UUID.'
+        required: true
+        example: bc77e811-b4ae-398f-9a17-56f183295eb8
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      preferences:
+        name: preferences
+        description: ''
+        required: true
+        example: []
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      preferences.analytics_cookies:
+        name: preferences.analytics_cookies
+        description: ''
+        required: false
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      preferences.marketing_cookies:
+        name: preferences.marketing_cookies
+        description: ''
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      preferences.functional_cookies:
+        name: preferences.functional_cookies
+        description: ''
+        required: false
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      user_id: bc77e811-b4ae-398f-9a17-56f183295eb8
+      preferences:
+        analytics_cookies: true
+        marketing_cookies: false
+        functional_cookies: true
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/cookies/preferences
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      user_id:
+        name: user_id
+        description: 'Must be a valid UUID.'
+        required: true
+        example: 02b991df-70d5-3526-8993-ed447143e8ae
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      user_id: 02b991df-70d5-3526-8993-ed447143e8ae
+    fileParameters: []
+    responses:
+      -
+        status: 400
+        content: '{"status_code":400,"success":false,"message":"Invalid user ID.","errors":{"user_id":["The selected user id is invalid."]}}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '38'
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/help-center/topics
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      user_id:
+        name: user_id
+        description: 'Must be a valid UUID.'
+        required: true
+        example: f292a1a0-b13c-3acd-833b-919ca253633a
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      title:
+        name: title
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: xayutfbnlgazrdlnjnic
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      content:
+        name: content
+        description: ''
+        required: true
+        example: dolore
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      user_id: f292a1a0-b13c-3acd-833b-919ca253633a
+      title: xayutfbnlgazrdlnjnic
+      content: dolore
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PATCH
+    uri: 'api/v1/help-center/topics/{articleId}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      articleId:
+        name: articleId
+        description: ''
+        required: true
+        example: qui
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      articleId: qui
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      title:
+        name: title
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: rncvoschgdujobtvzclefjkg
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      content:
+        name: content
+        description: ''
+        required: false
+        example: ut
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      title: rncvoschgdujobtvzclefjkg
+      content: ut
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/help-center/topics/{articleId}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      articleId:
+        name: articleId
+        description: ''
+        required: true
+        example: voluptatem
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      articleId: voluptatem
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/help-center/topics
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      page:
+        name: page
+        description: 'Must be at least 1.'
+        required: false
+        example: 67
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      size:
+        name: size
+        description: 'Must be at least 1. Must not be greater than 100.'
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      category:
+        name: category
+        description: ''
+        required: false
+        example: 11
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      search:
+        name: search
+        description: 'Must be at least 3 characters.'
+        required: false
+        example: wvahczchgfcoxknkfnlfywpkxpumbrnayvyivqyfaooztjcpdreaiqtrsnxdzafiblyvn
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanQueryParameters:
+      page: 67
+      size: 17
+      category: 11
+      search: wvahczchgfcoxknkfnlfywpkxpumbrnayvyivqyfaooztjcpdreaiqtrsnxdzafiblyvn
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 500
+        content: '{"status_code":500,"success":false,"message":"Failed to retrieve help articles. Please try again later.","error":"SQLSTATE[42703]: Undefined column: 7 ERROR:  column \"category\" does not exist\nLINE 1: ...le\"::text like $1 or \"content\"::text like $2) and \"category\"...\n                                                             ^ (Connection: pgsql, SQL: select count(*) as aggregate from \"articles\" where (\"title\"::text like %wvahczchgfcoxknkfnlfywpkxpumbrnayvyivqyfaooztjcpdreaiqtrsnxdzafiblyvn% or \"content\"::text like %wvahczchgfcoxknkfnlfywpkxpumbrnayvyivqyfaooztjcpdreaiqtrsnxdzafiblyvn%) and \"category\" = 11)"}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '37'
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/email-templates
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Display a paginated list of email templates.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      page:
+        name: page
+        description: 'Must be at least 1.'
+        required: false
+        example: 25
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      limit:
+        name: limit
+        description: 'Must be at least 1. Must not be greater than 100.'
+        required: false
+        example: 3
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanQueryParameters:
+      page: 25
+      limit: 3
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/email-templates
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      title:
+        name: title
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: rokyiiozy
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      template:
+        name: template
+        description: ''
+        required: true
+        example: commodi
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      status:
+        name: status
+        description: ''
+        required: true
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      title: rokyiiozy
+      template: commodi
+      status: false
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PATCH
+    uri: 'api/v1/email-templates/{id}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the email template.'
+        required: true
+        example: eum
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      id: eum
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      title:
+        name: title
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: rvmkiteyrksfyrwtpkompiwjc
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      template:
+        name: template
+        description: ''
+        required: false
+        example: labore
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      status:
+        name: status
+        description: ''
+        required: false
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      title: rvmkiteyrksfyrwtpkompiwjc
+      template: labore
+      status: true
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/email-templates/{id}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the email template.'
+        required: true
+        example: suscipit
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      id: suscipit
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/invitations/generate
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Generate and store an invitation with email validation.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      org_id:
+        name: org_id
+        description: ''
+        required: true
+        example: dolorem
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      email:
+        name: email
+        description: 'Must be a valid email address.'
+        required: true
+        example: zieme.travis@example.org
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      org_id: dolorem
+      email: zieme.travis@example.org
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/invite/accept
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Handle GET request to accept an invitation.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 400
+        content: '{"message":"Invalid or expired invitation link","errors":["Invalid invitation link format","Expired invitation link","Organization not found"],"status_code":400}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '36'
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/invite
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Handle POST request to accept an invitation.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      invitation_link:
+        name: invitation_link
+        description: ''
+        required: true
+        example: cumque
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      invitation_link: cumque
     fileParameters: []
     responses: []
     responseFields: []
@@ -745,7 +3227,7 @@ endpoints:
         name: feature
         description: ''
         required: true
-        example: modi
+        example: sit
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -754,14 +3236,14 @@ endpoints:
         name: description
         description: 'Must not be greater than 255 characters.'
         required: false
-        example: 'Modi voluptatibus hic enim.'
+        example: 'Omnis aut vitae voluptas itaque ipsa ut illo.'
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      feature: modi
-      description: 'Modi voluptatibus hic enim.'
+      feature: sit
+      description: 'Omnis aut vitae voluptas itaque ipsa ut illo.'
     fileParameters: []
     responses: []
     responseFields: []
@@ -791,13 +3273,13 @@ endpoints:
         name: id
         description: 'The ID of the feature.'
         required: true
-        example: itaque
+        example: omnis
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: itaque
+      id: omnis
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -841,13 +3323,13 @@ endpoints:
         name: id
         description: 'The ID of the feature.'
         required: true
-        example: qui
+        example: voluptas
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: qui
+      id: voluptas
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -881,13 +3363,13 @@ endpoints:
         name: id
         description: 'The ID of the feature.'
         required: true
-        example: quia
+        example: aut
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: quia
+      id: aut
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -964,7 +3446,7 @@ endpoints:
         name: name
         description: ''
         required: true
-        example: tenetur
+        example: ut
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -984,7 +3466,7 @@ endpoints:
         name: price
         description: ''
         required: true
-        example: 15
+        example: 7
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -993,7 +3475,7 @@ endpoints:
         name: description
         description: ''
         required: true
-        example: 'Veniam accusamus sequi quam est modi soluta quia.'
+        example: 'Ut est quasi ratione repudiandae excepturi neque eum.'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1012,7 +3494,7 @@ endpoints:
         name: 'features[].id'
         description: 'Must be a valid UUID.'
         required: true
-        example: 2f725c0c-e035-359c-98f9-aebee287982e
+        example: 3c5c02de-0921-3381-ae6f-7cae78f38e45
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1029,13 +3511,13 @@ endpoints:
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      name: tenetur
+      name: ut
       duration: yearly
-      price: 15
-      description: 'Veniam accusamus sequi quam est modi soluta quia.'
+      price: 7
+      description: 'Ut est quasi ratione repudiandae excepturi neque eum.'
       features:
         -
-          id: 2f725c0c-e035-359c-98f9-aebee287982e
+          id: 3c5c02de-0921-3381-ae6f-7cae78f38e45
           status: '1'
     fileParameters: []
     responses: []
@@ -1066,13 +3548,13 @@ endpoints:
         name: id
         description: 'The ID of the plan.'
         required: true
-        example: nihil
+        example: assumenda
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: nihil
+      id: assumenda
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1116,13 +3598,13 @@ endpoints:
         name: id
         description: 'The ID of the plan.'
         required: true
-        example: ea
+        example: est
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: ea
+      id: est
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1156,13 +3638,13 @@ endpoints:
         name: id
         description: 'The ID of the plan.'
         required: true
-        example: minima
+        example: et
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: minima
+      id: et
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1178,7 +3660,328 @@ endpoints:
   -
     httpMethods:
       - POST
-    uri: api/v1/organisations
+    uri: api/v1/payments/paystack
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      plan_id:
+        name: plan_id
+        description: "'organisation_id' => 'required',."
+        required: true
+        example: non
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      billing_option:
+        name: billing_option
+        description: ''
+        required: true
+        example: yearly
+        type: string
+        enumValues:
+          - monthly
+          - yearly
+        exampleWasSpecified: false
+        custom: []
+      full_name:
+        name: full_name
+        description: ''
+        required: true
+        example: et
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      redirect_url:
+        name: redirect_url
+        description: 'Must be a valid URL.'
+        required: true
+        example: 'https://schroeder.com/magni-at-sint-delectus-error-quas-eveniet.html'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      plan_id: non
+      billing_option: yearly
+      full_name: et
+      redirect_url: 'https://schroeder.com/magni-at-sint-delectus-error-quas-eveniet.html'
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/payments/paystack/verify/{id}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the verify.'
+        required: true
+        example: expedita
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      id: expedita
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/payments/flutterwave
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      plan_id:
+        name: plan_id
+        description: "'organisation_id' => 'required',."
+        required: true
+        example: hic
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      billing_option:
+        name: billing_option
+        description: ''
+        required: true
+        example: monthly
+        type: string
+        enumValues:
+          - monthly
+          - yearly
+        exampleWasSpecified: false
+        custom: []
+      full_name:
+        name: full_name
+        description: ''
+        required: true
+        example: corrupti
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      redirect_url:
+        name: redirect_url
+        description: 'Must be a valid URL.'
+        required: true
+        example: 'http://www.kemmer.com/animi-aut-reiciendis-officia-animi'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      plan_id: hic
+      billing_option: monthly
+      full_name: corrupti
+      redirect_url: 'http://www.kemmer.com/animi-aut-reiciendis-officia-animi'
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/payments/flutterwave/verify/{id}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the verify.'
+        required: true
+        example: voluptates
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      id: voluptates
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/payments/cancel
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/users/plans/{user_subscription}/cancel'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'cancel user subscription'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      user_subscription:
+        name: user_subscription
+        description: ''
+        required: true
+        example: cupiditate
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      user_subscription: cupiditate
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/organizations
     metadata:
       groupName: Endpoints
       groupDescription: ''
@@ -1200,7 +4003,7 @@ endpoints:
         name: name
         description: ''
         required: true
-        example: praesentium
+        example: ex
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1209,7 +4012,7 @@ endpoints:
         name: description
         description: ''
         required: true
-        example: 'Asperiores eligendi sint et libero repellat perspiciatis suscipit harum.'
+        example: 'Et iure fugit quos adipisci expedita recusandae corporis.'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1218,7 +4021,7 @@ endpoints:
         name: email
         description: 'Must be a valid email address. Must not be greater than 255 characters.'
         required: true
-        example: krystel05@example.com
+        example: goyette.shyanne@example.net
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1227,7 +4030,7 @@ endpoints:
         name: industry
         description: ''
         required: true
-        example: nihil
+        example: eius
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1236,7 +4039,7 @@ endpoints:
         name: type
         description: ''
         required: true
-        example: sed
+        example: debitis
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1245,7 +4048,7 @@ endpoints:
         name: country
         description: ''
         required: true
-        example: aut
+        example: et
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1254,7 +4057,7 @@ endpoints:
         name: address
         description: ''
         required: true
-        example: repellendus
+        example: velit
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1263,20 +4066,20 @@ endpoints:
         name: state
         description: ''
         required: true
-        example: iusto
+        example: nam
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      name: praesentium
-      description: 'Asperiores eligendi sint et libero repellat perspiciatis suscipit harum.'
-      email: krystel05@example.com
-      industry: nihil
-      type: sed
-      country: aut
-      address: repellendus
-      state: iusto
+      name: ex
+      description: 'Et iure fugit quos adipisci expedita recusandae corporis.'
+      email: goyette.shyanne@example.net
+      industry: eius
+      type: debitis
+      country: et
+      address: velit
+      state: nam
     fileParameters: []
     responses: []
     responseFields: []
@@ -1288,7 +4091,7 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/organisations
+    uri: api/v1/organizations
     metadata:
       groupName: Endpoints
       groupDescription: ''
@@ -1311,12 +4114,10 @@ endpoints:
     responses:
       -
         status: 401
-        content: '{"status":"Unauthorized","message":"User not authenticated","status_code":401}'
+        content: '{"message":"Unauthenticated."}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '53'
           access-control-allow-origin: '*'
         description: null
         custom: []
@@ -1328,8 +4129,167 @@ endpoints:
     custom: []
   -
     httpMethods:
+      - PUT
+    uri: 'api/v1/organizations/{org_id}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Update the specified resource in storage.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      org_id:
+        name: org_id
+        description: 'The ID of the org.'
+        required: true
+        example: ex
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      org_id: ex
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        name: name
+        description: ''
+        required: true
+        example: et
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      description:
+        name: description
+        description: ''
+        required: true
+        example: 'In voluptatem reiciendis sint et.'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      email:
+        name: email
+        description: ''
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      industry:
+        name: industry
+        description: ''
+        required: true
+        example: magnam
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      type:
+        name: type
+        description: ''
+        required: true
+        example: aspernatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      country:
+        name: country
+        description: ''
+        required: true
+        example: cupiditate
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      address:
+        name: address
+        description: ''
+        required: true
+        example: unde
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      state:
+        name: state
+        description: ''
+        required: true
+        example: pariatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      name: et
+      description: 'In voluptatem reiciendis sint et.'
+      industry: magnam
+      type: aspernatur
+      country: cupiditate
+      address: unde
+      state: pariatur
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
       - DELETE
-    uri: 'api/v1/organisations/{org_id}/users/{user_id}'
+    uri: 'api/v1/organizations/{org_id}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Remove the specified resource from storage.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      org_id:
+        name: org_id
+        description: 'The ID of the org.'
+        required: true
+        example: tenetur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      org_id: tenetur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/organizations/{org_id}/users/{user_id}'
     metadata:
       groupName: Endpoints
       groupDescription: ''
@@ -1347,7 +4307,7 @@ endpoints:
         name: org_id
         description: 'The ID of the org.'
         required: true
-        example: qui
+        example: provident
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1356,14 +4316,14 @@ endpoints:
         name: user_id
         description: 'The ID of the user.'
         required: true
-        example: et
+        example: 9cb402e5-e983-4696-9bc4-74d7bfc255a1
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      org_id: qui
-      user_id: et
+      org_id: provident
+      user_id: 9cb402e5-e983-4696-9bc4-74d7bfc255a1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1379,45 +4339,143 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/customers
+    uri: 'api/v1/organizations/{organisation}/users'
     metadata:
       groupName: Endpoints
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Display a listing of the resource.'
+      title: ''
       description: ''
       authenticated: false
       custom: []
     headers:
       Content-Type: application/json
       Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      limit:
-        name: limit
-        description: 'Must be at least 1.'
+    urlParameters:
+      organisation:
+        name: organisation
+        description: ''
         required: true
-        example: 63
-        type: integer
+        example: rerum
+        type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
-      page:
-        name: page
-        description: 'Must be at least 1.'
+    cleanUrlParameters:
+      organisation: rerum
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/members/{org_id}/search'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      org_id:
+        name: org_id
+        description: 'The ID of the org.'
         required: true
-        example: 34
-        type: integer
+        example: voluptatem
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      org_id: voluptatem
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      org_id:
+        name: org_id
+        description: 'Must be a valid UUID.'
+        required: true
+        example: edac571b-969a-36d2-8ddf-df8baa2f2f84
+        type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      limit: 63
-      page: 34
+      org_id: edac571b-969a-36d2-8ddf-df8baa2f2f84
+    fileParameters: []
+    responses:
+      -
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/members/{org_id}/export'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      org_id:
+        name: org_id
+        description: 'The ID of the org.'
+        required: true
+        example: fugit
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      org_id: fugit
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
     fileParameters: []
     responses:
       -
@@ -1460,13 +4518,13 @@ endpoints:
         name: content
         description: ''
         required: true
-        example: sit
+        example: commodi
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      content: sit
+      content: commodi
     fileParameters: []
     responses: []
     responseFields: []
@@ -1496,13 +4554,13 @@ endpoints:
         name: testimonial_id
         description: 'The ID of the testimonial.'
         required: true
-        example: accusantium
+        example: neque
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      testimonial_id: accusantium
+      testimonial_id: neque
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1526,8 +4584,1401 @@ endpoints:
     custom: []
   -
     httpMethods:
-      - GET
+      - DELETE
+    uri: 'api/v1/testimonials/{testimonial}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Remove the specified resource from storage.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      testimonial:
+        name: testimonial
+        description: 'The testimonial.'
+        required: true
+        example: distinctio
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      testimonial: distinctio
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
     uri: api/v1/jobs
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      title:
+        name: title
+        description: ''
+        required: true
+        example: eum
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      description:
+        name: description
+        description: ''
+        required: true
+        example: 'Ut in fuga autem optio perferendis nihil nulla.'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      location:
+        name: location
+        description: ''
+        required: true
+        example: illum
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      deadline:
+        name: deadline
+        description: 'Must be a valid date.'
+        required: true
+        example: '2024-08-07T03:57:11'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      salary_range:
+        name: salary_range
+        description: ''
+        required: true
+        example: eius
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      job_type:
+        name: job_type
+        description: ''
+        required: true
+        example: cupiditate
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      job_mode:
+        name: job_mode
+        description: ''
+        required: true
+        example: fugit
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      experience_level:
+        name: experience_level
+        description: ''
+        required: false
+        example: ut
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      company_name:
+        name: company_name
+        description: ''
+        required: false
+        example: tempore
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      key_responsibilities:
+        name: key_responsibilities
+        description: ''
+        required: false
+        example: sed
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      qualifications:
+        name: qualifications
+        description: ''
+        required: false
+        example: quod
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      title: eum
+      description: 'Ut in fuga autem optio perferendis nihil nulla.'
+      location: illum
+      deadline: '2024-08-07T03:57:11'
+      salary_range: eius
+      job_type: cupiditate
+      job_mode: fugit
+      experience_level: ut
+      company_name: tempore
+      key_responsibilities: sed
+      qualifications: quod
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+    uri: 'api/v1/jobs/{id}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the job.'
+        required: true
+        example: 9cb402e7-79e4-46d5-9dbd-02b95ffa8d4e
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      id: 9cb402e7-79e4-46d5-9dbd-02b95ffa8d4e
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      title:
+        name: title
+        description: ''
+        required: true
+        example: quisquam
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      description:
+        name: description
+        description: ''
+        required: true
+        example: 'Recusandae quis et voluptas enim cumque in.'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      location:
+        name: location
+        description: ''
+        required: true
+        example: a
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      deadline:
+        name: deadline
+        description: 'Must be a valid date.'
+        required: true
+        example: '2024-08-07T03:57:11'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      salary_range:
+        name: salary_range
+        description: ''
+        required: true
+        example: nobis
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      job_type:
+        name: job_type
+        description: ''
+        required: true
+        example: velit
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      job_mode:
+        name: job_mode
+        description: ''
+        required: true
+        example: cumque
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      experience_level:
+        name: experience_level
+        description: ''
+        required: false
+        example: quibusdam
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      benefits:
+        name: benefits
+        description: ''
+        required: false
+        example: qui
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      key_responsibilities:
+        name: key_responsibilities
+        description: ''
+        required: false
+        example: doloremque
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      qualifications:
+        name: qualifications
+        description: ''
+        required: false
+        example: quidem
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      title: quisquam
+      description: 'Recusandae quis et voluptas enim cumque in.'
+      location: a
+      deadline: '2024-08-07T03:57:11'
+      salary_range: nobis
+      job_type: velit
+      job_mode: cumque
+      experience_level: quibusdam
+      benefits: qui
+      key_responsibilities: doloremque
+      qualifications: quidem
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/jobs/{id}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the job.'
+        required: true
+        example: 9cb402e7-79e4-46d5-9dbd-02b95ffa8d4e
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      id: 9cb402e7-79e4-46d5-9dbd-02b95ffa8d4e
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/user/export/{format}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      format:
+        name: format
+        description: ''
+        required: true
+        example: omnis
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      format: omnis
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PATCH
+    uri: api/v1/accounts/deactivate
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      confirmation:
+        name: confirmation
+        description: ''
+        required: true
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      reason:
+        name: reason
+        description: ''
+        required: false
+        example: facilis
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      confirmation: true
+      reason: facilis
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+    uri: 'api/v1/organisations/{org_id}/roles/{role_id}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      org_id:
+        name: org_id
+        description: 'The ID of the org.'
+        required: true
+        example: 1f1935bd-d9fb-3f47-929c-f9d453233ec4
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      role_id:
+        name: role_id
+        description: 'The ID of the role.'
+        required: true
+        example: nihil
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      org_id: 1f1935bd-d9fb-3f47-929c-f9d453233ec4
+      role_id: nihil
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        name: name
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: jsni
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      description:
+        name: description
+        description: ''
+        required: false
+        example: 'Omnis dolore eaque dolorem voluptatum et maxime explicabo quia.'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      name: jsni
+      description: 'Omnis dolore eaque dolorem voluptatum et maxime explicabo quia.'
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+    uri: 'api/v1/organisations/{org_id}/roles/{role_id}/disable'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      org_id:
+        name: org_id
+        description: 'The ID of the org.'
+        required: true
+        example: 1f1935bd-d9fb-3f47-929c-f9d453233ec4
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      role_id:
+        name: role_id
+        description: 'The ID of the role.'
+        required: true
+        example: rem
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      org_id: 1f1935bd-d9fb-3f47-929c-f9d453233ec4
+      role_id: rem
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      role_name:
+        name: role_name
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: gravcsacqmjxsd
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      organisation_id:
+        name: organisation_id
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: rptabzwnlyqjoubaojn
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      permissions_id:
+        name: permissions_id
+        description: ''
+        required: true
+        example: ut
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      role_name: gravcsacqmjxsd
+      organisation_id: rptabzwnlyqjoubaojn
+      permissions_id: ut
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+    uri: 'api/v1/organisations/{org_id}/users/{user_id}/roles'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      org_id:
+        name: org_id
+        description: 'The ID of the org.'
+        required: true
+        example: 1f1935bd-d9fb-3f47-929c-f9d453233ec4
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      user_id:
+        name: user_id
+        description: 'The ID of the user.'
+        required: true
+        example: 9cb402e5-e983-4696-9bc4-74d7bfc255a1
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      org_id: 1f1935bd-d9fb-3f47-929c-f9d453233ec4
+      user_id: 9cb402e5-e983-4696-9bc4-74d7bfc255a1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      role:
+        name: role
+        description: ''
+        required: true
+        example: sint
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      role: sint
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+    uri: 'api/v1/organisations/{org_id}/{role_id}/permissions'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      org_id:
+        name: org_id
+        description: 'The ID of the org.'
+        required: true
+        example: 1f1935bd-d9fb-3f47-929c-f9d453233ec4
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      role_id:
+        name: role_id
+        description: 'The ID of the role.'
+        required: true
+        example: amet
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      org_id: 1f1935bd-d9fb-3f47-929c-f9d453233ec4
+      role_id: amet
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      permission_list:
+        name: permission_list
+        description: ''
+        required: true
+        example: []
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      permission_list: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/password-update
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: updatePassword
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      old_password:
+        name: old_password
+        description: ''
+        required: true
+        example: aperiam
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      new_password:
+        name: new_password
+        description: 'Must match the regex /[A-Z]/. Must match the regex /[0-9]/. Must be at least 8 characters.'
+        required: true
+        example: pghnqugrihgfovgkanemrvjgilfjpxtunggicjzyfwiucwyjndxafqzi
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      old_password: aperiam
+      new_password: pghnqugrihgfovgkanemrvjgilfjpxtunggicjzyfwiucwyjndxafqzi
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PATCH
+    uri: api/v1/profile
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Update the specified resource in storage.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      first_name:
+        name: first_name
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: ysjmxhyztohbqetoeg
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      last_name:
+        name: last_name
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: sofwjginlumdkzki
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      job_title:
+        name: job_title
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: hblwmmejxcfb
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      pronoun:
+        name: pronoun
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: qtpzfrbqxviyyeyyfb
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      bio:
+        name: bio
+        description: 'Must not be greater than 500 characters.'
+        required: false
+        example: nrzklbecstmy
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      email:
+        name: email
+        description: 'Must be a valid email address. Must not be greater than 255 characters.'
+        required: false
+        example: easton26@example.net
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      avatar_url:
+        name: avatar_url
+        description: ''
+        required: false
+        example: 'http://www.satterfield.com/ea-iste-in-qui'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      display_image:
+        name: display_image
+        description: ''
+        required: false
+        example: dolor
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      first_name: ysjmxhyztohbqetoeg
+      last_name: sofwjginlumdkzki
+      job_title: hblwmmejxcfb
+      pronoun: qtpzfrbqxviyyeyyfb
+      bio: nrzklbecstmy
+      email: easton26@example.net
+      avatar_url: 'http://www.satterfield.com/ea-iste-in-qui'
+      display_image: dolor
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/profile/upload-image
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: multipart/form-data
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      file:
+        name: file
+        description: 'Must be an image.'
+        required: true
+        example: null
+        type: file
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters: []
+    fileParameters:
+      file: null
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/notification-settings
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Display the specified resource.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 500
+        content: |-
+          {
+              "message": "Server Error"
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '35'
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PATCH
+    uri: api/v1/notification-settings
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Update the specified resource in storage.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      mobile_push_notifications:
+        name: mobile_push_notifications
+        description: ''
+        required: true
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      email_notification_activity_in_workspace:
+        name: email_notification_activity_in_workspace
+        description: ''
+        required: true
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      email_notification_always_send_email_notifications:
+        name: email_notification_always_send_email_notifications
+        description: ''
+        required: true
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      email_notification_email_digest:
+        name: email_notification_email_digest
+        description: ''
+        required: true
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      email_notification_announcement_and_update_emails:
+        name: email_notification_announcement_and_update_emails
+        description: ''
+        required: true
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      slack_notifications_activity_on_your_workspace:
+        name: slack_notifications_activity_on_your_workspace
+        description: ''
+        required: true
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      slack_notifications_always_send_email_notifications:
+        name: slack_notifications_always_send_email_notifications
+        description: ''
+        required: true
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      slack_notifications_announcement_and_update_emails:
+        name: slack_notifications_announcement_and_update_emails
+        description: ''
+        required: true
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      mobile_push_notifications: false
+      email_notification_activity_in_workspace: false
+      email_notification_always_send_email_notifications: true
+      email_notification_email_digest: true
+      email_notification_announcement_and_update_emails: true
+      slack_notifications_activity_on_your_workspace: true
+      slack_notifications_always_send_email_notifications: true
+      slack_notifications_announcement_and_update_emails: true
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/customers
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Display a listing of the resource.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      limit:
+        name: limit
+        description: 'Must be at least 1.'
+        required: true
+        example: 67
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      page:
+        name: page
+        description: 'Must be at least 1.'
+        required: true
+        example: 30
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      limit: 67
+      page: 30
+    fileParameters: []
+    responses:
+      -
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/blogs
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Store a newly created resource in storage.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      title:
+        name: title
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: zqsjxmev
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      content:
+        name: content
+        description: ''
+        required: true
+        example: natus
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      image_url:
+        name: image_url
+        description: ''
+        required: true
+        example: quos
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      category:
+        name: category
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: xdwzqghtxhcasmxiukiqohiu
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      title: zqsjxmev
+      content: natus
+      image_url: quos
+      category: xdwzqghtxhcasmxiukiqohiu
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PATCH
+    uri: 'api/v1/blogs/edit/{id}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Update the specified resource in storage.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the edit.'
+        required: true
+        example: natus
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      id: natus
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/blogs/{id}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Remove the specified resource from storage.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the blog.'
+        required: true
+        example: fad7d874-61f9-40f0-ad3e-8bafdc6daf7b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      id: fad7d874-61f9-40f0-ad3e-8bafdc6daf7b
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/waitlists
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 401
+        content: '{"status":"Unauthorized","message":"User not authenticated","status_code":401}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '34'
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/waitlists
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        name: name
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: uolgyfljuqbpf
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      email:
+        name: email
+        description: 'Must be a valid email address.'
+        required: true
+        example: kacey.cremin@example.org
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      name: uolgyfljuqbpf
+      email: kacey.cremin@example.org
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/faqs
     metadata:
       groupName: Endpoints
       groupDescription: ''
@@ -1549,11 +6000,887 @@ endpoints:
     fileParameters: []
     responses:
       -
+        status: 200
+        content: '{"status_code":200,"message":"Faq returned successfully","data":[{"id":"9cb402fc-99ed-49ea-b689-406c182835f1","question":"What is the return policy?","answer":"Our return policy allows you to return products within 30 days of purchase. The items must be in their original condition with all packaging and tags intact. For more details, visit our return policy page.","status":true,"created_at":"2024-08-06T18:39:41.000000Z","updated_at":"2024-08-06T18:39:41.000000Z"},{"id":"9cb402fc-9eb2-45f4-a594-ce4a0c0c5213","question":"How do I track my order?","answer":"Once your order has been shipped, you will receive an email with a tracking number. You can use this number on our website to track the status of your delivery.","status":true,"created_at":"2024-08-06T18:39:41.000000Z","updated_at":"2024-08-06T18:39:41.000000Z"},{"id":"9cb402fc-a0a2-4b03-8122-075ec2e9e899","question":"What payment methods are accepted?","answer":"We accept various payment methods including credit\/debit cards, PayPal, and bank transfers. For a full list of accepted payment methods, please visit our payment information page.","status":true,"created_at":"2024-08-06T18:39:41.000000Z","updated_at":"2024-08-06T18:39:41.000000Z"},{"id":"9cb402fc-a270-4999-8304-9d9fab8974d4","question":"How do I contact customer support?","answer":"You can contact our customer support team via email, phone, or live chat. Visit our contact us page for more information on how to reach us.","status":true,"created_at":"2024-08-06T18:39:41.000000Z","updated_at":"2024-08-06T18:39:41.000000Z"},{"id":"9cb402fc-a469-4f39-83c2-a195f39be260","question":"Are there any discounts for bulk purchases?","answer":"Yes, we offer discounts for bulk purchases. Please contact our sales team with your requirements, and we will provide you with a custom quote.","status":true,"created_at":"2024-08-06T18:39:41.000000Z","updated_at":"2024-08-06T18:39:41.000000Z"},{"id":"9cb402fc-a653-4ceb-9e0b-73ba302c438a","question":"How do I create an account?","answer":"Creating an account is easy. Click on the \"Sign Up\" button at the top of our website, and fill in your details. Once registered, you can enjoy a faster checkout process and keep track of your orders.","status":true,"created_at":"2024-08-06T18:39:41.000000Z","updated_at":"2024-08-06T18:39:41.000000Z"},{"id":"9cb402fc-a835-48d6-8454-baa5755e46d7","question":"What do I do if I receive a defective product?","answer":"If you receive a defective product, please contact our customer support team immediately. We will arrange for a replacement or a refund as per our return policy.","status":true,"created_at":"2024-08-06T18:39:41.000000Z","updated_at":"2024-08-06T18:39:41.000000Z"},{"id":"9cb402fc-a9fd-4b5f-ad1a-7ef9e3a49dc6","question":"Do you ship internationally?","answer":"Yes, we ship to many countries around the world. International shipping costs and delivery times vary based on your location. For more details, please visit our shipping information page.","status":true,"created_at":"2024-08-06T18:39:41.000000Z","updated_at":"2024-08-06T18:39:41.000000Z"},{"id":"9cb402fc-abc6-4e6c-aea2-a97dd5a23d7a","question":"How can I apply a discount code?","answer":"You can apply a discount code at checkout. Enter the code in the designated field and click \"Apply\" to see the discount reflected in your order total.","status":true,"created_at":"2024-08-06T18:39:41.000000Z","updated_at":"2024-08-06T18:39:41.000000Z"}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '33'
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/faqs
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Store a newly created resource in storage.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      question:
+        name: question
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: mfyybkfdangsrh
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      answer:
+        name: answer
+        description: 'Must not be greater than 500 characters.'
+        required: true
+        example: qxnuetdrzosbln
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      question: mfyybkfdangsrh
+      answer: qxnuetdrzosbln
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/faqs/{id}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Display the specified resource.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the faq.'
+        required: true
+        example: 9cb402fc-99ed-49ea-b689-406c182835f1
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      id: 9cb402fc-99ed-49ea-b689-406c182835f1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '{"status_code":200,"message":"Faq returned successfully","data":{"id":"9cb402fc-99ed-49ea-b689-406c182835f1","question":"What is the return policy?","answer":"Our return policy allows you to return products within 30 days of purchase. The items must be in their original condition with all packaging and tags intact. For more details, visit our return policy page.","status":true,"created_at":"2024-08-06T18:39:41.000000Z","updated_at":"2024-08-06T18:39:41.000000Z"}}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '32'
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+      - PATCH
+    uri: 'api/v1/faqs/{id}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Update the specified resource in storage.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the faq.'
+        required: true
+        example: 9cb402fc-99ed-49ea-b689-406c182835f1
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      id: 9cb402fc-99ed-49ea-b689-406c182835f1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      question:
+        name: question
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: hxszodqapscivhfxiqrnb
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      answer:
+        name: answer
+        description: 'Must not be greater than 500 characters.'
+        required: false
+        example: twqoaxiztjxinigzcpvi
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      question: hxszodqapscivhfxiqrnb
+      answer: twqoaxiztjxinigzcpvi
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/faqs/{id}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Remove the specified resource from storage.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the faq.'
+        required: true
+        example: 9cb402fc-99ed-49ea-b689-406c182835f1
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      id: 9cb402fc-99ed-49ea-b689-406c182835f1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/blogs/{id}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Display the specified resource.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the blog.'
+        required: true
+        example: fad7d874-61f9-40f0-ad3e-8bafdc6daf7b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      id: fad7d874-61f9-40f0-ad3e-8bafdc6daf7b
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '{"data":{"title":"Ut odio ipsam illo vel fuga.","category":"Business","content":"Et quidem culpa culpa vel quam velit. Velit numquam aspernatur vero quis iure expedita. Dicta quia facere consectetur.\n\nVoluptatem eos dolorem aut reprehenderit numquam. Quis ut doloribus quo quasi voluptatem vero officiis sunt. Voluptate a eum ut. Tempore facere ducimus corporis accusamus aspernatur et.\n\nRerum quis modi quia. Sit voluptate et similique ea quia. Et non magni atque quia molestiae. Ratione velit perferendis quos vitae.","image_url":"storage\/images\/QZsSJjeCnS.jpg","created_at":"2024-08-06T18:39:32.000000Z"},"message":"Blog post fetched sucessfully.","status_code":200}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '31'
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/blogs
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Display a listing of the resource.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '{"data":[{"id":"71eb8a33-c1ef-4526-9c13-0e57e84e3454","title":"Maiores nulla quis qui aut id iusto voluptatibus.","content":"Unde nihil vel perspiciatis tempore beatae. Iusto velit amet ipsa dolores. Ab eos quis rerum ipsa dolorum. Cumque eos velit est voluptatem.\n\nQui qui magni iure delectus expedita quibusdam. Consectetur sit sit accusantium enim dolore ut. Aspernatur omnis ipsum voluptatibus amet tempore fugiat.\n\nId nihil autem iusto maxime sed ipsa repudiandae. Iusto eligendi ipsam dolor minus corporis. Expedita maxime suscipit soluta excepturi eum facere.","author":"Dorian Powlowski","created_at":"2024-08-06T18:39:40.000000Z","category":"World News","image_url":"storage\/images\/MTm0TdKKdV.jpg"},{"id":"4beb4480-9a7e-4d40-9913-2222c0d4000a","title":"Et dolores qui et quod qui a.","content":"Deserunt voluptatem pariatur aut explicabo voluptas sapiente alias similique. Quos necessitatibus est facere et voluptatibus mollitia sint est. Accusantium dicta adipisci est eum enim ut ratione. Nostrum mollitia tempora repellendus voluptatibus.\n\nVoluptas nulla ut voluptatem et quo. Deserunt cumque odio ipsam sapiente velit inventore. Porro consectetur qui et est occaecati.\n\nDeserunt est voluptate et aut neque quis praesentium. Maiores ut ex eaque et illum. Rerum aperiam illum sit. Architecto dolorem provident accusamus illum perspiciatis non.","author":"Ilene Klein","created_at":"2024-08-06T18:39:38.000000Z","category":"Lifestyle","image_url":"storage\/images\/BzVOnNLQ89.jpg"},{"id":"bf6252d8-1ae7-4fac-bbe1-533a4d5d49ba","title":"Culpa quis repellat consequuntur explicabo autem aspernatur debitis.","content":"Asperiores officia fuga et quas. Et adipisci exercitationem et aut a quasi. Vel voluptas ad consectetur hic accusantium ut voluptatem.\n\nReprehenderit sed nostrum facilis sit quia. Et voluptates voluptatum consectetur est unde. Vitae necessitatibus optio voluptatem cum.\n\nQuo eligendi nihil laborum atque doloremque sunt. Ea voluptates eius dolores quis quisquam dolorem fuga. Modi sapiente expedita dignissimos et.","author":"Mina Schimmel","created_at":"2024-08-06T18:39:35.000000Z","category":"Food","image_url":"storage\/images\/BCYawtsLx6.jpg"},{"id":"fad7d874-61f9-40f0-ad3e-8bafdc6daf7b","title":"Ut odio ipsam illo vel fuga.","content":"Et quidem culpa culpa vel quam velit. Velit numquam aspernatur vero quis iure expedita. Dicta quia facere consectetur.\n\nVoluptatem eos dolorem aut reprehenderit numquam. Quis ut doloribus quo quasi voluptatem vero officiis sunt. Voluptate a eum ut. Tempore facere ducimus corporis accusamus aspernatur et.\n\nRerum quis modi quia. Sit voluptate et similique ea quia. Et non magni atque quia molestiae. Ratione velit perferendis quos vitae.","author":"Rafael Schowalter","created_at":"2024-08-06T18:39:32.000000Z","category":"Business","image_url":"storage\/images\/QZsSJjeCnS.jpg"}],"message":"All blog posts retrieved successfully","status_code":200}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '30'
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/user/preferences
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        name: name
+        description: ''
+        required: true
+        example: officiis
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      value:
+        name: value
+        description: ''
+        required: true
+        example: ipsum
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      name: officiis
+      value: ipsum
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+    uri: 'api/v1/user/preferences/{id}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the preference.'
+        required: true
+        example: repellat
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      id: repellat
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        name: name
+        description: ''
+        required: true
+        example: id
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      value:
+        name: value
+        description: ''
+        required: true
+        example: odit
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      name: id
+      value: odit
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/user/preferences
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
         status: 401
         content: '{"message":"Unauthenticated."}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/user/preferences/{id}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the preference.'
+        required: true
+        example: ut
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      id: ut
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PATCH
+    uri: 'api/v1/notification-settings/{user_id}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      user_id:
+        name: user_id
+        description: 'The ID of the user.'
+        required: true
+        example: necessitatibus
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      user_id: necessitatibus
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      email_notifications:
+        name: email_notifications
+        description: ''
+        required: false
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      push_notifications:
+        name: push_notifications
+        description: ''
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      sms_notifications:
+        name: sms_notifications
+        description: ''
+        required: false
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      email_notifications: true
+      push_notifications: false
+      sms_notifications: true
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/email-templates/{id}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Display the specified resource.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the email template.'
+        required: true
+        example: harum
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      id: harum
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+      - PATCH
+    uri: 'api/v1/email-templates/{id}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the email template.'
+        required: true
+        example: placeat
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      id: placeat
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      title:
+        name: title
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: yaok
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      template:
+        name: template
+        description: ''
+        required: false
+        example: ea
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      status:
+        name: status
+        description: ''
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      title: yaok
+      template: ea
+      status: false
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/email-templates/{id}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the email template.'
+        required: true
+        example: pariatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      id: pariatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PATCH
+    uri: 'api/v1/notifications/{notification}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Update the specified resource in storage.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      notification:
+        name: notification
+        description: 'The notification.'
+        required: true
+        example: officia
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      notification: officia
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      is_read:
+        name: is_read
+        description: ''
+        required: true
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      is_read: true
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: api/v1/notifications
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Remove the specified resource from storage.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/notifications
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Show the form for creating a new resource.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      message:
+        name: message
+        description: 'Must not be greater than 500 characters.'
+        required: true
+        example: 'n'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      message: 'n'
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/notifications
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 401
+        content: '{"status":"Unauthorized","message":"User not authenticated","status_code":401}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '29'
           access-control-allow-origin: '*'
         description: null
         custom: []
