@@ -92,7 +92,7 @@ class FaqControllerTest extends TestCase
         $this->assertDatabaseHas('faqs', $payload);
     }
 
-    public function test_if_creat_faq_missing_field_fails()
+    public function test_if_create_faq_missing_field_fails()
     {
         $payload = [
             'answer' => 'Our return policy allows returns within 30 days of purchase.',
