@@ -40,6 +40,7 @@ use App\Http\Controllers\Api\V1\User\ExportUserController;
 use App\Http\Controllers\Api\V1\User\ProfileController;
 use App\Http\Controllers\Api\V1\User\UserController;
 use App\Http\Controllers\Api\V1\WaitListController;
+use App\Http\Controllers\Api\V1\RegionController;
 use App\Http\Controllers\BillingPlanController;
 use App\Http\Controllers\InvitationAcceptanceController;
 use App\Http\Controllers\NotificationSettingController;
@@ -103,7 +104,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/payments/flutterwave/{organisation_id}/verify/{id}', [PaymentController::class, 'handleFlutterwaveCallback']);
     Route::post('/languages', [LanguageController::class, 'create']);
     Route::get('/languages', [LanguageController::class, 'index']);
-    Route::put('/languages/{id}', [LanguageController::class, 'update']); 
+    Route::put('/languages/{id}', [LanguageController::class, 'update']);
 
     Route::middleware('throttle:10,1')->get('/topics/search', [ArticleController::class, 'search']);
 
@@ -246,6 +247,8 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('squeeze-pages', SqueezePageCoontroller::class);
         Route::get('/statistics', [AdminDashboardController::class, 'getStatistics']);
         Route::apiResource('faqs', FaqController::class);
+
+
     });
 
     Route::post('/waitlists', [WaitListController::class, 'store']);
@@ -262,7 +265,12 @@ Route::prefix('v1')->group(function () {
         Route::get('/user-statistics', [DashboardController::class, 'index']);
         Route::get('/user-analytics', [DashboardController::class, 'user_analytics']);
         Route::get('/user-sales', [DashboardController::class, 'recent_sales']);
+
+        Route::post('/regions', [RegionController::class, 'store']);
+
     });
+
+
 
     // Notification settings
     Route::patch('/notification-settings/{user_id}', [NotificationPreferenceController::class, 'update']);
