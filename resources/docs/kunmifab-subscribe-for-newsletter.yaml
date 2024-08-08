@@ -69,7 +69,7 @@ paths:
                         type: array
                         items:
                           type: string
-                          example: "The email field is required."
+                          example: "The email has already been taken."
         '500':
           description: Internal Server Error
           content:

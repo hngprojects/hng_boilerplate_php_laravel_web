@@ -21,7 +21,7 @@ class NewsletterSubscriptionController extends Controller
     public function store(Request $request)
     {
         $validator = $this->validator->make($request->all(), [
-            'email' => 'required|email'
+            'email' => 'required|email|unique:newsletter_subscriptions,email'
         ]);
 
         if ($validator->fails()) {
