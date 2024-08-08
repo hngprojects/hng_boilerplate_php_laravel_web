@@ -500,53 +500,131 @@
         },
         "/api/v1/statistics": {
             "get": {
-                "tags": [
-                    "Dashboard"
-                ],
-                "summary": "Get dashboard statistics",
-                "description": "Retrieve the statistics for the dashboard, including total revenue, subscriptions, and sales.",
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/inline_response_200_5"
+            "tags": [
+                "Admin Dashboard"
+            ],
+            "summary": "Get admin dashboard statistics",
+            "description": "Retrieve the statistics for the admin dashboard, including total revenue, users, products, and lifetime sales.",
+            "responses": {
+                "200": {
+                "description": "Successful operation",
+                "content": {
+                    "application/json": {
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                        "message": {
+                            "type": "string",
+                            "example": "Dashboard statistics retrieved successfully"
+                        },
+                        "status_code": {
+                            "type": "integer",
+                            "example": 200
+                        },
+                        "data": {
+                            "type": "object",
+                            "properties": {
+                            "revenue": {
+                                "type": "object",
+                                "properties": {
+                                "current_month": {
+                                    "type": "number",
+                                    "example": 45000
+                                },
+                                "previous_month": {
+                                    "type": "number",
+                                    "example": 37500
+                                },
+                                "percentage_difference": {
+                                    "type": "string",
+                                    "example": "20%"
+                                }
                                 }
                             },
-                            "application/xml": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/inline_response_200_5"
+                            "users": {
+                                "type": "object",
+                                "properties": {
+                                "current_month": {
+                                    "type": "integer",
+                                    "example": 4000
+                                },
+                                "previous_month": {
+                                    "type": "integer",
+                                    "example": 3636
+                                },
+                                "percentage_difference": {
+                                    "type": "string",
+                                    "example": "10%"
                                 }
+                                }
+                            },
+                            "products": {
+                                "type": "object",
+                                "properties": {
+                                "current_month": {
+                                    "type": "integer",
+                                    "example": 1000
+                                },
+                                "previous_month": {
+                                    "type": "integer",
+                                    "example": 833
+                                },
+                                "percentage_difference": {
+                                    "type": "string",
+                                    "example": "20%"
+                                }
+                                }
+                            },
+                            "lifetime_sales": {
+                                "type": "object",
+                                "properties": {
+                                "current_month": {
+                                    "type": "number",
+                                    "example": 450000
+                                },
+                                "previous_month": {
+                                    "type": "number",
+                                    "example": 180000
+                                },
+                                "percentage_difference": {
+                                    "type": "string",
+                                    "example": "150%"
+                                }
+                                }
+                            }
                             }
                         }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/inline_response_400"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/inline_response_500_3"
-                                }
-                            }
                         }
                     }
+                    }
+                }
                 },
-                "security": [
-                    {
-                        "bearerAuth": []
+                "400": {
+                "description": "Bad Request",
+                "content": {
+                    "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/inline_response_400"
                     }
-                ]
+                    }
+                }
+                },
+                "500": {
+                "description": "Internal Server Error",
+                "content": {
+                    "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/inline_response_500_3"
+                    }
+                    }
+                }
+                }
+            },
+            "security": [
+                {
+                "bearerAuth": []
+                }
+            ]
             }
         },
         "/api/v1/export/{format}": {
