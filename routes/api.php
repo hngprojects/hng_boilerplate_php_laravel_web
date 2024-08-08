@@ -42,11 +42,6 @@ use App\Http\Controllers\Api\V1\Auth\ResetUserPasswordController;
 use App\Http\Controllers\Api\V1\NotificationPreferenceController;
 use App\Http\Controllers\Api\V1\Admin\Plan\SubscriptionController;
 use App\Http\Controllers\Api\V1\Testimonial\TestimonialController;
-use App\Http\Controllers\BillingPlanController;
-use App\Http\Controllers\Api\V1\User\ProfileController;
-use App\Http\Controllers\Api\V1\JobSearchController;
-use App\Http\Controllers\Api\V1\WaitListController;
-use App\Http\Controllers\Api\V1\CookiePreferencesController;
 use Illuminate\Http\Request;
 
 
