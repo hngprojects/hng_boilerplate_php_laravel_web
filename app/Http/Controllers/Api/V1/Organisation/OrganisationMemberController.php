@@ -11,27 +11,27 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
-class OrganizationMemberController extends Controller
+class organisationMemberController extends Controller
 {
-    public function index($organizationId, Request $request)
+    public function index($organisationId, Request $request)
     {
         $user = Auth::user();
 
-        // Validate organization ID
-        if (!preg_match('/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/', $organizationId)) {
+        // Validate organisation ID
+        if (!preg_match('/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/', $organisationId)) {
             return response()->json([
                 'status' => 'fail',
-                'message' => 'Invalid organization ID',
+                'message' => 'Invalid organisation ID',
                 'status_code' => 400,
             ], 400);
         }
 
         // Check if the user has permission to view members
-        $organizationUser = OrganisationUser::where('org_id', $organizationId)
+        $organisationUser = OrganisationUser::where('org_id', $organisationId)
             ->where('user_id', $user->id)
             ->first();
 
-        if (!$organizationUser) {
+        if (!$organisationUser) {
             return response()->json([
                 'status' => 'fail',
                 'message' => 'Unauthorized access',
@@ -43,14 +43,14 @@ class OrganizationMemberController extends Controller
         $page = $request->query('page', 1);
         $pageSize = $request->query('page_size', 10);
 
-        // Fetch members of the organization
-        $members = OrganisationUser::where('org_id', $organizationId)
+        // Fetch members of the organisation
+        $members = OrganisationUser::where('org_id', $organisationId)
             ->join('users', 'organisation_user.user_id', '=', 'users.id')
             ->paginate($pageSize, ['users.id as userId', 'users.name as firstName', 'users.email', 'users.phone'], 'page', $page);
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Organization members fetched successfully',
+            'message' => 'organisation members fetched successfully',
             'data' => [
                 'members' => $members->items(),
                 'pagination' => [
@@ -66,25 +66,25 @@ class OrganizationMemberController extends Controller
 
     public function searchMembers($org_id, Request $request)
     {
-        // Validate the organization ID format
+        // Validate the organisation ID format
         $validator = Validator::make(['org_id' => $org_id], [
             'org_id' => 'required|uuid'
         ]);
 
         if ($validator->fails()) {
             return response()->json([
-                'message' => 'Invalid organization ID',
+                'message' => 'Invalid organisation ID',
                 'status_code' => 400,
             ], 400);
         }
 
         $user = Auth::user();
 
-        // Fetch the organization
-        $organization = Organisation::where('org_id', $org_id)->first();
-        if (!$organization) {
+        // Fetch the organisation
+        $organisation = Organisation::where('org_id', $org_id)->first();
+        if (!$organisation) {
             return response()->json([
-                'message' => 'Organization does not exist',
+                'message' => 'organisation does not exist',
                 'status_code' => 404
             ], 404);
         }
@@ -92,8 +92,8 @@ class OrganizationMemberController extends Controller
         // Get the search term from the request
         $searchTerm = $request->input('search', '');
 
-        // Query users belonging to the organization and matching the search term
-        $users = $organization->users()
+        // Query users belonging to the organisation and matching the search term
+        $users = $organisation->users()
             ->where(function ($query) use ($searchTerm) {
                 $query->where('name', 'LIKE', '%' . $searchTerm . '%')
                     ->orWhere('email', 'LIKE', '%' . $searchTerm . '%');
@@ -111,26 +111,26 @@ class OrganizationMemberController extends Controller
     {
         $currentUser = Auth::user();
 
-        // Validate organization ID
+        // Validate organisation ID
         if (!preg_match('/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/', $org_id)) {
             return response()->json([
                 'status' => 'fail',
-                'message' => 'Invalid organization ID',
+                'message' => 'Invalid organisation ID',
                 'status_code' => 400,
             ], 400);
         }
 
-        // Fetch the organization
-        $organization = Organisation::where('org_id', $org_id)->first();
-        if (!$organization) {
+        // Fetch the organisation
+        $organisation = Organisation::where('org_id', $org_id)->first();
+        if (!$organisation) {
             return response()->json([
-                'message' => 'Organization does not exist',
+                'message' => 'organisation does not exist',
                 'status_code' => 404
             ], 404);
         }
 
-        // Get all users associated with this organization
-        $users = $organization->users()->get();
+        // Get all users associated with this organisation
+        $users = $organisation->users()->get();
 
         // Prepare data for CSV
         $now = Carbon::today()->isoFormat('DD_MMMM_YYYY');

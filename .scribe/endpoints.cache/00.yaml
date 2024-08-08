@@ -1591,7 +1591,7 @@ endpoints:
   -
     httpMethods:
       - POST
-    uri: 'api/v1/organizations/{org_id}/products'
+    uri: 'api/v1/organisations/{org_id}/products'
     metadata:
       groupName: Endpoints
       groupDescription: ''
@@ -1691,7 +1691,7 @@ endpoints:
   -
     httpMethods:
       - PATCH
-    uri: 'api/v1/organizations/{org_id}/products/{product_id}'
+    uri: 'api/v1/organisations/{org_id}/products/{product_id}'
     metadata:
       groupName: Endpoints
       groupDescription: ''
@@ -3110,7 +3110,7 @@ endpoints:
     responses:
       -
         status: 400
-        content: '{"message":"Invalid or expired invitation link","errors":["Invalid invitation link format","Expired invitation link","Organization not found"],"status_code":400}'
+        content: '{"message":"Invalid or expired invitation link","errors":["Invalid invitation link format","Expired invitation link","organisation not found"],"status_code":400}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -3983,7 +3983,7 @@ endpoints:
   -
     httpMethods:
       - POST
-    uri: api/v1/organizations
+    uri: api/v1/organisations
     metadata:
       groupName: Endpoints
       groupDescription: ''
@@ -4093,7 +4093,7 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/organizations
+    uri: api/v1/organisations
     metadata:
       groupName: Endpoints
       groupDescription: ''
@@ -4132,7 +4132,7 @@ endpoints:
   -
     httpMethods:
       - PUT
-    uri: 'api/v1/organizations/{org_id}'
+    uri: 'api/v1/organisations/{org_id}'
     metadata:
       groupName: Endpoints
       groupDescription: ''
@@ -4251,7 +4251,7 @@ endpoints:
   -
     httpMethods:
       - DELETE
-    uri: 'api/v1/organizations/{org_id}'
+    uri: 'api/v1/organisations/{org_id}'
     metadata:
       groupName: Endpoints
       groupDescription: ''
@@ -4291,7 +4291,7 @@ endpoints:
   -
     httpMethods:
       - DELETE
-    uri: 'api/v1/organizations/{org_id}/users/{user_id}'
+    uri: 'api/v1/organisations/{org_id}/users/{user_id}'
     metadata:
       groupName: Endpoints
       groupDescription: ''
@@ -4341,7 +4341,7 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/v1/organizations/{organisation}/users'
+    uri: 'api/v1/organisations/{organisation}/users'
     metadata:
       groupName: Endpoints
       groupDescription: ''

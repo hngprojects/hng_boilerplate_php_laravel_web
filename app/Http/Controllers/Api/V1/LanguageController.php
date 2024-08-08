@@ -16,7 +16,7 @@ class LanguageController extends Controller
     {
         if (!auth()->check()) {
             return response()->json([
-                'status' => 401,
+                'status_code' => 401,
                 'message' => 'Unauthorized'
             ], 401);
         }
@@ -29,7 +29,7 @@ class LanguageController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'status' => 400,
+                'status_code' => 400,
                 'message' => 'Bad Request',
                 'errors' => $validator->errors()
             ], 400);
@@ -43,9 +43,9 @@ class LanguageController extends Controller
         ]);
 
         return response()->json([
-            'status' => 201,
+            'status_code' => 201,
             'message' => 'Language Created Successfully',
-            'language' => $language
+            'data' => $language
         ], 201);
     }
     
@@ -53,7 +53,7 @@ class LanguageController extends Controller
     {
         if (!auth()->check()) {
             return response()->json([
-                'status' => 401,
+                'status_code' => 401,
                 'message' => 'Unauthorized'
             ], 401);
         }
@@ -66,7 +66,7 @@ class LanguageController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'status' => 400,
+                'status_code' => 400,
                 'message' => 'Validation Error',
                 'errors' => $validator->errors()
             ], 400);
@@ -76,7 +76,7 @@ class LanguageController extends Controller
 
         if (!$language) {
             return response()->json([
-                'status' => 404,
+                'status_code' => 404,
                 'message' => 'Language not found'
             ], 404);
         }
@@ -88,9 +88,9 @@ class LanguageController extends Controller
         ]);
 
         return response()->json([
-            'status' => 200,
+            'status_code' => 200,
             'message' => 'Language Updated Successfully',
-            'language' => $language
+            'data' => $language
         ], 200);
     }
 
@@ -99,7 +99,7 @@ class LanguageController extends Controller
     {
         if (!auth()->check()) {
             return response()->json([
-                'status' => 401,
+                'status_code' => 401,
                 'message' => 'Unauthorized'
             ], 401);
         }
@@ -109,9 +109,9 @@ class LanguageController extends Controller
         $languages = Language::select('id', 'language', 'code')->get();
 
         return response()->json([
-            'status' => 200,
+            'status_code' => 200,
             'message' => 'Languages fetched successfully',
-            'languages' => $languages
+            'data' => $languages
         ], 200);
     }
 }

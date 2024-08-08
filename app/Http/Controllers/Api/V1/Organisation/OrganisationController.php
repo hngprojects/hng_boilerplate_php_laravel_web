@@ -19,47 +19,72 @@ class OrganisationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        try {
-            $user = auth('api')->user();
-            if (!$user) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Unauthorized',
-                    'status_code' => 401
-                ], 401);
-            }
-
-            $organisations = $user->organisations;
-
-            if ($organisations->isEmpty()) {
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'No organisations available',
-                    'data' => [
-                        'organisations' => []
-                    ]
-                ], 200);
-            }
-
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Organizations retrieved successfully',
-                'status_code' => 200,
-                'data' => [
-                    'organisations' => OrganisationResource::collection($organisations)
-                ]
-            ]);
-        } catch (\Exception $e) {
+    public function index($user_id)
+{
+    try {
+        // Ensure that the authenticated user is accessing their own organisations
+        $authUser = auth('api')->user();
+        if (!$authUser) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'An error occurred',
-                'status_code' => 500,
-                'error' => $e->getMessage()
-            ], 500);
+                'message' => 'Unauthorized',
+                'status_code' => 401
+            ], 401);
         }
+
+        // Check if the authenticated user is trying to access their own data
+        if ($authUser->id !== (string) $user_id) {
+            Log::info('Authenticated User ID:', ['id' => $authUser->id]);
+            Log::info('Requested User ID:', ['requested_id' => $user_id]);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Forbidden',
+                'status_code' => 403
+            ], 403);
+        }
+
+        // Find the user by ID, handling potential non-existence
+        $user = User::where('id', $user_id)->first();
+        if (!$user) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'User not found',
+                'status_code' => 404
+            ], 404);
+        }
+
+        // Retrieve the user's organisations
+        $organisations = $user->organisations;
+
+        if ($organisations->isEmpty()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'No organisations available',
+                'status_code' => 200,
+                'data' => [
+                    'organisations' => []
+                ]
+            ], 200);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Organisations retrieved successfully',
+            'status_code' => 200,
+            'data' => [
+                'organisations' => OrganisationResource::collection($organisations)
+            ]
+        ]);
+    } catch (\Exception $e) {
+        Log::error('An error occurred while retrieving organisations:', ['error' => $e->getMessage()]);
+        return response()->json([
+            'status' => 'error',
+            'message' => 'An error occurred',
+            'status_code' => 500,
+            'error' => $e->getMessage()
+        ], 500);
     }
+}
 
 
     /**
@@ -141,10 +166,10 @@ class OrganisationController extends Controller
     
     public function removeUser(Request $request, $org_id, $user_id)
     {
-        $organization = Organisation::findOrFail($org_id);
+        $organisation = Organisation::findOrFail($org_id);
 
         // Use $request->auth instead of Auth::user()
-        if (!$request->user()->can('removeUser', $organization)) {
+        if (!$request->user()->can('removeUser', $organisation)) {
             return response()->json([
                 'status' => 'Forbidden',
                 'message' => 'Only admin can remove users',
@@ -154,7 +179,7 @@ class OrganisationController extends Controller
 
         $user = User::find($user_id);
 
-        if (!$user || !$organization->users()->detach($user)) {
+        if (!$user || !$organisation->users()->detach($user)) {
             return response()->json([
                 'status' => 'forbidden',
                 'message' => 'user not found',
