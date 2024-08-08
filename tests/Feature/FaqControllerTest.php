@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use Database\Seeders\FaqSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -23,6 +24,8 @@ class FaqControllerTest extends TestCase
 
     public function test_index_returns_paginated_faqs()
     {
+        $this->seed(FaqSeeder::class);
+
         $response = $this->withHeaders(['Authorization' => "Bearer $this->adminToken"])
             ->getJson('/api/v1/faqs?page=1&size=5');
 
