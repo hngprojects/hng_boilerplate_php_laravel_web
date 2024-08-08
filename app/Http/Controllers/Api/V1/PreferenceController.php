@@ -183,7 +183,7 @@ class PreferenceController extends Controller
         }
     }
 
-    //update the regio
+    //update the region
     public function updateRegion(Request $request, $user_id){
         $request->validate([
             'region_id' => 'required|uuid|exists:regions,id'
