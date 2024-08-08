@@ -100,24 +100,5 @@ class AdminDashboardController extends Controller
         ]);
     }
 
-    public function getAllProductsSortedBySales()
-    {
-        $allProducts = Product::withCount('orders')
-            ->orderByDesc('orders_count')
-            ->get()
-            ->map(function ($product) {
-                return [
-                    'id' => $product->id,
-                    'name' => $product->name,
-                    'total_sales' => $product->orders_count
-                ];
-            });
-
-        return response()->json([
-            'message' => 'All products sorted by sales retrieved successfully',
-            'status_code' => Response::HTTP_OK,
-            'data' => $allProducts
-        ]);
-    }
 
 }
