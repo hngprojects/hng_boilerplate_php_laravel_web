@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DeleteSqueezeRequest;
 use App\Models\SqueezePage;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -72,8 +73,19 @@ class SqueezePageCoontroller extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(DeleteSqueezeRequest $request, string $squeeze_page)
     {
-        //
+        try {
+            SqueezePage::findOrFail($squeeze_page)->delete();
+            return response()->json([
+                'message' => 'Squeeze Page deleted successfully',
+                'status' => Response::HTTP_OK,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Internal server error',
+                'status' => Response::HTTP_INTERNAL_SERVER_ERROR
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 }
