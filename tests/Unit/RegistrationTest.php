@@ -263,28 +263,4 @@ class RegistrationTest extends TestCase
         $this->assertEquals('Doe', $user->profile->last_name);
         $this->assertEquals($facebookUser['avatar'], $user->profile->avatar_url);
     }
-
-    /** @test */
-    public function google_login_creates_or_updates_user_and_profile_with_post2()
-    {
-        // Mock Google user response
-
-        $response = $this->postJson('/api/v1/auth/google', [
-            'token' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2RlcGxveW1lbnQuYXBpLXBocC5ib2lsZXJwbGF0ZS5obmcudGVjaC9hcGkvdjEvYXV0aC9nb29nbGUvY2FsbGJhY2siLCJpYXQiOjE3MjIyNTEwMzksImV4cCI6MTcyMjI1NDYzOSwibmJmIjoxNzIyMjUxMDM5LCJqdGkiOiJHVUYzSVJUNWVBMFgxcDJnIiwic3ViIjoiOWNhMzQ4MjQtMDFlMC00YjAyLWExMGUtMGU0ZTdhMzM3ZGU1IiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.m8XxKDdKWVp08vjUghXPPu7fi22Fg0RdupaKSoQ80g0',
-            'email' => 'tulbadex@gmail.com'
-        ]);
-
-        dd($response);
-
-        $response->assertStatus(Response::HTTP_OK);
-
-        // Verify user in the database
-        $user = User::where('email', $facebookUser['email'])->first();
-        $this->assertNotNull($user);
-        $this->assertEquals($facebookUser['id'], $user->social_id);
-        $this->assertEquals('Facebook', $user->signup_type);
-        $this->assertEquals('John', $user->profile->first_name);
-        $this->assertEquals('Doe', $user->profile->last_name);
-        $this->assertEquals($facebookUser['avatar'], $user->profile->avatar_url);
-    }
 }
