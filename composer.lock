@@ -4027,16 +4027,16 @@
         },
         {
             "name": "promphp/prometheus_client_php",
-            "version": "v2.10.0",
+            "version": "v2.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PromPHP/prometheus_client_php.git",
-                "reference": "a09ea80ec1ec26dd1d4853e9af2a811e898dbfeb"
+                "reference": "35d5a68628ea18209938bc1b8796646015ab93cf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PromPHP/prometheus_client_php/zipball/a09ea80ec1ec26dd1d4853e9af2a811e898dbfeb",
-                "reference": "a09ea80ec1ec26dd1d4853e9af2a811e898dbfeb",
+                "url": "https://api.github.com/repos/PromPHP/prometheus_client_php/zipball/35d5a68628ea18209938bc1b8796646015ab93cf",
+                "reference": "35d5a68628ea18209938bc1b8796646015ab93cf",
                 "shasum": ""
             },
             "require": {
@@ -4060,6 +4060,7 @@
             },
             "suggest": {
                 "ext-apc": "Required if using APCu.",
+                "ext-pdo": "Required if using PDO.",
                 "ext-redis": "Required if using Redis.",
                 "promphp/prometheus_push_gateway_php": "An easy client for using Prometheus PushGateway.",
                 "symfony/polyfill-apcu": "Required if you use APCu on PHP8.0+"
@@ -4088,9 +4089,9 @@
             "description": "Prometheus instrumentation library for PHP applications.",
             "support": {
                 "issues": "https://github.com/PromPHP/prometheus_client_php/issues",
-                "source": "https://github.com/PromPHP/prometheus_client_php/tree/v2.10.0"
+                "source": "https://github.com/PromPHP/prometheus_client_php/tree/v2.11.0"
             },
-            "time": "2024-02-01T13:28:34+00:00"
+            "time": "2024-08-05T07:58:08+00:00"
         },
         {
             "name": "psr/cache",
@@ -10409,5 +10410,5 @@
         "ext-zip": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }
