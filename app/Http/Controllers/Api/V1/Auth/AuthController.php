@@ -50,12 +50,7 @@ class AuthController extends Controller
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|email:rfc|max:255|unique:users',
             'admin_secret' => 'nullable|string|max:255',
-            'password' => ['required', 'string', Password::min(8)
-            ->letters()
-            ->mixedCase()
-            ->numbers()
-            ->symbols()
-            ->uncompromised()],
+            'password' => 'required|string|min:6',
         ]);
 
         // Check if validation fails
@@ -81,18 +76,18 @@ class AuthController extends Controller
                 'last_name' => $request->last_name
             ]);
 
-            $organisation = $user->owned_organisations()->create([
+            $organization = $user->owned_organisations()->create([
                 'name' => $request->first_name."'s Organisation",
             ]);
 
-            $organisation_user = OrganisationUser::create([
+            $organization_user = OrganisationUser::create([
                 'user_id' => $user->id,
-                'org_id' => $organisation->org_id
+                'org_id' => $organization->org_id
             ]);
 
             $roles = $user->roles()->create([
                 'name' => $role,
-                'org_id' => $organisation->org_id
+                'org_id' => $organization->org_id
             ]);
             DB::table('users_roles')->insert([
                 'user_id' => $user->id,
