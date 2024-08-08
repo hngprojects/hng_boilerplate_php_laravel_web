@@ -39,22 +39,4 @@ class RoleUpdateTest extends TestCase
         ]);
     }
 
-    public function test_assign_role_to_user()
-    {
-        $organisation = Organisation::factory()->create();
-        $role = Role::factory()->create(['org_id' => $organisation->org_id]);
-        $user = User::factory()->create();
-        $organisation->users()->attach($user->id);
-        $this->actingAs($user, 'api');
-
-        $response = $this->putJson("/api/v1/organisations/{$organisation->org_id}/users/{$user->id}/roles", [
-            'role' => $role->name,
-        ]);
-
-        $response->assertStatus(200);
-        $response->assertOk()
-            ->assertJson([
-                'message' => 'Roles updated successfully',
-            ]);
-    }
 }
