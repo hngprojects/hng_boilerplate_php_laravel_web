@@ -40,9 +40,7 @@ class Profile extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function language() {
-        return $this->hasOne(Language::class);
-    }
+    
 
     
 }
