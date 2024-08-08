@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Faq;
 use App\Models\User;
 use Database\Seeders\FaqSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -112,5 +113,46 @@ class FaqControllerTest extends TestCase
                     ],
                 ]
             ]);
+    }
+
+
+    public function test_if_admin_can_edit_faq()
+    {
+
+        $faq = Faq::create([
+            'question' => 'What is the safe policy?',
+            'answer' => 'Our safe policy allows returns within 30 days of purchase.',
+            'category' => 'Policies'
+        ]);
+
+        $payload = [
+            'question' => 'What is the disposal policy?',
+            'answer' => 'Our disposal policy allows returns within 30 days of purchase.',
+            'category' => 'Policies'
+        ];
+
+        $response = $this->withHeaders(['Authorization' => "Bearer $this->adminToken"])
+            ->putJson("/api/v1/faqs/{$faq->id}", $payload);
+
+        $response->assertStatus(201)
+            ->assertJsonStructure([
+                'message',
+                'data' => [
+                    'id',
+                    'question',
+                    'answer',
+                    'category',
+                    'createdAt',
+                    'updatedAt',
+                    'createdBy'
+                ]
+            ]);
+
+        $this->assertDatabaseHas('faqs', [
+            'id' => $faq->id,
+            'question' => 'What is the disposal policy?',
+            'answer' => 'Our disposal policy allows returns within 30 days of purchase.',
+            'category' => 'Policies'
+        ]);
     }
 }

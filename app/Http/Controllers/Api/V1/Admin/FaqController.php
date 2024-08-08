@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateFaqRequest;
+use App\Http\Requests\UpdateFaqRequest;
 use App\Models\Faq;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -77,7 +78,6 @@ class FaqController extends Controller
                     'updatedAt' => $faq->updated_at,
                 ]
             ], Response::HTTP_CREATED);
-
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Internal server error',
@@ -101,20 +101,39 @@ class FaqController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Faq $faq)
+    public function update(UpdateFaqRequest $request, Faq $faq)
     {
-        $data = $request->validate([
-            'question' => 'sometimes|string|max:255',
-            'answer' => 'sometimes|string|max:500',
-        ]);
+        if (auth()->user()->role !== 'admin') {
+            return response()->json([
+                'status_code' => Response::HTTP_FORBIDDEN,
+                'message' => 'Only admin users can update a faq',
+            ], Response::HTTP_FORBIDDEN);
+        }
 
-        $updateFaq = $faq->update($data);
+        try {
+            $data = $request->validated();
 
-        return response()->json([
-            'status_code' => 200,
-            'message' => "Faq updated successfully",
-            'data' => $faq
-        ], 200);
+            $faq->update($data);
+
+            return response()->json([
+                'status_code' => Response::HTTP_CREATED,
+                'message' => "The FAQ has been updated created.",
+                'data' => [
+                    'id' => $faq->id,
+                    'question' => $faq->question,
+                    'answer' => $faq->answer,
+                    'category' => $faq->category,
+                    'createdBy' => "",
+                    'createdAt' => $faq->created_at,
+                    'updatedAt' => $faq->updated_at,
+                ]
+            ], Response::HTTP_CREATED);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Internal server error',
+                'status' => Response::HTTP_INTERNAL_SERVER_ERROR
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**
