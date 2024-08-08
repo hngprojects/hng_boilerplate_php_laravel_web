@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Illuminate\Auth\AuthenticationException;
+use InvalidArgumentException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 
@@ -83,6 +84,14 @@ class Handler extends ExceptionHandler
                   "error" => "Unauthorized",
                   'message' => $e->getMessage(),
               ], 401);
+          }
+        });
+        $this->renderable(function (InvalidArgumentException $e, Request $request) {
+          if ($request->is('api/*')) {
+              return response()->json([
+                  "error" => "Exception",
+                  'message' => $e->getMessage(),
+              ], 500);
           }
         });
     }

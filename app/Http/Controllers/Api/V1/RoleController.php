@@ -19,6 +19,18 @@ use Illuminate\Support\Facades\Validator;
 
 class RoleController extends Controller
 {
+
+    public function index($org_id){
+      $roles = Role::where('org_id', $org_id)->with('permissions')->get();
+      return $roles->map(function ($role) {
+          return [
+              'id' => $role->id,
+              'name' => $role->name,
+              'description' => $role->description,
+          ];
+      });
+    }
+
     use HttpResponses;
     /**
      * Store a newly created resource in storage.
@@ -165,6 +177,58 @@ class RoleController extends Controller
         }
         return ResponseHelper::response("Permissions updated successfully", 202, null);
       } else return ResponseHelper::response("Role not found", 404, null);
+    }
+
+    public function addRole(Request $request, $org_id){
+      $user = $request->user();
+      if($organisation = Organisation::find($org_id)){
+        if(!$organisation->users->contains($user->id)){
+          return response()->json([
+            'message' => 'You are not authorized to perform this action',
+            'status' => 401,
+          ], 401);
+        }
+        if($role = Role::where('org_id', $org_id)->where('name', $request->name)->first()){
+          return response()->json([
+            'message' => 'Role already exists',
+            'status' => 409,
+          ], 409);
+        }
+        if(!$request->name || $request->name == ''){
+          return response()->json([
+            "message" => [
+              "name should not be empty"
+            ],
+            "error" => "Bad Request",
+            "statusCode" => 400
+          ], 400);
+        }
+        $role = Role::create([
+          'name' => $request->name,
+          'description' => $request->description,
+          'org_id' => $org_id,
+        ]);
+        if($role){
+          return response()->json([
+            'message' => 'Role created successfully',
+            'status_code' => 201,
+            'id' => $role->id,
+            'name' => $role->name,
+            'description' => $role->description,
+          ], 201);
+        } 
+        else {
+          return response()->json([
+            'message' => 'Role creation failed',
+            'status' => 400,
+          ], 400);
+        } 
+      } else {
+        return response()->json([
+          'message' => 'Organisation not found',
+          'status' => 404,
+        ], 404);
+      }
     }
 
 }
