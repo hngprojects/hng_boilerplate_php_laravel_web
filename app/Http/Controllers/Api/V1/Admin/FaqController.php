@@ -106,10 +106,24 @@ class FaqController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Faq $faq)
+    public function destroy($faq)
     {
+        $faq = Faq::find($faq);
+
+        if (!$faq) {
+            return response()->json([
+                'code' => 400,
+                'description' => 'Bad Request.',
+                'links' => []
+            ], 400);
+        }
+
         $faq->delete();
 
-        return response()->noContent();
+        return response()->json([
+            'code' => 200,
+            'description' => 'The FAQ has been successfully deleted.',
+            'links' => []
+        ], 200);
     }
 }
