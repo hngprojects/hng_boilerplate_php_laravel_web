@@ -63,4 +63,57 @@ class FaqControllerTest extends TestCase
         $response = $this->getJson('/api/v1/faqs');
         $response->assertStatus(401);
     }
+
+    public function test_if_admin_can_create_faq()
+    {
+        $payload = [
+            'question' => 'What is the return policy?',
+            'answer' => 'Our return policy allows returns within 30 days of purchase.',
+            'category' => 'Policies'
+        ];
+
+        $response = $this->withHeaders(['Authorization' => "Bearer $this->adminToken"])
+            ->postJson('/api/v1/faqs', $payload);
+
+        $response->assertStatus(201)
+            ->assertJsonStructure([
+                'message',
+                'data' => [
+                    'id',
+                    'created_at',
+                    'updated_at',
+                    'question',
+                    'answer',
+                    'category',
+                    'createdBy'
+                ]
+            ]);
+
+        $this->assertDatabaseHas('faqs', $payload);
+    }
+
+    public function test_if_creat_faq_missing_field_fails()
+    {
+        $payload = [
+            'answer' => 'Our return policy allows returns within 30 days of purchase.',
+            'category' => 'Policies'
+        ];
+
+        $response = $this->withHeaders(['Authorization' => "Bearer $this->adminToken"])
+            ->postJson('/api/v1/faqs', $payload);
+
+        $response->assertStatus(400)
+            ->assertJsonStructure([
+                'message',
+                'data' => [
+                    'status_code',
+                    'errors' => [
+                        '*' => [
+                            'field',
+                            'message'
+                        ],
+                    ]
+                ]
+            ]);
+    }
 }

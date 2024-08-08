@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CreateFaqRequest;
 use App\Models\Faq;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -56,20 +57,33 @@ class FaqController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CreateFaqRequest $request)
     {
-        $data = $request->validate([
-            'question' => 'required|string|max:255',
-            'answer' => 'required|string|max:500',
-        ]);
+        try {
+            $data = $request->validated();
 
-        $faq = Faq::create($data);
+            $faq = Faq::create($data);
 
-        return response()->json([
-            'status_code' => 201,
-            'message' => "Faq created successfully",
-            'data' => $faq
-        ]);
+            return response()->json([
+                'status_code' => 201,
+                'message' => "The FAQ has been successfully created.",
+                'data' => [
+                    'id' => $faq->id,
+                    'created_at' => $faq->created_at,
+                    'updated_at' => $faq->updated_at,
+                    'question' => $faq->question,
+                    'answer' => $faq->answer,
+                    'category' => $faq->category,
+                    'createdBy' => "",
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Internal server error',
+                'status' => Response::HTTP_INTERNAL_SERVER_ERROR
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**
