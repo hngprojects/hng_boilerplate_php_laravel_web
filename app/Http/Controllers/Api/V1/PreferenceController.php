@@ -7,6 +7,7 @@ use App\Http\Requests\Preference\DeletePreferenceRequest;
 use App\Http\Requests\Preference\StorePreferenceRequest;
 use App\Http\Requests\Preference\UpdatePreferenceRequest;
 use App\Models\Preference;
+use App\Models\Region;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -135,6 +136,8 @@ class PreferenceController extends Controller
     {
         $preference = Auth::user()->preferences()->find($id);
 
+
+
         if (!$preference) {
             return response()->json([
                 'status' => 404,
@@ -175,5 +178,32 @@ class PreferenceController extends Controller
                 'message' => 'Preference not found for user',
             ], 404);
         }
+    }
+
+    //update the regio
+    public function updateRegion(Request $request, $user_id){
+        $request->validate([
+            'region_id' => 'required|uuid|exists:regions,id'
+        ]);
+
+        $preference = Preference::where('user_id', $user_id)->first();
+
+        if(!$preference){
+            return response()->json([
+                'status'=> 404,
+                'message'=> 'Preference not found for user'
+            ], 404);
+        }
+
+        $preference->region_id = $request->input('region_id');
+        $preference->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Region updated successfully',
+            'data' => [
+                'region' => $preference->region,
+            ],
+        ]);
     }
 }
