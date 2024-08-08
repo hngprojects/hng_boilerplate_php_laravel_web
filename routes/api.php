@@ -47,6 +47,8 @@ use App\Http\Controllers\QuestController;
 use App\Http\Controllers\UserNotificationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\Admin\AdminDashboardController;
+use App\Http\Controllers\Api\V1\NewsletterSubscriptionController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -285,4 +287,7 @@ Route::prefix('v1')->group(function () {
 
     //    quest
     Route::get('/quests/{id}/messages', [QuestController::class, 'getQuestMessages']);
+
+    //Newsletter Subscription
+    Route::post('newsletter-subscription', [NewsletterSubscriptionController::class, 'store']);
 });

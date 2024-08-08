@@ -1,0 +1,85 @@
+openapi: 3.0.3
+info:
+  title: Newsletter Subscription API
+  description: API for managing newsletter subscriptions.
+  version: 1.0.0
+paths:
+  /api/v1/newsletter-subscription:
+    post:
+      summary: Subscribe to the newsletter
+      operationId: subscribeNewsletter
+      tags:
+        - Newsletter Subscription
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: "user@example.com"
+              required:
+                - email
+      responses:
+        '201':
+          description: Subscription created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                      email:
+                        type: string
+                        format: email
+                    example:
+                      id: "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+                      email: "user@example.com"
+                  message:
+                    type: string
+                    example: "Subscription created successfully."
+                  status_code:
+                    type: integer
+                    example: 201
+        '400':
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Validation failed."
+                  errors:
+                    type: object
+                    properties:
+                      email:
+                        type: array
+                        items:
+                          type: string
+                          example: "The email field is required."
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal Server Error"
+                  status_code:
+                    type: integer
+                    example: 500
