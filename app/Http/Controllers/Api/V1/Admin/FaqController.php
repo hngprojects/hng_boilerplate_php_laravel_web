@@ -5,21 +5,52 @@ namespace App\Http\Controllers\Api\V1\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Faq;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Validator;
+
 
 class FaqController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $faq = Faq::where('status', 1)->get();
+        $validator = Validator::make($request->all(), [
+            'page' => 'nullable|integer|min:1',
+            'size' => 'nullable|integer|min:1',
+        ]);
+
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid input parameters.',
+                'errors' => $validator->errors(),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $perPage = $request->input('size', 15);
+
+        $faqs = Faq::where('status', 1)->paginate($perPage);
 
         return response()->json([
             'status_code' => 200,
             'message' => "Faq returned successfully",
-            'data' => $faq
-        ]);
+            'data' => collect($faqs->items())->map(function ($faq) {
+                return [
+                    'id' => $faq->id,
+                    'question' => $faq->question,
+                    'answer' => $faq->answer,
+                ];
+            }),
+            'pagination' => [
+                'current_page' => $faqs->currentPage(),
+                'total_pages' => $faqs->lastPage(),
+                'page_size' => $faqs->perPage(),
+                'total_items' => $faqs->total(),
+            ],
+        ], Response::HTTP_OK);
     }
 
     /**
@@ -70,7 +101,6 @@ class FaqController extends Controller
             'message' => "Faq updated successfully",
             'data' => $faq
         ], 200);
-
     }
 
     /**
