@@ -198,7 +198,7 @@ class ProductController extends Controller
         $isOwner = OrganisationUser::where('org_id', $org_id)->where('user_id', auth()->id())->exists();
 
         if (!$isOwner) {
-            return response()->json(['message' => 'You are not authorized to create products for this organization.'], 403);
+            return response()->json(['message' => 'You are not authorized to create products for this organisation.'], 403);
         }
 
         $imageUrl = null;
@@ -274,7 +274,7 @@ class ProductController extends Controller
         $isOwner = OrganisationUser::where('org_id', $org_id)->where('user_id', auth()->id())->exists();
 
         if (!$isOwner) {
-            return response()->json(['message' => 'You are not authorized to update products for this organization.'], 403);
+            return response()->json(['message' => 'You are not authorized to update products for this organisation.'], 403);
         }
 
         $validated = $request->validated();
@@ -323,12 +323,12 @@ class ProductController extends Controller
     {
 
         $isOwner = OrganisationUser::where('org_id', $org_id)->where('user_id', auth()->id())->exists();
-        // Check if the user's organization matches the org_id in the request
+        // Check if the user's organisation matches the org_id in the request
         if (!$isOwner) {
             return response()->json(
                 [
                     'status' => 'Forbidden',
-                    'message' => 'You do not have permission to delete a product from this organization.',
+                    'message' => 'You do not have permission to delete a product from this organisation.',
                     'status_code' => 403
                 ],
                 403
@@ -344,7 +344,7 @@ class ProductController extends Controller
             ], 404);
         }
 
-        // Check if the product belongs to the organization
+        // Check if the product belongs to the organisation
         if ($product->org_id !== $org_id) {
             return response()->json([
                 'error' => 'Forbidden',

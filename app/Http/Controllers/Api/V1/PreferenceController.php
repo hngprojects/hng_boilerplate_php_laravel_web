@@ -6,9 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Preference\DeletePreferenceRequest;
 use App\Http\Requests\Preference\StorePreferenceRequest;
 use App\Http\Requests\Preference\UpdatePreferenceRequest;
+use App\Http\Requests\Preference\SavePreferencesRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+
+use App\Models\Preference;
+use App\Models\Profile;
 
 class PreferenceController extends Controller
 {
@@ -16,7 +20,7 @@ class PreferenceController extends Controller
     {
         if (!auth()->check()) {
             return response()->json([
-                'status' => 401,
+                'status_code' => 401,
                 'message' => 'Unauthorized'
             ], 401);
         }
@@ -25,7 +29,7 @@ class PreferenceController extends Controller
 
         Log::info('Preferences retrieved', ['user_id' => Auth::id(), 'preferences' => $preferences]);
         return response()->json([
-            'status' => 200,
+            'status_code' => 200,
             'message' => 'Languages fetched successfully',
             'preferences' => $preferences
         ], 200);
@@ -38,7 +42,7 @@ class PreferenceController extends Controller
     public function store(StorePreferenceRequest $request){
         if (!auth()->check()) {
             return response()->json([
-                'status' => 401,
+                'status_code' => 401,
                 'message' => 'Unauthorized'
             ], 401);
         }
@@ -47,7 +51,7 @@ class PreferenceController extends Controller
         
         if (!$validated) {
             return response()->json([
-                'status' => 400,
+                'status_code' => 400,
                 'message' => 'Validation Error',
                 'errors' => $validator->errors()
             ], 400);
@@ -59,9 +63,9 @@ class PreferenceController extends Controller
             Log::info('Preference created', ['user_id' => Auth::id(), 'preference' => $preference]);
     
             return response()->json([
-                'status' => 201,
+                'status_code' => 201,
                 'message' => 'Preference created successfully',
-                'preference' => [
+                'data' => [
                     'id' => $preference->id,
                     'name' => $preference->name,
                     'value' => $preference->value,
@@ -72,7 +76,7 @@ class PreferenceController extends Controller
             Log::error("Error creating preference: {$e->getMessage()}");
     
             return response()->json([
-                'status' => 500,
+                'status_code' => 500,
                 'message' => 'Internal Server Error',
                 'error' => 'Server Error'
             ], 500);
@@ -83,7 +87,7 @@ class PreferenceController extends Controller
     {
         if (!auth()->check()) {
             return response()->json([
-                'status' => 401,
+                'status_code' => 401,
                 'message' => 'Unauthorized'
             ], 401);
         }
@@ -92,7 +96,7 @@ class PreferenceController extends Controller
         
         if (!$validated) {
             return response()->json([
-                'status' => 400,
+                'status_code' => 400,
                 'message' => 'Validation Error',
                 'errors' => $validator->errors()
             ], 400);
@@ -103,7 +107,7 @@ class PreferenceController extends Controller
 
             if(!$preference) {
                 return response()->json([
-                    'status' => 404,
+                    'status_code' => 404,
                     'message' => 'Preference not found',
                 ], 404);
             }
@@ -112,9 +116,9 @@ class PreferenceController extends Controller
             Log::info('Preference updated', ['user_id' => Auth::id(), 'preference' => $preference]);
 
             return response()->json([
-                'status' => 200,
+                'status_code' => 200,
                 'message' => 'Preference updated successfully',
-                'preference' => [
+                'data' => [
                     'id' => $preference->id,
                     'name' => $preference->name,
                     'value' => $preference->value,
@@ -124,7 +128,7 @@ class PreferenceController extends Controller
             Log::error("Error updating preference: {$e->getMessage()}");
 
             return response()->json([
-                'status' => 500,
+                'status_code' => 500,
                 'message' => 'Internal Server Error',
                 'error' => 'Server Error'
             ], 500);
@@ -137,7 +141,7 @@ class PreferenceController extends Controller
 
         if (!$preference) {
             return response()->json([
-                'status' => 404,
+                'status_code' => 404,
                 'error' => 'Preference not found',
             ], 404);
         }
@@ -145,12 +149,11 @@ class PreferenceController extends Controller
         $preference->delete();
 
         Log::info('Preference deleted', ['user_id' => Auth::id(), 'preference_id' => $id]);
-        
+
         return response()->json([
-            'status' => 200,
+            'status_code' => 200,
             'message' => 'Preference deleted successfully.',
         ], 200);
     }
 
-        
 }

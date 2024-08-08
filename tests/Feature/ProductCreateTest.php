@@ -34,7 +34,7 @@ class ProductCreateTest extends TestCase
         // Create an organisation and get the first instance
         $organisation = Organisation::factory()->create();
 
-        // Associate the user with the organization as an owner
+        // Associate the user with the organisation as an owner
         OrganisationUser::create([
             'org_id' => $organisation->org_id,
             'user_id' => $user->id,
@@ -54,7 +54,7 @@ class ProductCreateTest extends TestCase
         ];
 
         // Send POST request to create product
-        $response = $this->postJson("/api/v1/organizations/{$organisation->org_id}/products", $payload);
+        $response = $this->postJson("/api/v1/organisations/{$organisation->org_id}/products", $payload);
 
         // Assert the response status and structure
         $response->assertStatus(201)
@@ -135,10 +135,10 @@ class ProductCreateTest extends TestCase
         ];
 
         // Send POST request to create product
-        $response = $this->postJson("/api/v1/organizations/{$organisation->org_id}/products", $payload);
+        $response = $this->postJson("/api/v1/organisations/{$organisation->org_id}/products", $payload);
 
         // Assert the response status is 403 Forbidden
         $response->assertStatus(403)
-            ->assertJson(['message' => 'You are not authorized to create products for this organization.']);
+            ->assertJson(['message' => 'You are not authorized to create products for this organisation.']);
     }
 }
