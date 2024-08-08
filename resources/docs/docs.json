@@ -1034,15 +1034,15 @@
         "required": [
           "billing_option",
           "full_name",
-          "organization_id",
+          "organisation_id",
           "plan_id",
           "redirect_url"
         ],
         "type": "object",
         "properties": {
-          "organization_id": {
+          "organisation_id": {
             "type": "string",
-            "description": "ID of the organization making the payment"
+            "description": "ID of the organisation making the payment"
           },
           "plan_id": {
             "type": "string",
