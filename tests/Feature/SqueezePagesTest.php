@@ -78,7 +78,7 @@ class SqueezePagesTest extends TestCase
                 'data' => ['id', 'title', 'slug', 'created_at', 'status', 'activate']
             ]);
 
-        $this->assertDatabaseHas('faqs', $payload);
+        $this->assertDatabaseHas('squeeze_pages', $payload);
     }
 
     public function test_if_create_squeeze_page_missing_field_fails()

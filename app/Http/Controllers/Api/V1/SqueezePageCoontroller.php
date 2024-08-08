@@ -44,7 +44,9 @@ class SqueezePageCoontroller extends Controller
     {
         try {
             $validated = $request->validate();
-            $squeeze_page = SqueezePage::create($validated);
+
+            $squeeze_page = SqueezePage::create([$validated]);
+
             return response()->json([
                 'status_code' => Response::HTTP_OK,
                 'message' => 'Squeeze page created successfully',
@@ -57,6 +59,7 @@ class SqueezePageCoontroller extends Controller
                     'activate' => $squeeze_page->activate
                 ]
             ], Response::HTTP_OK);
+
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Internal server error',
