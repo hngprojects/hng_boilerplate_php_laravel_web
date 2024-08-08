@@ -3,7 +3,6 @@
 use App\Http\Controllers\Api\V1\Admin\BlogController;
 use App\Http\Controllers\Api\V1\Admin\CustomerController;
 use App\Http\Controllers\Api\V1\Admin\EmailTemplateController;
-use App\Http\Controllers\Api\V1\Admin\super\EmailTempController;
 use App\Http\Controllers\Api\V1\Admin\Plan\FeatureController;
 use App\Http\Controllers\Api\V1\Admin\Plan\SubscriptionController;
 use App\Http\Controllers\Api\V1\PaymentController;
@@ -244,13 +243,16 @@ Route::prefix('v1')->group(function () {
     Route::middleware(['auth:api', 'admin'])->group(function () {
         //Email Template
         Route::apiResource('email-templates', EmailTemplateController::class);
-        // Email template Super Admin
-        Route::get('email-templates', [EmailTemplateController::class, 'index']);
-        Route::get('email-templates/{id}', [EmailTemplateController::class, 'show']);
-        Route::post('email-templates', [EmailTemplateController::class, 'store']);
-        Route::put('email-templates/{id}', [EmailTemplateController::class, 'update']);
-        Route::delete('email-templates/{id}', [EmailTemplateController::class, 'destroy']);
     });
+
+//super Admin Email template
+Route::prefix('v1/admin')->group(function () {
+    Route::get('email-templates', [EmailTemplateController::class, 'index']);
+    Route::get('email-templates/{id}', [EmailTemplateController::class, 'show']);
+    Route::post('email-templates', [EmailTemplateController::class, 'store']);
+    Route::put('email-templates/{id}', [EmailTemplateController::class, 'update']);
+    Route::delete('email-templates/{id}', [EmailTemplateController::class, 'destroy']);
+});
     // User Notification
     Route::patch('/notifications/{notification}', [UserNotificationController::class, 'update']);
     Route::delete('/notifications', [UserNotificationController::class, 'destroy']);
