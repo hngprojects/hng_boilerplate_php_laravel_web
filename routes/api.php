@@ -240,6 +240,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/waitlists', [WaitListController::class, 'index']);
         Route::apiResource('squeeze-pages', SqueezePageCoontroller::class);
         Route::get('/statistics', [AdminDashboardController::class, 'getStatistics']);
+        Route::apiResource('faqs', FaqController::class);
     });
 
     Route::post('/waitlists', [WaitListController::class, 'store']);
