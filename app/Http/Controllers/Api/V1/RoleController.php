@@ -70,7 +70,7 @@ class RoleController extends Controller
             ]);
 
             // Attach the permission to the role
-            // $role->permissions()->attach($request->permissions_id);
+            $role->permissions()->attach($request->permissions_id);
 
             DB::commit();
 
