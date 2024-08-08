@@ -20,7 +20,7 @@ class OrganisationTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $response = $this->post('/api/v1/organizations', [
+        $response = $this->post('/api/v1/organisations', [
             "email" => "mark.essienm@gmail.co.uk",
             "name" => "Ruxy Now Organisation",
             "description" => "With description like a big man",
@@ -42,7 +42,7 @@ class OrganisationTest extends TestCase
 
     public function test_unauthenticated_user_cannot_access_endpoint()
     {
-        $response = $this->getJson('/api/v1/organizations');
+        $response = $this->getJson('/api/v1/organisations');
 
         $response->assertStatus(401)
             ->assertJson([
@@ -59,7 +59,7 @@ class OrganisationTest extends TestCase
         $token = JWTAuth::fromUser($user);
 
         $response = $this->withHeader('Authorization', "Bearer $token")
-            ->getJson('/api/v1/organizations', ['accept' => 'application/json']);
+            ->getJson('/api/v1/{user_id}/organisations', ['accept' => 'application/json']);
 
         $response->assertStatus(200)
             ->assertJsonStructure([
@@ -86,7 +86,7 @@ class OrganisationTest extends TestCase
             ])
             ->assertJson([
                 'status' => 'success',
-                'message' => 'Organizations retrieved successfully',
+                'message' => 'organisations retrieved successfully',
                 'status_code' => 200,
             ]);
 
@@ -100,7 +100,7 @@ class OrganisationTest extends TestCase
 
         $token = JWTAuth::fromUser($user);
         $response = $this->withHeader('Authorization', "Bearer $token")
-            ->getJson('/api/v1/organizations');
+            ->getJson('/api/v1/organisations');
 
         $response->assertStatus(200)
             ->assertJson([
@@ -122,7 +122,7 @@ class OrganisationTest extends TestCase
 
         $token = JWTAuth::attempt(['email' => $user1->email, 'password' => 'password']);
         $response = $this->withHeader('Authorization', "Bearer $token")
-            ->getJson('/api/v1/organizations');
+            ->getJson('/api/v1/organisations');
 
         $response->assertStatus(200)
             ->assertJson([
