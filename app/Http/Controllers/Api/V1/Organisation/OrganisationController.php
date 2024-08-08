@@ -25,7 +25,7 @@ class OrganisationController extends Controller
             $user = auth('api')->user();
             if (!$user) {
                 return response()->json([
-                    'status' => 'error',
+                    'status' => 'Unauthorized',
                     'message' => 'Unauthorized',
                     'status_code' => 401
                 ], 401);
