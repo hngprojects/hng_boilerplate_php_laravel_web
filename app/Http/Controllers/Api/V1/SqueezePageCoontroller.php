@@ -43,9 +43,9 @@ class SqueezePageCoontroller extends Controller
     public function store(CreateSqueezePageRequest $request)
     {
         try {
-            $validated = $request->validate();
+            $validated = $request->validated();
 
-            $squeeze_page = SqueezePage::create([$validated]);
+            $squeeze_page = SqueezePage::create($validated);
 
             return response()->json([
                 'status_code' => Response::HTTP_OK,
