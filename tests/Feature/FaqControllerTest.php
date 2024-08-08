@@ -13,7 +13,6 @@ class FaqControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-
     protected $adminUser;
     protected $adminToken;
 
