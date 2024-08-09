@@ -254,15 +254,16 @@ Route::prefix('v1')->group(function () {
         Route::get('/squeeze-pages/filter', [SqueezePageCoontroller::class, 'filter']);
         Route::apiResource('squeeze-pages', SqueezePageCoontroller::class);
         Route::get('/dashboard/statistics', [AdminDashboardController::class, 'getStatistics']);
-        Route::apiResource('faqs', FaqController::class);
+        Route::post('/faqs', [FaqController::class, 'store']);
+        Route::put('/faqs/{faq}', [FaqController::class, 'update']);
+        Route::delete('/faqs/{faq}', [FaqController::class, 'destroy']);
         Route::get('/dashboard/top-products', [AdminDashboardController::class, 'getTopProducts']);
         Route::get('/dashboard/all-top-products', [AdminDashboardController::class, 'getAllProductsSortedBySales']);
-
-
-
     });
 
     Route::post('/waitlists', [WaitListController::class, 'store']);
+
+    Route::get('faqs', [FaqController::class, 'index']);
 
 
     Route::get('/blogs/{id}', [BlogController::class, 'show']);
@@ -307,8 +308,6 @@ Route::prefix('v1/admin')->group(function () {
     Route::get('/notifications', [UserNotificationController::class, 'getByUser'])->middleware('auth.jwt');
     //Timezone
     Route::get('/timezones', [TimezoneController::class, 'index']);
-
-
 
 
     //    quest
