@@ -20,7 +20,7 @@ class AdminSeeder extends Seeder
             [
                 'name' => "Super Admin",
                 'role' => "admin",
-                'password' => Hash::make("bulldozer"),
+                'password' => Hash::make("@Bulldozer01"),
                 'is_verified' => 1,
             ] 
         );
