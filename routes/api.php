@@ -281,6 +281,7 @@ Route::prefix('v1')->group(function () {
 
         //region get and update
         Route::group(['middleware' => ['auth:api']], function () {
+            Route::put('/regions/{user_id}', [PreferenceController::class, 'updateRegion']);
             Route::get('/regions/{user_id}', [PreferenceController::class, 'showRegion']);
     });
     // Notification settings
