@@ -95,10 +95,10 @@ class RegistrationTest extends TestCase
             'user' => [
                 'given_name' => 'John',
                 'family_name' => 'Doe',
-                'picture' => 'https://lh3.googleusercontent.com/a-/' . config('google.GOOGLE_TEST_KEY') // Added picture URL
+                'picture' => 'https://lh3.googleusercontent.com/a-/AOh14Gh2G_YHMAI' // Added picture URL
             ],
             'attributes' => [
-                'avatar_original' => 'https://lh3.googleusercontent.com/a-/' . config('google.GOOGLE_TEST_KEY')
+                'avatar_original' => 'https://lh3.googleusercontent.com/a-/AOh14Gh2G_YHMAI'
             ]
         ];
 
@@ -139,10 +139,10 @@ class RegistrationTest extends TestCase
             'user' => [
                 'given_name' => 'John',
                 'family_name' => 'Doe',
-                'picture' => 'https://lh3.googleusercontent.com/a-/' . config('google.GOOGLE_TEST_KEY')  // Added picture URL
+                'picture' => 'https://lh3.googleusercontent.com/a-/AOh14Gh2G_YHMAI' // Added picture URL
             ],
             'attributes' => [
-                'avatar_original' => 'https://lh3.googleusercontent.com/a-/' . config('google.GOOGLE_TEST_KEY')
+                'avatar_original' => 'https://lh3.googleusercontent.com/a-/AOh14Gh2G_YHMAI'
             ]
         ];
 
@@ -186,7 +186,7 @@ class RegistrationTest extends TestCase
                 'avatar_original' => 'https://graph.facebook.com/v3.3/1022097350/picture?width=1920',
                 'profileUrl' => null
             ],
-            'token' => config('facebook.FACEBOOK_TEST_KEY'),
+            'token' => 'EAAXSQSZAEan4BO48hdLYs84YGRXkTzBCZC5Pkpx3J6TlrmakX3SiMRJoYR2FYwb5hR1otRJxuGglfBVRJc9J9LgcDBOmHdsdblKZAFmPo6ZAwex6KN3DuRN9cyRM7ZCKGNdOWgvZCBmp0qUjhkaFUCr71L43ExxSc8ZAHQalcEDQqar9mXeg3EzuBasQFnFxOqFw3ZBbZBM3O91wENlK4YwZDZD',
             'refreshToken' => null,
             'expiresIn' => 5169882,
             'approvedScopes' => [""]
@@ -242,7 +242,7 @@ class RegistrationTest extends TestCase
                 'avatar_original' => 'https://graph.facebook.com/v3.3/1022097350/picture?width=1920',
                 'profileUrl' => null
             ],
-            'token' => config('facebook.FACEBOOK_TEST_KEY'),
+            'token' => 'EAAXSQSZAEan4BO48hdLYs84YGRXkTzBCZC5Pkpx3J6TlrmakX3SiMRJoYR2FYwb5hR1otRJxuGglfBVRJc9J9LgcDBOmHdsdblKZAFmPo6ZAwex6KN3DuRN9cyRM7ZCKGNdOWgvZCBmp0qUjhkaFUCr71L43ExxSc8ZAHQalcEDQqar9mXeg3EzuBasQFnFxOqFw3ZBbZBM3O91wENlK4YwZDZD',
             'refreshToken' => null,
             'expiresIn' => 5169882,
             'approvedScopes' => [""]
