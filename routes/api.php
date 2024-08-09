@@ -236,9 +236,14 @@ Route::prefix('v1')->group(function () {
         Route::get('/waitlists', [WaitListController::class, 'index']);
         Route::apiResource('squeeze-pages', SqueezePageCoontroller::class);
         Route::apiResource('faqs', FaqController::class);
+        Route::post('/faqs', [FaqController::class, 'store']);
+        Route::put('/faqs/{faq}', [FaqController::class, 'update']);
+        Route::delete('/faqs/{faq}', [FaqController::class, 'delete']);
     });
 
     Route::post('/waitlists', [WaitListController::class, 'store']);
+
+    Route::get('faqs', [FaqController::class, 'index']);
 
 
     Route::get('/blogs/{id}', [BlogController::class, 'show']);
