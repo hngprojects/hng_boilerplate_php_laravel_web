@@ -22,9 +22,6 @@ class SocialAuthController extends Controller
     public function handleGoogleCallback()
     {
         $googleUser = Socialite::driver('google')->stateless()->user();
-        return response()->json([
-            'user' => $googleUser
-        ]);
 
         $user = User::updateOrCreate(
             ['email' => $googleUser->email],
