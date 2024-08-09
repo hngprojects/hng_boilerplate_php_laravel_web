@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1\Auth;
 
+use Google_Client;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
@@ -9,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 
@@ -114,7 +117,17 @@ class SocialAuthController extends Controller
 
     public function saveGoogleRequestPost(Request $request)
     {
-        // Validate the incoming request working
+        Log::info($request->input('id_token'));
+
+        $response = Http::get('https://www.googleapis.com/oauth2/v3/userinfo', [
+
+            'access_token' => $request->input('id_token'),
+
+        ]);
+
+        return $response->json();
+
+        // Validate the incoming request
         $validator = Validator::make($request->all(), [
             'id_token' => 'required|string',
         ]);
@@ -125,14 +138,17 @@ class SocialAuthController extends Controller
                 'message' => $validator->errors()
             ], 422);
         }
-        
+
         // Extract Google user data from the request
-        $google_token = $request->id_token;
+        $google_token = $request->input('id_token');
+
+        $googleUser = Socialite::driver('google')->userFromToken($google_token);
+
+        return $googleUser;
 
         try {
             // Retrieve user information from Google
-            $googleUser = Socialite::driver('google')->userFromToken($google_token);
-    
+
             // Create or update the user
             $user = User::updateOrCreate(
                 ['email' => $googleUser->email],
@@ -144,7 +160,7 @@ class SocialAuthController extends Controller
                     'is_active' => true,
                 ]
             );
-    
+
             // Handle profile update or creation
             if ($user->profile) {
                 $user->profile->update([
@@ -159,10 +175,10 @@ class SocialAuthController extends Controller
                     'avatar_url' => $googleUser->user['picture'],
                 ]);
             }
-    
+
             // Generate JWT token
             $token = JWTAuth::fromUser($user);
-    
+
             return response()->json([
                 'status_code' => 200,
                 'message' => 'User Created Successfully',
