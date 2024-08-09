@@ -33,13 +33,13 @@ class PreferenceController extends Controller
             'message' => 'Languages fetched successfully',
             'preferences' => $preferences
         ], 200);
-
     }
 
     //
-    
 
-    public function store(StorePreferenceRequest $request){
+
+    public function store(StorePreferenceRequest $request)
+    {
         if (!auth()->check()) {
             return response()->json([
                 'status_code' => 401,
@@ -48,7 +48,7 @@ class PreferenceController extends Controller
         }
 
         $validated = $request->validated();
-        
+
         if (!$validated) {
             return response()->json([
                 'status_code' => 400,
@@ -56,12 +56,12 @@ class PreferenceController extends Controller
                 'errors' => $validator->errors()
             ], 400);
         }
-    
+
         try {
             $preference = Auth::user()->preferences()->create($request->all());
-    
+
             Log::info('Preference created', ['user_id' => Auth::id(), 'preference' => $preference]);
-    
+
             return response()->json([
                 'status_code' => 201,
                 'message' => 'Preference created successfully',
@@ -71,10 +71,9 @@ class PreferenceController extends Controller
                     'value' => $preference->value,
                 ]
             ], 201);
-    
         } catch (\Exception $e) {
             Log::error("Error creating preference: {$e->getMessage()}");
-    
+
             return response()->json([
                 'status_code' => 500,
                 'message' => 'Internal Server Error',
@@ -93,7 +92,7 @@ class PreferenceController extends Controller
         }
 
         $validated = $request->validated();
-        
+
         if (!$validated) {
             return response()->json([
                 'status_code' => 400,
@@ -105,7 +104,7 @@ class PreferenceController extends Controller
         try {
             $preference = Auth::user()->preferences()->findOrFail($id);
 
-            if(!$preference) {
+            if (!$preference) {
                 return response()->json([
                     'status_code' => 404,
                     'message' => 'Preference not found',
@@ -134,7 +133,7 @@ class PreferenceController extends Controller
             ], 500);
         }
     }
-    
+
     public function delete(DeletePreferenceRequest $request, $id)
     {
         $preference = Auth::user()->preferences()->find($id);
@@ -155,5 +154,29 @@ class PreferenceController extends Controller
             'message' => 'Preference deleted successfully.',
         ], 200);
     }
-
+//show regions
+    public function showRegion($user_id)
+    {
+        $preference = Preference::where('user_id', $user_id)->first();
+        if ($preference) {
+            if ($preference->region) {
+                return response()->json([
+                    'status' => 200,
+                    'message' => "Region retrieved successfully",
+                    'data' => $preference->region,
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => 200,
+                    'message' => "Region has not been set",
+                    'data' => [],
+                ], 200);
+            }
+        } else {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Preference not found for user',
+            ], 404);
+        }
+    }
 }

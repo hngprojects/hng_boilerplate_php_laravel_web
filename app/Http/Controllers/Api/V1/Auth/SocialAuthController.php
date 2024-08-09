@@ -114,7 +114,7 @@ class SocialAuthController extends Controller
 
     public function saveGoogleRequestPost(Request $request)
     {
-        // Validate the incoming request
+        // Validate the incoming request working
         $validator = Validator::make($request->all(), [
             'id_token' => 'required|string',
         ]);
@@ -127,8 +127,7 @@ class SocialAuthController extends Controller
         }
         
         // Extract Google user data from the request
-        $google_token = $request->input('id_token');
-
+        $google_token = $request->id_token;
 
         try {
             // Retrieve user information from Google

@@ -49,6 +49,7 @@ use App\Http\Controllers\QuestController;
 use App\Http\Controllers\UserNotificationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\Admin\AdminDashboardController;
+use App\Http\Controllers\Api\V1\NewsletterSubscriptionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -88,7 +89,10 @@ Route::prefix('v1')->group(function () {
     Route::get('/auth/facebook/callback', [SocialAuthController::class, 'callbackFromFacebook']);
     Route::post('/auth/facebook/callback', [SocialAuthController::class, 'saveFacebookRequest']);
 
+
+    Route::get('/users/stats', [UserController::class, 'stats']);
     Route::apiResource('/users', UserController::class);
+
 
     //jobs
     Route::get('/jobs', [JobController::class, 'index']);
@@ -247,6 +251,8 @@ Route::prefix('v1')->group(function () {
         Route::patch('/blogs/edit/{id}', [BlogController::class, 'update'])->name('admin.blogs.update');
         Route::delete('/blogs/{id}', [BlogController::class, 'destroy']);
         Route::get('/waitlists', [WaitListController::class, 'index']);
+        Route::get('/squeeze-pages/search', [SqueezePageCoontroller::class, 'search']);
+        Route::get('/squeeze-pages/filter', [SqueezePageCoontroller::class, 'filter']);
         Route::apiResource('squeeze-pages', SqueezePageCoontroller::class);
         Route::get('/dashboard/statistics', [AdminDashboardController::class, 'getStatistics']);
         Route::apiResource('faqs', FaqController::class);
@@ -278,8 +284,10 @@ Route::prefix('v1')->group(function () {
 
     });
 
-
-
+        //region get and update
+        Route::group(['middleware' => ['auth:api']], function () {
+            Route::get('/regions/{user_id}', [PreferenceController::class, 'showRegion']);
+    });
     // Notification settings
     Route::patch('/notification-settings/{user_id}', [NotificationPreferenceController::class, 'update']);
 
@@ -310,4 +318,7 @@ Route::prefix('v1/admin')->group(function () {
 
     //    quest
     Route::get('/quests/{id}/messages', [QuestController::class, 'getQuestMessages']);
+
+    //Newsletter Subscription
+    Route::post('newsletter-subscription', [NewsletterSubscriptionController::class, 'store']);
 });

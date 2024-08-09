@@ -7,7 +7,10 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Models\Blog;
 use App\Models\Comment;
+use Illuminate\Http\Response;
 use Tymon\JWTAuth\Facades\JWTAuth;
+
+use Illuminate\Support\Str;
 
 class CommentControllerTest extends TestCase
 {
@@ -125,6 +128,25 @@ class CommentControllerTest extends TestCase
                 ]
             ]);
     }
+
+    public function testAnotherUserCantEditComment()
+    {
+        $user1 = User::factory()->create();
+        $user2 = User::factory()->create();
+        $comment = Comment::factory()->create(['user_id' => $user1->id]);
+        $token1 = JWTAuth::fromUser($user1);
+        $token2 = JWTAuth::fromUser($user2);
+
+        $response = $this->withHeaders(['Authorization' => "Bearer $token2"])
+            ->patchJson("/api/v1/comments/edit/{$comment->id}", [
+                'content' => 'Edited content'
+            ]);
+
+        $response->assertStatus(Response::HTTP_FORBIDDEN)->assertJsonStructure([
+                'message',
+            ]);
+    }
+
     public function testDeleteComment()
     {
         $user = User::factory()->create();
@@ -138,6 +160,23 @@ class CommentControllerTest extends TestCase
             ->assertJson([
                 'status' => 200,
                 'message' => 'Comment deleted successfully',
+            ]);
+    }
+
+    public function testDeleteCommentThatDontExist()
+    {
+        $user = User::factory()->create();
+        $comment = Comment::factory()->create(['user_id' => $user->id]);
+        $token = JWTAuth::fromUser($user);
+
+        $uuid = Str::uuid();
+
+        $response = $this->withHeaders(['Authorization' => "Bearer $token"])
+            ->deleteJson("/api/v1/comments/{$uuid}");
+
+        $response->assertStatus(Response::HTTP_NOT_FOUND);
+        $this->assertDatabaseMissing('comments', [
+                'id' => $uuid,
             ]);
     }
 
