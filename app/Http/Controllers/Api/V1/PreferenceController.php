@@ -30,7 +30,7 @@ class PreferenceController extends Controller
         Log::info('Preferences retrieved', ['user_id' => Auth::id(), 'preferences' => $preferences]);
         return response()->json([
             'status_code' => 200,
-            'message' => 'Languages fetched successfully',
+            'message' => 'Preferences fetched successfully',
             'preferences' => $preferences
         ], 200);
     }
