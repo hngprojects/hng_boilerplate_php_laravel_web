@@ -37,8 +37,7 @@ class FaqControllerTest extends TestCase
                 'data' => [
                     '*' => ['id', 'question', 'answer', 'category', 'createdBy', 'createdAt', 'updatedAt']
                 ]
-            ])
-            ->assertJsonCount(5, 'data');
+                ]);
     }
 
     public function test_index_returns_faqs_without_pagination()

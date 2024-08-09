@@ -117,15 +117,6 @@ class SocialAuthController extends Controller
 
     public function saveGoogleRequestPost(Request $request)
     {
-
-        $response = Http::get('https://www.googleapis.com/oauth2/v3/userinfo', [
-
-            'access_token' => $request->input('id_token'),
-
-        ]);
-
-        return $response->json();
-
         // Validate the incoming request
         $validator = Validator::make($request->all(), [
             'id_token' => 'required|string',
