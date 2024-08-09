@@ -9,6 +9,26 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
+
+    public function stats()
+    {
+        $totalUsers = User::count();
+        $totalDeletedUsers = User::onlyTrashed()->count();
+        $totalActiveUsers = User::where('is_active', 1)->count() - $totalDeletedUsers;
+        $totalInActiveUsers = User::where('is_active', 0)->count();
+
+        return response()->json(
+            [
+                "status_code" => 200,
+                "message" => "User statistics retrieved successfully",
+                "total_users" => $totalUsers,
+                "deleted_users" => $totalDeletedUsers,
+                "active_users" => $totalActiveUsers,
+                "in_active_users" => $totalInActiveUsers,
+            ],
+            200
+        );
+    }
     /**
      * Display a listing of the resource.
      */
@@ -16,26 +36,11 @@ class UserController extends Controller
     {
         $users = User::latest()->paginate();
 
-        $totalUsers = User::count();
-        $totalDeletedUsers = User::onlyTrashed()->count();
-        $totalActiveUsers = User::where('is_active', 1)->count() - $totalDeletedUsers;
-        $totalInActiveUsers = User::where('is_active', 0)->count();
-
-        dd($users);
-
-        // $users = [
-        //     'name' =>
-        // ];
-
 
         return response()->json(
             [
                 "status_code" => 200,
                 "message" => "Users returned successfully",
-                "total_users" => $totalUsers,
-                "total_deleted_users" => $totalDeletedUsers,
-                "total_active_users" => $totalActiveUsers,
-                "total_inActive_users" => $totalInActiveUsers,
                 "data" =>$users
             ],
             200
