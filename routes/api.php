@@ -6,7 +6,9 @@ use App\Http\Controllers\Api\V1\Admin\EmailTemplateController;
 use App\Http\Controllers\Api\V1\Admin\FaqController;
 use App\Http\Controllers\Api\V1\Admin\Plan\FeatureController;
 use App\Http\Controllers\Api\V1\Admin\Plan\SubscriptionController;
+use App\Http\Controllers\Api\V1\Admin\SendEmailController;
 use App\Http\Controllers\Api\V1\ArticleController;
+use App\Http\Controllers\Api\V1\LanguageController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\Auth\ForgetPasswordRequestController;
 use App\Http\Controllers\Api\V1\Auth\ForgotResetPasswordController;
@@ -23,7 +25,7 @@ use App\Http\Controllers\Api\V1\JobController;
 use App\Http\Controllers\Api\V1\JobSearchController;
 use App\Http\Controllers\Api\V1\NotificationPreferenceController;
 use App\Http\Controllers\Api\V1\Organisation\OrganisationController;
-use App\Http\Controllers\Api\V1\Organisation\OrganizationMemberController;
+use App\Http\Controllers\Api\V1\Organisation\OrganisationMemberController;
 use App\Http\Controllers\Api\V1\PaymentController;
 use App\Http\Controllers\Api\V1\PreferenceController;
 use App\Http\Controllers\Api\V1\ProductController;
@@ -45,7 +47,8 @@ use App\Http\Controllers\NotificationSettingController;
 use App\Http\Controllers\QuestController;
 use App\Http\Controllers\UserNotificationController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Api\V1\Admin\AdminDashboardController;
+use App\Http\Controllers\Api\V1\NewsletterSubscriptionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,11 +60,13 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+Route::any('/', function () {
+  return 'Language Learning AI Game';
+});
 
 Route::prefix('v1')->group(function () {
-    Route::post('/', function () {
-        // dd($request);
-        return 'language Learning Ai Game';
+    Route::any('/', function () {
+        return 'Language Learning AI Game Version 1';
     });
     Route::post('/auth/register', [AuthController::class, 'store']);
     Route::post('/auth/login', [LoginController::class, 'login']);
@@ -72,18 +77,21 @@ Route::prefix('v1')->group(function () {
     Route::get('/auth/login-google', [SocialAuthController::class, 'redirectToGoogle']);
     Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
     Route::post('/auth/google/callback', [SocialAuthController::class, 'saveGoogleRequest']);
+    Route::post('/auth/google', [SocialAuthController::class, 'saveGoogleRequestPost']);
     /* Forget and Reset Password using OTP */
     Route::post('/auth/forgot-password', [ForgotResetPasswordController::class, 'forgetPassword']);
     Route::post('/auth/reset-forgot-password', [ForgotResetPasswordController::class, 'resetPassword']);
     Route::post('/auth/verify-otp', [ForgotResetPasswordController::class, 'verifyUserOTP']);
 
-    Route::post('/roles', [RoleController::class, 'store']);
 
     Route::get('/auth/login-facebook', [SocialAuthController::class, 'loginUsingFacebook']);
     Route::get('/auth/facebook/callback', [SocialAuthController::class, 'callbackFromFacebook']);
     Route::post('/auth/facebook/callback', [SocialAuthController::class, 'saveFacebookRequest']);
 
+
+    Route::get('/users/stats', [UserController::class, 'stats']);
     Route::apiResource('/users', UserController::class);
+
 
     //jobs
     Route::get('/jobs', [JobController::class, 'index']);
@@ -96,14 +104,19 @@ Route::prefix('v1')->group(function () {
     Route::get('/products/{product_id}', [ProductController::class, 'show']);
     Route::get('/billing-plans', [BillingPlanController::class, 'index']);
     Route::get('/billing-plans/{id}', [BillingPlanController::class, 'getBillingPlan']);
+    Route::get('/payments/paystack/{organisation_id}/verify/{id}', [PaymentController::class, 'handlePaystackCallback']);
+    Route::get('/payments/flutterwave/{organisation_id}/verify/{id}', [PaymentController::class, 'handleFlutterwaveCallback']);
+    Route::post('/languages', [LanguageController::class, 'create']);
+    Route::get('/languages', [LanguageController::class, 'index']);
+    Route::put('/languages/{id}', [LanguageController::class, 'update']);
 
     Route::middleware('throttle:10,1')->get('/topics/search', [ArticleController::class, 'search']);
 
     Route::middleware('auth:api')->group(function () {
 
-        Route::post('/organizations/{org_id}/products', [ProductController::class, 'store']);
-        Route::patch('/organizations/{org_id}/products/{product_id}', [ProductController::class, 'update']);
-        Route::delete('/organizations/{org_id}/products/{product_id}', [ProductController::class, 'destroy']);
+        Route::post('/organisations/{org_id}/products', [ProductController::class, 'store']);
+        Route::patch('/organisations/{org_id}/products/{product_id}', [ProductController::class, 'update']);
+        Route::delete('/organisations/{org_id}/products/{product_id}', [ProductController::class, 'destroy']);
     });
 
     //comment
@@ -141,6 +154,8 @@ Route::prefix('v1')->group(function () {
     //Super Admin Add Products
     Route::middleware(['auth:api', 'admin'])->group(function () {
         Route::post('/products', [SuperAdminProductController::class, 'store']);
+        Route::patch('/products/{productId}', [SuperAdminProductController::class, 'update']);
+        Route::delete('/products/{productId}', [SuperAdminProductController::class, 'destroy']);
     });
 
     Route::middleware(['auth:api', 'admin'])->group(function () {
@@ -149,6 +164,9 @@ Route::prefix('v1')->group(function () {
         Route::patch('/email-templates/{id}', [EmailTemplateController::class, 'update']);
         Route::delete('/email-templates/{id}', [EmailTemplateController::class, 'destroy']);
     });
+
+    Route::post('/email-requests', [SendEmailController::class, 'createEmailRequest']);
+    Route::post('/email-requests/send', [SendEmailController::class, 'triggerEmailSending']);
 
 
     Route::post('/invitations/generate', [InvitationAcceptanceController::class, 'generateInvitation']);
@@ -162,27 +180,26 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('/features', FeatureController::class);
         Route::apiResource('/plans', SubscriptionController::class);
         Route::post('/payments/paystack', [PaymentController::class, 'initiatePaymentForPayStack']);
-        Route::get('/payments/paystack/{organisation_id}/verify/{id}', [PaymentController::class, 'handlePaystackCallback']);
+
         Route::post('/payments/flutterwave', [PaymentController::class, 'initiatePaymentForFlutterWave']);
-        Route::get('/payments/flutterwave/{organisation_id}/verify/{id}', [PaymentController::class, 'handleFlutterwaveCallback']);
         Route::get('/payments/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
         Route::post('/users/plans/{user_subscription}/cancel', [\App\Http\Controllers\Api\V1\User\SubscriptionController::class, 'destroy']);
         Route::get('/users/plan', [\App\Http\Controllers\Api\V1\User\SubscriptionController::class, 'userPlan']);
 
 
         // Organisations
-        Route::post('/organizations', [OrganisationController::class, 'store']);
-        Route::get('/organizations', [OrganisationController::class, 'index']);
-        Route::put('/organizations/{org_id}', [OrganisationController::class, 'update']);
-        Route::delete('/organizations/{org_id}', [OrganisationController::class, 'destroy']);
-        Route::delete('/organizations/{org_id}/users/{user_id}', [OrganisationController::class, 'removeUser']);
-        Route::get('/organizations/{organisation}/users', [OrganizationMemberController::class, 'index']);
+        Route::post('/organisations', [OrganisationController::class, 'store']);
+        Route::get('/{user_id}/organisations', [OrganisationController::class, 'index']);
+        Route::put('/organisations/{org_id}', [OrganisationController::class, 'update']);
+        Route::delete('/organisations/{org_id}', [OrganisationController::class, 'destroy']);
+        Route::delete('/organisations/{org_id}/users/{user_id}', [OrganisationController::class, 'removeUser']);
+        Route::get('/organisations/{organisation}/users', [organisationMemberController::class, 'index']);
 
         // members
-        Route::get('/members/{org_id}/search', [OrganizationMemberController::class, 'searchMembers']);
-        Route::get('/members/{org_id}/export', [OrganizationMemberController::class, 'download']);
+        Route::get('/members/{org_id}/search', [OrganisationMemberController::class, 'searchMembers']);
+        Route::get('/members/{org_id}/export', [OrganisationMemberController::class, 'download']);
 
-        Route::delete('/organizations/{org_id}', [OrganisationController::class, 'destroy']);
+        Route::delete('/organisations/{org_id}', [OrganisationController::class, 'destroy']);
 
         // Testimonials
         Route::post('/testimonials', [TestimonialController::class, 'store']);
@@ -194,18 +211,17 @@ Route::prefix('v1')->group(function () {
         Route::put('/jobs/{id}', [JobController::class, 'update']);
         Route::delete('/jobs/{id}', [JobController::class, 'destroy']);
 
-
-
         Route::get('/user/export/{format}', [ExportUserController::class, 'export']);
 
         // Accounts
         Route::patch('/accounts/deactivate', [AccountController::class, 'deactivate']);
 
         // Roles
+        Route::post('/organisations/{org_id}/roles', [RoleController::class, 'store']);
         Route::put('/organisations/{org_id}/roles/{role_id}', [RoleController::class, 'update']);
         Route::put('/organisations/{org_id}/roles/{role_id}/disable', [RoleController::class, 'disableRole']);
-        Route::put('/organisations/{org_id}/users/{user_id}/roles', [RoleController::class, 'assignRole']);
-        Route::put('/organisations/{org_id}/{role_id}/permissions', [RoleController::class, 'assignPermissions']);
+        Route::get('/organisations/{org_id}/roles', [RoleController::class, 'index']);
+        Route::get('/organisations/{org_id}/roles/{role_id}', [RoleController::class, 'show']);
 
         //Update Password
         Route::post('/password-update', [ProfileController::class, 'updatePassword']);
@@ -234,11 +250,15 @@ Route::prefix('v1')->group(function () {
         Route::patch('/blogs/edit/{id}', [BlogController::class, 'update'])->name('admin.blogs.update');
         Route::delete('/blogs/{id}', [BlogController::class, 'destroy']);
         Route::get('/waitlists', [WaitListController::class, 'index']);
+        Route::get('/squeeze-pages/search', [SqueezePageCoontroller::class, 'search']);
+        Route::get('/squeeze-pages/filter', [SqueezePageCoontroller::class, 'filter']);
         Route::apiResource('squeeze-pages', SqueezePageCoontroller::class);
-        Route::apiResource('faqs', FaqController::class);
+        Route::get('/dashboard/statistics', [AdminDashboardController::class, 'getStatistics']);
         Route::post('/faqs', [FaqController::class, 'store']);
         Route::put('/faqs/{faq}', [FaqController::class, 'update']);
         Route::delete('/faqs/{faq}', [FaqController::class, 'delete']);
+        Route::get('/dashboard/top-products', [AdminDashboardController::class, 'getTopProducts']);
+        Route::get('/dashboard/all-top-products', [AdminDashboardController::class, 'getAllProductsSortedBySales']);
     });
 
     Route::post('/waitlists', [WaitListController::class, 'store']);
@@ -255,10 +275,14 @@ Route::prefix('v1')->group(function () {
         Route::get('/user/preferences', [PreferenceController::class, 'index']);
         Route::delete('/user/preferences/{id}', [PreferenceController::class, 'delete']);
         Route::get('/user-statistics', [DashboardController::class, 'index']);
+        Route::get('/user-analytics', [DashboardController::class, 'user_analytics']);
         Route::get('/user-sales', [DashboardController::class, 'recent_sales']);
-
     });
 
+        //region get and update
+        Route::group(['middleware' => ['auth:api']], function () {
+            Route::get('/regions/{user_id}', [PreferenceController::class, 'showRegion']);
+    });
     // Notification settings
     Route::patch('/notification-settings/{user_id}', [NotificationPreferenceController::class, 'update']);
 
@@ -267,6 +291,15 @@ Route::prefix('v1')->group(function () {
         //Email Template
         Route::apiResource('email-templates', EmailTemplateController::class);
     });
+
+//super Admin Email template
+Route::prefix('v1/admin')->group(function () {
+    Route::get('email-templates', [EmailTemplateController::class, 'index']);
+    Route::get('email-templates/{id}', [EmailTemplateController::class, 'show']);
+    Route::post('email-templates', [EmailTemplateController::class, 'store']);
+    Route::put('email-templates/{id}', [EmailTemplateController::class, 'update']);
+    Route::delete('email-templates/{id}', [EmailTemplateController::class, 'destroy']);
+});
     // User Notification
     Route::patch('/notifications/{notification}', [UserNotificationController::class, 'update']);
     Route::delete('/notifications', [UserNotificationController::class, 'destroy']);
@@ -277,6 +310,10 @@ Route::prefix('v1')->group(function () {
 
 
 
+
     //    quest
     Route::get('/quests/{id}/messages', [QuestController::class, 'getQuestMessages']);
+
+    //Newsletter Subscription
+    Route::post('newsletter-subscription', [NewsletterSubscriptionController::class, 'store']);
 });

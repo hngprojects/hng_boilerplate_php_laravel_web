@@ -15,6 +15,7 @@ use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 
 class RoleController extends Controller
@@ -25,32 +26,70 @@ class RoleController extends Controller
      */
     public function store(StoreRoleRequest $request)
     {
+        Log::info('Incoming role creation request', $request->all());
+
         try {
             DB::beginTransaction();
 
-            // creating the role
+            $org_id = $request->organisation_id;
+
+            // Validate the organisation ID as a UUID
+            if (!preg_match('/^[a-f0-9-]{36}$/', $org_id)) {
+                return response()->json([
+                    'status_code' => Response::HTTP_BAD_REQUEST,
+                    'error' => 'Invalid input',
+                    'message' => 'Invalid organisation ID format',
+                ], Response::HTTP_BAD_REQUEST);
+            }
+
+            // Check whether the organisation exists
+            $organisation = Organisation::find($org_id);
+            if (!$organisation) {
+                return response()->json([
+                    'status_code' => Response::HTTP_NOT_FOUND,
+                    'error' => 'Organisation not found',
+                    'message' => 'The organisation with ID ' . $org_id . ' does not exist',
+                ], Response::HTTP_NOT_FOUND);
+            }
+
+            // Check for duplicate role name within the organisation
+            $existingRole = Role::where('org_id', $org_id)->where('name', $request->role_name)->first();
+            if ($existingRole) {
+                return response()->json([
+                    'status_code' => Response::HTTP_CONFLICT,
+                    'error' => 'Conflict',
+                    'message' => 'A role with this name already exists in the organisation',
+                ], Response::HTTP_CONFLICT);
+            }
+
+            // Creating the role
             $role = Role::create([
                 'name' => $request->role_name,
-                'org_id' => $request->organisation_id,
+                'description' => $request->description,
+                'org_id' => $org_id,
             ]);
 
+            // Attach the permission to the role
             $role->permissions()->attach($request->permissions_id);
+
             DB::commit();
 
-            $code = Response::HTTP_CREATED;
-
             return response()->json([
+                'id' => $role->id,
+                'name' => $role->name,
+                'description' => $role->description,
                 'message' => "Role created successfully",
-                'status_code' => $code,
-            ], $code);
+                'status_code' => Response::HTTP_CREATED,
+            ], Response::HTTP_CREATED);
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Role creation error: ' . $e->getMessage());
-            $code = Response::HTTP_BAD_REQUEST;
+
             return response()->json([
-                'message' => "Role creation failed - " . $e->getMessage(),
-                'status_code' => $code,
-            ], $code);
+                'status_code' => Response::HTTP_BAD_REQUEST,
+                'error' => 'Invalid input',
+                'message' => 'Role creation failed - ' . $e->getMessage(),
+            ], Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -148,6 +187,149 @@ class RoleController extends Controller
         } else return ResponseHelper::response("Organisation not found", 404, null);
     }
 
+   // To get all roles
+   public function index($org_id)
+   {
+       try {
+           // Validate the organisation ID (UUID format)
+           if (!Str::isUuid($org_id)) {
+               return response()->json([
+                   'status_code' => Response::HTTP_BAD_REQUEST,
+                   'error' => 'Bad Request',
+                   'message' => 'Invalid organisation ID format',
+               ], Response::HTTP_BAD_REQUEST);
+           }
+
+           // Check whether organisation exists
+           $organisation = Organisation::where('org_id', $org_id)->first();
+           if (!$organisation) {
+               return response()->json([
+                   'status_code' => Response::HTTP_NOT_FOUND,
+                   'error' => 'Not Found',
+                   'message' => 'The organisation with ID ' . $org_id . ' does not exist',
+               ], Response::HTTP_NOT_FOUND);
+           }
+
+           // Fetch all roles within the organisation
+           $roles = Role::where('org_id', $org_id)->get(['id', 'name', 'description']);
+
+           return response()->json([
+               'status_code' => Response::HTTP_OK,
+               'data' => $roles,
+           ], Response::HTTP_OK);
+       } catch (\Exception $e) {
+            Log::error('Role creation error: ' . $e->getMessage());
+           return response()->json([
+               'status_code' => Response::HTTP_INTERNAL_SERVER_ERROR,
+               'error' => 'Internal Server Error',
+               'message' => 'An error occurred while fetching roles',
+           ], Response::HTTP_INTERNAL_SERVER_ERROR);
+       }
+   }
+
+   public function show($org_id, $role_id)
+    {
+        try {
+            // Validate UUID format
+            if (!Str::isUuid($org_id) || !is_numeric($role_id)) {
+                Log::error('Invalid UUID or ID format', [
+                    'org_id' => $org_id,
+                    'role_id' => $role_id,
+                    'org_id_type' => gettype($org_id),
+                    'role_id_type' => gettype($role_id)
+                ]);
+
+                return response()->json([
+                    'status_code' => Response::HTTP_BAD_REQUEST,
+                    'error' => 'Bad Request',
+                    'message' => 'Invalid organisation ID or role ID format',
+                ], Response::HTTP_BAD_REQUEST);
+            }
+
+            // Check if the organisation exists
+            $organisation = Organisation::where('org_id', $org_id)->first();
+            if (!$organisation) {
+                Log::error('Organisation not found', ['org_id' => $org_id]);
+
+                return response()->json([
+                    'status_code' => Response::HTTP_NOT_FOUND,
+                    'error' => 'Not Found',
+                    'message' => 'The organisation with ID ' . $org_id . ' does not exist',
+                ], Response::HTTP_NOT_FOUND);
+            }
+
+            // Check if the role exists within the organisation
+            $role = Role::where('org_id', $org_id)->where('id', $role_id)->first();
+            if (!$role) {
+                Log::error('Role not found', ['org_id' => $org_id, 'role_id' => $role_id]);
+
+                return response()->json([
+                    'status_code' => Response::HTTP_NOT_FOUND,
+                    'error' => 'Not Found',
+                    'message' => 'The role with ID ' . $role_id . ' does not exist',
+                ], Response::HTTP_NOT_FOUND);
+            }
+
+            // Fetch and format permissions
+            $permissions = $role->permissions->map(function ($permission) use ($role) {
+                return [
+                    'id' => $permission->id,
+                    'permission_list' => [
+                        'can_view_transactions' => $role->permissions()->where('permission_id', $permission->id)->where('name', 'can_view_transactions')->exists(),
+                        'can_view_refunds' => $role->permissions()->where('permission_id', $permission->id)->where('name', 'can_view_refunds')->exists(),
+                        'can_edit_transactions' => $role->permissions()->where('permission_id', $permission->id)->where('name', 'can_edit_transactions')->exists(),
+                    ],
+                ];
+            });
+
+            return response()->json([
+                'status_code' => Response::HTTP_OK,
+                'data' => [
+                    'id' => $role->id,
+                    'name' => $role->name,
+                    'description' => $role->description,
+                    'permissions' => $permissions,
+                ],
+            ], Response::HTTP_OK);
+        } catch (\InvalidArgumentException $e) {
+            Log::error('Invalid argument exception', [
+                'exception' => $e->getMessage(),
+                'org_id' => $org_id,
+                'role_id' => $role_id
+            ]);
+
+            return response()->json([
+                'status_code' => Response::HTTP_BAD_REQUEST,
+                'error' => 'Bad Request',
+                'message' => 'Invalid organisation ID or role ID format',
+            ], Response::HTTP_BAD_REQUEST);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            Log::error('Model not found exception', [
+                'exception' => $e->getMessage(),
+                'org_id' => $org_id,
+                'role_id' => $role_id
+            ]);
+
+            return response()->json([
+                'status_code' => Response::HTTP_NOT_FOUND,
+                'error' => 'Not Found',
+                'message' => 'The role with ID ' . $role_id . ' does not exist',
+            ], Response::HTTP_NOT_FOUND);
+        } catch (\Exception $e) {
+            Log::error('General exception', [
+                'exception' => $e->getMessage(),
+                'org_id' => $org_id,
+                'role_id' => $role_id
+            ]);
+
+            return response()->json([
+                'status_code' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                'error' => 'Internal Server Error',
+                'message' => 'An error occurred while fetching the role',
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
     public function assignPermissions(Request $request, $org_id, $role_id){
       $role = Role::where('org_id', $org_id)->with('permissions')->find($role_id);
       $payload = Validator::make($request->all(), [
@@ -168,3 +350,5 @@ class RoleController extends Controller
     }
 
 }
+
+?>

@@ -25,6 +25,12 @@ class PaymentController extends Controller
 
     public function initiatePaymentForPayStack(Request $request)
     {
+        if (!auth()->check()) {
+            return response()->json([
+                'status_code' => 401,
+                'message' => 'Unauthorized'
+            ], 401);
+        }
         // return response()->json(['h'=> 'ng']);
         $validator = Validator::make($request->all(), [
             'organisation_id' => 'required',
@@ -36,7 +42,7 @@ class PaymentController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'status' => 400,
+                'status_code' => 400,
                 'message' => 'Validation error: ' . $validator->errors()->first()
             ], 400);
         }
@@ -45,7 +51,7 @@ class PaymentController extends Controller
                                             ->exists();
         if (!$userIsAnAdminInOrganisation) {
             return response()->json([
-                'status' => 403,
+                'status_code' => 403,
                 'message' => 'You do not have permission to initiate this payment'
             ], 403);
         }
@@ -54,7 +60,7 @@ class PaymentController extends Controller
         $subscriptionPlan = SubscriptionPlan::find($request->plan_id);
         if(!$subscriptionPlan) {
             return response()->json([
-                'status' => 404,
+                'status_code' => 404,
                 'message' => 'Subscription Plan not found'
             ], 404);
         }
@@ -81,7 +87,7 @@ class PaymentController extends Controller
             $payment->save();
 
             return response()->json([
-                'status' => 200,
+                'status_code' => 200,
                 'message' => 'Payment initiated successfully',
                 'data' => [
                     'payment_url' => $paymentUrl
@@ -89,7 +95,7 @@ class PaymentController extends Controller
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status' => 500,
+                'status_code' => 500,
                 'message' => 'An unexpected error occurred. Please try again later.'
                 // 'message' => 'Payment Initialization Failed: ' . $e->getMessage()
             ], 500);
@@ -114,9 +120,17 @@ class PaymentController extends Controller
             }
 
             $payment->save();
+            $user = Organisation::find($organisation_id)->first();
+            if(!$user) {
+                return response()->json([
+                    'status_code' => 404,
+                    'message' => 'User Not found'
+                ], 404);
+            }
+            $user_id = $user->id;
 
             $userSubscription = new UserSubscription;
-            $userSubscription->user_id = auth()->user()->id;
+            $userSubscription->user_id = $user_id;
             $userSubscription->subscription_plan_id = $id;
             $userSubscription->org_id = $organisation_id;
             $userSubscription->save();
@@ -126,7 +140,7 @@ class PaymentController extends Controller
             return redirect()->to($payment->redirect_url . '?status=' . $payment->status);
         } catch (Exception $e) {
             return response()->json([
-                'status' => 500,
+                'status_code' => 500,
                 'message' => 'Transaction Verification Failed: ' . $e->getMessage()
             ], 500);
         }
@@ -134,6 +148,13 @@ class PaymentController extends Controller
 
     public function initiatePaymentForFlutterWave(Request $request)
     {
+        if (!auth()->check()) {
+            return response()->json([
+                'status_code' => 401,
+                'message' => 'Unauthorized'
+            ], 401);
+        }
+        
         $validator = Validator::make($request->all(), [
             'organisation_id' => 'required',
             'plan_id' =>'required',
@@ -144,7 +165,7 @@ class PaymentController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'status' => 400,
+                'status_code' => 400,
                 'message' => 'Validation error: ' . $validator->errors()->first()
             ], 400);
         }
@@ -155,7 +176,7 @@ class PaymentController extends Controller
         // return response()->json(auth()->user()->id);
         if (!$userIsAnAdminInOrganisation) {
             return response()->json([
-                'status' => 403,
+                'status_code' => 403,
                 'message' => 'You do not have permission to initiate this payment'
             ], 403);
         }
@@ -163,7 +184,7 @@ class PaymentController extends Controller
         $subscriptionPlan = SubscriptionPlan::find($request->plan_id);
         if(!$subscriptionPlan) {
             return response()->json([
-                'status' => 404,
+                'status_code' => 404,
                 'message' => 'Subscription Plan not found'
             ], 404);
         }
@@ -196,7 +217,7 @@ class PaymentController extends Controller
             $payment->save();
 
             return response()->json([
-                'status' => 200,
+                'status_code' => 200,
                 'message' => 'Payment initiated successfully',
                 'data' => [
                     'payment_url' => $paymentUrl
@@ -204,7 +225,7 @@ class PaymentController extends Controller
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status' => 500,
+                'status_code' => 500,
                 'message' => 'An unexpected error occurred. Please try again later.'
                 // 'message' => 'Payment Initialization Failed: ' . $e->getMessage()
             ], 500);
@@ -229,8 +250,17 @@ class PaymentController extends Controller
             }
 
             $payment->save();
+            $user = Organisation::find($organisation_id)->first();
+            if(!$user) {
+                return response()->json([
+                    'status_code' => 404,
+                    'message' => 'User Not found'
+                ], 404);
+            }
+            $user_id = $user->id;
+
             $userSubscription = new UserSubscription;
-            $userSubscription->user_id = auth()->user()->id;
+            $userSubscription->user_id = $user_id;
             $userSubscription->subscription_plan_id = $id;
             $userSubscription->org_id = $organisation_id;
             $userSubscription->save();
@@ -239,7 +269,7 @@ class PaymentController extends Controller
             return redirect()->to($payment->redirect_url . '?status=' . $payment->status);
         } catch (Exception $e) {
             return response()->json([
-                'status' => 500,
+                'status_code' => 500,
                 'message' => 'Transaction Verification Failed: ' . $e->getMessage()
             ], 500);
         }
@@ -256,7 +286,7 @@ class PaymentController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'status' => 400,
+                'status_code' => 400,
                 'message' => 'Validation error: ' . $validator->errors()->first()
             ], 400);
         }
@@ -275,7 +305,7 @@ class PaymentController extends Controller
                 $paymentUrl = $this->paymentService->initiateFlutterwavePayment($data);
             } else {
                 return response()->json([
-                    'status' => 400,
+                    'status_code' => 400,
                     'message' => 'Unsupported payment gateway'
                 ], 400);
             }
@@ -290,7 +320,7 @@ class PaymentController extends Controller
             $payment->save();
 
             return response()->json([
-                'status' => 200,
+                'status_code' => 200,
                 'message' => 'Payment initiated successfully',
                 'data' => [
                     'payment_url' => $paymentUrl
@@ -298,7 +328,7 @@ class PaymentController extends Controller
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status' => 500,
+                'status_code' => 500,
                 'message' => 'Payment Initialization Failed: ' . $e->getMessage()
             ], 500);
         }
@@ -308,7 +338,7 @@ class PaymentController extends Controller
     {
 
         return response()->json([
-            'status' => 200,
+            'status_code' => 200,
             'message' => 'Payment was cancelled.',
         ], 200);
     }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Models\Blog;
 use App\Models\Comment;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -37,7 +38,7 @@ class CommentController extends Controller
             ], 201);
         } catch (\Exception $e) {
             Log::error('Error creating reply comment:', ['exception' => $e->getMessage()]);
-       
+
             return response()->json([
                 'status' => 500,
                 'message' => 'Failed to create comment',
@@ -52,7 +53,7 @@ class CommentController extends Controller
         try {
             Log::info('Reached the replyComment method');
             Log::info('Request data:', $request->all());
-            
+
             $user = auth('api')->user();
             $request->validate([
                 'content' => 'required|string'
@@ -78,7 +79,7 @@ class CommentController extends Controller
             \Exception  $e
         ) {
             Log::error('Error creating reply comment:', ['exception' => $e->getMessage()]);
-       
+
             return response()->json([
                 'status' => 500,
                 'message' => 'Failed to create reply',
@@ -183,10 +184,17 @@ class CommentController extends Controller
                 'message' => 'Comment deleted successfully',
             ], 200);
        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 500,
-                'message' => 'Failed to delete comment',
-            ], 500);
+
+            if($e instanceof ModelNotFoundException) {
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'Comment not found',
+                ], 404);
+            }
+           return response()->json([
+               'status' => 500,
+               'message' => 'Failed to delete comment',
+           ], 500);
        }
     }
 
