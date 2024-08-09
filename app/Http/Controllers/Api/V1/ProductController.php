@@ -219,17 +219,8 @@ class ProductController extends Controller
             'org_id' => $org_id
         ]);
 
-        // {
-        //     "name": "Product Name",
-        //     "quantity": 10,
-        //     "price": 99.99,
-        //     "category": "Electronics",
-        //     "description": "string",
-        //     "image_url": string,  
-        //     "size": string[] //optional
-        //   }
-        $standardSize = Size::where('size', 'standard')->first('id');
-
+        $standardSize = Size::where('size', 'standard')->value('id');
+        // dd($standardSize);
         $productVariant = ProductVariant::create([
             'product_id' => $product->product_id,
             'stock' => $request->input('quantity'),

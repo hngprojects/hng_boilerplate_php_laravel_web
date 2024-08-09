@@ -22,7 +22,7 @@ class Size extends Model
         return $this->belongsTo(ProductVariant::class);
     }
 
-    public function productVariantsSize(): HasMany
+    public function productVariantsSize()
     {
         return $this->hasMany(ProductVariantSize::class);
     }
