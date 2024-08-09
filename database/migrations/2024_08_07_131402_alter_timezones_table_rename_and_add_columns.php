@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('timezones', function (Blueprint $table) {
             $table->renameColumn('name', 'timezone');
             $table->renameColumn('offset', 'gmtoffset');
-            $table->string('description')->after('gmtoffset');
+            // $table->string('description')->after('gmtoffset');
         });
     }
 
@@ -22,8 +22,8 @@ return new class extends Migration
     {
         Schema::table('timezones', function (Blueprint $table) {
             $table->dropColumn('timezone');
-            $table->dropColumn('gmtoffset');
-            $table->dropColumn('description');
+            // $table->dropColumn('gmtoffset');
+            // $table->dropColumn('description');
         });
     }
 };
