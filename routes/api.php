@@ -254,7 +254,7 @@ Route::prefix('v1')->group(function () {
 
 
        
-    });
+    }); 
 
     Route::post('/waitlists', [WaitListController::class, 'store']);
 
