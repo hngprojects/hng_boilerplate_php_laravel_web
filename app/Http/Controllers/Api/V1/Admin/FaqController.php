@@ -16,42 +16,24 @@ class FaqController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
-        $validator = Validator::make($request->all(), [
-            'page' => 'nullable|integer|min:1',
-            'size' => 'nullable|integer|min:1',
-        ]);
-
-
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Invalid input parameters.',
-                'errors' => $validator->errors(),
-            ], Response::HTTP_BAD_REQUEST);
-        }
-
-        $perPage = $request->input('size', 15);
-
-        $faqs = Faq::where('status', 1)->paginate($perPage);
+        $faqs = Faq::where('status', 1)->get()->map(function ($faq) {
+            return [
+                'id' => $faq->id,
+                'question' => $faq->question,
+                'answer' => $faq->answer,
+                'category' => $faq->category,
+                'createdBy' => "ADMIN",
+                'createdAt' => $faq->created_at,
+                'updatedAt' => $faq->updated_at,
+            ];
+        });
 
         return response()->json([
             'status_code' => 200,
-            'message' => "Faq returned successfully",
-            'data' => collect($faqs->items())->map(function ($faq) {
-                return [
-                    'id' => $faq->id,
-                    'question' => $faq->question,
-                    'answer' => $faq->answer,
-                ];
-            }),
-            'pagination' => [
-                'current_page' => $faqs->currentPage(),
-                'total_pages' => $faqs->lastPage(),
-                'page_size' => $faqs->perPage(),
-                'total_items' => $faqs->total(),
-            ],
+            'message' => "Faq fetched successfully",
+            'data' => $faqs
         ], Response::HTTP_OK);
     }
 
