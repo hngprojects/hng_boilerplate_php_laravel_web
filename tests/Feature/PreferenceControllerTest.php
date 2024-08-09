@@ -79,4 +79,55 @@ class PreferenceControllerTest extends TestCase
                 'message' => 'Preference not found for user',
             ]);
     }
+
+    public function test_update_region()
+    {
+        $token = JWTAuth::fromUser($this->user);
+
+        // Scenario: Valid region update
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer $token",
+        ])->putJson("/api/v1/regions/{$this->user->id}", [
+            'region_id' => $this->region->id,
+        ]);
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'status' => 200,
+                'message' => 'Region updated successfully',
+                'data' => [
+                    'region' => [
+                        'id' => $this->region->id,
+                        'name' => $this->region->name,
+                    ],
+                ],
+            ]);
+
+        // Scenario: Invalid region ID
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer $token",
+        ])->putJson("/api/v1/regions/{$this->user->id}", [
+            'region_id' => 'invalid-region-id', 
+        ]);
+
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['region_id']);
+
+        // Scenario: Preference not found
+        $newUser = User::factory()->create();
+        $newToken = JWTAuth::fromUser($newUser);
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer $newToken",
+        ])->putJson("/api/v1/regions/{$newUser->id}", [
+            'region_id' => $this->region->id,
+        ]);
+
+        $response->assertStatus(404)
+            ->assertJson([
+                'status' => 404,
+                'message' => 'Preference not found for user',
+            ]);
+    }
+
+
 }

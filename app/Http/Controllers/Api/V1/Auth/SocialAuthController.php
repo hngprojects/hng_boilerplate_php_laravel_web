@@ -11,6 +11,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
+use Google_Client;
 
 class SocialAuthController extends Controller
 {
@@ -127,42 +128,49 @@ class SocialAuthController extends Controller
         }
         
         // Extract Google user data from the request
-        $google_token = $request->id_token;
+        $idToken = $request->id_token;
 
-        try {
-            // Retrieve user information from Google
-            $googleUser = Socialite::driver('google')->userFromToken($google_token);
-    
-            // Create or update the user
+        $client = new Google_Client(['client_id' => env('GOOGLE_CLIENT_ID')]); // Replace with your Google Client ID
+        $payload = $client->verifyIdToken($idToken);
+
+        if ($payload) {
+             // Token is valid
+            $email = $payload['email'];
+            $firstName = $payload['given_name'];
+            $lastName = $payload['family_name'];
+            $avatarUrl = $payload['picture'] ?? null;
+
+            // Create or update user
             $user = User::updateOrCreate(
-                ['email' => $googleUser->email],
+                ['email' => $email],
                 [
-                    'password' => Hash::make(Str::random(12)), // Random password for social sign-ins
-                    'social_id' => $googleUser->id,
+                    'password' => Hash::make(Str::random(12)), // Generate a random password for the user
+                    'social_id' => $idToken,
                     'is_verified' => true,
                     'signup_type' => 'Google',
                     'is_active' => true,
+                    'role' => 'user',
                 ]
             );
-    
-            // Handle profile update or creation
+
+            // Update or create user profile
             if ($user->profile) {
                 $user->profile->update([
-                    'first_name' => $googleUser->user['given_name'],
-                    'last_name' => $googleUser->user['family_name'],
-                    'avatar_url' => $googleUser->user['picture'],
+                    'first_name' => $firstName,
+                    'last_name' => $lastName,
+                    'avatar_url' => $avatarUrl,
                 ]);
             } else {
                 $user->profile()->create([
-                    'first_name' => $googleUser->user['given_name'],
-                    'last_name' => $googleUser->user['family_name'],
-                    'avatar_url' => $googleUser->user['picture'],
+                    'first_name' => $firstName,
+                    'last_name' => $lastName,
+                    'avatar_url' => $avatarUrl,
                 ]);
             }
-    
+
             // Generate JWT token
             $token = JWTAuth::fromUser($user);
-    
+
             return response()->json([
                 'status_code' => 200,
                 'message' => 'User Created Successfully',
@@ -171,18 +179,19 @@ class SocialAuthController extends Controller
                     'user' => [
                         'id' => $user->id,
                         'email' => $user->email,
-                        'first_name' => $googleUser->user['given_name'],
-                        'last_name' => $googleUser->user['family_name'],
-                        'fullname' => $googleUser->user['given_name'].' '.$googleUser->user['family_name'],
+                        'first_name' => $firstName,
+                        'last_name' => $lastName,
+                        'fullname' => $firstName.' '.$lastName,
                         'role' => $user->role,
                     ]
                 ]
-            ], 200);
-        } catch (Exception $e) {
+            ]);
+        } else {
+            // Invalid token
             return response()->json([
-                'status_code' => 500,
-                'message' => $e->getMessage()
-            ], 500);
+                'status_code' => 401,
+                'message' => 'Invalid Token'
+            ], 401);
         }
     }
 
