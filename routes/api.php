@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\Admin\EmailTemplateController;
 use App\Http\Controllers\Api\V1\Admin\FaqController;
 use App\Http\Controllers\Api\V1\Admin\Plan\FeatureController;
 use App\Http\Controllers\Api\V1\Admin\Plan\SubscriptionController;
+use App\Http\Controllers\Api\V1\Admin\SendEmailController;
 use App\Http\Controllers\Api\V1\ArticleController;
 use App\Http\Controllers\Api\V1\LanguageController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
@@ -47,6 +48,7 @@ use App\Http\Controllers\QuestController;
 use App\Http\Controllers\UserNotificationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\Admin\AdminDashboardController;
+use App\Http\Controllers\Api\V1\NewsletterSubscriptionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -86,7 +88,10 @@ Route::prefix('v1')->group(function () {
     Route::get('/auth/facebook/callback', [SocialAuthController::class, 'callbackFromFacebook']);
     Route::post('/auth/facebook/callback', [SocialAuthController::class, 'saveFacebookRequest']);
 
+
+    Route::get('/users/stats', [UserController::class, 'stats']);
     Route::apiResource('/users', UserController::class);
+
 
     //jobs
     Route::get('/jobs', [JobController::class, 'index']);
@@ -103,7 +108,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/payments/flutterwave/{organisation_id}/verify/{id}', [PaymentController::class, 'handleFlutterwaveCallback']);
     Route::post('/languages', [LanguageController::class, 'create']);
     Route::get('/languages', [LanguageController::class, 'index']);
-    Route::put('/languages/{id}', [LanguageController::class, 'update']); 
+    Route::put('/languages/{id}', [LanguageController::class, 'update']);
 
     Route::middleware('throttle:10,1')->get('/topics/search', [ArticleController::class, 'search']);
 
@@ -159,6 +164,9 @@ Route::prefix('v1')->group(function () {
         Route::patch('/email-templates/{id}', [EmailTemplateController::class, 'update']);
         Route::delete('/email-templates/{id}', [EmailTemplateController::class, 'destroy']);
     });
+
+    Route::post('/email-requests', [SendEmailController::class, 'createEmailRequest']);
+    Route::post('/email-requests/send', [SendEmailController::class, 'triggerEmailSending']);
 
 
     Route::post('/invitations/generate', [InvitationAcceptanceController::class, 'generateInvitation']);
@@ -242,14 +250,16 @@ Route::prefix('v1')->group(function () {
         Route::patch('/blogs/edit/{id}', [BlogController::class, 'update'])->name('admin.blogs.update');
         Route::delete('/blogs/{id}', [BlogController::class, 'destroy']);
         Route::get('/waitlists', [WaitListController::class, 'index']);
+        Route::get('/squeeze-pages/search', [SqueezePageCoontroller::class, 'search']);
+        Route::get('/squeeze-pages/filter', [SqueezePageCoontroller::class, 'filter']);
         Route::apiResource('squeeze-pages', SqueezePageCoontroller::class);
         Route::get('/dashboard/statistics', [AdminDashboardController::class, 'getStatistics']);
-        Route::apiResource('faqs', FaqController::class);       
-        Route::get('/dashboard/top-products', [AdminDashboardController::class, 'getTopProducts']);        
+        Route::apiResource('faqs', FaqController::class);
+        Route::get('/dashboard/top-products', [AdminDashboardController::class, 'getTopProducts']);
         Route::get('/dashboard/all-top-products', [AdminDashboardController::class, 'getAllProductsSortedBySales']);
 
 
-       
+
     });
 
     Route::post('/waitlists', [WaitListController::class, 'store']);
@@ -303,4 +313,7 @@ Route::prefix('v1/admin')->group(function () {
 
     //    quest
     Route::get('/quests/{id}/messages', [QuestController::class, 'getQuestMessages']);
+
+    //Newsletter Subscription
+    Route::post('newsletter-subscription', [NewsletterSubscriptionController::class, 'store']);
 });

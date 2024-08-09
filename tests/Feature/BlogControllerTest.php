@@ -137,13 +137,13 @@ class BlogControllerTest extends TestCase
 
     public function test_non_author_cannot_delete_blog()
     {
-        // create a user to create a blog 
+        // create a user to create a blog
         $superAdmin = User::factory()->create(['role' => 'admin']);
 
         // Create a blog post
         $blog = Blog::factory()->create(['author_id'=> $superAdmin->id, 'author' => $superAdmin->name]);
 
-        // not an author 
+        // not an author
         $user = User::factory()->create(['role' => 'admin']);
 
           // Authenticate the user with a valid JWT token
@@ -217,6 +217,29 @@ class BlogControllerTest extends TestCase
         Storage::disk('public')->assertExists('images/' . $image->hashName());
     }
 
+    public function test_admin_cant_create_blog_post_with_incorrect_image_format()
+    {
+        Storage::fake('public');
+
+        $admin = User::factory()->create(['role' => 'admin']);
+        $token = JWTAuth::fromUser($admin);
+
+        $pdf = UploadedFile::fake()->create('john_avatar.pdf', 100, 'application/pdf');
+        $path = Storage::putFile('public/images', $pdf);
+        $imageUrl = str_replace('public/', 'storage/', $path);
+
+        $response = $this->withHeaders(['Authorization' => "Bearer $token"])->postJson('/api/v1/blogs', [
+            'title' => 'Test Blog Post',
+            'content' => 'This is a test blog post content.',
+            'author' => $admin->name,
+            'author_id' => $admin->id,
+            'image_url' => $pdf,
+            'category' => 'Example 2',
+        ]);
+
+        $response->assertUnprocessable()->assertJsonValidationErrors(['image_url']);
+    }
+
     public function test_blog_create_request_validation()
     {
         Storage::fake('public');
@@ -237,14 +260,14 @@ class BlogControllerTest extends TestCase
             ->assertJsonValidationErrors(['title', 'content', 'image_url', 'category']);
 
     }
-    
+
     public function test_admin_can_update_blog()
     {
         // Create a user with admin role
         $admin = User::factory()->create([
             'role' => 'admin',
         ]);
-        
+
         $token = JWTAuth::fromUser($admin);
         // Create a blog post to update
         $blog = Blog::factory()->create(['author_id'=> $admin->id, 'author' => $admin->name]);

@@ -77,7 +77,7 @@ class BlogController extends Controller
         }catch(Exception $exception){
             return response()->json(['error' => 'Internal server error.'], 500);
         }
-        
+
     }
 
     /**
@@ -93,6 +93,11 @@ class BlogController extends Controller
      */
     public function store(Request $request)
     {
+        $author = User::where('id', Auth::id())->first();
+        if(!$author){
+            return response()->json(['error' => 'User Not found.'], 404);
+        }
+
         Log::error('Error creating blog post: ' . Auth::id());
         $validator = Validator::make($request->all(), [
             'title' => ['required', 'string', 'max:255'],
@@ -100,11 +105,7 @@ class BlogController extends Controller
             'image_url' => ['required', 'mimes:jpeg,png,jpg,gif,svg'],
             'category' => ['required', 'string', 'max:255'],
         ]);
-        $author = User::where('id', Auth::id())->first();
 
-        if(!$author){
-            return response()->json(['error' => 'User Not found.'], 404);
-        }
         if ($validator->fails()) {
             return response()->json([
                 'errors' => $validator->errors(),
@@ -185,7 +186,7 @@ class BlogController extends Controller
                     'status_code' => Response::HTTP_NOT_FOUND,
                 ], 404);
             }
-            
+
             //user not the author
             if($blog->author_id != Auth::id()){
                 return response()->json([

@@ -156,8 +156,7 @@ class PreferenceController extends Controller
             'message' => 'Preference deleted successfully.',
         ], 200);
     }
-
-
+//show regions
     public function showRegion($user_id)
     {
         $preference = Preference::where('user_id', $user_id)->first();
