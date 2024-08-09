@@ -255,8 +255,8 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('squeeze-pages', SqueezePageCoontroller::class);
         Route::get('/dashboard/statistics', [AdminDashboardController::class, 'getStatistics']);
         Route::post('/faqs', [FaqController::class, 'store']);
-        Route::put('/faqs/{faq}', [FaqController::class, 'update']);
-        Route::delete('/faqs/{faq}', [FaqController::class, 'delete']);
+        Route::put('/faqs/{id}', [FaqController::class, 'update']);
+        Route::delete('/faqs/{id}', [FaqController::class, 'delete']);
         Route::get('/dashboard/top-products', [AdminDashboardController::class, 'getTopProducts']);
         Route::get('/dashboard/all-top-products', [AdminDashboardController::class, 'getAllProductsSortedBySales']);
     });
