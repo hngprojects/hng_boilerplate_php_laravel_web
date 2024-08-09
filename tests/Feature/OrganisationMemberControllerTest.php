@@ -11,12 +11,12 @@ use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 
-class OrganizationMemberControllerTest extends TestCase
+class organisationMemberControllerTest extends TestCase
 {
     use LazilyRefreshDatabase;
 
     protected $user;
-    protected $organization;
+    protected $organisation;
 
     protected function setUp(): void
     {
@@ -26,12 +26,12 @@ class OrganizationMemberControllerTest extends TestCase
         $this->user = User::factory()->create();
         $this->actingAs($this->user);
 
-        // Create an organization
-        $this->organization = Organisation::factory()->create();
+        // Create an organisation
+        $this->organisation = Organisation::factory()->create();
     }
 
     /** @test */
-    public function it_validates_the_organization_id_and_returns_paginated_members()
+    public function it_validates_the_organisation_id_and_returns_paginated_members()
     {
         // Create a user
         $user = User::factory()->create([
@@ -49,10 +49,10 @@ class OrganizationMemberControllerTest extends TestCase
         $response->assertStatus(200);
         $token = $response->json('data.access_token');
 
-        // Create an organization
-        $response = $this->postJson('/api/v1/organizations', [
-            'name' => 'Example Organization',
-            'description' => 'This is an example organization description.',
+        // Create an organisation
+        $response = $this->postJson('/api/v1/organisations', [
+            'name' => 'Example organisation',
+            'description' => 'This is an example organisation description.',
             'email' => 'example@example.com',
             'industry' => 'Technology',
             'type' => 'Non-profit',
@@ -66,8 +66,8 @@ class OrganizationMemberControllerTest extends TestCase
         $response->assertStatus(201);
         $organisation = $response->json('data.org_id');
 
-        // Fetch members with valid organization ID
-        $response = $this->getJson("/api/v1/organizations/{$organisation}/users?page=1&page_size=10", [
+        // Fetch members with valid organisation ID
+        $response = $this->getJson("/api/v1/organisations/{$organisation}/users?page=1&page_size=10", [
             'Authorization' => 'Bearer ' . $token
         ]);
 
@@ -95,23 +95,23 @@ class OrganizationMemberControllerTest extends TestCase
             ]);
     }
 
-    public function test_it_returns_users_when_searching_with_valid_organization_id()
+    public function test_it_returns_users_when_searching_with_valid_organisation_id()
     {
-        // Create users belonging to the organization
-        $user1 = $this->organization->users()->create([
+        // Create users belonging to the organisation
+        $user1 = $this->organisation->users()->create([
             'name' => 'John Doe',
             'email' => 'john@example.com',
             'password' => bcrypt('password'),
         ]);
 
-        $user2 = $this->organization->users()->create([
+        $user2 = $this->organisation->users()->create([
             'name' => 'Jane Smith',
             'email' => 'jane@example.com',
             'password' => bcrypt('password'),
         ]);
 
-        // Search for users in the organization
-        $response = $this->getJson('/api/v1/members/' . $this->organization->org_id . '/search?search=Jane');
+        // Search for users in the organisation
+        $response = $this->getJson('/api/v1/members/' . $this->organisation->org_id . '/search?search=Jane');
 
         $response->assertStatus(200)
             ->assertJson([
@@ -126,30 +126,30 @@ class OrganizationMemberControllerTest extends TestCase
             ]);
     }
 
-    public function test_it_returns_an_error_when_organization_id_is_invalid()
+    public function test_it_returns_an_error_when_organisation_id_is_invalid()
     {
-        // Pass an invalid organization ID
+        // Pass an invalid organisation ID
         $invalidOrgId = Str::random(10);
 
         $response = $this->getJson('/api/v1/members/' . $invalidOrgId . '/search');
 
         $response->assertStatus(400)
             ->assertJson([
-                'message' => 'Invalid organization ID',
+                'message' => 'Invalid organisation ID',
                 'status_code' => 400,
             ]);
     }
 
-    public function test_it_returns_an_error_when_organization_does_not_exist()
+    public function test_it_returns_an_error_when_organisation_does_not_exist()
     {
-        // Create a non-existing organization ID
+        // Create a non-existing organisation ID
         $nonExistingOrgId = Str::uuid()->toString();
 
         $response = $this->getJson('/api/v1/members/' . $nonExistingOrgId . '/search');
 
         $response->assertStatus(404)
             ->assertJson([
-                'message' => 'Organization does not exist',
+                'message' => 'organisation does not exist',
                 'status_code' => 404,
             ]);
     }
@@ -158,20 +158,20 @@ class OrganizationMemberControllerTest extends TestCase
     {
    
         $user = $this->user;
-        // Create an organization
-        $organization = Organisation::factory()->create();
+        // Create an organisation
+        $organisation = Organisation::factory()->create();
    
    
-        // Attach user to the organization
-        $organization->users()->attach($user);
+        // Attach user to the organisation
+        $organisation->users()->attach($user);
    
         // Mock the storage
         Storage::fake('local');
    
-        //dd($organization->org_id);
+        //dd($organisation->org_id);
    
         // Call the download endpoint
-        $response = $this->get("/api/v1/members/{$organization->org_id}/export");
+        $response = $this->get("/api/v1/members/{$organisation->org_id}/export");
    
    
         $response->assertOk();

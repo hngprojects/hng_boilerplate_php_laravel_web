@@ -50,12 +50,7 @@ class AuthController extends Controller
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|email:rfc|max:255|unique:users',
             'admin_secret' => 'nullable|string|max:255',
-            'password' => ['required', 'string', Password::min(8)
-            ->letters()
-            ->mixedCase()
-            ->numbers()
-            ->symbols()
-            ->uncompromised()],
+            'password' => 'required|string|min:6',
         ]);
 
         // Check if validation fails

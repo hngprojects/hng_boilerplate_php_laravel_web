@@ -54,7 +54,7 @@ class ProductUpdateTest extends TestCase
         $organisation = Organisation::factory()->create();
         OrganisationUser::create(['org_id' => $organisation->org_id, 'user_id' => $user->id]);
 
-        $response = $this->patchJson("/api/v1/organizations/{$organisation->org_id}/products/{$product->product_id}", $data);
+        $response = $this->patchJson("/api/v1/organisations/{$organisation->org_id}/products/{$product->product_id}", $data);
 
         $response->assertStatus(200);
         $response->assertJson(['message' => 'Product updated successfully']);
@@ -132,11 +132,11 @@ class ProductUpdateTest extends TestCase
         $organisation = Organisation::factory()->create();
         OrganisationUser::create(['org_id' => $organisation->org_id, 'user_id' => $user->id]);
 
-        $response = $this->patchJson("/api/v1/organizations/{$organisation->org_id}/products/{$product->product_id}", $payload);
+        $response = $this->patchJson("/api/v1/organisations/{$organisation->org_id}/products/{$product->product_id}", $payload);
 
         // Assert the response status is 403 Forbidden
         $response->assertStatus(403)
-            ->assertJson(['message' => 'You are not authorized to update products for this organization.']);
+            ->assertJson(['message' => 'You are not authorized to update products for this organisation.']);
 
         // Assert the product was not updated
         $this->assertDatabaseMissing('products', [
