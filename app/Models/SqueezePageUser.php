@@ -15,4 +15,5 @@ class SqueezePageUser extends Model
     protected $guarded = [];
 
     protected $keyType = 'string';
+    
 }
