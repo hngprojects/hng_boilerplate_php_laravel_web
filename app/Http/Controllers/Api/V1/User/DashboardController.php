@@ -28,7 +28,7 @@ class DashboardController extends Controller
             ->get()
             ->flatMap(function ($product) {
                 return $product->orders->map(function ($order) {
-                    return $order->quantity * $order->amount;
+                    return $order->total_amount;
                 });
             })->sum();
 
@@ -37,7 +37,6 @@ class DashboardController extends Controller
         }])
             ->get()
             ->sum('orders_count');
-
         $lastMonthRevenue = $userProducts
             ->with(['orders' => function ($query) use ($currentMonth, $lastMonth) {
                 $query->whereBetween('created_at', [$lastMonth, $currentMonth]);
@@ -45,7 +44,7 @@ class DashboardController extends Controller
             ->get()
             ->flatMap(function ($product) {
                 return $product->orders->map(function ($order) {
-                    return $order->quantity * $order->amount;
+                    return $order->total_amount;
                 });
             })->sum();
 
@@ -149,9 +148,8 @@ class DashboardController extends Controller
         return response()->json([
             'message' => 'User analytics retrieved successfully',
             'status_code' => Response::HTTP_OK,
-            'data' => [
-                $revenueByMonth,
-            ]
+            'data' => $revenueByMonth,
+
         ]);
     }
 
