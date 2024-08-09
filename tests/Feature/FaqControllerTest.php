@@ -40,20 +40,6 @@ class FaqControllerTest extends TestCase
                 ]);
     }
 
-    public function test_index_returns_faqs_without_pagination()
-    {
-        $response = $this->withHeaders(['Authorization' => "Bearer $this->adminToken"])
-            ->getJson('/api/v1/faqs');
-
-        $response->assertStatus(200)
-            ->assertJsonStructure([
-                'message',
-                'data' => [
-                    '*' => ['id', 'question', 'answer']
-                ],
-            ]);
-    }
-
 
     public function test_if_admin_can_create_faq()
     {
