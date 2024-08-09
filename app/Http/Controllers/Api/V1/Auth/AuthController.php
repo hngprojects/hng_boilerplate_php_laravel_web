@@ -118,8 +118,6 @@ class AuthController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
 
-            // dd($e->getMessage());
-
             return $this->apiResponse('Registration unsuccessful', Response::HTTP_BAD_REQUEST);
         }
 
