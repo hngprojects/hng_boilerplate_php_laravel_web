@@ -22,7 +22,7 @@ class FilterSqueezeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'status' => 'nullable|string|in:online,offline',
+            'status' => 'required|string|in:online,offline',
         ];
     }
 }
