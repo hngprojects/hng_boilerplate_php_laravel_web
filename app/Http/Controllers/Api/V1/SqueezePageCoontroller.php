@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\FilterSqueezeRequest;
 use App\Models\SqueezePage;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Validation\ValidationException;
 
 class SqueezePageCoontroller extends Controller
 {
@@ -75,5 +77,56 @@ class SqueezePageCoontroller extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function search(Request $request)
+    {
+            $request->validate([
+                'q' => 'required|string|max:255',
+            ]);
+
+            $query = SqueezePage::query();
+
+            if ($searchTerm = $request->input('q')) {
+                $query->where(function ($q) use ($searchTerm) {
+                    $q->where('headline', 'LIKE', "%{$searchTerm}%")
+                        ->orWhere('sub_headline', 'LIKE', "%{$searchTerm}%")
+                        ->orWhere('content', 'LIKE', "%{$searchTerm}%")
+                        ->orWhere('title', 'LIKE', "%{$searchTerm}%")
+                        ->orWhere('slug', 'LIKE', "%{$searchTerm}%");
+                });
+            }
+
+            $results = $query->get();
+
+            return response()->json([
+                'status' => Response::HTTP_OK,
+                'message' => 'Search result retrieved',
+                'data' => $results,
+            ]);
+    }
+
+    public function filter(FilterSqueezeRequest $request)
+    {
+        $query = SqueezePage::query();
+
+        // Filter by status if provided
+        if ($status = $request->input('status')) {
+            $query->where('status', $status);
+        }
+
+        // Filter by slug if provided
+        if ($slug = $request->input('slug')) {
+            $query->where('slug', $slug);
+        }
+
+        // Get the results
+        $results = $query->get();
+
+        return response()->json([
+            'status' => Response::HTTP_OK,
+            'message' => 'Filtered results',
+            'data' => $results,
+        ]);
     }
 }
