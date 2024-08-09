@@ -19,10 +19,12 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use App\Http\Resources\ProductResource;
+use App\Models\Order;
 
 
 class ProductController extends Controller
 {
+
     public function search(Request $request)
     {
         $validator = Validator::make($request->all(), [
