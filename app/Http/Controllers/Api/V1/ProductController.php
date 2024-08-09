@@ -202,33 +202,38 @@ class ProductController extends Controller
         }
 
         $imageUrl = null;
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('product_images', 'public');
+        if ($request->hasFile('image_url')) {
+            $imagePath = $request->file('image_url')->store('product_images', 'public');
             $imageUrl = Storage::url($imagePath);
         }
 
         $product = Product::create([
-            'name' => $request->input('title'),
+            'name' => $request->input('name'),
             'description' => $request->input('description'),
             'slug' => Carbon::now(),
             'tags' => $request->input('category'),
+            'category' => $request->input('category'),
             'price' => $request->input('price'),
             'imageUrl' => $imageUrl,
             'user_id' => auth()->id(),
             'org_id' => $org_id
         ]);
 
-        CategoryProduct::create([
-            'category_id' => $request->input('category'),
-            'product_id' => $product->product_id
-        ]);
-
+        // {
+        //     "name": "Product Name",
+        //     "quantity": 10,
+        //     "price": 99.99,
+        //     "category": "Electronics",
+        //     "description": "string",
+        //     "image_url": string,  
+        //     "size": string[] //optional
+        //   }
         $standardSize = Size::where('size', 'standard')->first('id');
 
         $productVariant = ProductVariant::create([
             'product_id' => $product->product_id,
-            'stock' => $request->input('stock'),
-            'stock_status' => $request->input('stock') > 0 ? 'in_stock' : 'out_stock',
+            'stock' => $request->input('quantity'),
+            'stock_status' => $request->input('quantity') > 0 ? 'in_stock' : 'out_stock',
             'price' => $request->input('price'),
             'size_id' => $standardSize->id,
         ]);
