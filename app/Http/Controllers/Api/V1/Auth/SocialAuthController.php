@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
-use Google_Client;
 
 class SocialAuthController extends Controller
 {
@@ -118,7 +117,6 @@ class SocialAuthController extends Controller
 
     public function saveGoogleRequestPost(Request $request)
     {
-        Log::info($request->input('id_token'));
 
         $response = Http::get('https://www.googleapis.com/oauth2/v3/userinfo', [
 
