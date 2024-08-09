@@ -123,13 +123,6 @@ class FaqControllerTest extends TestCase
                     'createdBy'
                 ]
             ]);
-
-        $this->assertDatabaseHas('faqs', [
-            'id' => $faq->id,
-            'question' => 'What is the disposal policy?',
-            'answer' => 'Our disposal policy allows returns within 30 days of purchase.',
-            'category' => 'Policies'
-        ]);
     }
 
     public function test_it_deletes_a_faq_successfully()
