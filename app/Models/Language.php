@@ -15,6 +15,8 @@ class Language extends Model
     // Set the key type to string
     protected $keyType = 'string';
 
+    protected $fillable = ['language', 'code', 'description'];
+
     // Disable auto-incrementing IDs
     public $incrementing = false;
 

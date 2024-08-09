@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Organisation;
 use App\Models\Role;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Str;
 
 class OrganisationRemoveUserTest extends TestCase
 {
@@ -19,7 +20,10 @@ class OrganisationRemoveUserTest extends TestCase
     /** @test */
     public function it_test_unauthenticated_user_cannot_remove_user()
     {
-        $response = $this->delete('/api/v1/organisations/44572ad3-2efe-463c-9531-8b879ef2bfa5/users/44572ad3-2efe-463c-9531-8b879ef2bfa5', [], [
+        $uuid1 = Str::uuid();
+        $uuid2 = Str::uuid();
+
+        $response = $this->delete('/api/v1/organisations/' . $uuid1 . '/users/'. $uuid2, [], [
             'accept' => 'application/json',
         ]);
         $response->assertStatus(401)

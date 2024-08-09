@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Api\V1\Auth;
 
+use Google_Client;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
-use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 
@@ -125,65 +127,71 @@ class SocialAuthController extends Controller
                 'message' => $validator->errors()
             ], 422);
         }
-        
+
         // Extract Google user data from the request
-        $google_token = $request->input('id_token');
+        $idToken = $request->id_token;
 
+        $response = Http::get("https://www.googleapis.com/oauth2/v3/tokeninfo?id_token={$idToken}");
+        if($response->successful()) {
+            $payload = $response->json();
 
-        try {
-            // Retrieve user information from Google
-            $googleUser = Socialite::driver('google')->userFromToken($google_token);
-    
-            // Create or update the user
-            $user = User::updateOrCreate(
-                ['email' => $googleUser->email],
-                [
-                    'password' => Hash::make(Str::random(12)), // Random password for social sign-ins
-                    'social_id' => $googleUser->id,
-                    'is_verified' => true,
-                    'signup_type' => 'Google',
-                    'is_active' => true,
-                ]
-            );
-    
-            // Handle profile update or creation
-            if ($user->profile) {
-                $user->profile->update([
-                    'first_name' => $googleUser->user['given_name'],
-                    'last_name' => $googleUser->user['family_name'],
-                    'avatar_url' => $googleUser->user['picture'],
-                ]);
-            } else {
-                $user->profile()->create([
-                    'first_name' => $googleUser->user['given_name'],
-                    'last_name' => $googleUser->user['family_name'],
-                    'avatar_url' => $googleUser->user['picture'],
-                ]);
-            }
-    
-            // Generate JWT token
-            $token = JWTAuth::fromUser($user);
-    
-            return response()->json([
-                'status_code' => 200,
-                'message' => 'User Created Successfully',
-                'access_token' => $token,
-                'data' => [
-                    'user' => [
+            if (isset($payload['sub']) && isset($payload['email'])) {
+                $email = $payload['email'];
+                $firstName = $payload['given_name'];
+                $lastName = $payload['family_name'];
+                $avatarUrl = $payload['picture'] ?? null;
+
+                // Create or update user
+                $user = User::updateOrCreate(
+                    ['email' => $email],
+                    [
+                        'password' => Hash::make(Str::random(12)), // Generate a random password for the user
+                        'social_id' => $idToken,
+                        'is_verified' => true,
+                        'signup_type' => 'Google',
+                        'is_active' => true,
+                    ]
+                );
+
+                // Update or create user profile
+                if ($user->profile) {
+                    $user->profile->update([
+                        'first_name' => $firstName,
+                        'last_name' => $lastName,
+                        'avatar_url' => $avatarUrl,
+                    ]);
+                } else {
+                    $user->profile()->create([
+                        'first_name' => $firstName,
+                        'last_name' => $lastName,
+                        'avatar_url' => $avatarUrl,
+                    ]);
+                }
+
+                $token = JWTAuth::fromUser($user);
+
+                return response()->json([
+                    'status_code' => 200,
+                    'message' => 'User Created',
+                    'access_token' => $token,
+                    'data' => [
                         'id' => $user->id,
                         'email' => $user->email,
-                        'first_name' => $googleUser->user['given_name'],
-                        'last_name' => $googleUser->user['family_name'],
-                        'fullname' => $googleUser->user['given_name'].' '.$googleUser->user['family_name'],
-                        'role' => $user->role,
+                        'first_name' => $firstName,
+                        'last_name' => $lastName,
                     ]
-                ]
-            ], 200);
-        } catch (Exception $e) {
+                ]);
+            } else {
+                return response()->json([
+                    'status_code' => 401,
+                    'message' => 'Invalid Token Payload'
+                ], 401);
+            }
+        } else {
             return response()->json([
-                'status_code' => 500,
-                'message' => $e->getMessage()
-            ], 500);
+                'status_code' => 401,
+                'message' => 'Invalid Token: ' . $response->body()
+            ], 401);
         }
     }
 
