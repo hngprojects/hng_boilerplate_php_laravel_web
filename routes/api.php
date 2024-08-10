@@ -48,6 +48,7 @@ use App\Http\Controllers\QuestController;
 use App\Http\Controllers\UserNotificationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\Admin\AdminDashboardController;
+use App\Http\Controllers\SqueezePageUserController;
 use App\Http\Controllers\Api\V1\NewsletterSubscriptionController;
 
 /*
@@ -156,6 +157,9 @@ Route::prefix('v1')->group(function () {
         Route::post('/products', [SuperAdminProductController::class, 'store']);
         Route::patch('/products/{productId}', [SuperAdminProductController::class, 'update']);
         Route::delete('/products/{productId}', [SuperAdminProductController::class, 'destroy']);
+
+      
+        Route::get('/squeeze-pages-users', [SqueezePageUserController::class, 'index']);
     });
 
     Route::middleware(['auth:api', 'admin'])->group(function () {
@@ -313,6 +317,9 @@ Route::prefix('v1/admin')->group(function () {
     //    quest
     Route::get('/quests/{id}/messages', [QuestController::class, 'getQuestMessages']);
 
+    Route::post('/squeeze-user', [SqueezePageUserController::class, 'store']);
+
+   
     //Newsletter Subscription
     Route::post('newsletter-subscription', [NewsletterSubscriptionController::class, 'store']);
 });
