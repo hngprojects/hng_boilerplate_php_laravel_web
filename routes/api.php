@@ -260,7 +260,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/dashboard/statistics', [AdminDashboardController::class, 'getStatistics']);
         Route::post('/faqs', [FaqController::class, 'store']);
         Route::put('/faqs/{faq}', [FaqController::class, 'update']);
-        Route::delete('/faqs/{faq}', [FaqController::class, 'destroy']);
+        Route::delete('/faqs/{faq}', [FaqController::class, 'destroy'])->name('admin.faq.delete');
         Route::get('/dashboard/top-products', [AdminDashboardController::class, 'getTopProducts']);
         Route::get('/dashboard/all-top-products', [AdminDashboardController::class, 'getAllProductsSortedBySales']);
     });

@@ -123,22 +123,27 @@ class FaqController extends Controller
      */
     public function destroy($faq)
     {
+        if (auth()->user()->role !== 'admin') {
+            return response()->json([
+                'status_code' => Response::HTTP_FORBIDDEN,
+                'message' => 'Only admin users can delete a faq',
+            ], Response::HTTP_FORBIDDEN);
+        }
+
         $faq = Faq::find($faq);
 
         if (!$faq) {
             return response()->json([
-                'code' => 400,
-                'description' => 'Bad Request.',
-                'links' => []
+                'status_code' => 400,
+                'message' => 'Bad Request.',
             ], 400);
         }
 
         $faq->delete();
 
         return response()->json([
-            'code' => 200,
-            'description' => 'The FAQ has been successfully deleted.',
-            'links' => []
+            'status_code' => 200,
+            'message' => 'FAQ successfully deleted.',
         ], 200);
     }
 }

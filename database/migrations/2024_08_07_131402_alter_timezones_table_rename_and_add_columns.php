@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::table('timezones', function (Blueprint $table) {
             $table->renameColumn('name', 'timezone');
-            $table->renameColumn('offset', 'gmtoffset');
-            $table->string('description')->after('gmtoffset');
+            // $table->renameColumn('offset', 'gmtoffset');
+            // $table->string('description')->after('gmtoffset');
         });
     }
 

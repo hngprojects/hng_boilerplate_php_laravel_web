@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Faq;
 use App\Models\User;
 use Database\Seeders\FaqSeeder;
+use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -125,43 +126,46 @@ class FaqControllerTest extends TestCase
             ]);
     }
 
-    public function test_it_deletes_a_faq_successfully()
+    public function test_if_admin_can_delete_faq()
     {
-        // Arrange: Seed the database and create a FAQ instance
-        $this->seed(FaqSeeder::class);
-        $faq = Faq::first();
+        
+        // Create a FAQ
+        $faq = Faq::create([
+            'question' => 'What is the safe policy?',
+            'answer' => 'Our safe policy allows returns within 30 days of purchase.',
+            'category' => 'Policies'
+        ]);
 
-        // Act: Send DELETE request to delete the FAQ
         $response = $this->withHeaders(['Authorization' => "Bearer $this->adminToken"])
             ->deleteJson("/api/v1/faqs/{$faq->id}");
 
-        // Assert: Verify the response
-        $response->assertStatus(200)
-            ->assertJson([
-                'code' => 200,
-                'description' => 'The FAQ has been successfully deleted.',
-                'links' => []
-            ]);
+        // Assert that the FAQ is deleted
+        $response->assertStatus(Response::HTTP_OK)
+                 ->assertJson([
+                     'status_code' => 200,
+                     'message' => 'FAQ successfully deleted.',
+                 ]);
 
-        // Assert: Verify the FAQ has been deleted from the database
         $this->assertDatabaseMissing('faqs', ['id' => $faq->id]);
     }
 
-    public function test_it_returns_bad_request_when_faq_not_found()
+    public function test_delete_non_existent_faq()
     {
-        // Generate a UUID that does not exist in the database
-        $invalidUuid = (string) Str::uuid();
-
-        // Act: Send DELETE request to delete a non-existent FAQ
         $response = $this->withHeaders(['Authorization' => "Bearer $this->adminToken"])
-            ->deleteJson('/api/v1/faqs/' . $invalidUuid);
+            ->deleteJson("/api/v1/faqs/9999");
 
-        // Assert: Verify the response
+        // Assert that the FAQ is deleted
         $response->assertStatus(400)
-            ->assertJson([
-                'code' => 400,
-                'description' => 'Bad Request.',
-                'links' => []
-            ]);
+                ->assertJson([
+                    'status_code' => 400,
+                    'message' => 'Bad Request.',
+                ]);
+
     }
+
+    
+
+    
+
+    
 }
