@@ -15,8 +15,9 @@ class CreateFaqRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return auth()->user()->role === 'super_admin';
     }
+
 
     /**
      * Get the validation rules that apply to the request.
@@ -27,8 +28,8 @@ class CreateFaqRequest extends FormRequest
     {
         return [
             'question' => 'required|string|max:255',
-            'answer' => 'required|string|max:500',
-            'category' => 'nullable|string',
+            'answer' => 'required|string',
+            'category' => 'required|string',
         ];
     }
 

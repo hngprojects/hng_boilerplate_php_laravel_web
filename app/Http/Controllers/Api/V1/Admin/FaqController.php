@@ -42,31 +42,24 @@ class FaqController extends Controller
      */
     public function store(CreateFaqRequest $request)
     {
-        try {
-            $data = $request->validated();
+        $data = $request->validated();
+        
+        $faq = Faq::create($data);
 
-            $faq = Faq::create($data);
-
-            return response()->json([
-                'status_code' => Response::HTTP_CREATED,
-                'message' => "The FAQ has been successfully created.",
-                'data' => [
-                    'id' => $faq->id,
-                    'question' => $faq->question,
-                    'answer' => $faq->answer,
-                    'category' => $faq->category,
-                    'createdBy' => "",
-                    'createdAt' => $faq->created_at,
-                    'updatedAt' => $faq->updated_at,
-                ]
-            ], Response::HTTP_CREATED);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Internal server error',
-                'status' => Response::HTTP_INTERNAL_SERVER_ERROR
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
+        return response()->json([
+            'status_code' => 201,
+            'message' => "FAQ created successfully",
+            'data' => [
+                'id' => $faq->id,
+                'question' => $faq->question,
+                'answer' => $faq->answer,
+                'category' => $faq->category,
+                'created_at' => $faq->created_at,
+                'updated_at' => $faq->updated_at,
+            ]
+        ], 201);
     }
+
 
     /**
      * Display the specified resource.

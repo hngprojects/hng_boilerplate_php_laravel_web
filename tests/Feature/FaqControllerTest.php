@@ -41,33 +41,37 @@ class FaqControllerTest extends TestCase
     }
 
 
-    public function test_if_admin_can_create_faq()
+    public function test_if_super_admin_can_create_faq()
     {
+        $superAdmin = User::factory()->create(['role' => 'super_admin']);
+        $token = JWTAuth::fromUser($superAdmin);
+    
         $payload = [
             'question' => 'What is the return policy?',
             'answer' => 'Our return policy allows returns within 30 days of purchase.',
             'category' => 'Policies'
         ];
-
-        $response = $this->withHeaders(['Authorization' => "Bearer $this->adminToken"])
+    
+        $response = $this->withHeaders(['Authorization' => "Bearer $token"])
             ->postJson('/api/v1/faqs', $payload);
-
+    
         $response->assertStatus(201)
             ->assertJsonStructure([
+                'status_code',
                 'message',
                 'data' => [
                     'id',
                     'question',
                     'answer',
                     'category',
-                    'createdAt',
-                    'updatedAt',
-                    'createdBy'
+                    'created_at',
+                    'updated_at',
                 ]
             ]);
-
+    
         $this->assertDatabaseHas('faqs', $payload);
     }
+    
 
     public function test_if_create_faq_missing_field_fails()
     {
