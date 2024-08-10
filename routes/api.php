@@ -48,6 +48,7 @@ use App\Http\Controllers\QuestController;
 use App\Http\Controllers\UserNotificationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\Admin\AdminDashboardController;
+use App\Http\Controllers\SqueezePageUserController;
 use App\Http\Controllers\Api\V1\NewsletterSubscriptionController;
 
 /*
@@ -156,6 +157,9 @@ Route::prefix('v1')->group(function () {
         Route::post('/products', [SuperAdminProductController::class, 'store']);
         Route::patch('/products/{productId}', [SuperAdminProductController::class, 'update']);
         Route::delete('/products/{productId}', [SuperAdminProductController::class, 'destroy']);
+
+      
+        Route::get('/squeeze-pages-users', [SqueezePageUserController::class, 'index']);
     });
 
     Route::middleware(['auth:api', 'admin'])->group(function () {
@@ -254,15 +258,16 @@ Route::prefix('v1')->group(function () {
         Route::get('/squeeze-pages/filter', [SqueezePageCoontroller::class, 'filter']);
         Route::apiResource('squeeze-pages', SqueezePageCoontroller::class);
         Route::get('/dashboard/statistics', [AdminDashboardController::class, 'getStatistics']);
-        Route::apiResource('faqs', FaqController::class);
+        Route::post('/faqs', [FaqController::class, 'store']);
+        Route::put('/faqs/{faq}', [FaqController::class, 'update']);
+        Route::delete('/faqs/{faq}', [FaqController::class, 'destroy']);
         Route::get('/dashboard/top-products', [AdminDashboardController::class, 'getTopProducts']);
         Route::get('/dashboard/all-top-products', [AdminDashboardController::class, 'getAllProductsSortedBySales']);
-
-
-
     });
 
     Route::post('/waitlists', [WaitListController::class, 'store']);
+
+    Route::get('faqs', [FaqController::class, 'index']);
 
 
     Route::get('/blogs/{id}', [BlogController::class, 'show']);
@@ -309,11 +314,12 @@ Route::prefix('v1/admin')->group(function () {
     Route::get('/timezones', [TimezoneController::class, 'index']);
 
 
-
-
     //    quest
     Route::get('/quests/{id}/messages', [QuestController::class, 'getQuestMessages']);
 
+    Route::post('/squeeze-user', [SqueezePageUserController::class, 'store']);
+
+   
     //Newsletter Subscription
     Route::post('newsletter-subscription', [NewsletterSubscriptionController::class, 'store']);
 });

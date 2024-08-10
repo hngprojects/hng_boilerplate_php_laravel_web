@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers\Api\V1\Auth;
 
+use Google_Client;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
-use Google_Client;
-use Illuminate\Support\Facades\Http;
 
 class SocialAuthController extends Controller
 {
@@ -115,7 +116,7 @@ class SocialAuthController extends Controller
 
     public function saveGoogleRequestPost(Request $request)
     {
-        // Validate the incoming request working
+        // Validate the incoming request
         $validator = Validator::make($request->all(), [
             'id_token' => 'required|string',
         ]);
@@ -126,7 +127,7 @@ class SocialAuthController extends Controller
                 'message' => $validator->errors()
             ], 422);
         }
-        
+
         // Extract Google user data from the request
         $idToken = $request->id_token;
 

@@ -21,10 +21,12 @@ class UserController extends Controller
             [
                 "status_code" => 200,
                 "message" => "User statistics retrieved successfully",
-                "total_users" => $totalUsers,
-                "deleted_users" => $totalDeletedUsers,
-                "active_users" => $totalActiveUsers,
-                "in_active_users" => $totalInActiveUsers,
+                "data" => [
+                    "total_users" => $totalUsers,
+                    "deleted_users" => $totalDeletedUsers,
+                    "active_users" => $totalActiveUsers,
+                    "in_active_users" => $totalInActiveUsers,
+                ]
             ],
             200
         );
@@ -34,14 +36,13 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::latest()->paginate();
-
+        $users = User::paginate();
 
         return response()->json(
             [
                 "status_code" => 200,
                 "message" => "Users returned successfully",
-                "data" =>$users
+                "data" => $users
             ],
             200
         );
