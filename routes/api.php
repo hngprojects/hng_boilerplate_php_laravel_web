@@ -320,8 +320,6 @@ Route::prefix('v1/admin')->group(function () {
     Route::post('/squeeze-user', [SqueezePageUserController::class, 'store']);
 
    
-
-
     //Newsletter Subscription
     Route::post('newsletter-subscription', [NewsletterSubscriptionController::class, 'store']);
 });
