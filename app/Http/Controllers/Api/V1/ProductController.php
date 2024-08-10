@@ -222,18 +222,17 @@ class ProductController extends Controller
         ]);
 
         $standardSize = Size::where('size', 'standard')->value('id');
-        // dd($standardSize);
         $productVariant = ProductVariant::create([
             'product_id' => $product->product_id,
             'stock' => $request->input('quantity'),
             'stock_status' => $request->input('quantity') > 0 ? 'in_stock' : 'out_stock',
             'price' => $request->input('price'),
-            'size_id' => $standardSize->id,
+            'size_id' => $standardSize,
         ]);
 
         ProductVariantSize::create([
             'product_variant_id' => $productVariant->id,
-            'size_id' => $standardSize->id,
+            'size_id' => $standardSize,
         ]);
 
         return response()->json(['message' => 'Product created successfully', 'product' => $product], 201);

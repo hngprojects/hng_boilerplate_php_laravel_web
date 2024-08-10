@@ -22,7 +22,7 @@ return new class extends Migration
             $table->boolean('is_active')->default(1);
             $table->boolean('is_verified')->default(0);
             $table->string('signup_type')->default('Token');
-            $table->string('social_id')->nullable();
+            $table->mediumText('social_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

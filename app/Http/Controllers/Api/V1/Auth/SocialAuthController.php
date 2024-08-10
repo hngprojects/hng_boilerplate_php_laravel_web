@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api\V1\Auth;
 
-use Google_Client;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
@@ -134,7 +133,6 @@ class SocialAuthController extends Controller
         $response = Http::get("https://www.googleapis.com/oauth2/v3/tokeninfo?id_token={$idToken}");
         if($response->successful()) {
             $payload = $response->json();
-
             if (isset($payload['sub']) && isset($payload['email'])) {
                 $email = $payload['email'];
                 $firstName = $payload['given_name'];
@@ -161,24 +159,29 @@ class SocialAuthController extends Controller
                         'avatar_url' => $avatarUrl,
                     ]);
                 } else {
-                    $user->profile()->create([
+                    $profile = $user->profile()->create([
                         'first_name' => $firstName,
                         'last_name' => $lastName,
                         'avatar_url' => $avatarUrl,
                     ]);
+                    $user->profile = $profile;
                 }
 
                 $token = JWTAuth::fromUser($user);
 
                 return response()->json([
                     'status_code' => 200,
-                    'message' => 'User Created',
+                    'message' => 'User Created Successfully',
                     'access_token' => $token,
                     'data' => [
-                        'id' => $user->id,
-                        'email' => $user->email,
-                        'first_name' => $firstName,
-                        'last_name' => $lastName,
+                        'user' => [
+                            'id' => $user->id,
+                            'email' => $user->email,
+                            'first_name' => $firstName,
+                            'last_name' => $lastName,
+                            'avatar_url' => $avatarUrl,
+                            'role' => $user->role
+                        ]
                     ]
                 ]);
             } else {
