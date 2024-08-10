@@ -27,7 +27,6 @@ class ProductCreateTest extends TestCase
 
         // Create a size with 'standard'
         $size = Size::create(['size' => 'standard']);
-
         // Create a category
         $category = Category::create(['name' => 'Test Category', 'slug' => 'test-category', 'description' => 'Testing']);
 

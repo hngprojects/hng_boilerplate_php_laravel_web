@@ -220,8 +220,11 @@ class ProductController extends Controller
             'user_id' => auth()->id(),
             'org_id' => $org_id
         ]);
+        // Create a size with 'standard'
+        $standardSize = Size::create(['size' => 'standard']);
 
-        $standardSize = Size::where('size', 'standard')->value('id');
+
+        // $standardSize = Size::where('size', 'standard')->value('id');
         // dd($standardSize);
         $productVariant = ProductVariant::create([
             'product_id' => $product->product_id,
