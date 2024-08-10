@@ -19,10 +19,12 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use App\Http\Resources\ProductResource;
+use App\Models\Order;
 
 
 class ProductController extends Controller
 {
+
     public function search(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -202,33 +204,29 @@ class ProductController extends Controller
         }
 
         $imageUrl = null;
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('product_images', 'public');
+        if ($request->hasFile('image_url')) {
+            $imagePath = $request->file('image_url')->store('product_images', 'public');
             $imageUrl = Storage::url($imagePath);
         }
 
         $product = Product::create([
-            'name' => $request->input('title'),
+            'name' => $request->input('name'),
             'description' => $request->input('description'),
             'slug' => Carbon::now(),
             'tags' => $request->input('category'),
+            'category' => $request->input('category'),
             'price' => $request->input('price'),
             'imageUrl' => $imageUrl,
             'user_id' => auth()->id(),
             'org_id' => $org_id
         ]);
 
-        CategoryProduct::create([
-            'category_id' => $request->input('category'),
-            'product_id' => $product->product_id
-        ]);
-
-        $standardSize = Size::where('size', 'standard')->first('id');
-
+        $standardSize = Size::where('size', 'standard')->value('id');
+        // dd($standardSize);
         $productVariant = ProductVariant::create([
             'product_id' => $product->product_id,
-            'stock' => $request->input('stock'),
-            'stock_status' => $request->input('stock') > 0 ? 'in_stock' : 'out_stock',
+            'stock' => $request->input('quantity'),
+            'stock_status' => $request->input('quantity') > 0 ? 'in_stock' : 'out_stock',
             'price' => $request->input('price'),
             'size_id' => $standardSize->id,
         ]);

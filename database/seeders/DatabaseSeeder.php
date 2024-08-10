@@ -60,6 +60,7 @@ class DatabaseSeeder extends Seeder
         $this->call([ArticlesTableSeeder::class]);
         $this->call(UserJobSeeder::class);
         $this->call(BlogSeeder::class);
+        $this->call(SqueezePageUserSeeder::class);
 
 
         UserSubscription::factory()->create();
