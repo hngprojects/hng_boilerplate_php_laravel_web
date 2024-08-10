@@ -25,15 +25,20 @@ class AdminSeeder extends Seeder
                 'is_verified' => 1,
             ]
         );
-
+    
+        $nameParts = explode(' ', $name);
+        $firstName = $nameParts[0];
+        $lastName = $nameParts[1] ?? ''; // Use empty string if last name doesn't exist
+    
         $user->profile()->updateOrCreate(
             ['user_id' => $user->id],
             [
-                'first_name' => explode(' ', $name)[0],
-                'last_name' => explode(' ', $name)[1],
+                'first_name' => $firstName,
+                'last_name' => $lastName,
                 'job_title' => $name,
                 'bio' => "$name bio",
             ]
         );
     }
+    
 }
