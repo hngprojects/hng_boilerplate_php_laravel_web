@@ -258,7 +258,6 @@ Route::prefix('v1')->group(function () {
         Route::get('/squeeze-pages/filter', [SqueezePageCoontroller::class, 'filter']);
         Route::apiResource('squeeze-pages', SqueezePageCoontroller::class);
         Route::get('/dashboard/statistics', [AdminDashboardController::class, 'getStatistics']);
-        Route::post('/faqs', [FaqController::class, 'store']);
         Route::put('/faqs/{faq}', [FaqController::class, 'update']);
         Route::delete('/faqs/{faq}', [FaqController::class, 'destroy']);
         Route::get('/dashboard/top-products', [AdminDashboardController::class, 'getTopProducts']);
@@ -267,7 +266,7 @@ Route::prefix('v1')->group(function () {
 
     Route::post('/waitlists', [WaitListController::class, 'store']);
 
-    Route::get('faqs', [FaqController::class, 'index']);
+    
 
 
     Route::get('/blogs/{id}', [BlogController::class, 'show']);
@@ -322,4 +321,11 @@ Route::prefix('v1/admin')->group(function () {
    
     //Newsletter Subscription
     Route::post('newsletter-subscription', [NewsletterSubscriptionController::class, 'store']);
+
+    Route::group(['middleware' => ['auth.jwt', 'superadmin']], function () {
+        Route::post('/faqs', [FaqController::class, 'store']);
+    });
+
+    Route::get('/faqs', [FaqController::class, 'index']);
+    
 });

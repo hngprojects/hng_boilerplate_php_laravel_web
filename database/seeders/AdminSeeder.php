@@ -11,11 +11,12 @@ class AdminSeeder extends Seeder
     public function run(): void
     {
         $this->createUser("Admin", "admin", "bulldozeradmin@hng.com");
-        $this->createUser("Super Admin", "superadmin", "bulldozersuperadmin@hng.com");
+        $this->createUser("Super Admin", "superAdmin", "bulldozersuperadmin@hng.com",  true);
     }
 
     private function createUser($name, $role, $email): void
     {
+        $isSuperAdmin = ($role === 'superadmin');
         $user = User::updateOrCreate(
             ['email' => $email],
             [
@@ -28,7 +29,7 @@ class AdminSeeder extends Seeder
     
         $nameParts = explode(' ', $name);
         $firstName = $nameParts[0];
-        $lastName = $nameParts[1] ?? ''; // Use empty string if last name doesn't exist
+        $lastName = $nameParts[1] ?? '';
     
         $user->profile()->updateOrCreate(
             ['user_id' => $user->id],
