@@ -77,5 +77,71 @@ class FaqController extends Controller
             ], 500);
         }
     }
+
+    public function update(Request $request, $id)
+    {
+        try {
+            $validatedData = $request->validate([
+                'question' => 'required|string|max:255',
+                'answer' => 'required|string',
+                'category' => 'required|string',
+            ]);
+    
+            $faq = Faq::findOrFail($id);
+    
+            $faq->update([
+                'question' => $validatedData['question'],
+                'answer' => $validatedData['answer'],
+                'category' => $validatedData['category'],
+            ]);
+    
+            return response()->json([
+                'status_code' => 200,
+                'message' => 'FAQ updated successfully',
+                'data' => [
+                    'question' => $faq->question,
+                    'answer' => $faq->answer,
+                    'category' => $faq->category,
+                    'id' => $faq->id,
+                    'created_at' => $faq->created_at->toIso8601String(),
+                    'updated_at' => $faq->updated_at->toIso8601String(),
+                ]
+            ], 200);
+    
+        } catch (ValidationException $e) {
+            return response()->json([
+                'status_code' => 422,
+                'message' => 'Validation failed',
+                'data' => $e->errors()
+            ], 422);
+    
+        } catch (Exception $e) {
+            return response()->json([
+                'status_code' => 500,
+                'message' => 'An error occurred while updating the FAQ',
+                'data' => []
+            ], 500);
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $faq = Faq::findOrFail($id);
+            $faq->delete();
+    
+            return response()->json([
+                'status_code' => 200,
+                'message' => 'FAQ successfully deleted'
+            ], 200);
+    
+        } catch (Exception $e) {
+            return response()->json([
+                'status_code' => 500,
+                'message' => 'An error occurred while deleting the FAQ',
+                'data' => []
+            ], 500);
+        }
+    }
     
 }

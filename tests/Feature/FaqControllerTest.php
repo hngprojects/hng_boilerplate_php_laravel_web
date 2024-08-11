@@ -111,4 +111,82 @@ class FaqControllerTest extends TestCase
                 'data'
             ]);
     }
+
+    public function test_super_admin_can_update_faq()
+    {
+        $faq = Faq::factory()->create();
+        $updatedData = [
+            'question' => 'Updated question?',
+            'answer' => 'Updated answer.',
+            'category' => 'Updated Category'
+        ];
+    
+        $response = $this->withHeaders(['Authorization' => "Bearer $this->token"])
+            ->putJson("/api/v1/faqs/{$faq->id}", $updatedData);
+    
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                'status_code',
+                'message',
+                'data' => [
+                    'id',
+                    'question',
+                    'answer',
+                    'category',
+                    'created_at',
+                    'updated_at',
+                ]
+            ]);
+    
+        $this->assertDatabaseHas('faqs', $updatedData);
+    }
+    
+    public function test_unauthorized_user_cannot_update_faq()
+    {
+        $faq = Faq::factory()->create();
+        $regularUser = User::factory()->create(['role' => 'user']);
+        $token = JWTAuth::fromUser($regularUser);
+    
+        $updatedData = [
+            'question' => 'Unauthorized update',
+            'answer' => 'This should not be updated.',
+            'category' => 'Test'
+        ];
+    
+        $response = $this->withHeaders(['Authorization' => "Bearer $token"])
+            ->putJson("/api/v1/faqs/{$faq->id}", $updatedData);
+    
+        $response->assertStatus(403);
+        $this->assertDatabaseMissing('faqs', $updatedData);
+    }
+    
+    public function test_super_admin_can_delete_faq()
+    {
+        $faq = Faq::factory()->create();
+    
+        $response = $this->withHeaders(['Authorization' => "Bearer $this->token"])
+            ->deleteJson("/api/v1/faqs/{$faq->id}");
+    
+        $response->assertStatus(200)
+            ->assertJson([
+                'status_code' => 200,
+                'message' => 'FAQ successfully deleted'
+            ]);
+    
+        $this->assertDatabaseMissing('faqs', ['id' => $faq->id]);
+    }
+    
+    public function test_unauthorized_user_cannot_delete_faq()
+    {
+        $faq = Faq::factory()->create();
+        $regularUser = User::factory()->create(['role' => 'user']);
+        $token = JWTAuth::fromUser($regularUser);
+    
+        $response = $this->withHeaders(['Authorization' => "Bearer $token"])
+            ->deleteJson("/api/v1/faqs/{$faq->id}");
+    
+        $response->assertStatus(403);
+        $this->assertDatabaseHas('faqs', ['id' => $faq->id]);
+    }
+    
 }
