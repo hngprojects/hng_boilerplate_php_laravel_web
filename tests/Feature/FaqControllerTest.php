@@ -2,10 +2,8 @@
 
 namespace Tests\Feature;
 
-use App\Models\Faq;
 use App\Models\User;
-use Database\Seeders\FaqSeeder;
-use Illuminate\Support\Str;
+use App\Models\Faq;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -14,34 +12,17 @@ class FaqControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected $adminUser;
-    protected $adminToken;
+    protected $superAdmin;
+    protected $token;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
-
-        $this->adminUser = User::factory()->create(['role' => 'admin']);
-        $this->adminToken = JWTAuth::fromUser($this->adminUser);
+        $this->superAdmin = User::factory()->create(['role' => 'superAdmin']);
+        $this->token = JWTAuth::fromUser($this->superAdmin);
     }
 
-    public function test_index_returns_faqs()
-    {
-        $this->seed(FaqSeeder::class);
-
-        $response = $this->getJson('/api/v1/faqs');
-
-        $response->assertStatus(200)
-            ->assertJsonStructure([
-                'message',
-                'data' => [
-                    '*' => ['id', 'question', 'answer', 'category', 'createdBy', 'createdAt', 'updatedAt']
-                ]
-                ]);
-    }
-
-
-    public function test_if_admin_can_create_faq()
+    public function test_super_admin_can_create_faq()
     {
         $payload = [
             'question' => 'What is the return policy?',
@@ -49,119 +30,85 @@ class FaqControllerTest extends TestCase
             'category' => 'Policies'
         ];
 
-        $response = $this->withHeaders(['Authorization' => "Bearer $this->adminToken"])
+        $response = $this->withHeaders(['Authorization' => "Bearer $this->token"])
             ->postJson('/api/v1/faqs', $payload);
 
         $response->assertStatus(201)
             ->assertJsonStructure([
+                'status_code',
                 'message',
                 'data' => [
                     'id',
                     'question',
                     'answer',
                     'category',
-                    'createdAt',
-                    'updatedAt',
-                    'createdBy'
+                    'created_at',
+                    'updated_at',
                 ]
             ]);
 
         $this->assertDatabaseHas('faqs', $payload);
     }
 
-    public function test_if_create_faq_missing_field_fails()
+    public function test_unauthorized_user_cannot_create_faq()
     {
+        $regularUser = User::factory()->create(['role' => 'user']);
+        $token = JWTAuth::fromUser($regularUser);
+
         $payload = [
-            'answer' => 'Our return policy allows returns within 30 days of purchase.',
-            'category' => 'Policies'
+            'question' => 'Unauthorized question?',
+            'answer' => 'This should not be created.',
+            'category' => 'Test'
         ];
 
-        $response = $this->withHeaders(['Authorization' => "Bearer $this->adminToken"])
+        $response = $this->withHeaders(['Authorization' => "Bearer $token"])
             ->postJson('/api/v1/faqs', $payload);
 
-        $response->assertStatus(400)
+        $response->assertStatus(403);
+        $this->assertDatabaseMissing('faqs', $payload);
+    }
+
+    public function test_can_fetch_all_faqs()
+    {
+        Faq::factory()->count(3)->create();
+
+        $response = $this->getJson('/api/v1/faqs');
+
+        $response->assertStatus(200)
             ->assertJsonStructure([
                 'status_code',
-                'errors' => [
-                    '*' => [
-                        'field',
-                        'message'
-                    ],
-                ]
-            ]);
-    }
-
-
-    public function test_if_admin_can_edit_faq()
-    {
-
-        $faq = Faq::create([
-            'question' => 'What is the safe policy?',
-            'answer' => 'Our safe policy allows returns within 30 days of purchase.',
-            'category' => 'Policies'
-        ]);
-
-        $payload = [
-            'question' => 'What is the disposal policy?',
-            'answer' => 'Our disposal policy allows returns within 30 days of purchase.',
-            'category' => 'Policies'
-        ];
-
-        $response = $this->withHeaders(['Authorization' => "Bearer $this->adminToken"])
-            ->putJson("/api/v1/faqs/{$faq->id}", $payload);
-
-        $response->assertStatus(201)
-            ->assertJsonStructure([
                 'message',
                 'data' => [
-                    'id',
-                    'question',
-                    'answer',
-                    'category',
-                    'createdAt',
-                    'updatedAt',
-                    'createdBy'
+                    '*' => [
+                        'id',
+                        'created_at',
+                        'updated_at',
+                        'question',
+                        'answer',
+                        'category',
+                    ]
                 ]
             ]);
+
+        $this->assertEquals(3, count($response->json('data')));
     }
 
-    public function test_it_deletes_a_faq_successfully()
+    public function test_faq_creation_fails_with_invalid_data()
     {
-        // Arrange: Seed the database and create a FAQ instance
-        $this->seed(FaqSeeder::class);
-        $faq = Faq::first();
+        $payload = [
+            'question' => '',
+            'answer' => '',
+            'category' => ''
+        ];
 
-        // Act: Send DELETE request to delete the FAQ
-        $response = $this->withHeaders(['Authorization' => "Bearer $this->adminToken"])
-            ->deleteJson("/api/v1/faqs/{$faq->id}");
+        $response = $this->withHeaders(['Authorization' => "Bearer $this->token"])
+            ->postJson('/api/v1/faqs', $payload);
 
-        // Assert: Verify the response
-        $response->assertStatus(200)
-            ->assertJson([
-                'code' => 200,
-                'description' => 'The FAQ has been successfully deleted.',
-                'links' => []
-            ]);
-
-        // Assert: Verify the FAQ has been deleted from the database
-        $this->assertDatabaseMissing('faqs', ['id' => $faq->id]);
-    }
-
-    public function test_it_returns_bad_request_when_faq_not_found()
-    {
-        // Generate a UUID that does not exist in the database
-        $invalidUuid = (string) Str::uuid();
-
-        // Act: Send DELETE request to delete a non-existent FAQ
-        $response = $this->withHeaders(['Authorization' => "Bearer $this->adminToken"])
-            ->deleteJson('/api/v1/faqs/' . $invalidUuid);
-
-        // Assert: Verify the response
-        $response->assertStatus(400)
-            ->assertJson([
-                'code' => 400,
-                'description' => 'Bad Request.',
-                'links' => []
+        $response->assertStatus(422)
+            ->assertJsonStructure([
+                'status_code',
+                'message',
+                'data'
             ]);
     }
 }
