@@ -170,7 +170,7 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::post('/email-requests', [SendEmailController::class, 'createEmailRequest']);
-    Route::post('/email-requests/send', [SendEmailController::class, 'triggerEmailSending']);
+    // Route::post('/email-requests/send', [SendEmailController::class, 'triggerEmailSending']);
 
 
     Route::post('/invitations/generate', [InvitationAcceptanceController::class, 'generateInvitation']);
