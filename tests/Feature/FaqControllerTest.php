@@ -18,7 +18,7 @@ class FaqControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->superAdmin = User::factory()->create(['role' => 'superAdmin']);
+        $this->superAdmin = User::factory()->create(['role' => 'superadmin']);
         $this->token = JWTAuth::fromUser($this->superAdmin);
     }
 
