@@ -45,12 +45,12 @@ class ProductCreateTest extends TestCase
         $image = UploadedFile::fake()->image('test_image.jpg');
 
         $payload = [
-            'title' => 'Test Product',
+            'name' => 'Test Product',
             'description' => 'Test Description',
-            'category' => $category->id, // Use the created category ID
+            'category' => 'Hello', // Use the created category ID
             'price' => 100,
-            'stock' => 10,
-            'image' => $image,
+            'quantity' => 10,
+            'image_url' => $image,
         ];
 
         // Send POST request to create product
@@ -77,16 +77,12 @@ class ProductCreateTest extends TestCase
         $this->assertDatabaseHas('products', [
             'name' => 'Test Product',
             'description' => 'Test Description',
-            'tags' => $category->id,
+            'tags' => 'Hello',
             'price' => 100,
             'user_id' => $user->id
         ]);
 
-        // Assert the category_product relationship is created
-        $this->assertDatabaseHas('category_product', [
-            'category_id' => $category->id,
-            'product_id' => Product::first()->product_id
-        ]);
+
 
         // Assert the product variant is created with the correct size
         $this->assertDatabaseHas('product_variants', [
@@ -116,7 +112,7 @@ class ProductCreateTest extends TestCase
         $size = Size::create(['size' => 'standard']);
 
         // Create a category
-        $category = Category::create(['name' => 'Test Category', 'slug' => 'test-category', 'description' => 'Testing']);
+        // $category = Category::create(['name' => 'Test Category', 'slug' => 'test-category', 'description' => 'Testing']);
 
         // Create an organisation and get the first instance
         $organisation = Organisation::factory()->create();
@@ -126,12 +122,12 @@ class ProductCreateTest extends TestCase
         $image = UploadedFile::fake()->image('test_image.jpg');
 
         $payload = [
-            'title' => 'Unauthorized Product',
+            'name' => 'Unauthorized Product',
             'description' => 'Unauthorized Description',
-            'category' => $category->id, // Use the created category ID
+            'category' => 'hello', // Use the created category ID
             'price' => 100,
-            'stock' => 10,
-            'image' => $image,
+            'quantity' => 10,
+            'image_url' => $image,
         ];
 
         // Send POST request to create product

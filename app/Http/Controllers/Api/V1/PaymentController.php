@@ -359,9 +359,6 @@ class PaymentController extends Controller
             ], 401);
         }
 
-        //Validator::make($request->all(), [
-        // Validate the request data
-        //$validatedData = $request->validate([
         $validatedData =  Validator::make($request->all(),[
             'fullname' => 'required|string|max:255',
             'business_name' => 'string|max:255',
@@ -554,6 +551,5 @@ class PaymentController extends Controller
             'message' => 'Error: Unable to Process Paymnet!',
         ], 400);
     }
-
 
 }

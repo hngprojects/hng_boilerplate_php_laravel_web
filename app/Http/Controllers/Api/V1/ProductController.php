@@ -204,40 +204,35 @@ class ProductController extends Controller
         }
 
         $imageUrl = null;
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('product_images', 'public');
+        if ($request->hasFile('image_url')) {
+            $imagePath = $request->file('image_url')->store('product_images', 'public');
             $imageUrl = Storage::url($imagePath);
         }
 
         $product = Product::create([
-            'name' => $request->input('title'),
+            'name' => $request->input('name'),
             'description' => $request->input('description'),
             'slug' => Carbon::now(),
             'tags' => $request->input('category'),
+            'category' => $request->input('category'),
             'price' => $request->input('price'),
             'imageUrl' => $imageUrl,
             'user_id' => auth()->id(),
             'org_id' => $org_id
         ]);
 
-        CategoryProduct::create([
-            'category_id' => $request->input('category'),
-            'product_id' => $product->product_id
-        ]);
-
-        $standardSize = Size::where('size', 'standard')->first('id');
-
+        $standardSize = Size::where('size', 'standard')->value('id');
         $productVariant = ProductVariant::create([
             'product_id' => $product->product_id,
-            'stock' => $request->input('stock'),
-            'stock_status' => $request->input('stock') > 0 ? 'in_stock' : 'out_stock',
+            'stock' => $request->input('quantity'),
+            'stock_status' => $request->input('quantity') > 0 ? 'in_stock' : 'out_stock',
             'price' => $request->input('price'),
-            'size_id' => $standardSize->id,
+            'size_id' => $standardSize,
         ]);
 
         ProductVariantSize::create([
             'product_variant_id' => $productVariant->id,
-            'size_id' => $standardSize->id,
+            'size_id' => $standardSize,
         ]);
 
         return response()->json(['message' => 'Product created successfully', 'product' => $product], 201);
