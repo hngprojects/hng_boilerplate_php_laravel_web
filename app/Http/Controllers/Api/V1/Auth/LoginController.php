@@ -59,7 +59,7 @@ class LoginController extends Controller
                     'last_name' => $profile->last_name ?? null,
                     'email' => $user->email,
                     'avatar_url' => $profile->avatar_url ?? null,
-                    'is_superadmin' => $user->role === 'superAdmin',
+                    'is_superadmin' => $user->role === 'superadmin',
                     'role' => $user->role
                 ],
                 'organisations' => $organisations
