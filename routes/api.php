@@ -327,7 +327,7 @@ Route::prefix('v1/admin')->group(function () {
 
     Route::get('/faqs', [FaqController::class, 'index']);
 
-    Route::post('/process-payment', [PaymentController::class, 'processPayment']);
+    Route::post('/payment/stripe', [PaymentController::class, 'processPayment']);
     Route::get('/payment-success//{organisation_id}/{id}', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
     Route::get('/payment-cancel', [PaymentController::class, 'paymentCancel'])->name('payment.cancel');
 });
