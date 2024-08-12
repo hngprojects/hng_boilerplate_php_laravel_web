@@ -168,8 +168,7 @@ Route::prefix('v1')->group(function () {
         Route::patch('/email-templates/{id}', [EmailTemplateController::class, 'update']);
         Route::delete('/email-templates/{id}', [EmailTemplateController::class, 'destroy']);
 
-        // Dashboard
-        Route::get('/users', [AdminDashboardController::class, 'getUsers']);
+ 
     });
     Route::middleware(['auth:api', 'superadmin'])->group(function () {
 
