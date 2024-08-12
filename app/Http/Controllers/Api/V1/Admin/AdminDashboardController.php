@@ -7,9 +7,48 @@ use App\Models\Order;
 use App\Models\User;
 use App\Models\Product;
 use Illuminate\Http\Response;
+use Illuminate\Http\Request;
 
 class AdminDashboardController extends Controller
 {
+    public function getUsers(Request $request) 
+    {
+      // Get the 'status' and 'is_disabled' query parameters
+      $status = $request->query('status'); // For filtering by active or inactive status
+      $isDisabled = $request->query('is_disabled'); // For filtering by disabled status
+      $createdAtFrom = $request->query('created_at_from'); // Start date for filtering
+      $createdAtTo = $request->query('created_at_to'); // End date for filtering
+
+      // Build the query
+      $query = User::select('id', 'name', 'email', 'is_active', 'created_at',)
+                   ->orderBy('created_at', 'desc');
+  
+      // Apply filters if provided
+      if ($status !== null) {
+          if ($status === 'true') {
+              $query->where('status', 'true');
+          } elseif ($status === 'false') {
+              $query->where('status', 'false');
+          }
+      }
+  
+      if ($isDisabled !== null) {
+          $isDisabled = filter_var($isDisabled, FILTER_VALIDATE_BOOLEAN); // Convert to boolean
+          $query->where('is_disabled', $isDisabled);
+      }
+      
+      if ($createdAtFrom) {
+          $query->where('created_at', '>=', $createdAtFrom);
+      }
+  
+      if ($createdAtTo) {
+          $query->where('created_at', '<=', $createdAtTo);
+      }
+      // Paginate results
+      $users = $query->paginate(15);
+  
+      return response()->json($users);  
+    }
     public function getStatistics()
     {
         $currentMonth = now()->startOfMonth();
