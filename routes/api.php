@@ -120,6 +120,10 @@ Route::prefix('v1')->group(function () {
         Route::delete('/organisations/{org_id}/products/{product_id}', [ProductController::class, 'destroy']);
     });
 
+
+    Route::put('/notification-preferences/{user_id}', [NotificationPreferenceController::class, 'update']);
+Route::post('/subscribe', [NotificationPreferenceController::class, 'subscribe']);
+
     //comment
     Route::middleware('auth:api')->group(function () {
         Route::post('/blogs/{blogId}/comments', [CommentController::class, 'createComment']);
@@ -158,7 +162,7 @@ Route::prefix('v1')->group(function () {
         Route::patch('/products/{productId}', [SuperAdminProductController::class, 'update']);
         Route::delete('/products/{productId}', [SuperAdminProductController::class, 'destroy']);
 
-      
+
         Route::get('/squeeze-pages-users', [SqueezePageUserController::class, 'index']);
     });
 
@@ -240,7 +244,11 @@ Route::prefix('v1')->group(function () {
 
 
 
-        Route::get('/notification-settings', [NotificationSettingController::class, 'show']);
+       
+
+        Route::put('/notification-preferences/{user_id}', [NotificationPreferenceController::class, 'update']);
+        Route::post('/subscribe', [NotificationPreferenceController::class, 'subscribe']);
+
         Route::patch('/notification-settings', [NotificationSettingController::class, 'update']);
     });
     Route::get('/notification-settings', [NotificationSettingController::class, 'show']);
@@ -263,7 +271,7 @@ Route::prefix('v1')->group(function () {
 
     Route::post('/waitlists', [WaitListController::class, 'store']);
 
-    
+
 
 
     Route::get('/blogs/{id}', [BlogController::class, 'show']);
@@ -315,7 +323,7 @@ Route::prefix('v1/admin')->group(function () {
 
     Route::post('/squeeze-user', [SqueezePageUserController::class, 'store']);
 
-   
+
     //Newsletter Subscription
     Route::post('newsletter-subscription', [NewsletterSubscriptionController::class, 'store']);
 
@@ -326,5 +334,5 @@ Route::prefix('v1/admin')->group(function () {
     });
 
     Route::get('/faqs', [FaqController::class, 'index']);
-    
+
 });
