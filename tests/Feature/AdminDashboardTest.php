@@ -3,13 +3,13 @@
 namespace Tests\Feature;
 
 use App\Models\User;
-use App\Enums\Role;
+use App\Models\Role;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
-class AdminDashboardControllerTest extends TestCase
+class AdminDashboardTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -27,7 +27,7 @@ class AdminDashboardControllerTest extends TestCase
             'id' => (string) \Illuminate\Support\Str::uuid(),
             'username' => 'admin_user',
             'email' => 'admin@example.com',
-            'role' => Role::ADMIN->value,
+            'role' => 'admin',
             'avatar_url' => 'https://example.com/avatar.jpg',
             'invite_link' => 'https://example.com/invite/admin_user',
             'status' => true,
@@ -45,7 +45,7 @@ class AdminDashboardControllerTest extends TestCase
             'id' => (string) \Illuminate\Support\Str::uuid(),
             'username' => 'regular_user',
             'email' => 'user@example.com',
-            'role' => Role::USER->value,
+            'role' => 'user',
             'avatar_url' => 'https://example.com/avatar.jpg',
             'invite_link' => 'https://example.com/invite/regular_user',
             'status' => true,
@@ -66,17 +66,16 @@ class AdminDashboardControllerTest extends TestCase
     public function test_admin_can_get_all_users()
     {
         $response = $this->withHeaders(['Authorization' => "Bearer $this->adminToken"])
-                         ->getJson('/api/v1/users');
+                         ->getJson('/api/v1/users-list');
         $response->assertStatus(200)
          ->assertJsonStructure([
              'data' => [
                  '*' => [
                      'id',
-                     'username',
+                     'name',
                      'email',
-                     'status',
+                     'is_active',
                      'created_at',
-                     'is_disabled',
                  ]
              ]
          ]);
@@ -86,7 +85,7 @@ class AdminDashboardControllerTest extends TestCase
     public function test_non_admin_cannot_get_all_users()
     {
         $response = $this->withHeaders(['Authorization' => "Bearer $this->userToken"])
-                         ->getJson('/api/v1/users');
+                         ->getJson('/api/v1/users-list');
 
         $response->assertStatus(401); 
     }

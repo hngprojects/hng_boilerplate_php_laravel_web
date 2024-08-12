@@ -170,11 +170,11 @@ Route::prefix('v1')->group(function () {
 
  
     });
-    Route::middleware(['auth:api', 'superadmin'])->group(function () {
+    Route::middleware(['auth:api', 'admin'])->group(function () {
 
 
         // Dashboard
-        Route::get('/users', [AdminDashboardController::class, 'getUsers']);
+        Route::get('/users-list', [AdminDashboardController::class, 'getUsers']);
     });
     Route::post('/email-requests', [SendEmailController::class, 'createEmailRequest']);
 
