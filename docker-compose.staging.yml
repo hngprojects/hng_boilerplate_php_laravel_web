@@ -1,56 +1,7 @@
 services:
-  app:
-    image: myapp:latest 
-    ports:
-      - "8000:8000"
-    depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    environment:
-      - APP_ENV=staging
-      - APP_DEBUG=true
-      - DB_CONNECTION=pgsql
-      - DB_HOST=db
-      - DB_PORT=5432
-      - DB_DATABASE=app_staging
-      - DB_USERNAME=app_staging
-      - DB_PASSWORD=changethis123
-      - QUEUE_CONNECTION=redis
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-
   db:
-    image: postgres:latest
-    environment:
-      POSTGRES_USER: app_staging
-      POSTGRES_PASSWORD: changethis123
-      POSTGRES_DB: app_staging
-    ports:
-      - "5432:5432"
     volumes:
-      - db_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U app_staging"]
-      interval: 10s
-      retries: 5
-      start_period: 30s
-      timeout: 5s
+      - staging_db_data:/var/lib/postgresql/data
 
-
-  redis:
-    image: redis:latest
-    ports:
-      - "6300:6379"
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      retries: 3
-      start_period: 30s
-      timeout: 5s
-
-
-  
 volumes:
-  db_data:
+  staging_db_data:
