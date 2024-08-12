@@ -78,7 +78,8 @@ class AuthController extends Controller
                         'last_name' => $request->last_name,
                         'avatar_url' => $user->profile->avatar_url,
                         'email' => $user->email,
-                        'is_superadmin' => false
+                        'is_superadmin' => false,
+                        'role' => $user->role
                     ],
                     'organisations' => $organisations
                 ],
