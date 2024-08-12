@@ -400,8 +400,16 @@ class PaymentController extends Controller
         $data['plan_id'] = $subscriptionPlan->id;
         $data['amount'] = $subscriptionPlan->price;
         $data['organisation_id'] = $request->organisation_id;
+        $data['billing_option'] = $request->billing_option;
 
-        $reference_id = $data['reference'];
+        if( $request->billing_option === 'monthly'){
+            $total_amount = $data['amount'] * 1;
+        }
+        else if($request->billing_option === 'yearly') {
+            $total_amount = $data['amount'] * 12;
+        }
+
+       $data['total_amount'] = $total_amount;
 
         // Set the Stripe secret key
         Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
@@ -416,7 +424,7 @@ class PaymentController extends Controller
                         'product_data' => [
                             'name' => $data['business_name'],
                         ],
-                        'unit_amount' => $data['amount'] * 100, // Stripe expects the amount in cents
+                        'unit_amount' => $data['total_amount'] * 100, // Stripe expects the amount in cents
                     ],
                     'quantity' => 1,
                 ]],
@@ -439,7 +447,7 @@ class PaymentController extends Controller
 
             $payment = new Payment();
             $payment->user_id = auth()->id(); 
-            $payment->amount = $data['amount'];
+            $payment->amount = $data['total_amount'];
             $payment->status = 'pending';
             $payment->payment_date = now();
             $payment->transaction_id = $data['reference'];
