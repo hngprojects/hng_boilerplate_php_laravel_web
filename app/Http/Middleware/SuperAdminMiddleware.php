@@ -10,7 +10,7 @@ class SuperAdminMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
-        if (auth()->user()->role !== 'superAdmin') {
+        if (auth()->user()->role !== 'superadmin') {
             return ResponseHelper::response('Unauthorized. Super Admin access only.', 403);
         }
 
