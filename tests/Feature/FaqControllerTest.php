@@ -19,7 +19,7 @@ class FaqControllerTest extends TestCase
     {
         parent::setUp();
         $this->superAdmin = User::factory()->create(['role' => 'superadmin']);
-        $this->token = JWTAuth::fromUser($this->superadmin);
+        $this->token = JWTAuth::fromUser($this->superAdmin);
     }
 
     public function test_super_admin_can_create_faq()
