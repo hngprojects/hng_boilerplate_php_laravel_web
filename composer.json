@@ -21,6 +21,8 @@
         "phpoffice/phpspreadsheet": "^1.18",
         "predis/predis": "^2.2",
         "promphp/prometheus_client_php": "^2.10",
+        "stripe/stripe-php": "^15.6",
+        "symfony/css-selector": "^6.0",
         "tymon/jwt-auth": "^2.1"
     },
     "require-dev": {
