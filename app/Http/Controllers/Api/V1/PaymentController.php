@@ -362,7 +362,6 @@ class PaymentController extends Controller
         $validatedData =  Validator::make($request->all(),[
             'fullname' => 'required|string|max:255',
             'business_name' => 'string|max:255',
-            'amount' => 'required|numeric|min:1',
             'organisation_id' => 'string',
             'plan_id' =>'string',
             'billing_option' => 'required|in:monthly,yearly',
