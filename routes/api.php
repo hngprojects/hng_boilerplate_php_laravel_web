@@ -241,17 +241,7 @@ Route::post('/subscribe', [NotificationPreferenceController::class, 'subscribe']
         Route::post('/timezones', [ProfileController::class, 'storeTimezones']);
         Route::get('/timezones', [ProfileController::class, 'getAllTimezones']);
         Route::put('/timezones/{id}', [ProfileController::class, 'updateTimezones']);
-
-
-
-       
-
-        Route::put('/notification-preferences/{user_id}', [NotificationPreferenceController::class, 'update']);
-        Route::post('/subscribe', [NotificationPreferenceController::class, 'subscribe']);
-
-        Route::patch('/notification-settings', [NotificationSettingController::class, 'update']);
     });
-    Route::get('/notification-settings', [NotificationSettingController::class, 'show']);
 
     Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
 
@@ -335,4 +325,11 @@ Route::prefix('v1/admin')->group(function () {
 
     Route::get('/faqs', [FaqController::class, 'index']);
 
+});
+
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/notification-settings', [NotificationSettingsController::class, 'update']);
+    Route::get('/notification-settings', [NotificationSettingsController::class, 'show']);
 });

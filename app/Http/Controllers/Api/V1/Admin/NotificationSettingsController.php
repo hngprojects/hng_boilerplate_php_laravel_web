@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Api\V1\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\NotificationPreference;
+use App\Http\Requests\UpdateNotificationSettingsRequest;
+use App\Models\NotificationSetting;
 use Illuminate\Http\Request;
 use App\Services\NotificationService;
 
@@ -19,16 +20,21 @@ class NotificationSettingsController extends Controller
     {
         // Validate request data
         $validated = $request->validate([
-            'email_notifications' => 'required|boolean',
-            'push_notifications' => 'required|boolean',
-            'sms_notifications' => 'required|boolean',
+            'email_notification_activity_in_workspace' => 'required|boolean',
+            'email_notification_always_send_email_notifications' => 'required|boolean',
+            'email_notification_email_digest' => 'required|boolean',
+            'email_notification_announcement_and_update_emails' => 'required|boolean',
+            'slack_notifications_activity_on_your_workspace' => 'required|boolean',
+            'slack_notifications_always_send_email_notifications' => 'required|boolean',
+            'slack_notifications_announcement_and_update_emails' => 'required|boolean',
+            'mobile_push_notifications' => 'required|boolean',
         ]);
 
         // Get authenticated user
         $user = $request->user();
 
-        // Update or create notification preferences
-        $preferences = NotificationPreference::updateOrCreate(
+        // Update or create notification settings
+        $settings = NotificationSetting::updateOrCreate(
             ['user_id' => $user->id],
             $validated
         );
@@ -38,7 +44,7 @@ class NotificationSettingsController extends Controller
 
         return response()->json([
             'message' => 'Notification settings updated successfully.',
-            'data' => $preferences
+            'data' => $settings
         ]);
     }
 
@@ -53,9 +59,9 @@ class NotificationSettingsController extends Controller
         // Get authenticated user
         $user = $request->user();
 
-        // Retrieve user's notification preferences
-        $preferences = NotificationPreference::where('user_id', $user->id)->firstOrFail();
+        // Retrieve user's notification settings
+        $settings = NotificationSetting::where('user_id', $user->id)->firstOrFail();
 
-        return response()->json($preferences);
+        return response()->json($settings);
     }
 }

@@ -32,4 +32,13 @@ class SubscriptionController extends Controller
 
         return response()->json(['message' => 'Subscription successful and notification sent!'], 201);
     }
+
+    private function sendSubscriptionEmail($subscription){
+        $user =$subscription->user;
+        $notificationSettings = $user->notificationSetting;
+        if($notificationSettings->email_notification){
+            Mail::to($request->user()->email)->send(new SubscriptionSuccessful($subscription));
+
+        }
+    }
 }
