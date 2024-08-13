@@ -1,12 +1,15 @@
 name: Code Quality
 
 on:
-  pull_request_target:
+  push:
     branches:
       - dev
+
 jobs:
   lint:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
+    env:
+      POSTGRES_PORT: $((RANDOM%65535+1024)) # Generate a random port number between 1024 and 65535
     services:
       postgres:
          image: postgres:latest
@@ -15,13 +18,14 @@ jobs:
            POSTGRES_PASSWORD: postgres
            POSTGRES_USER: postgres
          ports:
-           - 5432:5432
-       # Set health checks to wait until postgres has started
+           - ${{ env.POSTGRES_PORT }}:5432
+         # Set health checks to wait until postgres has started
          options: >-
            --health-cmd pg_isready
            --health-interval 10s
            --health-timeout 5s
            --health-retries 5
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -29,14 +33,16 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Set up PHP
-        uses: shivammathur/setup-php@v2
+        uses: nanasess/setup-php@v4
+        env:
+          runner: self-hosted
         with:
           php-version: '8.2'
           extensions: pgsql, pdo_pgsql, zip, bcmath, apcu
           ini-values: |
             apc.enabled=1
             apc.enable_cli=1
-
+        
       - name: Run PHP Linting
         run: |
           find . -type f -name "*.php" | xargs -n1 php -l
@@ -52,6 +58,7 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-composer-
+            
       - name: Install PHP dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
@@ -61,11 +68,10 @@ jobs:
           echo "APP_KEY=${{ secrets.APP_KEY }}" >> .env
           echo "DB_CONNECTION=pgsql" >> .env
           echo "DB_HOST=localhost" >> .env
-          echo "DB_PORT=5432" >> .env
+          echo "DB_PORT=${{ env.POSTGRES_PORT }}" >> .env
           echo "DB_DATABASE=postgres" >> .env
           echo "DB_USERNAME=postgres" >> .env
           echo "DB_PASSWORD=postgres" >> .env
-          # echo "DATABASE_URL=postgres://${{ secrets.DB_USERNAME }}:${{ secrets.DB_PASSWORD }}@${{ secrets.DB_HOST }}:${{ secrets.DB_PORT }}/${{ secrets.DB_DATABASE }}?sslmode=disable" >> .env
 
       - name: Run database migrations
         run: php artisan migrate --force
