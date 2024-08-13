@@ -10,6 +10,21 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+
+      - name: Start PostgreSQL container
+        id: postgres
+        run: |
+          docker run -d --name postgres \
+            -e POSTGRES_DB=postgres \
+            -e POSTGRES_USER=postgres \
+            -e POSTGRES_PASSWORD=postgres \
+            -p 0:5432 postgres:latest
+          
+          # Extract the dynamically assigned port
+          POSTGRES_PORT=$(docker inspect --format='{{(index (index .NetworkSettings.Ports "5432/tcp") 0).HostPort}}' postgres)
+          
+          # Export the port to the environment
+          echo "POSTGRES_PORT=$POSTGRES_PORT" >> $GITHUB_ENV
       - name: Checkout code
         uses: actions/checkout@v4
 
