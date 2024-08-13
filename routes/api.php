@@ -331,8 +331,7 @@ Route::prefix('v1/admin')->group(function () {
         Route::put('/faqs/{id}', [FaqController::class, 'update']);
         Route::delete('/faqs/{id}', [FaqController::class, 'destroy']);
     });
-
-    Route::get('/faqs', [FaqController::class, 'index']);
+        Route::get('/faqs', [FaqController::class, 'index']);
 
     Route::post('/payment/stripe', [PaymentController::class, 'processPayment']);
     Route::get('/payment-success//{organisation_id}/{id}', [PaymentController::class, 'paymentSuccess'])->name('payment.success');

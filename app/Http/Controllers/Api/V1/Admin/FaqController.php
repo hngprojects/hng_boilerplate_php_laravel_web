@@ -49,7 +49,8 @@ class FaqController extends Controller
         }
     }
 
-    public function index()
+
+     public function index()
     {
         try {
             $faqs = Faq::all()->map(function ($faq) {
@@ -77,7 +78,7 @@ class FaqController extends Controller
             ], 500);
         }
     }
-
+    
     public function update(Request $request, $id)
     {
         try {
