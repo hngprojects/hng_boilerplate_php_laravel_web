@@ -125,7 +125,7 @@ class FaqController extends Controller
         }
     }
 
-    public function destroy($id)
+public function destroy($id)
     {
         try {
             $faq = Faq::findOrFail($id);
