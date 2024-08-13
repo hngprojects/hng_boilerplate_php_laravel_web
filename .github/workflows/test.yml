@@ -4,12 +4,12 @@ on:
   push:
     branches:
       - dev
-
+env:
+      POSTGRES_PORT: $((RANDOM%65535+1024))
 jobs:
   lint:
     runs-on: ubuntu-latest
-    env:
-      POSTGRES_PORT: $((RANDOM%65535+1024)) # Generate a random port number between 1024 and 65535
+     # Generate a random port number between 1024 and 65535
     services:
       postgres:
          image: postgres:latest
