@@ -21,4 +21,9 @@ class NotificationSetting extends Model
         'mobile_push_notifications'
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
 }

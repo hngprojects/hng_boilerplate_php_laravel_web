@@ -158,7 +158,7 @@ Route::prefix('v1')->group(function () {
         Route::patch('/products/{productId}', [SuperAdminProductController::class, 'update']);
         Route::delete('/products/{productId}', [SuperAdminProductController::class, 'destroy']);
 
-      
+
         Route::get('/squeeze-pages-users', [SqueezePageUserController::class, 'index']);
     });
 
@@ -168,7 +168,7 @@ Route::prefix('v1')->group(function () {
         Route::patch('/email-templates/{id}', [EmailTemplateController::class, 'update']);
         Route::delete('/email-templates/{id}', [EmailTemplateController::class, 'destroy']);
 
- 
+
     });
     Route::middleware(['auth:api', 'admin'])->group(function () {
 
@@ -270,7 +270,7 @@ Route::prefix('v1')->group(function () {
 
     Route::post('/waitlists', [WaitListController::class, 'store']);
 
-    
+
 
 
     Route::get('/blogs/{id}', [BlogController::class, 'show']);
@@ -322,7 +322,7 @@ Route::prefix('v1/admin')->group(function () {
 
     Route::post('/squeeze-user', [SqueezePageUserController::class, 'store']);
 
-   
+
     //Newsletter Subscription
     Route::post('newsletter-subscription', [NewsletterSubscriptionController::class, 'store']);
 
@@ -337,3 +337,7 @@ Route::prefix('v1/admin')->group(function () {
     Route::get('/payment-success//{organisation_id}/{id}', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
     Route::get('/payment-cancel', [PaymentController::class, 'paymentCancel'])->name('payment.cancel');
 });
+
+// notification-settings
+
+Route::put('/notification-settings/{id}', [NotificationSettingController::class, 'update']);

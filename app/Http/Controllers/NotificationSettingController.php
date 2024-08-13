@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class NotificationSettingController extends Controller
 {
@@ -59,7 +60,7 @@ class NotificationSettingController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request): JsonResponse
+    public function update(Request $request, $id)
     {
         $request->validate([
             'mobile_push_notifications' => 'required|boolean',
@@ -71,6 +72,34 @@ class NotificationSettingController extends Controller
             'slack_notifications_always_send_email_notifications' => 'required|boolean',
             'slack_notifications_announcement_and_update_emails' => 'required|boolean',
         ]);
+
+
+        $notificationSettings = NotificationSetting::findOrFail($id);
+        $notificationSettings->update($validatedData);
+
+        // Send an email if certain conditions are met
+        $this->sendEmailIfNeeded($notificationSettings);
+
+        return response()->json([
+            'message' => 'Notification settings updated successfully.',
+            'data' => $notificationSettings
+        ]);
+    }
+
+    protected function sendEmailIfNeeded(NotificationSetting $settings)
+    {
+        // Check if the user has enabled certain email notifications
+        if ($settings->email_notification_always_send_email_notifications || $settings->email_notification_activity_in_workspace) {
+            // Fetch the user's email
+            $user = $settings->user; // Assuming you have a relationship defined in NotificationSetting
+
+            // Send the email
+            Mail::to($user->email)->send(new \App\Mail\NotificationSettingUpdated($user));
+        }
+
+
+
+
         $user = Auth::user();
         $settings = $user->notificationSetting;
         $settings->update($request->all());
