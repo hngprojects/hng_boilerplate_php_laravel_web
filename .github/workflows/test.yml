@@ -4,37 +4,42 @@ on:
   push:
     branches:
       - dev
-env:
-      POSTGRES_PORT: $((RANDOM%65535+1024))
+
 jobs:
   lint:
     runs-on: ubuntu-latest
-     # Generate a random port number between 1024 and 65535
-    services:
-      postgres:
-         image: postgres:latest
-         env:
-           POSTGRES_DB: postgres        
-           POSTGRES_PASSWORD: postgres
-           POSTGRES_USER: postgres
-
-         # Set health checks to wait until postgres has started
-         options: >-
-           --health-cmd pg_isready
-           --health-interval 10s
-           --health-timeout 5s
-           --health-retries 5
-
+    
     steps:
+      # Generate a random port number between 1024 and 65535
+      - name: Set dynamic POSTGRES_PORT
+        run: echo "POSTGRES_PORT=$((RANDOM%65535+1024))" >> $GITHUB_ENV
+      
+      - name: Display POSTGRES_PORT
+        run: echo "Using PostgreSQL port $POSTGRES_PORT"
+
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: postgres        
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+        ports:
+          - ${{ env.POSTGRES_PORT }}:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
       - name: Set up PHP
         uses: nanasess/setup-php@v4
-        env:
-          runner: self-hosted
         with:
           php-version: '8.2'
           extensions: pgsql, pdo_pgsql, zip, bcmath, apcu
