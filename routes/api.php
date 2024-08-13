@@ -171,8 +171,15 @@ Route::post('/subscribe', [NotificationPreferenceController::class, 'subscribe']
         Route::post('/email-templates', [EmailTemplateController::class, 'store']);
         Route::patch('/email-templates/{id}', [EmailTemplateController::class, 'update']);
         Route::delete('/email-templates/{id}', [EmailTemplateController::class, 'destroy']);
-    });
 
+ 
+    });
+    Route::middleware(['auth:api', 'admin'])->group(function () {
+
+
+        // Dashboard
+        Route::get('/users-list', [AdminDashboardController::class, 'getUsers']);
+    });
     Route::post('/email-requests', [SendEmailController::class, 'createEmailRequest']);
 
 
@@ -189,7 +196,7 @@ Route::post('/subscribe', [NotificationPreferenceController::class, 'subscribe']
         Route::post('/payments/paystack', [PaymentController::class, 'initiatePaymentForPayStack']);
 
         Route::post('/payments/flutterwave', [PaymentController::class, 'initiatePaymentForFlutterWave']);
-        Route::get('/payments/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
+        Route::get('/payments/cancel', [PaymentController::class, 'cancel'])->name('payment.cancels');
         Route::post('/users/plans/{user_subscription}/cancel', [\App\Http\Controllers\Api\V1\User\SubscriptionController::class, 'destroy']);
         Route::get('/users/plan', [\App\Http\Controllers\Api\V1\User\SubscriptionController::class, 'userPlan']);
 
@@ -325,11 +332,16 @@ Route::prefix('v1/admin')->group(function () {
 
     Route::get('/faqs', [FaqController::class, 'index']);
 
-});
-
-
+// Other existing routes or code
 
 Route::middleware('auth:sanctum')->group(function () {
+    // Notification settings routes
     Route::post('/notification-settings', [NotificationSettingsController::class, 'update']);
     Route::get('/notification-settings', [NotificationSettingsController::class, 'show']);
+    
+    // Payment routes
+    Route::post('/payment/stripe', [PaymentController::class, 'processPayment']);
+    Route::get('/payment-success/{organisation_id}/{id}', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
+    Route::get('/payment-cancel', [PaymentController::class, 'paymentCancel'])->name('payment.cancel');
 });
+
