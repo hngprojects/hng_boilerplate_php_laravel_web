@@ -18,7 +18,7 @@ jobs:
            POSTGRES_PASSWORD: postgres
            POSTGRES_USER: postgres
          ports:
-           - ${{ env.POSTGRES_PORT }}:5432
+           - $POSTGRES_PORT:5432
          # Set health checks to wait until postgres has started
          options: >-
            --health-cmd pg_isready
@@ -68,7 +68,7 @@ jobs:
           echo "APP_KEY=${{ secrets.APP_KEY }}" >> .env
           echo "DB_CONNECTION=pgsql" >> .env
           echo "DB_HOST=localhost" >> .env
-          echo "DB_PORT=${{ env.POSTGRES_PORT }}" >> .env
+          echo "DB_PORT=$POSTGRES_PORT" >> .env
           echo "DB_DATABASE=postgres" >> .env
           echo "DB_USERNAME=postgres" >> .env
           echo "DB_PASSWORD=postgres" >> .env
