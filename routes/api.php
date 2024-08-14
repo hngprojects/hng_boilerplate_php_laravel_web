@@ -331,8 +331,8 @@ Route::prefix('v1/admin')->group(function () {
 
     Route::group(['middleware' => ['auth.jwt', 'superadmin']], function () {
         Route::post('/faqs', [FaqController::class, 'store']);
-        Route::put('/faqs/{id}', [FaqController::class, 'update']);
-        Route::delete('/faqs/{id}', [FaqController::class, 'destroy']);
+            Route::put('/faqs/{id}', [FaqController::class, 'update']);
+            Route::delete('/faqs/{id}', [FaqController::class, 'destroy']);
     });
         Route::get('/faqs', [FaqController::class, 'index']);
 
