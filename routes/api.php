@@ -92,7 +92,6 @@ Route::prefix('v1')->group(function () {
 
     Route::get('/users/stats', [UserController::class, 'stats']);
     Route::apiResource('/users', UserController::class);
-    Route::apiResource('/admin/users', UserController::class);
 
 
     //jobs
