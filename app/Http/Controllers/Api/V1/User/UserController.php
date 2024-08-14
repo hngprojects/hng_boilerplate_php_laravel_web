@@ -133,16 +133,32 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         $user = User::find($id);
-
+    
         if (!$user) {
             return response()->json([
                 'status_code' => 404,
                 'message' => 'User not found'
             ], 404);
         }
-
+    
+        $authUser = auth()->user();
+    
+        if ($authUser->id !== $user->id) {
+            if (!in_array($authUser->role, ['superAdmin', 'admin'])) {
+                return response()->json([
+                    'status_code' => 403,
+                    'message' => 'Unauthorized to delete this user'
+                ], 403);
+            }
+        }
+    
         $user->delete();
-        return response()->noContent();
+    
+        return response()->json([
+            'status_code' => 200,
+            'message' => 'User deleted successfully'
+        ], 200);
     }
+    
 
 }

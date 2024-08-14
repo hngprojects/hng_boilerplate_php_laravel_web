@@ -88,12 +88,13 @@ Route::prefix('v1')->group(function () {
     Route::get('/auth/login-facebook', [SocialAuthController::class, 'loginUsingFacebook']);
     Route::get('/auth/facebook/callback', [SocialAuthController::class, 'callbackFromFacebook']);
     Route::post('/auth/facebook/callback', [SocialAuthController::class, 'saveFacebookRequest']);
+    
+    Route::middleware('auth:api')->group(function () {
 
+        Route::get('/users/stats', [UserController::class, 'stats']);
+        Route::apiResource('/users', UserController::class);
 
-    Route::get('/users/stats', [UserController::class, 'stats']);
-    Route::apiResource('/users', UserController::class);
-
-
+    });
     //jobs
     Route::get('/jobs', [JobController::class, 'index']);
     Route::get('/jobs/search', [JobSearchController::class, 'search']);
