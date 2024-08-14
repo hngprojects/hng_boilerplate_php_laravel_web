@@ -167,8 +167,15 @@ Route::prefix('v1')->group(function () {
         Route::post('/email-templates', [EmailTemplateController::class, 'store']);
         Route::patch('/email-templates/{id}', [EmailTemplateController::class, 'update']);
         Route::delete('/email-templates/{id}', [EmailTemplateController::class, 'destroy']);
-    });
 
+ 
+    });
+    Route::middleware(['auth:api', 'admin'])->group(function () {
+
+
+        // Dashboard
+        Route::get('/users-list', [AdminDashboardController::class, 'getUsers']);
+    });
     Route::post('/email-requests', [SendEmailController::class, 'createEmailRequest']);
 
 
@@ -231,6 +238,8 @@ Route::prefix('v1')->group(function () {
         //profile Update
         Route::patch('/profile', [ProfileController::class, 'update']);
         Route::post('/profile/upload-image', [ProfileController::class, 'uploadImage']);
+        Route::get('/profile/{id}', [ProfileController::class, 'show']);
+
 
 
         //Timezone Settings
@@ -321,11 +330,10 @@ Route::prefix('v1/admin')->group(function () {
 
     Route::group(['middleware' => ['auth.jwt', 'superadmin']], function () {
         Route::post('/faqs', [FaqController::class, 'store']);
-        Route::put('/faqs/{id}', [FaqController::class, 'update']);
-        Route::delete('/faqs/{id}', [FaqController::class, 'destroy']);
+            Route::put('/faqs/{id}', [FaqController::class, 'update']);
+            Route::delete('/faqs/{id}', [FaqController::class, 'destroy']);
     });
-
-    Route::get('/faqs', [FaqController::class, 'index']);
+        Route::get('/faqs', [FaqController::class, 'index']);
 
     Route::post('/payment/stripe', [PaymentController::class, 'processPayment']);
     Route::get('/payment-success//{organisation_id}/{id}', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
