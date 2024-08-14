@@ -92,6 +92,7 @@ Route::prefix('v1')->group(function () {
 
     Route::get('/users/stats', [UserController::class, 'stats']);
     Route::apiResource('/users', UserController::class);
+    Route::apiResource('/admin/users', UserController::class);
 
 
     //jobs
@@ -238,6 +239,8 @@ Route::prefix('v1')->group(function () {
         //profile Update
         Route::patch('/profile', [ProfileController::class, 'update']);
         Route::post('/profile/upload-image', [ProfileController::class, 'uploadImage']);
+        Route::get('/api/v1/profiles/{id}', [ProfileController::class, 'show']);
+
 
 
         //Timezone Settings
