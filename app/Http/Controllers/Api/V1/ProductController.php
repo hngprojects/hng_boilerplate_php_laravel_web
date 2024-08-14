@@ -120,8 +120,18 @@ class ProductController extends Controller
     public function index(Request $request)
 {
     try {
-        $page = $request->input('page', 1);
-        $limit = $request->input('limit', 10);
+        $validator = Validator::make($request->all(), [
+            'page' => 'integer|min:1',
+            'limit' => 'integer|min:1|max:100',
+        ]);
+        
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid pagination parameters',
+                'errors' => $validator->errors(),
+            ], 400);
+        }
 
         $products = Product::with(['productsVariant', 'categories'])
             ->offset(($page - 1) * $limit)
@@ -150,6 +160,7 @@ class ProductController extends Controller
         });
 
         return response()->json([
+            'success' => true,
             'status_code' => 200,
             'message' => 'Products retrieved successfully',
             'data' => [
