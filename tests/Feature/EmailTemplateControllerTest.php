@@ -173,7 +173,7 @@ class EmailTemplateControllerTest extends TestCase
                 'message' => 'Email template updated successfully',
                 'data' => [
                     'id' => $template->id,
-                    'title' => 'Updated Template Title',
+                    'title' => 'updated-template-title',
                     'template' => 'Updated Template Content',
                     'status' => true,
                 ],
@@ -181,7 +181,7 @@ class EmailTemplateControllerTest extends TestCase
 
         $this->assertDatabaseHas('email_templates', [
             'id' => $template->id,
-            'title' => 'Updated Template Title',
+            'title' => 'updated-template-title',
             'template' => 'Updated Template Content',
             'status' => true,
         ]);
