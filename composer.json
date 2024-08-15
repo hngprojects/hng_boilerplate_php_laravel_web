@@ -11,7 +11,6 @@
         "php": "^8.1",
         "ext-zip": "*",
         "doctrine/dbal": "^3.8",
-        "google/apiclient": "^2.17",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
@@ -22,6 +21,8 @@
         "phpoffice/phpspreadsheet": "^1.18",
         "predis/predis": "^2.2",
         "promphp/prometheus_client_php": "^2.10",
+        "stripe/stripe-php": "^15.6",
+        "symfony/css-selector": "^6.0",
         "tymon/jwt-auth": "^2.1"
     },
     "require-dev": {

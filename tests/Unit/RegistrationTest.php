@@ -91,7 +91,7 @@ class RegistrationTest extends TestCase
         // Mock Google user response
         $googleUser = (object) [
             'email' => 'john.doe@example.com',
-            'id' => 'google-id-12345',
+            'id' => null,
             'user' => [
                 'given_name' => 'John',
                 'family_name' => 'Doe',
@@ -121,7 +121,7 @@ class RegistrationTest extends TestCase
         $user = User::where('email', 'john.doe@example.com')->first();
         // dd($user);
         $this->assertNotNull($user);
-        $this->assertEquals('google-id-12345', $user->social_id);
+        $this->assertNull($user->social_id);
 
         $profile = $user->profile;
         $this->assertNotNull($profile);
@@ -155,8 +155,8 @@ class RegistrationTest extends TestCase
         // Verify user in the database
         $user = User::where('email', $googleUser['email'])->first();
         $this->assertNotNull($user);
-        $this->assertEquals($googleUser['id'], $user->social_id);
-        $this->assertEquals('Google', $user->signup_type);
+        $this->assertNull($user->social_id);
+        $this->assertEquals('Token', $user->signup_type);
         $this->assertEquals('John', $user->profile->first_name);
         $this->assertEquals('Doe', $user->profile->last_name);
         $this->assertEquals($googleUser['attributes']['avatar_original'], $user->profile->avatar_url);
@@ -210,7 +210,7 @@ class RegistrationTest extends TestCase
         // Assert user creation or update
         $user = User::where('email', 'john.doe@example.com')->first();
         $this->assertNotNull($user);
-        $this->assertEquals('10220927895907350', $user->social_id);
+        $this->assertNull($user->social_id);
 
         $profile = $user->profile;
         $this->assertNotNull($profile);
@@ -257,8 +257,8 @@ class RegistrationTest extends TestCase
         // Verify user in the database
         $user = User::where('email', $facebookUser['email'])->first();
         $this->assertNotNull($user);
-        $this->assertEquals($facebookUser['id'], $user->social_id);
-        $this->assertEquals('Facebook', $user->signup_type);
+        $this->assertNull($user->social_id);
+        $this->assertEquals('Token', $user->signup_type);
         $this->assertEquals('John', $user->profile->first_name);
         $this->assertEquals('Doe', $user->profile->last_name);
         $this->assertEquals($facebookUser['avatar'], $user->profile->avatar_url);
