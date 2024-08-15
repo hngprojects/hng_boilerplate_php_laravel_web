@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateProductRequest extends FormRequest
+class DeleteSqueezeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,12 +22,14 @@ class CreateProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'category' => 'required|string',
-            'price' => 'required|numeric',
-            'quantity' => 'required|integer',
-            'image_url' => 'required|image|mimes:jpeg,png,jpg,gif|max:1024',
+            'squeeze_page' => 'required|string|exists:squeeze_pages,id'
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'squeeze_page' => $this->route('squeeze_page'),
+        ]);
     }
 }

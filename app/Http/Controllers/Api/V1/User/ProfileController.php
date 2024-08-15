@@ -40,10 +40,47 @@ class ProfileController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        try {
+            $user = User::with('profile')->findOrFail($id);
+            $profile = $user->profile;
+    
+            return response()->json([
+                'status_code' => 200,
+                'message' => 'Successfully fetched profile',
+                'data' => [
+                    'id' => $user->id,
+                    'created_at' => $user->created_at->toIso8601String(),
+                    'updated_at' => $user->updated_at->toIso8601String(),
+                    'username' => $user->name ?? '',
+                    'jobTitle' => $profile->job_title ?? null,
+                    'pronouns' => $profile->pronoun ?? null,
+                    'department' => null,
+                    'email' => $user->email,
+                    'bio' => $profile->bio ?? null,
+                    'social_links' => null,
+                    'language' => null,
+                    'region' => null,
+                    'timezones' => null,
+                    'profile_pic_url' => $profile->avatar_url ?? null,
+                    'deletedAt' => $user->deleted_at ? $user->deleted_at->toIso8601String() : null,
+                    'avatar_url' => $profile->avatar_url ?? null,
+                ]
+            ], 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'status_code' => 404,
+                'message' => 'Profile not found',
+            ], 404);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status_code' => 500,
+                'message' => 'An unexpected error occurred while processing your request.',
+            ], 500);
+        }
     }
+    
 
     /**
      * Update the specified resource in storage.

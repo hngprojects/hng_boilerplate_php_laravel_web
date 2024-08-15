@@ -21,6 +21,4 @@ class SqueezePage extends Model
         'hero_image',
         'content',
     ];
-
-
 }

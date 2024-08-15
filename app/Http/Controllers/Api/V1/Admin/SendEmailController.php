@@ -39,10 +39,4 @@ class SendEmailController extends Controller
 
         return response()->json(['message' => 'Email request is queued.']);
     }
-    public function triggerEmailSending(Request $request)
-    {
-        SendEmailRequestsJob::dispatch();
-        
-        return response()->json(['message' => 'Email requests are being processed.']);
-    }
 }
