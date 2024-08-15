@@ -100,7 +100,7 @@ class EmailTemplateController extends Controller
 
         // Validate request data
         $validatedData = $request->validate([
-            'title' => 'required|string|max:255',
+            'title' => 'required|string|max:255|unique:email_templates,title',
             'template' => 'required|string',
             'status' => 'required|boolean'
         ]);
