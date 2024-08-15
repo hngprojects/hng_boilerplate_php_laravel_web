@@ -50,13 +50,11 @@ class RegistrationTest extends TestCase
                     'last_name',
                     'email',
                     'avatar_url',
-                    'role'
                 ]
             ]
         ]);
 
         // Optionally, decode and verify the token
-        $token = $response->json('access_token');
         $token = $response->json('access_token');
         $this->assertNotEmpty($token);
     }
@@ -76,8 +74,8 @@ class RegistrationTest extends TestCase
         // Check the status code
         $response->assertStatus(400);
         $response->assertJson([
-            'status_code' => 400,
-            'message' => [
+            'status' => 400,
+            'errors' => [
                 'email' => [
                     'The email field is required.'
                 ]
