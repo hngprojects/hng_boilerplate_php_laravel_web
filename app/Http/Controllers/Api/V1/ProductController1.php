@@ -118,57 +118,79 @@ class ProductController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-{
-    try {
-        $page = $request->input('page', 1);
-        $limit = $request->input('limit', 10);
+    {
+        try {
+            // Validate pagination parameters
+            $request->validate([
+                'page' => 'integer|min:1',
+                'limit' => 'integer|min:1',
+            ]);
 
-        $products = Product::with(['productsVariant', 'categories'])
-            ->offset(($page - 1) * $limit)
-            ->limit($limit)
-            ->get();
+            $page = $request->input('page', 1);
+            $limit = $request->input('limit', 10);
 
-        $totalItems = Product::count();
+            // Calculate offset
+            $offset = ($page - 1) * $limit;
 
-        $transformedProducts = $products->map(function ($product) {
-            $variant = $product->productsVariant->first();
-            return [
-                'id' => $product->product_id,
-                'created_at' => $product->created_at->toIso8601String(),
-                'updated_at' => $product->updated_at->toIso8601String(),
-                'name' => $product->name,
-                'description' => $product->description,
-                'category' => $product->categories->isNotEmpty() ? $product->categories->first()->name : null,
-                'image' => $product->imageUrl,
-                'price' => (float) $product->price,
-                'cost_price' => (float) ($product->price * 0.8), // Assuming cost price is 80% of selling price
-                'quantity' => $variant ? $variant->stock : 0,
-                'size' => $variant ? $variant->size->size : null,
-                'stock_status' => $variant ? $variant->stock_status : null,
-                'deletedAt' => $product->deleted_at ? $product->deleted_at->toIso8601String() : null,
-            ];
-        });
+            $products = Product::select(
+                'product_id',
+                'name',
+                'price',
+                'imageUrl',
+                'description',
+                'created_at',
+                'quantity'
+            )
+                ->with(['productsVariant', 'categories'])
+                ->offset($offset)
+                ->limit($limit)
+                ->get();
 
-        return response()->json([
-            'success' => true,
-            'status_code' => 200,
-            'message' => 'Products retrieved successfully',
-            'data' => [
+            // Get total product count
+            $totalItems = Product::count();
+            $totalPages = ceil($totalItems / $limit);
+
+            $transformedProducts = $products->map(function ($product) {
+                return [
+                    'name' => $product->name,
+                    'price' => $product->price,
+                    'imageUrl' => $product->imageUrl,
+                    'description' => $product->description,
+                    'product_id' => $product->product_id,
+                    'quantity' => $product->quantity,
+                    'category' => $product->categories->isNotEmpty() ? $product->categories->map->name : [],
+                    'stock' => $product->productsVariant->isNotEmpty() ? $product->productsVariant->first()->stock : null,
+                    'status' => $product->productsVariant->isNotEmpty() ? $product->productsVariant->first()->stock_status : null,
+                    'date_added' => $product->created_at
+                ];
+            });
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Products retrieved successfully',
                 'products' => $transformedProducts,
-                'total' => $totalItems,
-                'page' => $page,
-                'pageSize' => $limit,
-            ],
-        ], 200);
-    } catch (\Exception $e) {
-        return response()->json([
-            'status_code' => 500,
-            'message' => 'Internal server error',
-            'error' => $e->getMessage(),
-        ], 500);
+                'pagination' => [
+                    'totalItems' => $totalItems,
+                    'totalPages' => $totalPages,
+                    'currentPage' => $page,
+                ],
+                'status_code' => 200,
+            ], 200);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'status' => 'bad request',
+                'message' => 'Invalid query params passed',
+                'status_code' => 400,
+            ], 400);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Internal server error',
+                'error' => $e->getMessage(),
+                'status_code' => 500,
+            ], 500);
+        }
     }
-}
-
 
     /**
      * Store a newly created resource in storage.
@@ -220,41 +242,24 @@ class ProductController extends Controller
      * Display the specified resource.
      */
     public function show($product_id)
-{
-    $product = Product::with(['productsVariant', 'categories'])->find($product_id);
-
-    if (!$product) {
+    {
+        $product = Product::find($product_id);
+        // return $product_id;
+        if (!$product) {
+            return response()->json([
+                'status' => 'error',
+                "message" => "Product not found",
+                'status_code' => 404,
+            ]);
+        }
+        $product = new ProductResource($product);
         return response()->json([
-            'status_code' => 404,
-            'message' => "Product not found",
-        ], 404);
+            'status' => 'success',
+            "message" => "Product retrieve ",
+            'status_code' => 200,
+            'data' => $product
+        ]);
     }
-
-    $variant = $product->productsVariant->first();
-
-    $productData = [
-        'id' => $product->product_id,
-        'created_at' => $product->created_at->toIso8601String(),
-        'updated_at' => $product->updated_at->toIso8601String(),
-        'name' => $product->name,
-        'description' => $product->description,
-        'category' => $product->categories->isNotEmpty() ? $product->categories->first()->name : null,
-        'image' => $product->imageUrl,
-        'price' => (float) $product->price,
-        'cost_price' => (float) ($product->price * 0.8), // Assuming cost price is 80% of selling price
-        'quantity' => $variant ? $variant->stock : 0,
-        'size' => $variant ? $variant->size->size : null,
-        'stock_status' => $variant ? $variant->stock_status : null,
-        'deletedAt' => $product->deleted_at ? $product->deleted_at->toIso8601String() : null,
-    ];
-
-    return response()->json([
-        'status_code' => 200,
-        'message' => 'Product fetched successfully',
-        'data' => $productData
-    ], 200);
-}
-
 
     /**
      * Update the specified resource in storage.
