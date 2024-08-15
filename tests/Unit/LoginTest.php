@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Models\Profile;
 use Illuminate\Http\Response;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -26,12 +27,15 @@ class LoginTest extends TestCase
             'email' => 'test@gmail.com',
             'password' => Hash::make('Ed8M7s*)?e:hTb^#&;C!<y'),
         ]);
+        Profile::factory()->create([
+            'user_id' => $user->id
+        ]);
 
         $response = $this->postJson('/api/v1/auth/login', [
             'email' => 'test@gmail.com',
             'password' => 'Ed8M7s*)?e:hTb^#&;C!<y',
         ]);
-
+        // dd($response);
         $response->assertStatus(200)
             ->assertJsonStructure([
                 'status_code',
@@ -43,8 +47,8 @@ class LoginTest extends TestCase
                         'first_name',
                         'last_name',
                         'email',
-                        'role',
                         'avatar_url',
+                        'is_superadmin'
                     ],
                 ],
             ]);
@@ -74,6 +78,6 @@ class LoginTest extends TestCase
             'email' => 'test@gmail.com',
         ]);
 
-        $response->assertStatus(400);
+        $response->assertStatus(401);
     }
 }

@@ -129,7 +129,6 @@ public function testIndex()
     public function testStoreValidationFailure()
     {
         $payload = [
-            'name' => " ",
             'email' => 'invalid-email'
         ];
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use App\Traits\HttpResponses;
 use Illuminate\Http\Response;
@@ -13,8 +14,8 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\User;
 use App\Models\Organisation;
 use App\Models\OrganisationUser;
+use App\Services\OrganisationService;
 use Illuminate\Support\Facades\Log;
-use App\Models\Validators\AuthValidator;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
 
@@ -22,6 +23,9 @@ class AuthController extends Controller
 {
     use HttpResponses;
 
+    public function __construct(public OrganisationService $organisationService)
+    {    
+    }
     /**
      * Display a listing of the resource.
      */
@@ -55,7 +59,7 @@ class AuthController extends Controller
 
         // Check if validation fails
         if ($validator->fails()) {
-            return $this->apiResponse(message: $validator->errors(), status_code: 400);
+            return $this->validationErrorResponseAlign($validator->errors());
         }
 
         try {
@@ -65,29 +69,22 @@ class AuthController extends Controller
 
             // Creating the user
             $user = User::create([
-                'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
                 'role' => $role
             ]);
 
-            $profile = $user->profile()->create([
+            $user->profile()->create([
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name
             ]);
 
-            $organization = $user->owned_organisations()->create([
-                'name' => $request->first_name."'s Organisation",
-            ]);
-
-            $organization_user = OrganisationUser::create([
-                'user_id' => $user->id,
-                'org_id' => $organization->org_id
-            ]);
+            $name = $request->first_name."'s Organisation";
+            $organisation = $this->organisationService->create($user, $name);
 
             $roles = $user->roles()->create([
                 'name' => $role,
-                'org_id' => $organization->org_id
+                'org_id' => $organisation->org_id
             ]);
             DB::table('users_roles')->insert([
                 'user_id' => $user->id,
@@ -100,25 +97,18 @@ class AuthController extends Controller
             DB::commit();
 
             return response()->json([
-                'status_code' => 201,
+                'status_code' => 201,       
                 "message" => "User Created Successfully",
                 'access_token' => $token,
                 'data' => [
-                    'user' => [
-                        'id' => $user->id,
-                        'first_name' => $request->first_name,
-                        'last_name' => $request->last_name,
-                        'avatar_url' => $user->profile->avatar_url,
-                        'email' => $user->email,
-                        'role' => $user->role
-                    ]
+                    'user' => new UserResource($user->load('owned_organisations', 'profile'))
                 ],
             ], 201);
             // return $this->apiResponse('Registration successful', Response::HTTP_CREATED, $data);
         } catch (\Exception $e) {
             DB::rollBack();
-
-            return $this->apiResponse('Registration unsuccessful', Response::HTTP_BAD_REQUEST);
+            Log::error($e);
+            return $this->ap('Registration unsuccessful', Response::HTTP_BAD_REQUEST);
         }
 
     }
