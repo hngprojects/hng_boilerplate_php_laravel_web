@@ -158,7 +158,7 @@ Route::prefix('v1')->group(function () {
         Route::patch('/products/{productId}', [SuperAdminProductController::class, 'update']);
         Route::delete('/products/{productId}', [SuperAdminProductController::class, 'destroy']);
 
-      
+
         Route::get('/squeeze-pages-users', [SqueezePageUserController::class, 'index']);
     });
 
@@ -167,15 +167,13 @@ Route::prefix('v1')->group(function () {
         Route::post('/email-templates', [EmailTemplateController::class, 'store']);
         Route::patch('/email-templates/{id}', [EmailTemplateController::class, 'update']);
         Route::delete('/email-templates/{id}', [EmailTemplateController::class, 'destroy']);
-
- 
     });
+
     Route::middleware(['auth:api', 'admin'])->group(function () {
-
-
         // Dashboard
         Route::get('/users-list', [AdminDashboardController::class, 'getUsers']);
     });
+
     Route::post('/email-requests', [SendEmailController::class, 'createEmailRequest']);
 
 
@@ -270,7 +268,7 @@ Route::prefix('v1')->group(function () {
 
     Route::post('/waitlists', [WaitListController::class, 'store']);
 
-    
+
 
 
     Route::get('/blogs/{id}', [BlogController::class, 'show']);
@@ -322,7 +320,7 @@ Route::prefix('v1/admin')->group(function () {
 
     Route::post('/squeeze-user', [SqueezePageUserController::class, 'store']);
 
-   
+
     //Newsletter Subscription
     Route::post('newsletter-subscription', [NewsletterSubscriptionController::class, 'store']);
 
