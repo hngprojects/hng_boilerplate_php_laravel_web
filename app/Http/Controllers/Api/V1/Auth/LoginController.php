@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api\V1\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\RateLimiter;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Validator;
 
@@ -20,49 +22,32 @@ class LoginController extends Controller
     
         if ($validator->fails()) {
             return response()->json([
-                'status_code' => 400,
-                'message' => 'Validation failed',
-                'data' => $validator->errors()
-            ], 400);
+                'status_code' => 401,
+                'message' => 'Invalid Credentials',
+                'error' => 'Invalid Email or Password'
+            ], 401);
         }
 
-        $credentials = $request->only('email', 'password');
-
-        if (!$token = JWTAuth::attempt($credentials)) {
+        if (!$token = JWTAuth::attempt($request->only('email', 'password'))) {
+            $key = 'login_attempts_'.request()->ip();
+            RateLimiter::hit($key,3600);
             return response()->json([
                 'status_code' => 401,
                 'message' => 'Invalid credentials',
-                'data' => []
+                'error' => 'Invalid Email or Password'
             ], 401);
         }
 
         $user = Auth::user();
-        $profile = $user->profile;
-
-        $organisations = $user->organisations->map(function ($org) use ($user) {
-            return [
-                'organisation_id' => $org->org_id,
-                'name' => $org->name,
-                'role' => $org->pivot->role ?? null,
-                'is_owner' => $org->pivot->user_id === $user->id
-            ];
-        });
+        $user->last_login_at = now();
+        $user->save();
 
         return response()->json([
             'status_code' => 200,
             'message' => 'Login successful',
             'access_token' => $token,
             'data' => [
-                'user' => [
-                    'id' => $user->id,
-                    'first_name' => $profile->first_name ?? null,
-                    'last_name' => $profile->last_name ?? null,
-                    'email' => $user->email,
-                    'avatar_url' => $profile->avatar_url ?? null,
-                    'is_superadmin' => $user->role === 'superadmin',
-                    'role' => $user->role
-                ],
-                'organisations' => $organisations
+                'user' => new UserResource($user->load('profile', 'owned_organisations'))
             ]
         ], 200);
     }
