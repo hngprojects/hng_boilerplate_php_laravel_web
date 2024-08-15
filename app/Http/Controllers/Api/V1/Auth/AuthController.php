@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Resources\UserResource;
+use App\Models\EmailTemplate;
 use Illuminate\Http\Request;
 use App\Traits\HttpResponses;
 use Illuminate\Http\Response;
@@ -90,9 +91,17 @@ class AuthController extends Controller
 
             DB::commit();
 
+            $email_template_id = null;
+
+            $emailTemplate = EmailTemplate::where('title', 'welcome-email')->first();;
+            if ($emailTemplate) {
+                $email_template_id = $emailTemplate->id;
+            }
+
             return response()->json([
                 'status_code' => 201,       
                 "message" => "User Created Successfully",
+                'email_template_id' => $email_template_id,
                 'access_token' => $token,
                 'data' => [
                     'user' => new UserResource($user->load('owned_organisations', 'profile'))
