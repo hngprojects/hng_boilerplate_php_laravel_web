@@ -90,7 +90,6 @@ class WaitListControllerTest extends TestCase
     public function testStoreValidationFailure()
     {
         $payload = [
-            'name' => " ",
             'email' => 'invalid-email'
         ];
 
