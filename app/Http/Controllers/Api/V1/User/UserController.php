@@ -68,7 +68,7 @@ class UserController extends Controller
     {
         // Load the necessary relationships
         $user->load('profile', 'products', 'organisations');
-        dd($user);
+        
         // Format the response data
         $response = [
             'status_code' => 200,
