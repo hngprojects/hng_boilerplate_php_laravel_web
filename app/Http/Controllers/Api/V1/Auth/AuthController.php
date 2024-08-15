@@ -77,7 +77,7 @@ class AuthController extends Controller
             $organisation = $this->organisationService->create($user, $name);
 
             $roles = $user->roles()->create([
-                'name' => $role,
+                'name' => 'admin',
                 'org_id' => $organisation->org_id
             ]);
             DB::table('users_roles')->insert([
