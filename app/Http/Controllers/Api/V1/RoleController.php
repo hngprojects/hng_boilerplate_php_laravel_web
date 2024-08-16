@@ -284,6 +284,7 @@ class RoleController extends Controller
 
             return response()->json([
                 'status_code' => Response::HTTP_OK,
+                'message' => "Roles fetched successfully",
                 'data' => [
                     'id' => $role->id,
                     'name' => $role->name,
