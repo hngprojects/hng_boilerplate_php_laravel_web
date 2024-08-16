@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Str;
+use App\Models\EmailTemplate;
 
 class AuthController extends Controller
 {
@@ -67,13 +68,21 @@ class AuthController extends Controller
     
             $token = JWTAuth::fromUser($user);
     
-            $is_superadmin = in_array($user->role, ['superadmin']);
+            $is_superadmin = in_array($user->role, ['admin']);
     
             DB::commit();
+
+            $email_template_id = null;
+
+            $emailTemplate = EmailTemplate::where('title', 'welcome-email')->first();;
+            if ($emailTemplate) {
+                $email_template_id = $emailTemplate->id;
+            }
     
             return response()->json([
                 'status_code' => 201,
                 'message' => 'User Created Successfully',
+                'email_template_id' => $email_template_id,
                 'access_token' => $token,
                 'data' => [
                     'user' => [
