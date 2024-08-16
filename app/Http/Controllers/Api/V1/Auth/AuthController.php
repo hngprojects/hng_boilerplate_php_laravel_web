@@ -68,7 +68,7 @@ class AuthController extends Controller
     
             $token = JWTAuth::fromUser($user);
     
-            $is_superadmin = in_array($user->role, ['superadmin']);
+            $is_superadmin = in_array($user->role, ['admin']);
     
             DB::commit();
 

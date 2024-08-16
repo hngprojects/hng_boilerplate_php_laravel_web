@@ -50,7 +50,7 @@ class LoginController extends Controller
             ];
         });
 
-        $is_superadmin = in_array($user->role, ['superadmin']);
+        $is_superadmin = in_array($user->role, ['admin']);
 
         return response()->json([
             'status_code' => 200,

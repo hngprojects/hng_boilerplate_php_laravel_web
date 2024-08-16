@@ -269,6 +269,11 @@ Route::prefix('v1')->group(function () {
         Route::get('/dashboard/statistics', [AdminDashboardController::class, 'getStatistics']);
         Route::get('/dashboard/top-products', [AdminDashboardController::class, 'getTopProducts']);
         Route::get('/dashboard/all-top-products', [AdminDashboardController::class, 'getAllProductsSortedBySales']);
+
+        //faqs
+        Route::post('/faqs', [FaqController::class, 'store']);
+        Route::put('/faqs/{id}', [FaqController::class, 'update']);
+        Route::delete('/faqs/{id}', [FaqController::class, 'destroy']);
     });
 
     Route::post('/waitlists', [WaitListController::class, 'store']);
@@ -329,11 +334,7 @@ Route::prefix('v1/admin')->group(function () {
     //Newsletter Subscription
     Route::post('newsletter-subscription', [NewsletterSubscriptionController::class, 'store']);
 
-    Route::group(['middleware' => ['auth.jwt', 'superadmin','admin']], function () {
-        Route::post('/faqs', [FaqController::class, 'store']);
-            Route::put('/faqs/{id}', [FaqController::class, 'update']);
-            Route::delete('/faqs/{id}', [FaqController::class, 'destroy']);
-    });
+    
         Route::get('/faqs', [FaqController::class, 'index']);
 
     Route::post('/payment/stripe', [PaymentController::class, 'processPayment']);
