@@ -329,7 +329,7 @@ Route::prefix('v1/admin')->group(function () {
     //Newsletter Subscription
     Route::post('newsletter-subscription', [NewsletterSubscriptionController::class, 'store']);
 
-    Route::group(['middleware' => ['auth.jwt', 'superadmin']], function () {
+    Route::group(['middleware' => ['auth.jwt', 'superadmin','admin']], function () {
         Route::post('/faqs', [FaqController::class, 'store']);
             Route::put('/faqs/{id}', [FaqController::class, 'update']);
             Route::delete('/faqs/{id}', [FaqController::class, 'destroy']);
