@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Faq;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -25,11 +26,13 @@ class FaqController extends Controller
                 'question' => $validatedData['question'],
                 'answer' => $validatedData['answer'],
                 'category' => $validatedData['category'],
+                // 'role' => Role::USER,
             ]);
 
             return response()->json([
                 'status_code' => 201,
-                'message' => 'FAQ created successfully',
+                // 'message' => 'FAQ created successfully',
+                'success' => true,
                 'data' => $faq
             ], 201);
 

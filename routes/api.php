@@ -329,12 +329,19 @@ Route::prefix('v1/admin')->group(function () {
     //Newsletter Subscription
     Route::post('newsletter-subscription', [NewsletterSubscriptionController::class, 'store']);
 
-    Route::group(['middleware' => ['auth.jwt', 'superadmin']], function () {
+    // Route::group(['middleware' => ['auth.jwt', 'superadmin']], function () {
+    //     Route::post('/faqs', [FaqController::class, 'store']);
+    //         Route::put('/faqs/{id}', [FaqController::class, 'update']);
+    //         Route::delete('/faqs/{id}', [FaqController::class, 'destroy']);
+    // });
+
+    Route::group(['middleware' => ['auth.jwt', 'admin']], function () {
         Route::post('/faqs', [FaqController::class, 'store']);
-            Route::put('/faqs/{id}', [FaqController::class, 'update']);
-            Route::delete('/faqs/{id}', [FaqController::class, 'destroy']);
+        Route::put('/faqs/{id}', [FaqController::class, 'update']);
+        Route::delete('/faqs/{id}', [FaqController::class, 'destroy']);
     });
-        Route::get('/faqs', [FaqController::class, 'index']);
+    
+    Route::get('/faqs', [FaqController::class, 'index']);
 
     Route::post('/payment/stripe', [PaymentController::class, 'processPayment']);
     Route::get('/payment-success//{organisation_id}/{id}', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
