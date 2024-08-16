@@ -35,7 +35,7 @@ class StoreRoleRequest extends FormRequest
                 'exists:organisations,org_id',
                 Rule::unique('roles', 'org_id')->where('name', $this->input('role_name'))
             ],
-            'permissions_id' => 'required',
+            'permissions_id' => 'nullable',
         ];
     }
 
