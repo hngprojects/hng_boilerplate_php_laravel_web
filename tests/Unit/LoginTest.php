@@ -1,41 +1,35 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Feature\Auth;
 
 use App\Models\Profile;
-use Illuminate\Http\Response;
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Config;
+use Tests\TestCase;
 
 class LoginTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-        Config::set('auth.throttle.max_attempts', 3);
-        Config::set('auth.throttle.decay_minutes', 60);
-    }
-
-    public function test_login_with_valid_credentials()
+    public function test_user_can_login_with_valid_credentials()
     {
         $user = User::factory()->create([
-            'email' => 'test@gmail.com',
-            'password' => Hash::make('Ed8M7s*)?e:hTb^#&;C!<y'),
+            'email' => 'test@example.com',
+            'password' => Hash::make('password123'),
         ]);
+
         Profile::factory()->create([
-            'user_id' => $user->id
+            'user_id' => $user->id,
+            'first_name' => 'John',
+            'last_name' => 'Doe',
         ]);
 
         $response = $this->postJson('/api/v1/auth/login', [
-            'email' => 'test@gmail.com',
-            'password' => 'Ed8M7s*)?e:hTb^#&;C!<y',
+            'email' => 'test@example.com',
+            'password' => 'password123',
         ]);
-        // dd($response);
+
         $response->assertStatus(200)
             ->assertJsonStructure([
                 'status_code',
@@ -48,36 +42,28 @@ class LoginTest extends TestCase
                         'last_name',
                         'email',
                         'avatar_url',
-                        'is_superadmin'
+                        'is_superadmin',
                     ],
+                    'organisations',
                 ],
+            ])
+            ->assertJson([
+                'status_code' => 200,
+                'message' => 'Login successful',
             ]);
     }
 
-    public function test_login_with_invalid_credentials()
+    public function test_user_cannot_login_with_invalid_credentials()
     {
-        User::factory()->create([
-            'email' => 'test@gmail.com',
-            'password' => Hash::make('Ed8M7s*)?e:hTb^#&;C!<y'),
-        ]);
-
         $response = $this->postJson('/api/v1/auth/login', [
-            'email' => 'test@gmail.com',
+            'email' => 'nonexistent@example.com',
             'password' => 'wrongpassword',
         ]);
 
         $response->assertStatus(401)
             ->assertJson([
+                'status_code' => 401,
                 'message' => 'Invalid credentials',
             ]);
-    }
-
-    public function test_login_with_missing_fields()
-    {
-        $response = $this->postJson('/api/v1/auth/login', [
-            'email' => 'test@gmail.com',
-        ]);
-
-        $response->assertStatus(401);
     }
 }

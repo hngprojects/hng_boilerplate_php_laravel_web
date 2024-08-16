@@ -11,7 +11,7 @@ class AdminSeeder extends Seeder
     public function run(): void
     {
         $this->createUser("Admin", "admin", "bulldozeradmin@hng.com");
-        $this->createUser("Super Admin", "superAdmin", "bulldozersuperadmin@hng.com",  true);
+        $this->createUser("Super Admin", "superadmin", "bulldozersuperadmin@hng.com",  true);
     }
 
     private function createUser($name, $role, $email): void
