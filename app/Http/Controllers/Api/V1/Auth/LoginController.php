@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\RateLimiter;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Validator;
 
-
 class LoginController extends Controller
 {
     public function login(Request $request)
@@ -42,16 +41,36 @@ class LoginController extends Controller
         $user->last_login_at = now();
         $user->save();
 
+        $organisations = $user->owned_organisations->map(function ($org) use ($user) {
+            return [
+                'organisation_id' => $org->org_id,
+                'name' => $org->name,
+                'user_role' => $user->roles()->where('org_id', $org->org_id)->first()->name ?? 'user',
+                'is_owner' => true,
+            ];
+        });
+
+        $is_superadmin = in_array($user->role, ['superadmin']);
+
         return response()->json([
             'status_code' => 200,
             'message' => 'Login successful',
             'access_token' => $token,
             'data' => [
-                'user' => new UserResource($user->load('profile', 'owned_organisations'))
+                'user' => [
+                    'id' => $user->id,
+                    'first_name' => $user->profile->first_name,
+                    'last_name' => $user->profile->last_name,
+                    'email' => $user->email,
+                    'avatar_url' => $user->profile->avatar_url,
+                    'is_superadmin' => $is_superadmin,
+                    'role' => $user->role,
+                ],
+                'organisations' => $organisations,
             ]
         ], 200);
+    
     }
-
 
     public function logout()
     {
