@@ -138,5 +138,3 @@ class ShowRoleTest extends TestCase
                  ]);
     }
 }
-
-?>
