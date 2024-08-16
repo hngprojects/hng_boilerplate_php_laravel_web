@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Organisation;
+use App\Models\Profile;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
@@ -38,6 +39,10 @@ class organisationMemberControllerTest extends TestCase
             'name' => 'precious',
             'email' => 'precious@example.com',
             'password' => Hash::make('precious')
+        ]);
+
+        Profile::factory()->create([
+            'user_id' => $user->id
         ]);
 
         // Login the user

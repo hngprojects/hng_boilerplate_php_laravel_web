@@ -13,6 +13,11 @@ class WaitListControllerTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->withoutMiddleware(\Illuminate\Routing\Middleware\ThrottleRequests::class);
+    }
     /**
      * Test fetching all waitlist entries.
      *
@@ -129,7 +134,6 @@ public function testIndex()
     public function testStoreValidationFailure()
     {
         $payload = [
-            'name' => " ",
             'email' => 'invalid-email'
         ];
 

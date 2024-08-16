@@ -61,8 +61,9 @@ use App\Http\Controllers\Api\V1\NewsletterSubscriptionController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
 Route::any('/', function () {
-  return 'Language Learning AI Game';
+    return 'Language Learning AI Game';
 });
 
 Route::prefix('v1')->group(function () {
@@ -89,11 +90,11 @@ Route::prefix('v1')->group(function () {
     Route::get('/auth/facebook/callback', [SocialAuthController::class, 'callbackFromFacebook']);
     Route::post('/auth/facebook/callback', [SocialAuthController::class, 'saveFacebookRequest']);
 
+    Route::middleware('auth:api')->group(function () {
 
-    Route::get('/users/stats', [UserController::class, 'stats']);
-    Route::apiResource('/users', UserController::class);
-
-
+        Route::get('/users/stats', [UserController::class, 'stats']);
+        Route::apiResource('/users', UserController::class);
+    });
     //jobs
     Route::get('/jobs', [JobController::class, 'index']);
     Route::get('/jobs/search', [JobSearchController::class, 'search']);
@@ -158,7 +159,7 @@ Route::prefix('v1')->group(function () {
         Route::patch('/products/{productId}', [SuperAdminProductController::class, 'update']);
         Route::delete('/products/{productId}', [SuperAdminProductController::class, 'destroy']);
 
-      
+
         Route::get('/squeeze-pages-users', [SqueezePageUserController::class, 'index']);
     });
 
@@ -168,9 +169,13 @@ Route::prefix('v1')->group(function () {
         Route::patch('/email-templates/{id}', [EmailTemplateController::class, 'update']);
         Route::delete('/email-templates/{id}', [EmailTemplateController::class, 'destroy']);
     });
+    Route::middleware(['auth:api', 'admin'])->group(function () {
 
+
+        // Dashboard
+        Route::get('/users-list', [AdminDashboardController::class, 'getUsers']);
+    });
     Route::post('/email-requests', [SendEmailController::class, 'createEmailRequest']);
-    Route::post('/email-requests/send', [SendEmailController::class, 'triggerEmailSending']);
 
 
     Route::post('/invitations/generate', [InvitationAcceptanceController::class, 'generateInvitation']);
@@ -186,7 +191,7 @@ Route::prefix('v1')->group(function () {
         Route::post('/payments/paystack', [PaymentController::class, 'initiatePaymentForPayStack']);
 
         Route::post('/payments/flutterwave', [PaymentController::class, 'initiatePaymentForFlutterWave']);
-        Route::get('/payments/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
+        Route::get('/payments/cancel', [PaymentController::class, 'cancel'])->name('payment.cancels');
         Route::post('/users/plans/{user_subscription}/cancel', [\App\Http\Controllers\Api\V1\User\SubscriptionController::class, 'destroy']);
         Route::get('/users/plan', [\App\Http\Controllers\Api\V1\User\SubscriptionController::class, 'userPlan']);
 
@@ -232,6 +237,8 @@ Route::prefix('v1')->group(function () {
         //profile Update
         Route::patch('/profile', [ProfileController::class, 'update']);
         Route::post('/profile/upload-image', [ProfileController::class, 'uploadImage']);
+        Route::get('/profile/{id}', [ProfileController::class, 'show']);
+
 
 
         //Timezone Settings
@@ -258,16 +265,18 @@ Route::prefix('v1')->group(function () {
         Route::get('/squeeze-pages/filter', [SqueezePageCoontroller::class, 'filter']);
         Route::apiResource('squeeze-pages', SqueezePageCoontroller::class);
         Route::get('/dashboard/statistics', [AdminDashboardController::class, 'getStatistics']);
-        Route::post('/faqs', [FaqController::class, 'store']);
-        Route::put('/faqs/{faq}', [FaqController::class, 'update']);
-        Route::delete('/faqs/{faq}', [FaqController::class, 'destroy']);
         Route::get('/dashboard/top-products', [AdminDashboardController::class, 'getTopProducts']);
         Route::get('/dashboard/all-top-products', [AdminDashboardController::class, 'getAllProductsSortedBySales']);
+
+        // faq's
+        Route::post('/faqs', [FaqController::class, 'store']);
+        Route::put('/faqs/{id}', [FaqController::class, 'update']);
+        Route::delete('/faqs/{id}', [FaqController::class, 'destroy']);
     });
 
     Route::post('/waitlists', [WaitListController::class, 'store']);
 
-    Route::get('faqs', [FaqController::class, 'index']);
+
 
 
     Route::get('/blogs/{id}', [BlogController::class, 'show']);
@@ -283,10 +292,10 @@ Route::prefix('v1')->group(function () {
         Route::get('/user-sales', [DashboardController::class, 'recent_sales']);
     });
 
-        //region get and update
-        Route::group(['middleware' => ['auth:api']], function () {
-            Route::put('/regions/{user_id}', [PreferenceController::class, 'updateRegion']);
-            Route::get('/regions/{user_id}', [PreferenceController::class, 'showRegion']);
+    //region get and update
+    Route::group(['middleware' => ['auth:api']], function () {
+        Route::put('/regions/{user_id}', [PreferenceController::class, 'updateRegion']);
+        Route::get('/regions/{user_id}', [PreferenceController::class, 'showRegion']);
     });
     // Notification settings
     Route::patch('/notification-settings/{user_id}', [NotificationPreferenceController::class, 'update']);
@@ -297,14 +306,14 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('email-templates', EmailTemplateController::class);
     });
 
-//super Admin Email template
-Route::prefix('v1/admin')->group(function () {
-    Route::get('email-templates', [EmailTemplateController::class, 'index']);
-    Route::get('email-templates/{id}', [EmailTemplateController::class, 'show']);
-    Route::post('email-templates', [EmailTemplateController::class, 'store']);
-    Route::put('email-templates/{id}', [EmailTemplateController::class, 'update']);
-    Route::delete('email-templates/{id}', [EmailTemplateController::class, 'destroy']);
-});
+    //super Admin Email template
+    Route::prefix('v1/admin')->group(function () {
+        Route::get('email-templates', [EmailTemplateController::class, 'index']);
+        Route::get('email-templates/{id}', [EmailTemplateController::class, 'show']);
+        Route::post('email-templates', [EmailTemplateController::class, 'store']);
+        Route::put('email-templates/{id}', [EmailTemplateController::class, 'update']);
+        Route::delete('email-templates/{id}', [EmailTemplateController::class, 'destroy']);
+    });
     // User Notification
     Route::patch('/notifications/{notification}', [UserNotificationController::class, 'update']);
     Route::delete('/notifications', [UserNotificationController::class, 'destroy']);
@@ -319,9 +328,16 @@ Route::prefix('v1/admin')->group(function () {
 
     Route::post('/squeeze-user', [SqueezePageUserController::class, 'store']);
 
-   
+
 
 
     //Newsletter Subscription
     Route::post('newsletter-subscription', [NewsletterSubscriptionController::class, 'store']);
+
+
+    Route::get('/faqs', [FaqController::class, 'index']);
+
+    Route::post('/payment/stripe', [PaymentController::class, 'processPayment']);
+    Route::get('/payment-success//{organisation_id}/{id}', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
+    Route::get('/payment-cancel', [PaymentController::class, 'paymentCancel'])->name('payment.cancel');
 });

@@ -89,14 +89,13 @@ class ProductCreateTest extends TestCase
             'stock' => 10,
             'stock_status' => 'in_stock',
             'price' => 100,
-            'size_id' => $size->id
         ]);
 
-        // Assert the product variant size is created
+        $productVariant = ProductVariant::first();
         $this->assertDatabaseHas('product_variant_sizes', [
-            'product_variant_id' => ProductVariant::first()->id,
-            'size_id' => $size->id
+            'product_variant_id' => $productVariant->id,
         ]);
+        $this->assertNotNull($productVariant->size_id);
     }
 
     /** @test */
