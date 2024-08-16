@@ -38,7 +38,6 @@ class CookiePreferencesTest extends TestCase
                         'first_name',
                         'last_name',
                         'email',
-                        'role',
                         'avatar_url',
                     ],
                 ]
