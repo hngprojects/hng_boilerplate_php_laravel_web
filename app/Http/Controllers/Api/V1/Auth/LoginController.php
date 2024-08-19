@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Api\V1\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\RateLimiter;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Validator;
-
 
 class LoginController extends Controller
 {
@@ -20,33 +21,36 @@ class LoginController extends Controller
     
         if ($validator->fails()) {
             return response()->json([
-                'status_code' => 400,
-                'message' => 'Validation failed',
-                'data' => $validator->errors()
-            ], 400);
+                'status_code' => 401,
+                'message' => 'Invalid Credentials',
+                'error' => 'Invalid Email or Password'
+            ], 401);
         }
 
-        $credentials = $request->only('email', 'password');
-
-        if (!$token = JWTAuth::attempt($credentials)) {
+        if (!$token = JWTAuth::attempt($request->only('email', 'password'))) {
+            $key = 'login_attempts_'.request()->ip();
+            RateLimiter::hit($key,3600);
             return response()->json([
                 'status_code' => 401,
                 'message' => 'Invalid credentials',
-                'data' => []
+                'error' => 'Invalid Email or Password'
             ], 401);
         }
 
         $user = Auth::user();
-        $profile = $user->profile;
+        $user->last_login_at = now();
+        $user->save();
 
-        $organisations = $user->organisations->map(function ($org) use ($user) {
+        $organisations = $user->owned_organisations->map(function ($org) use ($user) {
             return [
                 'organisation_id' => $org->org_id,
                 'name' => $org->name,
-                'role' => $org->pivot->role ?? null,
-                'is_owner' => $org->pivot->user_id === $user->id
+                'user_role' => $user->roles()->where('org_id', $org->org_id)->first()->name ?? 'user',
+                'is_owner' => true,
             ];
         });
+
+        $is_superadmin = in_array($user->role, ['admin']);
 
         return response()->json([
             'status_code' => 200,
@@ -55,18 +59,18 @@ class LoginController extends Controller
             'data' => [
                 'user' => [
                     'id' => $user->id,
-                    'first_name' => $profile->first_name ?? null,
-                    'last_name' => $profile->last_name ?? null,
+                    'first_name' => $user->profile->first_name,
+                    'last_name' => $user->profile->last_name,
                     'email' => $user->email,
-                    'avatar_url' => $profile->avatar_url ?? null,
-                    'is_superadmin' => $user->role === 'superadmin',
-                    'role' => $user->role
+                    'avatar_url' => $user->profile->avatar_url,
+                    'is_superadmin' => $is_superadmin,
+                    'role' => $user->role,
                 ],
-                'organisations' => $organisations
+                'organisations' => $organisations,
             ]
         ], 200);
+    
     }
-
 
     public function logout()
     {

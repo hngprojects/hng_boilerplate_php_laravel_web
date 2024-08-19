@@ -3,24 +3,22 @@
 namespace App\Http\Controllers\Api\V1\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreUserRequest;
-use Illuminate\Http\Request;
-use App\Traits\HttpResponses;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\User;
 use App\Models\Organisation;
-use App\Models\OrganisationUser;
-use Illuminate\Support\Facades\Log;
-use App\Models\Validators\AuthValidator;
+use App\Services\OrganisationService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rules\Password;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Str;
+use App\Models\EmailTemplate;
 
 class AuthController extends Controller
 {
-    use HttpResponses;
+    public function __construct(public OrganisationService $organisationService)
+    {
+    }
 
     public function store(Request $request)
     {
@@ -29,99 +27,90 @@ class AuthController extends Controller
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|email:rfc|max:255|unique:users',
             'password' => 'required|string|min:6',
-            'invite_token' => 'nullable|string',
         ]);
-
+    
         if ($validator->fails()) {
-            return $this->apiResponse(message: $validator->errors(), status_code: 400);
+            return response()->json([
+                'status_code' => 422,
+                'message' => 'Validation error',
+                'errors' => $validator->errors(),
+            ], 422);
         }
-
+    
         try {
             DB::beginTransaction();
-
+    
             $user = User::create([
-                'name' => $request->first_name . ' ' . $request->last_name,
+                'id' => Str::uuid(),
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-                'role' => 'user'
+                'role' => 'user',
+                'is_verified' => 1,
             ]);
-
-            $profile = $user->profile()->create([
+    
+            $user->profile()->create([
                 'first_name' => $request->first_name,
-                'last_name' => $request->last_name
+                'last_name' => $request->last_name,
             ]);
-
-            $organisations = [];
-
-            if ($request->invite_token) {
-                // Handle invite logic here
-                // For now, we'll create a default org
-                $organization = $this->createDefaultOrganization($user);
-                $organisations[] = $this->formatOrganisation($organization, 'admin', true);
-            } else {
-                $organization = $this->createDefaultOrganization($user);
-                $organisations[] = $this->formatOrganisation($organization, 'admin', true);
-            }
-
+    
+            $name = $request->first_name . "'s Organisation";
+            $organisation = $this->organisationService->create($user, $name);
+    
+            $role = $user->roles()->create([
+                'name' => 'admin',
+                'org_id' => $organisation->org_id,
+            ]);
+    
+            DB::table('users_roles')->insert([
+                'user_id' => $user->id,
+                'role_id' => $role->id,
+            ]);
+    
             $token = JWTAuth::fromUser($user);
-
+    
+            $is_superadmin = in_array($user->role, ['admin']);
+    
             DB::commit();
 
+            $email_template_id = null;
+
+            $emailTemplate = EmailTemplate::where('title', 'welcome-email')->first();;
+            if ($emailTemplate) {
+                $email_template_id = $emailTemplate->id;
+            }
+    
             return response()->json([
                 'status_code' => 201,
                 'message' => 'User Created Successfully',
+                'email_template_id' => $email_template_id,
                 'access_token' => $token,
                 'data' => [
                     'user' => [
                         'id' => $user->id,
-                        'first_name' => $request->first_name,
-                        'last_name' => $request->last_name,
-                        'avatar_url' => $user->profile->avatar_url,
+                        'first_name' => $user->profile->first_name,
+                        'last_name' => $user->profile->last_name,
                         'email' => $user->email,
-                        'is_superadmin' => false,
-                        'role' => $user->role
+                        'avatar_url' => $user->avatar_url,
+                        'is_superadmin' => $is_superadmin,
+                        'role' => $user->role,
                     ],
-                    'organisations' => $organisations
+                    'organisations' => [
+                        [
+                            'organisation_id' => $organisation->org_id,
+                            'name' => $organisation->name,
+                            'user_role' => 'admin',
+                            'is_owner' => true,
+                        ]
+                    ]
                 ],
             ], 201);
-
         } catch (\Exception $e) {
             DB::rollBack();
-            return $this->apiResponse('Registration unsuccessful', Response::HTTP_BAD_REQUEST);
+            return response()->json([
+                'status_code' => 500,
+                'message' => 'Registration unsuccessful: ' . $e->getMessage(),
+            ], 500);
         }
     }
-
-    private function createDefaultOrganization($user)
-    {
-        $organization = $user->owned_organisations()->create([
-            'name' => $user->profile->first_name . "'s Organisation",
-        ]);
-
-        OrganisationUser::create([
-            'user_id' => $user->id,
-            'org_id' => $organization->org_id
-        ]);
-
-        $role = $user->roles()->create([
-            'name' => 'admin',
-            'org_id' => $organization->org_id
-        ]);
-
-        DB::table('users_roles')->insert([
-            'user_id' => $user->id,
-            'role_id' => $role->id
-        ]);
-
-        return $organization;
-    }
-
-    private function formatOrganisation($organization, $role, $isOwner)
-    {
-        return [
-            'organisation_id' => $organization->org_id,
-            'name' => $organization->name,
-            'role' => $role,
-            'is_owner' => $isOwner,
-        ];
-    }
+    
 }

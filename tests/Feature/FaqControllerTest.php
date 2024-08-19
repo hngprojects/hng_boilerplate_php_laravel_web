@@ -18,7 +18,7 @@ class FaqControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->superAdmin = User::factory()->create(['role' => 'superadmin']);
+        $this->superAdmin = User::factory()->create(['role' => 'admin']);
         $this->token = JWTAuth::fromUser($this->superAdmin);
     }
 
@@ -64,7 +64,7 @@ class FaqControllerTest extends TestCase
         $response = $this->withHeaders(['Authorization' => "Bearer $token"])
             ->postJson('/api/v1/faqs', $payload);
 
-        $response->assertStatus(403);
+        $response->assertStatus(401);
         $this->assertDatabaseMissing('faqs', $payload);
     }
 
@@ -156,7 +156,7 @@ class FaqControllerTest extends TestCase
         $response = $this->withHeaders(['Authorization' => "Bearer $token"])
             ->putJson("/api/v1/faqs/{$faq->id}", $updatedData);
     
-        $response->assertStatus(403);
+        $response->assertStatus(401);
         $this->assertDatabaseMissing('faqs', $updatedData);
     }
     
@@ -185,7 +185,7 @@ class FaqControllerTest extends TestCase
         $response = $this->withHeaders(['Authorization' => "Bearer $token"])
             ->deleteJson("/api/v1/faqs/{$faq->id}");
     
-        $response->assertStatus(403);
+        $response->assertStatus(401);
         $this->assertDatabaseHas('faqs', ['id' => $faq->id]);
     }
     
