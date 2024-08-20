@@ -57,8 +57,9 @@ use App\Http\Controllers\Api\V1\Admin\AdminDashboardController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
 Route::any('/', function () {
-  return 'Language Learning AI Game';
+    return 'Language Learning AI Game';
 });
 
 Route::prefix('v1')->group(function () {
@@ -103,13 +104,15 @@ Route::prefix('v1')->group(function () {
     Route::get('/payments/flutterwave/{organisation_id}/verify/{id}', [PaymentController::class, 'handleFlutterwaveCallback']);
     Route::post('/languages', [LanguageController::class, 'create']);
     Route::get('/languages', [LanguageController::class, 'index']);
-    Route::put('/languages/{id}', [LanguageController::class, 'update']); 
+    Route::put('/languages/{id}', [LanguageController::class, 'update']);
 
     Route::middleware('throttle:10,1')->get('/topics/search', [ArticleController::class, 'search']);
 
     Route::middleware('auth:api')->group(function () {
 
         Route::post('/organizations/{org_id}/products', [ProductController::class, 'store']);
+        Route::get('/{org_id}/products', [ProductController::class, 'index']);
+
         Route::patch('/organizations/{org_id}/products/{product_id}', [ProductController::class, 'update']);
         Route::delete('/organizations/{org_id}/products/{product_id}', [ProductController::class, 'destroy']);
     });

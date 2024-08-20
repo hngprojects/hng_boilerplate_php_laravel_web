@@ -136,9 +136,13 @@ class ProductController extends Controller
                 'imageUrl',
                 'description',
                 'created_at',
-                'quantity'
+                'updated_at',
+                'quantity',
+                'status',
+                'size',
+                'category'
             )
-                ->with(['productsVariant', 'categories'])
+
                 ->offset($offset)
                 ->limit($limit)
                 ->get();
@@ -151,21 +155,30 @@ class ProductController extends Controller
                 return [
                     'name' => $product->name,
                     'price' => $product->price,
-                    'imageUrl' => $product->imageUrl,
+                    'cost_price' => 0,
+                    'image' => $product->imageUrl,
                     'description' => $product->description,
-                    'product_id' => $product->product_id,
+                    'id' => $product->product_id,
                     'quantity' => $product->quantity,
-                    'category' => $product->categories->isNotEmpty() ? $product->categories->map->name : [],
-                    'stock' => $product->productsVariant->isNotEmpty() ? $product->productsVariant->first()->stock : null,
-                    'status' => $product->productsVariant->isNotEmpty() ? $product->productsVariant->first()->stock_status : null,
-                    'date_added' => $product->created_at
+                    'category' => $product->category,
+                    'status' => $product->status,
+                    'size' => $product->size,
+                    'created_at' => $product->created_at,
+                    'updated_at' => $product->updated_at,
+                    'deletedAt' => $product->deletedAt,
+
+
+
                 ];
             });
 
             return response()->json([
-                'success' => true,
+                'status_code' => 200,
                 'message' => 'Products retrieved successfully',
-                'products' => $transformedProducts,
+                'data' => [
+                    'products' => $transformedProducts,
+                ],
+
                 'pagination' => [
                     'totalItems' => $totalItems,
                     'totalPages' => $totalPages,
