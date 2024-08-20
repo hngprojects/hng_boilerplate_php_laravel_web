@@ -115,6 +115,7 @@ Route::prefix('v1')->group(function () {
 
         Route::patch('/organizations/{org_id}/products/{product_id}', [ProductController::class, 'update']);
         Route::delete('/organizations/{org_id}/products/{product_id}', [ProductController::class, 'destroy']);
+        Route::get('/organizations/{org_id}/products/{product_id}', [ProductController::class, 'show']);
     });
 
     //comment

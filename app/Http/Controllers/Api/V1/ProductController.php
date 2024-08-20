@@ -265,10 +265,9 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($product_id)
+    public function show(Request $request, $org_id, $product_id)
     {
         $product = Product::find($product_id);
-        // return $product_id;
         if (!$product) {
             return response()->json([
                 'status' => 'error',
@@ -276,12 +275,46 @@ class ProductController extends Controller
                 'status_code' => 404,
             ]);
         }
-        $product = new ProductResource($product);
+
+        $products = Product::select(
+            'product_id',
+            'name',
+            'price',
+            'imageUrl',
+            'description',
+            'created_at',
+            'updated_at',
+            'quantity',
+            'status',
+            'size',
+            'category'
+        )->get();
+
+        $transformedProduct =  [
+            'id' => $product->product_id,
+            'name' => $product->name,
+            'price' => $product->price,
+            'cost_price' => $product->cost_price,
+            'image' => url($product->imageUrl),
+            'description' => $product->description,
+            'quantity' => $product->quantity,
+            'category' => $product->category,
+            'status' => $product->status,
+            'size' => $product->size,
+            'created_at' => $product->created_at,
+            'updated_at' => $product->updated_at,
+            'deletedAt' => $product->deletedAt,
+
+
+
+        ];
+
+
+
         return response()->json([
-            'status' => 'success',
-            "message" => "Product retrieve ",
             'status_code' => 200,
-            'data' => $product
+            "message" => "Product retrieved successfully",
+            'data' => $transformedProduct
         ]);
     }
 
