@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Models\CategoryProduct;
 use App\Models\OrganisationUser;
-use App\Models\ProductVariant;
-use App\Models\ProductVariantSize;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\User;
 use App\Models\Product;
@@ -151,12 +148,15 @@ class ProductController extends Controller
             $totalItems = Product::count();
             $totalPages = ceil($totalItems / $limit);
 
+
+
+
             $transformedProducts = $products->map(function ($product) {
                 return [
                     'name' => $product->name,
                     'price' => $product->price,
-                    'cost_price' => 0,
-                    'image' => $product->imageUrl,
+                    'cost_price' => $product->cost_price,
+                    'image' => url($product->imageUrl),
                     'description' => $product->description,
                     'id' => $product->product_id,
                     'quantity' => $product->quantity,
@@ -172,6 +172,7 @@ class ProductController extends Controller
                 ];
             });
 
+
             return response()->json([
                 'status_code' => 200,
                 'message' => 'Products retrieved successfully',
@@ -184,7 +185,6 @@ class ProductController extends Controller
                     'totalPages' => $totalPages,
                     'currentPage' => $page,
                 ],
-                'status_code' => 200,
             ], 200);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
@@ -210,7 +210,6 @@ class ProductController extends Controller
 
 
 
-
         $isOwner = OrganisationUser::where('org_id', $org_id)->where('user_id', auth()->id())->exists();
 
         if (!$isOwner) {
@@ -222,11 +221,21 @@ class ProductController extends Controller
             ], 403);
         }
 
-        $imageUrl = null;
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('product_images', 'public');
-            $imageUrl = Storage::url($imagePath);
+
+        // Check if the file is present
+        if ($request->hasFile('image_url')) {
+            $file = $request->file('image_url');
+            $extension = $file->getClientOriginalExtension();
+            $filename = time() . '.' . $extension;
+            $path = 'uploads/product_images/';
+            $file->move(public_path($path), $filename);
+
+            $imageUrl = $path . $filename;
+        } else {
+            $imageUrl = null;
         }
+
+
 
         $product = Product::create([
             'name' => $request->input('name'),
@@ -294,38 +303,42 @@ class ProductController extends Controller
         $product = Product::findOrFail($product_id);
         $product->update([
             'name' => $validated['name'] ?? $product->name,
-            'is_archived' => $validated['is_archived'] ?? $product->is_archived,
-            'imageUrl' => $validated['image'] ?? $product->imageUrl
+            'quantity' => $validated['quantity'] ?? $product->quantity,
+            'price' => $validated['price'] ?? $product->price,
+            'category' => $validated['category'] ?? $product->category,
+            'description' => $validated['description'] ?? $product->description,
+
         ]);
 
-        foreach ($request->input('productsVariant') as $variant) {
-            $existingProductVariant = ProductVariant::where('product_id', $product->product_id)
-                ->where('size_id', $variant['size_id'])
-                ->first();
+        $transformedProduct =  [
+            'name' => $product->name,
+            'price' => $product->price,
+            'cost_price' => $product->cost_price,
+            'image' => url($product->imageUrl),
+            'description' => $product->description,
+            'id' => $product->product_id,
+            'quantity' => $product->quantity,
+            'category' => $product->category,
+            'status' => $product->status,
+            'size' => $product->size,
+            'created_at' => $product->created_at,
+            'updated_at' => $product->updated_at,
+            'deletedAt' => $product->deletedAt,
 
-            if ($existingProductVariant) {
-                $existingProductVariant->update([
-                    'stock' => $variant['stock'],
-                    'stock_status' => $variant['stock'] > 0 ? 'in_stock' : 'out_stock',
-                    'price' => $variant['price'],
-                ]);
-            } else {
-                $newProductVariant = ProductVariant::create([
-                    'product_id' => $product->product_id,
-                    'stock' => $variant['stock'],
-                    'stock_status' => $variant['stock'] > 0 ? 'in_stock' : 'out_stock',
-                    'price' => $variant['price'],
-                    'size_id' => $variant['size_id'],
-                ]);
 
-                ProductVariantSize::create([
-                    'product_variant_id' => $newProductVariant->id,
-                    'size_id' => $variant['size_id'],
-                ]);
-            }
-        }
 
-        return response()->json(['message' => 'Product updated successfully'], 200);
+        ];
+
+
+
+
+        return response()->json([
+            'status_code' => 200,
+            'message' => 'Products updated successfully',
+            'data' => $transformedProduct
+
+
+        ], 200);
     }
 
     /**
