@@ -6,7 +6,6 @@ use App\Models\CategoryProduct;
 use App\Models\OrganisationUser;
 use App\Models\ProductVariant;
 use App\Models\ProductVariantSize;
-use App\Models\Size;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\User;
 use App\Models\Product;
@@ -195,10 +194,19 @@ class ProductController extends Controller
      */
     public function store(CreateProductRequest $request, $org_id)
     {
+
+
+
+
         $isOwner = OrganisationUser::where('org_id', $org_id)->where('user_id', auth()->id())->exists();
 
         if (!$isOwner) {
-            return response()->json(['message' => 'You are not authorized to create products for this organization.'], 403);
+            return response()->json([
+                'status_code' => 403,
+                'message' => 'You are not authorized to create products for this organization.',
+
+
+            ], 403);
         }
 
         $imageUrl = null;
@@ -208,38 +216,29 @@ class ProductController extends Controller
         }
 
         $product = Product::create([
-            'name' => $request->input('title'),
+            'name' => $request->input('name'),
             'description' => $request->input('description'),
-            'slug' => Carbon::now(),
-            'tags' => $request->input('category'),
+            'size' => $request->input('size'),
             'price' => $request->input('price'),
+            'status' => $request->input('status'),
+            'quantity' => $request->input('quantity'),
+
             'imageUrl' => $imageUrl,
             'user_id' => auth()->id(),
-            'org_id' => $org_id
+            'org_id' => $org_id,
+            'category' => $request->input('category'),
         ]);
 
-        CategoryProduct::create([
-            'category_id' => $request->input('category'),
-            'product_id' => $product->product_id
+        $product = new ProductResource($product);
+        return response()->json([
+            'status' => 'success',
+            "message" => "Product created successfully",
+            'status_code' => 201,
+            'data' => $product
         ]);
-
-        $standardSize = Size::where('size', 'standard')->first('id');
-
-        $productVariant = ProductVariant::create([
-            'product_id' => $product->product_id,
-            'stock' => $request->input('stock'),
-            'stock_status' => $request->input('stock') > 0 ? 'in_stock' : 'out_stock',
-            'price' => $request->input('price'),
-            'size_id' => $standardSize->id,
-        ]);
-
-        ProductVariantSize::create([
-            'product_variant_id' => $productVariant->id,
-            'size_id' => $standardSize->id,
-        ]);
-
-        return response()->json(['message' => 'Product created successfully', 'product' => $product], 201);
     }
+
+
 
     /**
      * Display the specified resource.

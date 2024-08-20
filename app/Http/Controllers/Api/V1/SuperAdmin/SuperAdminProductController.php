@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class SuperAdminProductController extends Controller
 {
@@ -15,13 +16,8 @@ class SuperAdminProductController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'price' => 'required|numeric',
-            'slug' => 'required|string|max:255',
-            'tags' => 'required|string',
-            'imageUrl' => 'nullable|string|max:255',
-            'status' => 'required|string|max:50',
             'quantity' => 'required|integer',
-            'category' => 'nullable|string|max:255',
-            'org_id' => 'required|uuid',
+            'imageUrl' => 'nullable|string|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -33,19 +29,34 @@ class SuperAdminProductController extends Controller
             ], 422);
         }
 
+        $user = auth()->user();
+
+        // Fetch the org_id associated with the authenticated user
+        $organisation = $user->organisations()->first();
+        if (!$organisation) {
+            return response()->json([
+                'success' => false,
+                'status_code' => 400,
+                'message' => 'User is not associated with any organisation',
+            ], 400);
+        }
+        $org_id = $organisation->org_id;
+
+        $slug = Str::slug($request->name . '-' . Str::random(8));
+        $tags = 'default-tag';
+
         $product = Product::create([
-            'user_id' => auth()->id(),
+            'user_id' => $user->id,
             'name' => $request->name,
             'description' => $request->description,
             'price' => $request->price,
-            'slug' => $request->slug,
-            'tags' => $request->tags,
-            'imageUrl' => $request->imageUrl,
-            'status' => $request->status,
+            'image_url' => $request->imageUrl,
+            'status' => 'in stock',
             'quantity' => $request->quantity,
-            'is_archived' => false,
-            'org_id' => $request->org_id,
             'category' => $request->category,
+
+            'is_archived' => false,
+            'org_id' => $org_id,
         ]);
 
         return response()->json([
@@ -55,6 +66,7 @@ class SuperAdminProductController extends Controller
             'data' => $product,
         ], 201);
     }
+
     public function update(Request $request, $productId)
     {
         $validator = Validator::make($request->all(), [
@@ -82,10 +94,16 @@ class SuperAdminProductController extends Controller
         $product = Product::findOrFail($productId);
 
         $product->fill($request->only([
-            'name', 'description', 'price', 'slug', 'tags',
-            'imageUrl', 'status', 'quantity', 'org_id'
+            'name',
+            'description',
+            'price',
+            'slug',
+            'tags',
+            'imageUrl',
+            'status',
+            'quantity',
+            'org_id'
         ]));
-
 
         $product->user_id = $product->user_id;
 
