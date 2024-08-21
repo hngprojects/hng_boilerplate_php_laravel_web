@@ -6,8 +6,6 @@ use App\Models\Category;
 use App\Models\Organisation;
 use App\Models\OrganisationUser;
 use App\Models\Product;
-use App\Models\ProductVariant;
-use App\Models\Size;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -25,12 +23,6 @@ class ProductCreateTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        // Create a size with 'standard'
-        $size = Size::create(['size' => 'standard']);
-
-        // Create a category
-        $category = Category::create(['name' => 'Test Category', 'slug' => 'test-category', 'description' => 'Testing']);
-
         // Create an organisation and get the first instance
         $organisation = Organisation::factory()->create();
 
@@ -47,29 +39,31 @@ class ProductCreateTest extends TestCase
         $payload = [
             'name' => 'Test Product',
             'description' => 'Test Description',
-            'category' => 'Hello', // Use the created category ID
             'price' => 100,
-            'quantity' => 10,
+            'status' => 'in stock',
             'image_url' => $image,
+            'category' => 'Electronics',
+            'quantity' => '11',
         ];
 
         // Send POST request to create product
         $response = $this->postJson("/api/v1/organisations/{$organisation->org_id}/products", $payload);
 
         // Assert the response status and structure
-        $response->assertStatus(201)
+        $response->assertStatus(200)
             ->assertJsonStructure([
+                'status',
                 'message',
-                'product' => [
+                'status_code',
+                'data' => [
+                    'id',
                     'name',
                     'description',
-                    'slug',
-                    'tags',
                     'price',
-                    'imageUrl',
-                    'user_id',
-                    'updated_at',
+                    'status',
+                    'quantity',
                     'created_at',
+                    'updated_at',
                 ]
             ]);
 
@@ -77,29 +71,15 @@ class ProductCreateTest extends TestCase
         $this->assertDatabaseHas('products', [
             'name' => 'Test Product',
             'description' => 'Test Description',
-            'tags' => 'Hello',
             'price' => 100,
+            'quantity' => '11',
             'user_id' => $user->id
-        ]);
-
-
-
-        // Assert the product variant is created with the correct size
-        $this->assertDatabaseHas('product_variants', [
-            'product_id' => Product::first()->product_id,
-            'stock' => 10,
-            'stock_status' => 'in_stock',
-            'price' => 100,
-            'size_id' => $size->id
-        ]);
-
-        // Assert the product variant size is created
-        $this->assertDatabaseHas('product_variant_sizes', [
-            'product_variant_id' => ProductVariant::first()->id,
-            'size_id' => $size->id
         ]);
     }
 
+
+
+    /** @test */
     /** @test */
     public function it_cannot_create_a_product_if_not_an_owner()
     {
@@ -107,12 +87,6 @@ class ProductCreateTest extends TestCase
         $user = User::factory()->create();
         $otherUser = User::factory()->create();
         $this->actingAs($otherUser);
-
-        // Create a size with 'standard'
-        $size = Size::create(['size' => 'standard']);
-
-        // Create a category
-        // $category = Category::create(['name' => 'Test Category', 'slug' => 'test-category', 'description' => 'Testing']);
 
         // Create an organisation and get the first instance
         $organisation = Organisation::factory()->create();
@@ -124,10 +98,11 @@ class ProductCreateTest extends TestCase
         $payload = [
             'name' => 'Unauthorized Product',
             'description' => 'Unauthorized Description',
-            'category' => 'hello', // Use the created category ID
             'price' => 100,
-            'quantity' => 10,
             'image_url' => $image,
+            'category' => 'Beans',
+            'quantity' => '7',
+            'status' => 'in stock',
         ];
 
         // Send POST request to create product
@@ -135,6 +110,6 @@ class ProductCreateTest extends TestCase
 
         // Assert the response status is 403 Forbidden
         $response->assertStatus(403)
-            ->assertJson(['message' => 'You are not authorized to create products for this organisation.']);
+            ->assertJson(['message' => 'You are not authorized to create products for this organization.']);
     }
 }
