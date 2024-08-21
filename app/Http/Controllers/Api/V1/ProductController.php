@@ -79,8 +79,9 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         try {
-            $page = $request->input('page', 1);
-            $limit = $request->input('limit', 10);
+            $page = (int) $request->query('page', 1);
+            $limit = (int) $request->query('limit', 10);
+
 
             // Calculate offset
             $offset = ($page - 1) * $limit;

@@ -23,8 +23,6 @@ class ProductCreateTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-
-
         // Create an organisation and get the first instance
         $organisation = Organisation::factory()->create();
 
@@ -50,7 +48,6 @@ class ProductCreateTest extends TestCase
 
         // Send POST request to create product
         $response = $this->postJson("/api/v1/organisations/{$organisation->org_id}/products", $payload);
-        $response = $this->postJson("/api/v1/organisations/{$organisation->org_id}/products", $payload);
 
         // Assert the response status and structure
         $response->assertStatus(200)
@@ -59,12 +56,14 @@ class ProductCreateTest extends TestCase
                 'message',
                 'status_code',
                 'data' => [
+                    'id',
                     'name',
                     'description',
                     'price',
                     'status',
-                    'updated_at',
+                    'quantity',
                     'created_at',
+                    'updated_at',
                 ]
             ]);
 
@@ -73,10 +72,14 @@ class ProductCreateTest extends TestCase
             'name' => 'Test Product',
             'description' => 'Test Description',
             'price' => 100,
+            'quantity' => '11',
             'user_id' => $user->id
         ]);
     }
 
+
+
+    /** @test */
     /** @test */
     public function it_cannot_create_a_product_if_not_an_owner()
     {
@@ -84,9 +87,6 @@ class ProductCreateTest extends TestCase
         $user = User::factory()->create();
         $otherUser = User::factory()->create();
         $this->actingAs($otherUser);
-
-
-
 
         // Create an organisation and get the first instance
         $organisation = Organisation::factory()->create();
@@ -103,15 +103,13 @@ class ProductCreateTest extends TestCase
             'category' => 'Beans',
             'quantity' => '7',
             'status' => 'in stock',
-
         ];
 
         // Send POST request to create product
         $response = $this->postJson("/api/v1/organisations/{$organisation->org_id}/products", $payload);
-        $response = $this->postJson("/api/v1/organisations/{$organisation->org_id}/products", $payload);
 
         // Assert the response status is 403 Forbidden
         $response->assertStatus(403)
-            ->assertJson(['message' => 'You are not authorized to create products for this organisation.']);
+            ->assertJson(['message' => 'You are not authorized to create products for this organization.']);
     }
 }

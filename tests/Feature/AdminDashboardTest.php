@@ -66,28 +66,26 @@ class AdminDashboardTest extends TestCase
     public function test_admin_can_get_all_users()
     {
         $response = $this->withHeaders(['Authorization' => "Bearer $this->adminToken"])
-                         ->getJson('/api/v1/users-list');
+            ->getJson('/api/v1/users-list');
         $response->assertStatus(200)
-         ->assertJsonStructure([
-             'data' => [
-                 '*' => [
-                     'id',
-                     'name',
-                     'email',
-                     'is_active',
-                     'created_at',
-                 ]
-             ]
-         ]);
-
+            ->assertJsonStructure([
+                'data' => [
+                    '*' => [
+                        'id',
+                        'name',
+                        'email',
+                        'is_active',
+                        'created_at',
+                    ]
+                ]
+            ]);
     }
 
     public function test_non_admin_cannot_get_all_users()
     {
         $response = $this->withHeaders(['Authorization' => "Bearer $this->userToken"])
-                         ->getJson('/api/v1/users-list');
+            ->getJson('/api/v1/users-list');
 
-        $response->assertStatus(401); 
+        $response->assertStatus(401);
     }
-        
 }

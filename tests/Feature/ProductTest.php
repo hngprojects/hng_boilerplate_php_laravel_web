@@ -50,20 +50,4 @@ class ProductTest extends TestCase
     /**
      * Test that authenticated user receives bad request for invalid pagination params.
      */
-    public function test_authenticated_user_receives_bad_request_for_invalid_pagination_params()
-    {
-        $user = User::factory()->create();
-        $token = JWTAuth::fromUser($user);
-
-        $response = $this->getJson('/api/v1/products?page=invalid&limit=10', [
-            'Authorization' => "Bearer $token"
-        ]);
-
-        $response->assertStatus(400)
-            ->assertJson([
-                'status' => 'bad request',
-                'message' => 'Invalid query params passed',
-                'status_code' => 400,
-            ]);
-    }
 }

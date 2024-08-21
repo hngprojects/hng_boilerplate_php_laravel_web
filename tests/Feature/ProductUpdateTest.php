@@ -16,7 +16,7 @@ class ProductUpdateTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function it_can_update_a_product_with_nullable_fields()
+    public function it_can_update_a_product()
     {
         // Create a user and authenticate
         $user = User::factory()->create();
@@ -104,6 +104,6 @@ class ProductUpdateTest extends TestCase
 
         // Assert the response status is 403 Forbidden
         $response->assertStatus(403)
-            ->assertJson(['message' => 'You are not authorized to update products for this organization.']);
+            ->assertJson(['message' => 'You are not authorized to update products for this organisation.']);
     }
 }
