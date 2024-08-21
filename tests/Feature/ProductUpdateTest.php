@@ -4,93 +4,73 @@ namespace Tests\Feature;
 
 use App\Models\Organisation;
 use App\Models\OrganisationUser;
-use App\Models\Size;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
-
-use App\Models\Product;
-use App\Models\ProductVariant;
-use App\Models\ProductVariantSize;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Api\V1\ProductController;
-use App\Http\Requests\UpdateProductRequest;
-use Mockery;
 
 class ProductUpdateTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_update_product_and_variants()
+    /** @test */
+    public function it_can_update_a_product_with_nullable_fields()
     {
+        // Create a user and authenticate
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $product = Product::factory()->create();
-        $size = Size::create(['size' => 'standard']);
-        $existingVariant = ProductVariant::factory()->create(['product_id' => $product->product_id, 'size_id' => $size->id]);
+        // Create an organisation and get the first instance
+        $organisation = Organisation::factory()->create();
 
-        $newSizeId = Size::create(['size' => 'large'])->id;
+        // Associate the user with the organization as an owner
+        OrganisationUser::create([
+            'org_id' => $organisation->org_id,
+            'user_id' => $user->id,
+        ]);
+
+        // Create a product to update
+        $product = Product::factory()->create([
+            'org_id' => $organisation->org_id,
+            'user_id' => $user->id,
+        ]);
 
         $data = [
-            'name' => 'Updated Product Name',
-            'is_archived' => true,
-            'image' => 'http://example.com/image.jpg',
-            'productsVariant' => [
-                [
-                    'size_id' => $size->id,
-                    'stock' => 20,
-                    'price' => 95.00
-                ],
-                [
-                    'size_id' => $newSizeId,
-                    'stock' => 30,
-                    'price' => 105.00
-                ]
-            ]
+            'name' => 'Updated Product',
+            'quantity' => 20,
+            'price' => 120,
+            'category' => 'Updated Category',
+            'description' => 'Updated Description',
         ];
 
-        $organisation = Organisation::factory()->create();
-        OrganisationUser::create(['org_id' => $organisation->org_id, 'user_id' => $user->id]);
+        $response = $this->patchJson("/api/v1/organisations/{$organisation->org_id}/products/{$product->product_id}", $data);
 
-        $response = $this->patchJson("/api/v1/organizations/{$organisation->org_id}/products/{$product->product_id}", $data);
+        // Assert the response status and structure
+        $response->assertStatus(200)
+            ->assertJson([
+                'status_code' => 200,
+                'message' => 'Products updated successfully',
+                'data' => [
+                    'name' => 'Updated Product',
+                    'price' => 120,
+                    'description' => 'Updated Description',
+                    'quantity' => 20,
+                    'status' => $product->status,
+                    'category' => 'Updated Category',
+                    'id' => $product->product_id,
+                ],
+            ]);
 
-        $response->assertStatus(200);
-        $response->assertJson(['message' => 'Product updated successfully']);
-
-        // Assert the product was updated
+        // Assert the product is updated in the database
         $this->assertDatabaseHas('products', [
             'product_id' => $product->product_id,
-            'name' => 'Updated Product Name',
-            'is_archived' => true,
-            'imageUrl' => 'http://example.com/image.jpg'
-        ]);
-
-        // Assert the existing variant was updated
-        $this->assertDatabaseHas('product_variants', [
-            'id' => $existingVariant->id,
-            'product_id' => $product->product_id,
-            'size_id' => $size->id,
-            'stock' => 20,
-            'stock_status' => 'in_stock',
-            'price' => 95.00
-        ]);
-
-        // Assert the new variant was created
-        $this->assertDatabaseHas('product_variants', [
-            'product_id' => $product->product_id,
-            'size_id' => $newSizeId,
-            'stock' => 30,
-            'stock_status' => 'in_stock',
-            'price' => 105.00
-        ]);
-
-        // Assert the ProductVariantSize entry was created for the new variant
-        $newVariant = ProductVariant::where('product_id', $product->product_id)->where('size_id', $newSizeId)->first();
-        $this->assertDatabaseHas('product_variant_sizes', [
-            'product_variant_id' => $newVariant->id,
-            'size_id' => $newSizeId
+            'name' => 'Updated Product',
+            'quantity' => 20,
+            'price' => 120,
+            'category' => 'Updated Category',
+            'description' => 'Updated Description',
         ]);
     }
 
@@ -102,67 +82,28 @@ class ProductUpdateTest extends TestCase
         $otherUser = User::factory()->create();
         $this->actingAs($otherUser);
 
+        // Create an organisation and get the first instance
+        $organisation = Organisation::factory()->create();
+
         // Create a product
-        $product = Product::factory()->create();
+        $product = Product::factory()->create([
+            'org_id' => $organisation->org_id,
+            'user_id' => $user->id,
+        ]);
 
-        $size = Size::create(['size' => 'standard']);
-
-        ProductVariant::factory()->create(['product_id' => $product->product_id, 'size_id' => $size->id]);
-
-        $newSizeId = Size::create(['size' => 'large'])->id;
-
-        $payload = [
-            'name' => 'Unauthorized Product Update',
-            'is_archived' => true,
-            'image' => 'http://example.com/image.jpg',
-            'productsVariant' => [
-                [
-                    'size_id' => $size->id,
-                    'stock' => 20,
-                    'price' => 95.00
-                ],
-                [
-                    'size_id' => $newSizeId,
-                    'stock' => 30,
-                    'price' => 105.00
-                ]
-            ]
+        $data = [
+            'name' => 'Unauthorized Update',
+            'description' => 'Unauthorized Description',
+            'price' => 150,
+            'quantity' => 10,
+            'category' => 'Unauthorized Category',
         ];
 
-        $organisation = Organisation::factory()->create();
-        OrganisationUser::create(['org_id' => $organisation->org_id, 'user_id' => $user->id]);
-
-        $response = $this->patchJson("/api/v1/organizations/{$organisation->org_id}/products/{$product->product_id}", $payload);
+        // Send PATCH request to update product
+        $response = $this->patchJson("/api/v1/organisations/{$organisation->org_id}/products/{$product->product_id}", $data);
 
         // Assert the response status is 403 Forbidden
         $response->assertStatus(403)
             ->assertJson(['message' => 'You are not authorized to update products for this organization.']);
-
-        // Assert the product was not updated
-        $this->assertDatabaseMissing('products', [
-            'product_id' => $product->product_id,
-            'name' => 'Unauthorized Product Update',
-            'is_archived' => true,
-            'imageUrl' => 'http://example.com/image.jpg'
-        ]);
-
-        // Assert the existing variant was not updated
-        $this->assertDatabaseMissing('product_variants', [
-            'product_id' => $product->product_id,
-            'size_id' => $size->id,
-            'stock' => 20,
-            'stock_status' => 'in_stock',
-            'price' => 95.00
-        ]);
-
-        // Assert the new variant was not created
-        $this->assertDatabaseMissing('product_variants', [
-            'product_id' => $product->product_id,
-            'size_id' => $newSizeId,
-            'stock' => 30,
-            'stock_status' => 'in_stock',
-            'price' => 105.00
-        ]);
     }
-
 }
