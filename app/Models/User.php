@@ -36,6 +36,13 @@ class User extends Authenticatable  implements JWTSubject, CanResetPasswordContr
         'remember_token',
     ];
 
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'role',
+    ];
+    
     /* protected $fillable = [
         'name',
         'email',

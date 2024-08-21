@@ -23,6 +23,7 @@ return new class extends Migration
             $table->boolean('is_verified')->default(0);
             $table->string('signup_type')->default('Token');
             $table->string('social_id')->nullable();
+            $table->timestamp('last_login_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

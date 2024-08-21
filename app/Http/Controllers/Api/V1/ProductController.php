@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use App\Http\Resources\ProductResource;
+use App\Models\Order;
 
 
 class ProductController extends Controller
@@ -78,12 +79,6 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         try {
-            // Validate pagination parameters
-            $request->validate([
-                'page' => 'integer|min:1',
-                'limit' => 'integer|min:1',
-            ]);
-
             $page = $request->input('page', 1);
             $limit = $request->input('limit', 10);
 
@@ -203,6 +198,7 @@ class ProductController extends Controller
 
         $product = Product::create([
             'name' => $request->input('name'),
+            'name' => $request->input('name'),
             'description' => $request->input('description'),
             'size' => $request->input('size'),
             'price' => $request->input('price'),
@@ -292,7 +288,7 @@ class ProductController extends Controller
         $isOwner = OrganisationUser::where('org_id', $org_id)->where('user_id', auth()->id())->exists();
 
         if (!$isOwner) {
-            return response()->json(['message' => 'You are not authorized to update products for this organization.'], 403);
+            return response()->json(['message' => 'You are not authorized to update products for this organisation.'], 403);
         }
 
         $validated = $request->validated();
@@ -345,12 +341,12 @@ class ProductController extends Controller
     {
 
         $isOwner = OrganisationUser::where('org_id', $org_id)->where('user_id', auth()->id())->exists();
-        // Check if the user's organization matches the org_id in the request
+        // Check if the user's organisation matches the org_id in the request
         if (!$isOwner) {
             return response()->json(
                 [
                     'status' => 'Forbidden',
-                    'message' => 'You do not have permission to delete a product from this organization.',
+                    'message' => 'You do not have permission to delete a product from this organisation.',
                     'status_code' => 403
                 ],
                 403
@@ -366,7 +362,7 @@ class ProductController extends Controller
             ], 404);
         }
 
-        // Check if the product belongs to the organization
+        // Check if the product belongs to the organisation
         if ($product->org_id !== $org_id) {
             return response()->json([
                 'error' => 'Forbidden',

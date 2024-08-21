@@ -6,13 +6,16 @@ use App\Models\SqueezePage;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
+
 class SqueezePageSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
+
     public function run(): void
     {
+
         $squeezePages = [
             [
                 'title' => 'Digital Marketing',

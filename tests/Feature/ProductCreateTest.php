@@ -28,7 +28,7 @@ class ProductCreateTest extends TestCase
         // Create an organisation and get the first instance
         $organisation = Organisation::factory()->create();
 
-        // Associate the user with the organization as an owner
+        // Associate the user with the organisation as an owner
         OrganisationUser::create([
             'org_id' => $organisation->org_id,
             'user_id' => $user->id,
@@ -40,6 +40,7 @@ class ProductCreateTest extends TestCase
 
         $payload = [
             'name' => 'Test Product',
+            'name' => 'Test Product',
             'description' => 'Test Description',
             'price' => 100,
             'status' => 'in stock',
@@ -49,6 +50,7 @@ class ProductCreateTest extends TestCase
         ];
 
         // Send POST request to create product
+        $response = $this->postJson("/api/v1/organisations/{$organisation->org_id}/products", $payload);
         $response = $this->postJson("/api/v1/organisations/{$organisation->org_id}/products", $payload);
 
         // Assert the response status and structure
@@ -96,6 +98,7 @@ class ProductCreateTest extends TestCase
 
         $payload = [
             'name' => 'Unauthorized Product',
+            'name' => 'Unauthorized Product',
             'description' => 'Unauthorized Description',
             'price' => 100,
             'image_url' => $image,
@@ -107,9 +110,10 @@ class ProductCreateTest extends TestCase
 
         // Send POST request to create product
         $response = $this->postJson("/api/v1/organisations/{$organisation->org_id}/products", $payload);
+        $response = $this->postJson("/api/v1/organisations/{$organisation->org_id}/products", $payload);
 
         // Assert the response status is 403 Forbidden
         $response->assertStatus(403)
-            ->assertJson(['message' => 'You are not authorized to create products for this organization.']);
+            ->assertJson(['message' => 'You are not authorized to create products for this organisation.']);
     }
 }

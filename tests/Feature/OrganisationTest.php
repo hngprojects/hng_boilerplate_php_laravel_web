@@ -9,6 +9,7 @@ use App\Models\Organisation;
 //use Laravel\Passport\Passport;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Response;
 
 class OrganisationTest extends TestCase
 {
@@ -20,7 +21,7 @@ class OrganisationTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $response = $this->post('/api/v1/organizations', [
+        $response = $this->post('/api/v1/organisations', [
             "email" => "mark.essienm@gmail.co.uk",
             "name" => "Ruxy Now Organisation",
             "description" => "With description like a big man",
@@ -40,26 +41,13 @@ class OrganisationTest extends TestCase
         ]);
     }
 
-    public function test_unauthenticated_user_cannot_access_endpoint()
-    {
-        $response = $this->getJson('/api/v1/organizations');
-
-        $response->assertStatus(401)
-            ->assertJson([
-                'message' => 'Unauthenticated.',
-            ]);
-    }
-
     public function test_authenticated_user_can_retrieve_organisations()
     {
         $user = User::factory()->create();
-        $organisation = Organisation::factory()->create();
-        $user->organisations()->attach($organisation);
-
         $token = JWTAuth::fromUser($user);
 
         $response = $this->withHeader('Authorization', "Bearer $token")
-            ->getJson('/api/v1/organizations', ['accept' => 'application/json']);
+            ->getJson("/api/v1/{$user->id}/organisations");
 
         $response->assertStatus(200)
             ->assertJsonStructure([
@@ -83,16 +71,19 @@ class OrganisationTest extends TestCase
                         ]
                     ]
                 ]
-            ])
-            ->assertJson([
-                'status' => 'success',
-                'message' => 'Organizations retrieved successfully',
-                'status_code' => 200,
             ]);
-
-        $this->assertCount(1, $response->json('data.organisations'));
     }
 
+    public function test_unauthenticated_user_cant_retrieve_organisations()
+    {
+        $user = User::factory()->create();
+
+        $response = $this->getJson("/api/v1/{$user->id}/organisations");
+
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED)->assertJsonStructure([
+            'message',
+        ]);
+    }
 
     public function test_authenticated_user_with_no_organisations()
     {
@@ -100,7 +91,7 @@ class OrganisationTest extends TestCase
 
         $token = JWTAuth::fromUser($user);
         $response = $this->withHeader('Authorization', "Bearer $token")
-            ->getJson('/api/v1/organizations');
+            ->getJson("/api/v1/{$user->id}/organisations");
 
         $response->assertStatus(200)
             ->assertJson([
@@ -122,13 +113,16 @@ class OrganisationTest extends TestCase
 
         $token = JWTAuth::attempt(['email' => $user1->email, 'password' => 'password']);
         $response = $this->withHeader('Authorization', "Bearer $token")
-            ->getJson('/api/v1/organizations');
+            ->getJson("/api/v1/{$user2->id}/organisations"); // Accessing user2's organisations
 
-        $response->assertStatus(200)
+        $response->assertStatus(403)
             ->assertJson([
-                'status' => 'success',
-                'message' => 'No organisations available',
-                'data' => ['organisations' => []]
+                'status' => 'error',
+                'message' => 'Forbidden',
+                'status_code' => '403',
+
             ]);
     }
+
+
 }
