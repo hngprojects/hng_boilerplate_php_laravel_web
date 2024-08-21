@@ -19,94 +19,58 @@ use App\Http\Resources\ProductResource;
 
 class ProductController extends Controller
 {
-    public function search(Request $request)
+    /**
+     * Search for products within an organization.
+     */
+    public function search(Request $request, $orgId)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'category' => 'nullable|string|max:255',
-            'minPrice' => 'nullable|numeric|min:0',
-            'maxPrice' => 'nullable|numeric|min:0',
-            'status' => 'nullable|string|in:in_stock,out_of_stock,low_on_stock',
-            'page' => 'nullable|integer|min:1',
-            'limit' => 'nullable|integer|min:1|max:100',
-        ]);
+        $query = Product::where('org_id', $orgId);
 
-        if ($validator->fails()) {
-            $errors = [];
-            foreach ($validator->errors()->messages() as $field => $messages) {
-                foreach ($messages as $message) {
-                    $errors[] = [
-                        'parameter' => $field,
-                        'message' => $message,
-                    ];
-                }
-            }
-
-            return response()->json([
-                'success' => false,
-                'errors' => $errors,
-                'status_code' => 422
-            ], 422);
+        // Apply filters based on query parameters
+        if ($request->has('name')) {
+            $query->where('name', 'like', '%' . $request->query('name') . '%');
         }
 
-        $query = Product::query();
-
-        $query->where('name', 'LIKE', '%' . $request->name . '%');
-
-        // Add category filter if provided
-        if ($request->filled('category')) {
-            $query->whereHas('categories', function ($q) use ($request) {
-                $q->where('name', $request->category);
-            });
+        if ($request->has('category')) {
+            $query->where('category', $request->query('category'));
         }
 
-        if ($request->filled('minPrice')) {
-            $query->where('price', '>=', $request->minPrice);
+        if ($request->has('minPrice')) {
+            $query->where('price', '>=', $request->query('minPrice'));
         }
 
-        if ($request->filled('maxPrice')) {
-            $query->where('price', '<=', $request->maxPrice);
+        if ($request->has('maxPrice')) {
+            $query->where('price', '<=', $request->query('maxPrice'));
         }
 
-        if ($request->filled('status')) {
-            $query->whereHas('productsVariant', function ($q) use ($request) {
-                $q->where('stock_status', $request->status);
-            });
-        }
+        $products = $query->get();
 
-
-        $page = $request->input('page', 1);
-        $limit = $request->input('limit', 10);
-        $products = $query->with(['productsVariant', 'categories'])
-            ->paginate($limit, ['*'], 'page', $page);
-
+        // Transform the products for the response
         $transformedProducts = $products->map(function ($product) {
             return [
+                'id' => $product->product_id,
+                'created_at' => $product->created_at,
+                'updated_at' => $product->updated_at,
                 'name' => $product->name,
-                'price' => $product->price,
-                'imageUrl' => $product->imageUrl,
                 'description' => $product->description,
-                'product_id' => $product->product_id,
+                'category' => $product->category,
+                'image' => $product->imageUrl ? url($product->imageUrl) : null,
+                'price' => $product->price,
+                'cost_price' => $product->cost_price,
                 'quantity' => $product->quantity,
-                'category' => $product->categories->isNotEmpty() ? $product->categories->map->name : [],
-                'stock' => $product->productsVariant->isNotEmpty() ? $product->productsVariant->first()->stock : null,
-                'status' => $product->productsVariant->isNotEmpty() ? $product->productsVariant->first()->stock_status : null,
-                'date_added' => $product->created_at
+                'size' => $product->size,
+                'stock_status' => $product->quantity > 0 ? 'in stock' : 'out of stock',
+                'deletedAt' => $product->deletedAt,
             ];
         });
 
         return response()->json([
-            'success' => true,
-            'products' => $transformedProducts,
-            'pagination' => [
-                'totalItems' => $products->total(),
-                'totalPages' => $products->lastPage(),
-                'currentPage' => $products->currentPage(),
-                'perPage' => $products->perPage(),
-            ],
-            'status_code' => 200
-        ], 200);
+            'status_code' => 200,
+            'message' => 'Products retrieved successfully',
+            'data' => $transformedProducts
+        ]);
     }
+
 
     /**
      * Display a listing of the resource.

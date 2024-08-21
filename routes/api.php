@@ -110,6 +110,8 @@ Route::prefix('v1')->group(function () {
 
     Route::middleware('auth:api')->group(function () {
 
+        Route::get('/organizations/{orgId}/products/search', [ProductController::class, 'search']);
+
         Route::post('/organizations/{org_id}/products', [ProductController::class, 'store']);
         Route::get('/{org_id}/products', [ProductController::class, 'index']);
 
