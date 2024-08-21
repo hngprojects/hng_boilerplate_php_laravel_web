@@ -152,12 +152,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/help-center/topics', [HelpArticleController::class, 'getArticles']);
     Route::get('/help-center/topics/search', [HelpArticleController::class, 'search']);
 
-    //Super Admin Add Products
-    Route::middleware(['auth:api', 'admin'])->group(function () {
-        Route::post('/products', [SuperAdminProductController::class, 'store']);
-        Route::patch('/products/{productId}', [SuperAdminProductController::class, 'update']);
-        Route::delete('/products/{productId}', [SuperAdminProductController::class, 'destroy']);
-    });
+
 
     Route::middleware(['auth:api', 'admin'])->group(function () {
         Route::get('/email-templates', [EmailTemplateController::class, 'index']);
