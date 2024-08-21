@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit;
 
 use Tests\TestCase;
@@ -9,8 +10,6 @@ use App\Models\Product;
 class ProductTest extends TestCase
 {
     use RefreshDatabase;
-
-
 
     /**
      * Test that authenticated user can retrieve products with pagination.
@@ -47,16 +46,12 @@ class ProductTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJsonStructure([
-                'success',
                 'message',
-                'products' => [
-                    '*' => ['name', 'price']
-                ],
+                'data' => ['products'],
                 'pagination' => ['totalItems', 'totalPages', 'currentPage'],
                 'status_code'
             ])
             ->assertJson([
-                'success' => true,
                 'message' => 'Products retrieved successfully',
                 'pagination' => [
                     'totalItems' => 15,
@@ -67,7 +62,7 @@ class ProductTest extends TestCase
             ]);
 
         // Ensure the products are returned correctly
-        $this->assertCount(10, $response->json('products'));
+        $this->assertCount(10, $response->json('data.products'));
     }
 
     /**
@@ -107,6 +102,4 @@ class ProductTest extends TestCase
                 'status_code' => 400,
             ]);
     }
-
-
 }
