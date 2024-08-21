@@ -61,8 +61,9 @@ use App\Http\Controllers\Api\V1\NewsletterSubscriptionController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
 Route::any('/', function () {
-  return 'Language Learning AI Game';
+    return 'Language Learning AI Game';
 });
 
 Route::prefix('v1')->group(function () {
@@ -88,12 +89,11 @@ Route::prefix('v1')->group(function () {
     Route::get('/auth/login-facebook', [SocialAuthController::class, 'loginUsingFacebook']);
     Route::get('/auth/facebook/callback', [SocialAuthController::class, 'callbackFromFacebook']);
     Route::post('/auth/facebook/callback', [SocialAuthController::class, 'saveFacebookRequest']);
-    
+
     Route::middleware('auth:api')->group(function () {
 
         Route::get('/users/stats', [UserController::class, 'stats']);
         Route::apiResource('/users', UserController::class);
-
     });
     //jobs
     Route::get('/jobs', [JobController::class, 'index']);
@@ -116,6 +116,14 @@ Route::prefix('v1')->group(function () {
 
     Route::middleware('auth:api')->group(function () {
 
+        Route::get('/organisations/{orgId}/products/search', [ProductController::class, 'search']);
+
+        Route::post('/organisations/{org_id}/products', [ProductController::class, 'store']);
+        Route::get('/{org_id}/products', [ProductController::class, 'index']);
+
+        Route::patch('/organisations/{org_id}/products/{product_id}', [ProductController::class, 'update']);
+        Route::delete('/organisations/{org_id}/products/{product_id}', [ProductController::class, 'destroy']);
+        Route::get('/organisations/{org_id}/products/{product_id}', [ProductController::class, 'show']);
         Route::post('/organisations/{org_id}/products', [ProductController::class, 'store']);
         Route::patch('/organisations/{org_id}/products/{product_id}', [ProductController::class, 'update']);
         Route::delete('/organisations/{org_id}/products/{product_id}', [ProductController::class, 'destroy']);
@@ -153,15 +161,16 @@ Route::prefix('v1')->group(function () {
     Route::get('/help-center/topics', [HelpArticleController::class, 'getArticles']);
     Route::get('/help-center/topics/search', [HelpArticleController::class, 'search']);
 
-    //Super Admin Add Products
-    Route::middleware(['auth:api', 'admin'])->group(function () {
-        Route::post('/products', [SuperAdminProductController::class, 'store']);
-        Route::patch('/products/{productId}', [SuperAdminProductController::class, 'update']);
-        Route::delete('/products/{productId}', [SuperAdminProductController::class, 'destroy']);
 
 
+<<<<<<< HEAD
         Route::get('/squeeze-pages-users', [SqueezePageUserController::class, 'index']);
     });
+=======
+
+    Route::get('/squeeze-pages-users', [SqueezePageUserController::class, 'index']);
+
+>>>>>>> 2e0135c1989c1b83e302bf0480bf74cf616431f2
 
     Route::middleware(['auth:api', 'admin'])->group(function () {
         Route::get('/email-templates', [EmailTemplateController::class, 'index']);
@@ -292,10 +301,10 @@ Route::prefix('v1')->group(function () {
         Route::get('/user-sales', [DashboardController::class, 'recent_sales']);
     });
 
-        //region get and update
-        Route::group(['middleware' => ['auth:api']], function () {
-            Route::put('/regions/{user_id}', [PreferenceController::class, 'updateRegion']);
-            Route::get('/regions/{user_id}', [PreferenceController::class, 'showRegion']);
+    //region get and update
+    Route::group(['middleware' => ['auth:api']], function () {
+        Route::put('/regions/{user_id}', [PreferenceController::class, 'updateRegion']);
+        Route::get('/regions/{user_id}', [PreferenceController::class, 'showRegion']);
     });
     // Notification settings
     Route::patch('/notification-settings/{user_id}', [NotificationPreferenceController::class, 'update']);
@@ -306,14 +315,14 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('email-templates', EmailTemplateController::class);
     });
 
-//super Admin Email template
-Route::prefix('v1/admin')->group(function () {
-    Route::get('email-templates', [EmailTemplateController::class, 'index']);
-    Route::get('email-templates/{id}', [EmailTemplateController::class, 'show']);
-    Route::post('email-templates', [EmailTemplateController::class, 'store']);
-    Route::put('email-templates/{id}', [EmailTemplateController::class, 'update']);
-    Route::delete('email-templates/{id}', [EmailTemplateController::class, 'destroy']);
-});
+    //super Admin Email template
+    Route::prefix('v1/admin')->group(function () {
+        Route::get('email-templates', [EmailTemplateController::class, 'index']);
+        Route::get('email-templates/{id}', [EmailTemplateController::class, 'show']);
+        Route::post('email-templates', [EmailTemplateController::class, 'store']);
+        Route::put('email-templates/{id}', [EmailTemplateController::class, 'update']);
+        Route::delete('email-templates/{id}', [EmailTemplateController::class, 'destroy']);
+    });
     // User Notification
     Route::patch('/notifications/{notification}', [UserNotificationController::class, 'update']);
     Route::delete('/notifications', [UserNotificationController::class, 'destroy']);
@@ -332,8 +341,8 @@ Route::prefix('v1/admin')->group(function () {
     //Newsletter Subscription
     Route::post('newsletter-subscription', [NewsletterSubscriptionController::class, 'store']);
 
-    
-        Route::get('/faqs', [FaqController::class, 'index']);
+
+    Route::get('/faqs', [FaqController::class, 'index']);
 
     Route::post('/payment/stripe', [PaymentController::class, 'processPayment']);
     Route::get('/payment-success//{organisation_id}/{id}', [PaymentController::class, 'paymentSuccess'])->name('payment.success');

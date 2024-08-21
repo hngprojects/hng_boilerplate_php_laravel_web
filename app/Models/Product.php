@@ -40,16 +40,6 @@ class Product extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function categories(): BelongsToMany
-    {
-        return $this->belongsToMany(Category::class, 'category_product', 'product_id', 'category_id')->using(CategoryProduct::class);
-    }
-
-    //updated the product variant relationship
-    public function productsVariant()
-    {
-        return $this->hasMany(ProductVariant::class, 'product_id', 'product_id');
-    }
     public function organisation()
     {
         return $this->belongsTo(Organisation::class);
