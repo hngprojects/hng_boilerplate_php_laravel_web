@@ -12,14 +12,14 @@ class FaqControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected $admin;
+    protected $superAdmin;
     protected $token;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->admin = User::factory()->create(['role' => 'admin']);
-        $this->token = JWTAuth::fromUser($this->admin);
+        $this->superAdmin = User::factory()->create(['role' => 'admin']);
+        $this->token = JWTAuth::fromUser($this->superAdmin);
     }
 
     public function test_admin_can_create_faq()
