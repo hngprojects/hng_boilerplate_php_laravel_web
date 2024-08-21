@@ -110,14 +110,14 @@ Route::prefix('v1')->group(function () {
 
     Route::middleware('auth:api')->group(function () {
 
-        Route::get('/organizations/{orgId}/products/search', [ProductController::class, 'search']);
+        Route::get('/organisations/{orgId}/products/search', [ProductController::class, 'search']);
 
-        Route::post('/organizations/{org_id}/products', [ProductController::class, 'store']);
+        Route::post('/organisations/{org_id}/products', [ProductController::class, 'store']);
         Route::get('/{org_id}/products', [ProductController::class, 'index']);
 
-        Route::patch('/organizations/{org_id}/products/{product_id}', [ProductController::class, 'update']);
-        Route::delete('/organizations/{org_id}/products/{product_id}', [ProductController::class, 'destroy']);
-        Route::get('/organizations/{org_id}/products/{product_id}', [ProductController::class, 'show']);
+        Route::patch('/organisations/{org_id}/products/{product_id}', [ProductController::class, 'update']);
+        Route::delete('/organisations/{org_id}/products/{product_id}', [ProductController::class, 'destroy']);
+        Route::get('/organisations/{org_id}/products/{product_id}', [ProductController::class, 'show']);
     });
 
     //comment
