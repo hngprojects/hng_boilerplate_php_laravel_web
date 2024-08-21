@@ -65,14 +65,12 @@ class ProductDeleteTest extends TestCase
         $this->product = Product::create([
             'name' => 'Test',
             'description' => 'Testing',
-            'slug' => Carbon::now(),
             'category' => 'food',
-            'tags' => 'Food',
             'price' => 100,
             'imageUrl' => 'https://via.placeholder.com/640x480.png/0099ff?text=fuga',
             'org_id' => $this->org->org_id,
             'user_id' => $this->user->id,
-            'status' => 'active',
+            'status' => 'in stock',
             'quantity' => 80
         ]);
     }
@@ -84,10 +82,10 @@ class ProductDeleteTest extends TestCase
 
         $token = JWTAuth::fromUser($this->user);
         $response = $this->withHeaders(['Authorization' => "Bearer $token"])
-            ->deleteJson("api/v1/organizations/{$this->org->org_id}/products/{$this->product->product_id}");
+            ->deleteJson("api/v1/organisations/{$this->org->org_id}/products/{$this->product->product_id}");
 
 
-        $response->assertStatus(204);
+        $response->assertStatus(200);
         $this->assertDatabaseMissing('products', ['product_id' => $this->product->product_id]);
     }
     /**
@@ -98,7 +96,7 @@ class ProductDeleteTest extends TestCase
 
         $token = JWTAuth::fromUser($this->otherUser);
         $response = $this->withHeaders(['Authorization' => "Bearer $token"])
-            ->deleteJson("api/v1/organizations/{$this->org->org_id}/products/{$this->product->product_id}");
+            ->deleteJson("api/v1/organisations/{$this->org->org_id}/products/{$this->product->product_id}");
 
         $response->assertStatus(403);
         $response->assertJson([
