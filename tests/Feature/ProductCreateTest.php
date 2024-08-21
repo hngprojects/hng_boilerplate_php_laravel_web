@@ -40,7 +40,6 @@ class ProductCreateTest extends TestCase
 
         $payload = [
             'name' => 'Test Product',
-            'name' => 'Test Product',
             'description' => 'Test Description',
             'price' => 100,
             'status' => 'in stock',
@@ -97,7 +96,6 @@ class ProductCreateTest extends TestCase
         $image = UploadedFile::fake()->image('test_image.jpg');
 
         $payload = [
-            'name' => 'Unauthorized Product',
             'name' => 'Unauthorized Product',
             'description' => 'Unauthorized Description',
             'price' => 100,
