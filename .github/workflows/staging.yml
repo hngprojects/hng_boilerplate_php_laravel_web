@@ -84,7 +84,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             echo "About to Deploy"
-            cd /var/www/langlearnai-be/staging
+            cd /var/www/boilerplate-be/staging
             eval $(ssh-agent)
             ssh-add ~/.ssh/id_ecdsa
             git pull origin staging
