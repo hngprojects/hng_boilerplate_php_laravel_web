@@ -1,0 +1,7 @@
+services:
+  db:
+    volumes:
+      - staging_db_data:/var/lib/postgresql/data
+
+volumes:
+  staging_db_data:

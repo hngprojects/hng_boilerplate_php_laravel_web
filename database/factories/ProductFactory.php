@@ -26,10 +26,8 @@ class ProductFactory extends Factory
             'user_id' => $newUser->id,
             'name' => $productName,
             'price' => $this->faker->randomFloat(2, 0, 1000),
-            'slug' => $this->faker->unique()->slug,
-            'tags' => $this->faker->word,
             'imageUrl' => $this->faker->imageUrl(),
-            'status' => $this->faker->randomElement(['active', 'draft']),
+            'status' => $this->faker->randomElement(['in stock', 'out of stock',]),
             'quantity' => $this->faker->numberBetween(1, 100),
             'description' => $this->faker->text,
             'org_id' => $newOrg->org_id

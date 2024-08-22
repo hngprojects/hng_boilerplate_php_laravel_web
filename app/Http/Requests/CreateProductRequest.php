@@ -24,10 +24,11 @@ class CreateProductRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'description' => 'required|string',
-            'category' => 'required|string',
+            'category' => 'required',
             'price' => 'required|numeric',
-            'quantity' => 'required|integer',
-            'image_url' => 'required|image|mimes:jpeg,png,jpg,gif|max:1024',
+            'status' => 'required',
+            'quantity' => 'required',
+            'image_url' => 'required|file|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     }
 }

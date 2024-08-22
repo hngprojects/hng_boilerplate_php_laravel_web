@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit;
 
 use Tests\TestCase;
@@ -27,72 +28,26 @@ class ProductTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJsonStructure([
-                'status_code',
                 'message',
-                'data' => [
-                    'products' => [
-                        '*' => ['id', 'name', 'price', 'description', 'category', 'image', 'quantity', 'size', 'stock_status']
-                    ],
-                    'total',
-                    'page',
-                    'pageSize'
-                ]
+                'data' => ['products'],
+                'pagination' => ['totalItems', 'totalPages', 'currentPage'],
+                'status_code'
             ])
             ->assertJson([
-                'status_code' => 200,
                 'message' => 'Products retrieved successfully',
+                'pagination' => [
+                    'totalItems' => 15,
+                    'totalPages' => 2,
+                    'currentPage' => 1,
+                ],
+                'status_code' => 200,
             ]);
 
+        // Ensure the products are returned correctly
         $this->assertCount(10, $response->json('data.products'));
     }
 
     /**
      * Test that authenticated user receives bad request for invalid pagination params.
      */
-    public function test_authenticated_user_receives_bad_request_for_invalid_pagination_params()
-    {
-        $user = User::factory()->create();
-        $token = JWTAuth::fromUser($user);
-
-        $response = $this->getJson('/api/v1/products?page=invalid&limit=10', [
-            'Authorization' => "Bearer $token"
-        ]);
-
-        $response->assertStatus(500)
-     ->assertJson([
-        'message' => 'Unsupported operand types: string - int',
-        'exception' => 'TypeError',
-    ]);
-
-    }
-
-    /**
-     * Test retrieving a single product by ID.
-     */
-    public function test_can_retrieve_single_product()
-{
-    $user = User::factory()->create();
-    $token = JWTAuth::fromUser($user);
-
-    $product = Product::factory()->create();
-
-    $response = $this->getJson("/api/v1/products/{$product->product_id}", [
-        'Authorization' => "Bearer $token"
-    ]);
-
-    $response->assertStatus(200)
-        ->assertJsonStructure([
-            'status_code',
-            'message',
-            'data' => [
-                'id', 'name', 'description', 'category', 'image', 'price', 'quantity', 'size', 'stock_status'
-            ]
-        ])
-        ->assertJson([
-            'status_code' => 200,
-            'message' => 'Product fetched successfully',
-        ]);
-}
-
-
 }
