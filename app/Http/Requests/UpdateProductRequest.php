@@ -22,16 +22,13 @@ class UpdateProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'nullable|string|max:255',
-            'description' => 'nullable|string',
-            'price' => 'nullable|numeric|min:0',
-            'stock' => 'nullable|integer|min:0',
-            'image' => 'nullable|url',
-            'is_archived' => 'sometimes|boolean',
-            'productsVariant' => 'required|array',
-            'productsVariant.*.size_id' => 'required|uuid|exists:sizes,id',
-            'productsVariant.*.stock' => 'required|integer|min:0',
-            'productsVariant.*.price' => 'required|numeric|min:0',
+            'name' => 'nullable',
+            'quantity' => 'nullable',
+            'price' => 'nullable',
+            'category' => 'nullable',
+            'description' => 'sometimes',
+
+
         ];
     }
 
@@ -40,12 +37,4 @@ class UpdateProductRequest extends FormRequest
      *
      * @return array
      */
-    public function attributes()
-    {
-        return [
-            'productsVariant.*.size_id' => 'size ID',
-            'productsVariant.*.stock' => 'stock quantity',
-            'productsVariant.*.price' => 'price',
-        ];
-    }
 }

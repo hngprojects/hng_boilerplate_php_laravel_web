@@ -53,7 +53,7 @@ class UsersExport implements FromCollection, WithHeadings, WithMapping
             'Profile Phone',
             'Profile Avatar URL',
             'Products',
-            'Organizations',
+            'organisations',
         ];
     }
 

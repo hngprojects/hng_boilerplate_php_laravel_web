@@ -22,7 +22,7 @@ class UserUpdateTest extends TestCase{
         $data = [
             'name' => $this->faker->name,
             'email' => $this->faker->email,
-            'phone' => $this->faker->phoneNumber,
+            'phone' => null,
             'first_name' => $this->faker->firstName,
             'last_name' => $this->faker->lastName,
         ];

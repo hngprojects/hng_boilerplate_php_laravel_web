@@ -500,53 +500,131 @@
         },
         "/api/v1/statistics": {
             "get": {
-                "tags": [
-                    "Dashboard"
-                ],
-                "summary": "Get dashboard statistics",
-                "description": "Retrieve the statistics for the dashboard, including total revenue, subscriptions, and sales.",
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/inline_response_200_5"
+            "tags": [
+                "Admin Dashboard"
+            ],
+            "summary": "Get admin dashboard statistics",
+            "description": "Retrieve the statistics for the admin dashboard, including total revenue, users, products, and lifetime sales.",
+            "responses": {
+                "200": {
+                "description": "Successful operation",
+                "content": {
+                    "application/json": {
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                        "message": {
+                            "type": "string",
+                            "example": "Dashboard statistics retrieved successfully"
+                        },
+                        "status_code": {
+                            "type": "integer",
+                            "example": 200
+                        },
+                        "data": {
+                            "type": "object",
+                            "properties": {
+                            "revenue": {
+                                "type": "object",
+                                "properties": {
+                                "current_month": {
+                                    "type": "number",
+                                    "example": 45000
+                                },
+                                "previous_month": {
+                                    "type": "number",
+                                    "example": 37500
+                                },
+                                "percentage_difference": {
+                                    "type": "string",
+                                    "example": "20%"
+                                }
                                 }
                             },
-                            "application/xml": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/inline_response_200_5"
+                            "users": {
+                                "type": "object",
+                                "properties": {
+                                "current_month": {
+                                    "type": "integer",
+                                    "example": 4000
+                                },
+                                "previous_month": {
+                                    "type": "integer",
+                                    "example": 3636
+                                },
+                                "percentage_difference": {
+                                    "type": "string",
+                                    "example": "10%"
                                 }
+                                }
+                            },
+                            "products": {
+                                "type": "object",
+                                "properties": {
+                                "current_month": {
+                                    "type": "integer",
+                                    "example": 1000
+                                },
+                                "previous_month": {
+                                    "type": "integer",
+                                    "example": 833
+                                },
+                                "percentage_difference": {
+                                    "type": "string",
+                                    "example": "20%"
+                                }
+                                }
+                            },
+                            "lifetime_sales": {
+                                "type": "object",
+                                "properties": {
+                                "current_month": {
+                                    "type": "number",
+                                    "example": 450000
+                                },
+                                "previous_month": {
+                                    "type": "number",
+                                    "example": 180000
+                                },
+                                "percentage_difference": {
+                                    "type": "string",
+                                    "example": "150%"
+                                }
+                                }
+                            }
                             }
                         }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/inline_response_400"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/inline_response_500_3"
-                                }
-                            }
                         }
                     }
+                    }
+                }
                 },
-                "security": [
-                    {
-                        "bearerAuth": []
+                "400": {
+                "description": "Bad Request",
+                "content": {
+                    "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/inline_response_400"
                     }
-                ]
+                    }
+                }
+                },
+                "500": {
+                "description": "Internal Server Error",
+                "content": {
+                    "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/inline_response_500_3"
+                    }
+                    }
+                }
+                }
+            },
+            "security": [
+                {
+                "bearerAuth": []
+                }
+            ]
             }
         },
         "/api/v1/export/{format}": {
@@ -2399,11 +2477,11 @@
                 ]
             }
         },
-        "/api/v1/organizations": {
+        "/api/v1/organisations": {
             "post": {
-                "summary": "Create a new organization",
+                "summary": "Create a new organisation",
                 "tags": [
-                    "Organizations"
+                    "organisations"
                 ],
                 "requestBody": {
                     "required": true,
@@ -2449,13 +2527,13 @@
                 }
             },
             "get": {
-                "summary": "Get a list of organizations",
+                "summary": "Get a list of organisations",
                 "tags": [
-                    "Organizations"
+                    "organisations"
                 ],
                 "responses": {
                     "200": {
-                        "description": "Organizations retrieved successfully",
+                        "description": "organisations retrieved successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2487,11 +2565,11 @@
                 }
             }
         },
-        "/api/v1/organizations/{org_id}": {
+        "/api/v1/organisations/{org_id}": {
             "put": {
-                "summary": "Update an organization",
+                "summary": "Update an organisation",
                 "tags": [
-                    "Organizations"
+                    "organisations"
                 ],
                 "parameters": [
                     {
@@ -2568,9 +2646,9 @@
                 }
             },
             "delete": {
-                "summary": "Delete an organization",
+                "summary": "Delete an organisation",
                 "tags": [
-                    "Organizations"
+                    "organisations"
                 ],
                 "parameters": [
                     {
@@ -2630,11 +2708,11 @@
                 }
             }
         },
-        "/api/v1/organizations/{org_id}/users/{user_id}": {
+        "/api/v1/organisations/{org_id}/users/{user_id}": {
             "delete": {
-                "summary": "Remove a user from an organization",
+                "summary": "Remove a user from an organisation",
                 "tags": [
-                    "Organizations"
+                    "organisations"
                 ],
                 "parameters": [
                     {
@@ -2690,11 +2768,11 @@
                 }
             }
         },
-        "/api/v1/organizations/{organisation}/users": {
+        "/api/v1/organisations/{organisation}/users": {
             "get": {
-                "summary": "Get a list of users in an organization",
+                "summary": "Get a list of users in an organisation",
                 "tags": [
-                    "Organization Members"
+                    "organisation Members"
                 ],
                 "parameters": [
                     {
@@ -2709,17 +2787,17 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Organization members fetched successfully",
+                        "description": "organisation members fetched successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/OrganizationMembers"
+                                    "$ref": "#/components/schemas/organisationMembers"
                                 }
                             }
                         }
                     },
                     "400": {
-                        "description": "Invalid organization ID or Unauthorized access",
+                        "description": "Invalid organisation ID or Unauthorized access",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2734,15 +2812,15 @@
         "/api/v1/members/{org_id}/search": {
             "get": {
                 "tags": [
-                    "Organizations"
+                    "organisations"
                 ],
-                "summary": "Search members of an organization",
-                "description": "Retrieve a paginated list of users belonging to an organization and matching a search term.",
+                "summary": "Search members of an organisation",
+                "description": "Retrieve a paginated list of users belonging to an organisation and matching a search term.",
                 "parameters": [
                     {
                         "name": "org_id",
                         "in": "path",
-                        "description": "UUID of the organization",
+                        "description": "UUID of the organisation",
                         "required": true,
                         "style": "simple",
                         "explode": false,
@@ -2787,7 +2865,7 @@
                         }
                     },
                     "400": {
-                        "description": "Invalid organization ID",
+                        "description": "Invalid organisation ID",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2797,7 +2875,7 @@
                         }
                     },
                     "404": {
-                        "description": "Organization does not exist",
+                        "description": "organisation does not exist",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2955,17 +3033,31 @@
                                 "example": [
                                     {
                                         "id": "31491b6a-a2f1-47d4-804c-0a705bbb73a8",
-                                        "title": "Software Engineer",
-                                        "description": "We're looking for a talented software engineer to join our team.",
-                                        "location": "Remote",
-                                        "salary": 100000
+                                        "title": "software  Engineer",
+                                        "description": "team bulldozer is seeking reliable enginner for",
+                                        "location": "lagos, NG",
+                                        "deadline": "2024-12-31",
+                                        "salary_range": "1200000-1500000",
+                                        "job_type": "Full-time",
+                                        "job_mode": "remote",
+                                        "experience_level": "Senior",
+                                        "company_name": "life insurance",
+                                        "key_responsibilities": "Lead development projects, mentor junior developers, implement best practices",
+                                        "qualifications": "5+ years of experience in software development, proficiency in Python and JavaScript"
                                     },
                                     {
                                         "id": "31491b6a-a2f1-47d4-804c-0a705bbb73a8",
-                                        "title": "Product Manager",
-                                        "description": "Seeking an experienced product manager to lead our team.",
-                                        "location": "New York, NY",
-                                        "salary": 120000
+                                        "title": "software  Engineer",
+                                        "description": "team bulldozer is seeking reliable enginner for",
+                                        "location": "lagos, NG",
+                                        "deadline": "2024-12-31",
+                                        "salary_range": "1200000-1500000",
+                                        "job_type": "Full-time",
+                                        "job_mode": "remote",
+                                        "experience_level": "Senior",
+                                        "company_name": "life insurance",
+                                        "key_responsibilities": "Lead development projects, mentor junior developers, implement best practices",
+                                        "qualifications": "5+ years of experience in software development, proficiency in Python and JavaScript"
                                     }
                                 ]
                             }
@@ -2990,17 +3082,18 @@
                                 "$ref": "#/components/schemas/JobInput"
                             },
                             "example": {
-                                "title": "Software Engineer",
-                                "description": "We're looking for a talented software engineer to join our team.",
-                                "location": "Remote",
-                                "job_type": "full-time,",
-                                "experience_level": "10years,",
-                                "Deadline": "2204-4-31,",
-                                "Benefits": "lol,",
-                                "Key_responsibilities": "remote,",
-                                "Company_name": "remote,",
-                                "work_mode": "remote",
-                                "salary": 100000
+                                "id": "31491b6a-a2f1-47d4-804c-0a705bbb73a8",
+                                "title": "software  Engineer",
+                                "description": "team bulldozer is seeking reliable enginner for",
+                                "location": "lagos, NG",
+                                "deadline": "2024-12-31",
+                                "salary_range": "1200000-1500000",
+                                "job_type": "Full-time",
+                                "job_mode": "remote",
+                                "experience_level": "Senior",
+                                "company_name": "life insurance",
+                                "key_responsibilities": "Lead development projects, mentor junior developers, implement best practices",
+                                "qualifications": "5+ years of experience in software development, proficiency in Python and JavaScript"
                             }
                         }
                     },
@@ -3016,17 +3109,17 @@
                                 },
                                 "example": {
                                     "id": "1fbgvjfbvjcnjvjdnvdnkkdnvk",
-                                    "title": "Software Engineer",
-                                    "description": "We're looking for a talented software engineer to join our team.",
-                                    "location": "Remote",
-                                    "job_type": "full-time,",
-                                    "experience_level": "10years,",
-                                    "Deadline": "2204-4-31,",
-                                    "Benefits": "lol,",
-                                    "Key_responsibilities": "remote,",
-                                    "Company_name": "remote,",
-                                    "work_mode": "remote",
-                                    "salary": 100000
+                                    "title": "software  Engineer",
+                                    "description": "team bulldozer is seeking reliable enginner for",
+                                    "location": "lagos, NG",
+                                    "deadline": "2024-12-31",
+                                    "salary_range": "1200000-1500000",
+                                    "job_type": "Full-time",
+                                    "job_mode": "remote",
+                                    "experience_level": "Senior",
+                                    "company_name": "life insurance",
+                                    "key_responsibilities": "Lead development projects, mentor junior developers, implement best practices",
+                                    "qualifications": "5+ years of experience in software development, proficiency in Python and JavaScript"
                                 }
                             }
                         }
@@ -3053,7 +3146,7 @@
                         "style": "simple",
                         "explode": false,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     }
                 ],
@@ -3067,10 +3160,17 @@
                                 },
                                 "example": {
                                     "id": "31491b6a-a2f1-47d4-804c-0a705bbb73a8",
-                                    "title": "Senior Software Engineer",
-                                    "description": "We're looking for a senior software engineer to lead our development team.",
-                                    "location": "Remote",
-                                    "salary": 130000
+                                    "title": "software  Engineer",
+                                    "description": "team bulldozer is seeking reliable enginner for",
+                                    "location": "lagos, NG",
+                                    "deadline": "2024-12-31",
+                                    "salary_range": "1200000-1500000",
+                                    "job_type": "Full-time",
+                                    "job_mode": "remote",
+                                    "experience_level": "Senior",
+                                    "company_name": "life insurance",
+                                    "key_responsibilities": "Lead development projects, mentor junior developers, implement best practices",
+                                    "qualifications": "5+ years of experience in software development, proficiency in Python and JavaScript"
                                 }
                             }
                         }
@@ -3095,7 +3195,7 @@
                         "style": "simple",
                         "explode": false,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     }
                 ],
@@ -3106,10 +3206,18 @@
                                 "$ref": "#/components/schemas/JobInput"
                             },
                             "example": {
-                                "title": "Senior Software Engineer",
-                                "description": "We're looking for a senior software engineer to lead our development team.",
-                                "location": "Remote",
-                                "salary": 130000
+                                "id": "31491b6a-a2f1-47d4-804c-0a705bbb73a8",
+                                "title": "software  Engineer",
+                                "description": "team bulldozer is seeking reliable enginner for",
+                                "location": "lagos, NG",
+                                "deadline": "2024-12-31",
+                                "salary_range": "1200000-1500000",
+                                "job_type": "Full-time",
+                                "job_mode": "remote",
+                                "experience_level": "Senior",
+                                "company_name": "life insurance",
+                                "key_responsibilities": "Lead development projects, mentor junior developers, implement best practices",
+                                "qualifications": "5+ years of experience in software development, proficiency in Python and JavaScript"
                             }
                         }
                     },
@@ -3125,10 +3233,17 @@
                                 },
                                 "example": {
                                     "id": "31491b6a-a2f1-47d4-804c-0a705bbb73a8",
-                                    "title": "Senior Software Engineer",
-                                    "description": "We're looking for a senior software engineer to lead our development team.",
-                                    "location": "Remote",
-                                    "salary": 130000
+                                    "title": "software  Engineer",
+                                    "description": "team bulldozer is seeking reliable enginner for",
+                                    "location": "lagos, NG",
+                                    "deadline": "2024-12-31",
+                                    "salary_range": "1200000-1500000",
+                                    "job_type": "Full-time",
+                                    "job_mode": "remote",
+                                    "experience_level": "Senior",
+                                    "company_name": "life insurance",
+                                    "key_responsibilities": "Lead development projects, mentor junior developers, implement best practices",
+                                    "qualifications": "5+ years of experience in software development, proficiency in Python and JavaScript"
                                 }
                             }
                         }
@@ -3210,11 +3325,18 @@
                                 },
                                 "example": [
                                     {
-                                        "id": 1,
-                                        "title": "Senior Software Engineer",
-                                        "description": "We're looking for a senior software engineer to lead our development team.",
-                                        "location": "Remote",
-                                        "salary": 130000
+                                        "id": "31491b6a-a2f1-47d4-804c-0a705bbb73a8",
+                                        "title": "software  Engineer",
+                                        "description": "team bulldozer is seeking reliable enginner for",
+                                        "location": "lagos, NG",
+                                        "deadline": "2024-12-31",
+                                        "salary_range": "1200000-1500000",
+                                        "job_type": "Full-time",
+                                        "job_mode": "remote",
+                                        "experience_level": "Senior",
+                                        "company_name": "life insurance",
+                                        "key_responsibilities": "Lead development projects, mentor junior developers, implement best practices",
+                                        "qualifications": "5+ years of experience in software development, proficiency in Python and JavaScript"
                                     }
                                 ]
                             }
@@ -3312,7 +3434,7 @@
                         "style": "simple",
                         "explode": false,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     },
                     {
@@ -3322,7 +3444,7 @@
                         "style": "simple",
                         "explode": false,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     }
                 ],
@@ -3376,7 +3498,7 @@
                         "style": "simple",
                         "explode": false,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     },
                     {
@@ -3386,7 +3508,7 @@
                         "style": "simple",
                         "explode": false,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     }
                 ],
@@ -3623,7 +3745,7 @@
                         "style": "simple",
                         "explode": false,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     }
                 ],
@@ -3678,7 +3800,7 @@
                         "style": "simple",
                         "explode": false,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     }
                 ],
@@ -3931,7 +4053,7 @@
                         "style": "simple",
                         "explode": false,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     }
                 ],
@@ -4357,6 +4479,95 @@
                     }
                 }
             }
+        },
+        "/api/v1/user-statistics": {
+            "get": {
+                "summary": "Get a dashboard card content",
+                "tags": [
+                    "User Dashboard"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Dashboard retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Dashboard retrieved successfully"
+                                        },
+                                        "status_code": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "current_month_revenue": {
+                                                        "type": "string",
+                                                        "example": "148"
+                                                    },
+                                                    "difference_in_revenue_percent": {
+                                                        "type": "string",
+                                                        "example": "20%"
+                                                    },
+                                                    "subscriptions": {
+                                                        "type": "string",
+                                                        "example": "2000"
+                                                    },
+                                                    "monthly_subscriptions_diff": {
+                                                        "type": "string",
+                                                        "example": "148"
+                                                    },
+                                                    "current_month_orders": {
+                                                        "type": "string",
+                                                        "example": "200"
+                                                    },
+                                                    "difference_in_orders_percent": {
+                                                        "type": "string",
+                                                        "example": "50%"
+                                                    },
+                                                    "active_users_count": {
+                                                        "type": "string",
+                                                        "example": "200"
+                                                    },
+                                                    "difference_an_hour_ago": {
+                                                        "type": "string",
+                                                        "example": "40"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "An error occurred",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -4418,7 +4629,7 @@
                 "type": "object",
                 "properties": {
                     "id": {
-                        "type": "integer"
+                        "type": "string"
                     },
                     "first_name": {
                         "type": "string"
@@ -4510,7 +4721,7 @@
                 "type": "object",
                 "properties": {
                     "id": {
-                        "type": "integer"
+                        "type": "string"
                     },
                     "name": {
                         "type": "string"
@@ -4521,7 +4732,7 @@
                 "type": "object",
                 "properties": {
                     "id": {
-                        "type": "integer"
+                        "type": "string"
                     },
                     "name": {
                         "type": "string"
@@ -4583,7 +4794,7 @@
                 "type": "object",
                 "properties": {
                     "id": {
-                        "type": "integer"
+                        "type": "string"
                     },
                     "stock": {
                         "type": "integer"
@@ -4646,7 +4857,7 @@
                 "type": "object",
                 "properties": {
                     "id": {
-                        "type": "integer"
+                        "type": "string"
                     },
                     "title": {
                         "type": "string"
@@ -5194,20 +5405,6 @@
                         "items": {
                             "type": "integer"
                         }
-                    }
-                }
-            },
-            "Organisation": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "name": {
-                        "type": "string"
-                    },
-                    "description": {
-                        "type": "string"
                     }
                 }
             },
@@ -6009,7 +6206,7 @@
                 "properties": {
                     "message": {
                         "type": "string",
-                        "example": "Invalid organization ID"
+                        "example": "Invalid organisation ID"
                     },
                     "status_code": {
                         "type": "integer",
@@ -6022,7 +6219,7 @@
                 "properties": {
                     "message": {
                         "type": "string",
-                        "example": "Organization does not exist"
+                        "example": "organisation does not exist"
                     },
                     "status_code": {
                         "type": "integer",
@@ -6628,7 +6825,7 @@
                     }
                 }
             },
-            "OrganizationMembers": {
+            "organisationMembers": {
                 "type": "object",
                 "properties": {
                     "status": {

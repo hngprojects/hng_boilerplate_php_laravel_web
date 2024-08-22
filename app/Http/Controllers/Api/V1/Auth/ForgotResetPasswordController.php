@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\Hash;
 
-class ForgetResetPasswordController extends Controller
+class ForgotResetPasswordController extends Controller
 {
     use HttpResponses;
 
@@ -32,7 +32,7 @@ class ForgetResetPasswordController extends Controller
 
         $user = User::where('email', $request->email)->first();
         if (!$user) {
-            return $this->apiResponse(message:  'User does not exist', status_code: 400);
+            return $this->apiResponse(message:  'Account with the specified email doesn\'t exist', status_code: 400);
         }
 
         // Create a new token
@@ -49,7 +49,7 @@ class ForgetResetPasswordController extends Controller
         
         $user->sendPasswordResetToken($token);
 
-        return $this->apiResponse(message:  'Password reset link sent');
+        return $this->apiResponse(message:  'Email sent successfully');
     }
 
     /**
@@ -90,7 +90,7 @@ class ForgetResetPasswordController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email:rfc',
-            'otp' => ['required', 'digits:6', 'integer'],
+            'token' => ['required', 'digits:6', 'integer'],
         ]);
 
         if ($validator->fails()) {
@@ -100,18 +100,18 @@ class ForgetResetPasswordController extends Controller
         // Check if the token exists in the password_reset_tokens table
         $passwordReset = DB::table('password_reset_tokens')->where([
             ['email', $request->email],
-            ['token', $request->otp],
+            ['token', $request->token],
         ])->first();
 
         // If the token is invalid, return an error
         if (!$passwordReset) {
-            return $this->apiResponse(message: 'Invalid token', status_code: 400);
+            return $this->apiResponse(message: 'Invalid token or email', status_code: 401);
         }
 
         // Delete the password reset token after successful reset
         DB::table('password_reset_tokens')->where([
             ['email', $request->email],
-            ['token', $request->otp],
+            ['token', $request->token],
         ])->delete();
         
         return $this->apiResponse(message: 'Token Validated Successfully', status_code: 200);

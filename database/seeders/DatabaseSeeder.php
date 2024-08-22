@@ -60,6 +60,7 @@ class DatabaseSeeder extends Seeder
         $this->call([ArticlesTableSeeder::class]);
         $this->call(UserJobSeeder::class);
         $this->call(BlogSeeder::class);
+        $this->call(SqueezePageUserSeeder::class);
 
 
         UserSubscription::factory()->create();
@@ -76,6 +77,16 @@ class DatabaseSeeder extends Seeder
             FaqSeeder::class,
             UserNotificationSeeder::class,
             NotificationSettingSeeder::class,
+            OrderSeeder::class,
+            SqueezePageSeeder::class,
+            TimezoneSeeder::class,
+            LanguagesTableSeeder::class,
+        ]);
+
+        $this->call([
+            // QuestsSeeder::class,
+            QuestSeeder::class,
+            QuestMessageSeeder::class,
         ]);
 
     }

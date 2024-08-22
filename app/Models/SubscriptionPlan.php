@@ -21,4 +21,9 @@ class SubscriptionPlan extends Model
             ->withTimestamps();
     }
 
+    public function userSubscriptions()
+    {
+        return $this->hasMany(UserSubscription::class, 'subscription_plan_id', 'id');
+    }
+
 }

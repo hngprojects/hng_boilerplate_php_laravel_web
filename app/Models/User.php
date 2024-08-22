@@ -36,6 +36,13 @@ class User extends Authenticatable  implements JWTSubject, CanResetPasswordContr
         'remember_token',
     ];
 
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'role',
+    ];
+    
     /* protected $fillable = [
         'name',
         'email',
@@ -103,6 +110,11 @@ class User extends Authenticatable  implements JWTSubject, CanResetPasswordContr
     public function organisations(): BelongsToMany
     {
         return $this->belongsToMany(Organisation::class, 'organisation_user', 'user_id', 'org_id')->using(OrganisationUser::class);
+    }
+
+    public function owned_organisations(): hasMany
+    {
+        return $this->hasMany(Organisation::class, 'user_id', 'id');
     }
 
     public function jobs(): BelongsToMany

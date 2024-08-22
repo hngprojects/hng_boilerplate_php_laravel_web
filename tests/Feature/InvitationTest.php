@@ -38,7 +38,7 @@ class InvitationTest extends TestCase
         $this->accessToken = $loginResponse['access_token'];
 
         // Create an organisation
-        $orgResponse = $this->postJson('/api/v1/organizations', [
+        $orgResponse = $this->postJson('/api/v1/organisations', [
             'name' => 'test organisations',
             'description' => 'test org description',
             'email' => 'test.main.org@example.com',
@@ -66,7 +66,7 @@ class InvitationTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJson([
-                'message' => 'Invitation accepted, you have been added to the organization',
+                'message' => 'Invitation accepted, you have been added to the organisation',
                 'status' => 200
             ]);
     }
@@ -79,7 +79,7 @@ class InvitationTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJson([
-                'message' => 'Invitation accepted, you have been added to the organization',
+                'message' => 'Invitation accepted, you have been added to the organisation',
                 'status' => 200
             ]);
     }

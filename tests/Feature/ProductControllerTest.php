@@ -27,10 +27,10 @@ class ProductControllerTest extends TestCase
 
         $response->assertStatus(201);
 
-        $this->accessToken = $response->json('data.accessToken');
+        $this->accessToken = $response->json('access_token');
     }
 
-   
+
 
     public function testUserLogin()
     {
@@ -42,7 +42,7 @@ class ProductControllerTest extends TestCase
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'message',
-            'data' => ['user' => ['id', 'first_name', 'last_name', 'email', 'role', 'avatar_url']]
+            'data' => ['user' => ['id', 'first_name', 'last_name', 'email', 'avatar_url']]
         ]);
     }
 }

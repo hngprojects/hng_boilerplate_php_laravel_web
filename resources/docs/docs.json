@@ -1,0 +1,2438 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Language Learning AI Game API",
+    "version": "1.0.0",
+    "description": "API documentation for the Language Learning AI Game"
+  },
+  "servers": [
+    {
+      "url": "https://api.example.com/v1"
+    },
+    {
+      "url": "https://staging.api-php.boilerplate.hng.tech",
+      "description": "Deployment server"
+    },
+    {
+      "url": "http://127.0.0.1:8000",
+      "description": "local server"
+    }
+  ],
+  "paths": {
+    "/api/v1/auth/register": {
+      "post": {
+        "summary": "Register a new user",
+        "tags": ["Authentication"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful registration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "summary": "Login user",
+        "tags": ["Authentication"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful login",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/logout": {
+      "post": {
+        "summary": "Logout user",
+        "tags": ["Authentication"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful logout",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/password-reset-email": {
+      "post": {
+        "summary": "Send password reset email",
+        "tags": ["Authentication"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  }
+                },
+                "required": ["email"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset email sent successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/auth/request-password-request/{token}": {
+      "post": {
+        "summary": "Reset password with token",
+        "tags": ["Authentication"],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "password": {
+                    "type": "string",
+                    "format": "password"
+                  },
+                  "password_confirmation": {
+                    "type": "string",
+                    "format": "password"
+                  }
+                },
+                "required": ["password", "password_confirmation"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/auth/google": {
+      "get": {
+        "summary": "Redirect to Google for authentication",
+        "tags": ["Authentication"],
+        "responses": {
+          "302": {
+            "description": "Redirect to Google"
+          }
+        }
+      }
+    },
+    "/api/v1/auth/google/callback": {
+      "get": {
+        "summary": "Handle Google authentication callback",
+        "tags": ["Authentication"],
+        "responses": {
+          "200": {
+            "description": "Successful authentication with Google"
+          }
+        }
+      },
+      "post": {
+        "summary": "Save Google authentication request",
+        "tags": ["Authentication"],
+        "responses": {
+          "200": {
+            "description": "Google authentication data saved successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/auth/forgot-password": {
+      "post": {
+        "summary": "Forgot password",
+        "tags": ["Authentication"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  }
+                },
+                "required": ["email"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset instructions sent"
+          }
+        }
+      }
+    },
+    "/api/v1/auth/reset-forgot-password": {
+      "post": {
+        "summary": "Reset forgotten password",
+        "tags": ["Authentication"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "password": {
+                    "type": "string",
+                    "format": "password"
+                  },
+                  "password_confirmation": {
+                    "type": "string",
+                    "format": "password"
+                  }
+                },
+                "required": ["token", "email", "password", "password_confirmation"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/auth/verify-otp": {
+      "post": {
+        "summary": "Verify OTP",
+        "tags": ["Authentication"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "otp": {
+                    "type": "string"
+                  }
+                },
+                "required": ["email", "otp"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OTP verified successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/auth/login-facebook": {
+      "get": {
+        "summary": "Login using Facebook",
+        "tags": ["Authentication"],
+        "responses": {
+          "302": {
+            "description": "Redirect to Facebook"
+          }
+        }
+      }
+    },
+    "/api/v1/auth/facebook/callback": {
+      "get": {
+        "summary": "Handle Facebook authentication callback",
+        "tags": ["Authentication"],
+        "responses": {
+          "200": {
+            "description": "Successful authentication with Facebook"
+          }
+        }
+      },
+      "post": {
+        "summary": "Save Facebook authentication request",
+        "tags": ["Authentication"],
+        "responses": {
+          "200": {
+            "description": "Facebook authentication data saved successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/users/stats": {
+      "get": {
+        "summary": "Get user statistics",
+        "tags": ["Users"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User statistics retrieved successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/users": {
+      "get": {
+        "summary": "Get all users",
+        "tags": ["Users"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of users retrieved successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/jobs": {
+      "get": {
+        "summary": "Get all jobs",
+        "tags": ["Jobs"],
+        "responses": {
+          "200": {
+            "description": "List of jobs retrieved successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/jobs/search": {
+      "get": {
+        "summary": "Search jobs",
+        "tags": ["Jobs"],
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Search results retrieved successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/jobs/{id}": {
+      "get": {
+        "summary": "Get job details",
+        "tags": ["Jobs"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Job details retrieved successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/products/categories": {
+      "get": {
+        "summary": "Get product categories",
+        "tags": ["Products"],
+        "responses": {
+          "200": {
+            "description": "Product categories retrieved successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/products/search": {
+      "get": {
+        "summary": "Search products",
+        "tags": ["Products"],
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Search results retrieved successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/products": {
+      "get": {
+        "summary": "Get all products",
+        "tags": ["Products"],
+        "responses": {
+          "200": {
+            "description": "List of products retrieved successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/products/{product_id}": {
+      "get": {
+        "summary": "Get product details",
+        "tags": ["Products"],
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product details retrieved successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/billing-plans": {
+      "get": {
+        "summary": "Get billing plans",
+        "tags": ["Billing"],
+        "responses": {
+          "200": {
+            "description": "Billing plans retrieved successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/billing-plans/{id}": {
+      "get": {
+        "summary": "Get billing plan details",
+        "tags": ["Billing"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Billing plan details retrieved successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/payments/paystack/{organisation_id}/verify/{id}": {
+      "get": {
+        "summary": "Verify Paystack payment",
+        "tags": ["Payments"],
+        "parameters": [
+          {
+            "name": "organisation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "uuid"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Payment verified successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/payments/flutterwave/{organisation_id}/verify/{id}": {
+      "get": {
+        "summary": "Verify Flutterwave payment",
+        "tags": ["Payments"],
+        "parameters": [
+          {
+            "name": "organisation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "uuid"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Payment verified successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/languages": {
+      "post": {
+        "summary": "Create a new language",
+        "tags": ["Languages"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": ["name", "code"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Language created successfully"
+          }
+        }
+      },
+      "get": {
+        "summary": "Get all languages",
+        "tags": ["Languages"],
+        "responses": {
+          "200": {
+            "description": "Languages retrieved successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/languages/{id}": {
+      "put": {
+        "summary": "Update a language",
+        "tags": ["Languages"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "code": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Language updated successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/topics/search": {
+      "get": {
+        "summary": "Search topics",
+        "tags": ["Topics"],
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Search results retrieved successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/organisations/{org_id}/products": {
+      "post": {
+        "summary": "Create a new product for an organisation",
+        "tags": ["Products"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "org_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Product created successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/organisations/{org_id}/products/{product_id}": {
+      "patch": {
+        "summary": "Update a product for an organisation",
+        "tags": ["Products"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "org_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "uuid"
+            }
+          },
+          {
+            "name": "product_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Product updated successfully"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a product for an organisation",
+        "tags": ["Products"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "org_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "uuid"
+            }
+          },
+          {
+            "name": "product_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product deleted successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/blogs/{blogId}/comments": {
+      "post": {
+        "summary": "Create a comment on a blog",
+        "tags": ["Comments"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "blogId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "content": {
+                    "type": "string"
+                  }
+                },
+                "required": ["content"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Comment created successfully"
+          }
+        }
+      },
+      "get": {
+        "summary": "Get comments for a blog",
+        "tags": ["Comments"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "blogId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Comments retrieved successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/comments/{commentId}/reply": {
+      "post": {
+        "summary": "Reply to a comment",
+        "tags": ["Comments"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "commentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "content": {
+                    "type": "string"
+                  }
+                },
+                "required": ["content"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Reply created successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/comments/{commentId}/like": {
+      "post": {
+        "summary": "Like a comment",
+        "tags": ["Comments"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "commentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Comment liked successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/comments/{commentId}/dislike": {
+      "post": {
+        "summary": "Dislike a comment",
+        "tags": ["Comments"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "commentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Comment disliked successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/comments/edit/{commentId}": {
+      "patch": {
+        "summary": "Edit a comment",
+        "tags": ["Comments"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "commentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "content": {
+                    "type": "string"
+                  }
+                },
+                "required": ["content"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Comment updated successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/comments/{commentId}": {
+      "delete": {
+        "summary": "Delete a comment",
+        "tags": ["Comments"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "commentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Comment deleted successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/help-center/topics/search": {
+      "get": {
+        "summary": "Search help center topics",
+        "tags": ["Help Center"],
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Search results retrieved successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/inquiries": {
+      "post": {
+        "summary": "Send an inquiry",
+        "tags": ["Inquiries"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "message": {
+                    "type": "string"
+                  }
+                },
+                "required": ["name", "email", "message"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Inquiry sent successfully"
+          }
+        }
+      },
+      "get": {
+        "summary": "Get all inquiries",
+        "tags": ["Inquiries"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Inquiries retrieved successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/blogs/latest": {
+      "get": {
+        "summary": "Get latest blogs",
+        "tags": ["Blogs"],
+        "responses": {
+          "200": {
+            "description": "Latest blogs retrieved successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/blogs/search": {
+      "get": {
+        "summary": "Search blogs",
+        "tags": ["Blogs"],
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Search results retrieved successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/squeeze": {
+      "post": {
+        "summary": "Create a squeeze page",
+        "tags": ["Squeeze Pages"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "content": {
+                    "type": "string"
+                  }
+                },
+                "required": ["title", "content"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Squeeze page created successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/cookies/preferences": {
+      "post": {
+        "summary": "Update cookie preferences",
+        "tags": ["Cookies"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "preferences": {
+                    "type": "object"
+                  }
+                },
+                "required": ["preferences"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Cookie preferences updated successfully"
+          }
+        }
+      },
+      "get": {
+        "summary": "Get cookie preferences",
+        "tags": ["Cookies"],
+        "responses": {
+          "200": {
+            "description": "Cookie preferences retrieved successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/help-center/topics": {
+      "post": {
+        "summary": "Create a help center topic",
+        "tags": ["Help Center"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "content": {
+                    "type": "string"
+                  }
+                },
+                "required": ["title", "content"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Help center topic created successfully"
+          }
+        }
+      },
+      "get": {
+        "summary": "Get all help center topics",
+        "tags": ["Help Center"],
+        "responses": {
+          "200": {
+            "description": "Help center topics retrieved successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/help-center/topics/{articleId}": {
+      "patch": {
+        "summary": "Update a help center topic",
+        "tags": ["Help Center"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "articleId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "content": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Help center topic updated successfully"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a help center topic",
+        "tags": ["Help Center"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "articleId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Help center topic deleted successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/products": {
+      "post": {
+        "summary": "Create a new product",
+        "tags": ["Products"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Product created successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/products/{productId}": {
+      "patch": {
+        "summary": "Update a product",
+        "tags": ["Products"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Product updated successfully"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a product",
+        "tags": ["Products"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product deleted successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/squeeze-pages-users": {
+      "get": {
+        "summary": "Get all squeeze page users",
+        "tags": ["Squeeze Pages"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Squeeze page users retrieved successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/email-templates": {
+      "get": {
+        "summary": "Get all email templates",
+        "tags": ["Email Templates"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Email templates retrieved successfully"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new email template",
+        "tags": ["Email Templates"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmailTemplateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Email template created successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/email-templates/{id}": {
+      "patch": {
+        "summary": "Update an email template",
+        "tags": ["Email Templates"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmailTemplateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Email template updated successfully"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete an email template",
+        "tags": ["Email Templates"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Email template deleted successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/users-list": {
+      "get": {
+        "summary": "Get list of users",
+        "tags": ["Admin"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Users list retrieved successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/email-requests": {
+      "post": {
+        "summary": "Create an email request",
+        "tags": ["Email"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmailRequestCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Email request created successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/invitations/generate": {
+      "post": {
+        "summary": "Generate an invitation",
+        "tags": ["Invitations"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InvitationGenerate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Invitation generated successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/invite/accept": {
+      "get": {
+        "summary": "Accept an invitation",
+        "tags": ["Invitations"],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Invitation accepted successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/invite": {
+      "post": {
+        "summary": "Accept an invitation (POST method)",
+        "tags": ["Invitations"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InvitationAccept"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Invitation accepted successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/faqs": {
+      "get": {
+        "summary": "Get all FAQs",
+        "tags": ["FAQs"],
+        "responses": {
+          "200": {
+            "description": "FAQs retrieved successfully"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new FAQ",
+        "tags": ["FAQs"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FAQRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "FAQ created successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/faqs/{id}": {
+      "get": {
+        "summary": "Get a specific FAQ",
+        "tags": ["FAQs"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "FAQ retrieved successfully"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a FAQ",
+        "tags": ["FAQs"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FAQRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "FAQ updated successfully"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a FAQ",
+        "tags": ["FAQs"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "FAQ deleted successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/blogs": {
+      "get": {
+        "summary": "Get all blogs",
+        "tags": ["Blogs"],
+        "responses": {
+          "200": {
+            "description": "Blogs retrieved successfully"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new blog",
+        "tags": ["Blogs"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BlogRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Blog created successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/blogs/{id}": {
+      "get": {
+        "summary": "Get a specific blog",
+        "tags": ["Blogs"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Blog retrieved successfully"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update a blog",
+        "tags": ["Blogs"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BlogRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Blog updated successfully"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a blog",
+        "tags": ["Blogs"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Blog deleted successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/categories": {
+      "get": {
+        "summary": "Get all categories",
+        "tags": ["Categories"],
+        "responses": {
+          "200": {
+            "description": "Categories retrieved successfully"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new category",
+        "tags": ["Categories"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CategoryRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Category created successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/categories/{id}": {
+      "get": {
+        "summary": "Get a specific category",
+        "tags": ["Categories"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Category retrieved successfully"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a category",
+        "tags": ["Categories"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CategoryRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Category updated successfully"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a category",
+        "tags": ["Categories"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Category deleted successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/notifications": {
+      "get": {
+        "summary": "Get user notifications",
+        "tags": ["Notifications"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Notifications retrieved successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/notifications/{id}/mark-as-read": {
+      "post": {
+        "summary": "Mark a notification as read",
+        "tags": ["Notifications"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Notification marked as read successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/notifications/mark-all-as-read": {
+      "post": {
+        "summary": "Mark all notifications as read",
+        "tags": ["Notifications"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All notifications marked as read successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/user/profile": {
+      "get": {
+        "summary": "Get user profile",
+        "tags": ["User"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User profile retrieved successfully"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update user profile",
+        "tags": ["User"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserProfileUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User profile updated successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/user/change-password": {
+      "post": {
+        "summary": "Change user password",
+        "tags": ["User"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password changed successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/user/delete-account": {
+      "delete": {
+        "summary": "Delete user account",
+        "tags": ["User"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Account deleted successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/settings": {
+      "get": {
+        "summary": "Get user settings",
+        "tags": ["Settings"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User settings retrieved successfully"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update user settings",
+        "tags": ["Settings"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserSettingsUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User settings updated successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/feedback": {
+      "post": {
+        "summary": "Submit user feedback",
+        "tags": ["Feedback"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeedbackSubmission"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Feedback submitted successfully"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RegisterRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "format": "password"
+          }
+        },
+        "required": ["name", "email", "password"]
+      },
+      "LoginRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "format": "password"
+          }
+        },
+        "required": ["email", "password"]
+      },
+      "AuthResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          }
+        }
+      },
+      "ProductRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number",
+            "format": "float"
+          },
+          "category_id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": ["name", "description", "price", "category_id"]
+      },
+      "EmailTemplateRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          }
+        },
+        "required": ["name", "subject", "body"]
+      },
+      "EmailRequestCreate": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": ["email", "subject", "message"]
+      },
+      "InvitationGenerate": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "role": {
+            "type": "string",
+            "enum": ["admin", "user"]
+          }
+        },
+        "required": ["email", "role"]
+      },
+      "InvitationAccept": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string",
+            "format": "password"
+          },
+          "password_confirmation": {
+            "type": "string",
+            "format": "password"
+          }
+        },
+        "required": ["token", "name", "password", "password_confirmation"]
+      },
+      "FAQRequest": {
+        "type": "object",
+        "properties": {
+          "question": {
+            "type": "string"
+          },
+          "answer": {
+            "type": "string"
+          },
+          "category_id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": ["question", "answer", "category_id"]
+      },
+      "BlogRequest": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "category_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["title", "content", "category_id"]
+      },
+      "CategoryRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "parent_id": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          }
+        },
+        "required": ["name"]
+      },
+      "UserProfileUpdate": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "avatar": {
+            "type": "string",
+            "format": "binary"
+          }
+        }
+      },
+      "ChangePasswordRequest": {
+        "type": "object",
+        "properties": {
+          "current_password": {
+            "type": "string",
+            "format": "password"
+          },
+          "new_password": {
+            "type": "string",
+            "format": "password"
+          },
+          "new_password_confirmation": {
+            "type": "string",
+            "format": "password"
+          }
+        },
+        "required": ["current_password", "new_password", "new_password_confirmation"]
+      },
+      "UserSettingsUpdate": {
+        "type": "object",
+        "properties": {
+          "language": {
+            "type": "string"
+          },
+          "timezone": {
+            "type": "string"
+          },
+          "notifications_enabled": {
+            "type": "boolean"
+          }
+        }
+      },
+      "FeedbackSubmission": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["bug", "feature_request", "general"]
+          },
+          "content": {
+            "type": "string"
+          },
+          "rating": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5
+          }
+        },
+        "required": ["type", "content"]
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

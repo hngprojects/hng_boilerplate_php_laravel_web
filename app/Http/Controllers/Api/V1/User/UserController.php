@@ -9,13 +9,9 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        $users = User::latest()->paginate();
 
+    public function stats()
+    {
         $totalUsers = User::count();
         $totalDeletedUsers = User::onlyTrashed()->count();
         $totalActiveUsers = User::where('is_active', 1)->count() - $totalDeletedUsers;
@@ -24,16 +20,41 @@ class UserController extends Controller
         return response()->json(
             [
                 "status_code" => 200,
-                "message" => "Users returned successfully",
-                "total_users" => $totalUsers,
-                "total_deleted_users" => $totalDeletedUsers,
-                "total_active_users" => $totalActiveUsers,
-                "total_inActive_users" => $totalInActiveUsers,
-                "data" => $users
+                "message" => "User statistics retrieved successfully",
+                "data" => [
+                    "total_users" => $totalUsers,
+                    "deleted_users" => $totalDeletedUsers,
+                    "active_users" => $totalActiveUsers,
+                    "in_active_users" => $totalInActiveUsers,
+                ]
             ],
             200
         );
     }
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        $users = User::paginate(15);
+        
+        return response()->json([
+            'status_code' => 200,
+            'message' => 'Users retrieved successfully',
+            'status' => 'success',
+            'data' => [
+                'users' => $users->items(),
+                'pagination' => [
+                'current_page' => $users->currentPage(),
+                'per_page' => $users->perPage(),
+                'total' => $users->total(),
+                'last_page' => $users->lastPage(),
+            ],
+            ]
+        ]);
+    }
+    
+    
 
 
     /**
@@ -43,14 +64,69 @@ class UserController extends Controller
     {
         //
     }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(User $user)
     {
-        return $user->load('profile', 'products', 'organisations');
+        // Load the necessary relationships
+        $user->load('profile', 'products', 'organisations');
+        
+        // Format the response data
+        $response = [
+            'status_code' => 200,
+            'user' => [
+                'id' => $user->id,
+                'created_at' => $user->created_at,
+                'updated_at' => $user->updated_at,
+                'first_name' => $user->profile->first_name ?? '', 
+                'last_name' => $user->profile->last_name ?? '', 
+                'email' => $user->email,
+                'status' => null, 
+                'phone' => $user->phone,
+                'is_active' => $user->is_active,
+                'backup_codes' => null, 
+                'attempts_left' => null, 
+                'time_left' => null,
+                'secret' => null, 
+                'is_2fa_enabled' => false, 
+                'deletedAt' => $user->deleted_at,
+                'profile' => [
+                    'id' => $user->profile->id ?? null,
+                    'created_at' => $user->profile->created_at ?? null,
+                    'updated_at' => $user->profile->updated_at ?? null,
+                    'username' => '', 
+                    'jobTitle' => $user->profile->job_title ?? null,
+                    'pronouns' => $user->profile->pronoun ?? null,
+                    'department' => null, 
+                    'email' => $user->email,
+                    'bio' => $user->profile->bio ?? null,
+                    'social_links' => null,
+                    'language' => null, 
+                    'region' => null, 
+                    'timezones' => null, 
+                    'profile_pic_url' => $user->profile->avatar_url ?? null,
+                    'deletedAt' => $user->profile->deleted_at ?? null
+                ],
+                'owned_organisations' => $user->organisations->map(function ($organisation) {
+                    return [
+                        'id' => $organisation->id,
+                        'created_at' => $organisation->created_at,
+                        'updated_at' => $organisation->updated_at,
+                        'name' => $organisation->name,
+                        'description' => $organisation->description,
+                        'email' => $organisation->email,
+                        'industry' => $organisation->industry,
+                        'type' => $organisation->type,
+                        'country' => $organisation->country,
+                        'address' => $organisation->address,
+                        'state' => $organisation->state,
+                        'isDeleted' => $organisation->deleted_at ? true : false
+                    ];
+                })
+            ]
+        ];
+    
+        return response()->json($response);
     }
+    
 
     /**
      * Update the specified resource in storage.
@@ -120,16 +196,32 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         $user = User::find($id);
-
+    
         if (!$user) {
             return response()->json([
                 'status_code' => 404,
                 'message' => 'User not found'
             ], 404);
         }
-
+    
+        $authUser = auth()->user();
+    
+        if ($authUser->id !== $user->id) {
+            if (!in_array($authUser->role, ['superAdmin', 'admin'])) {
+                return response()->json([
+                    'status_code' => 403,
+                    'message' => 'Unauthorized to delete this user'
+                ], 403);
+            }
+        }
+    
         $user->delete();
-        return response()->noContent();
+    
+        return response()->json([
+            'status_code' => 200,
+            'message' => 'User deleted successfully'
+        ], 200);
     }
+    
 
 }

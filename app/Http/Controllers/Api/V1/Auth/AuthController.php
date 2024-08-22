@@ -3,128 +3,114 @@
 namespace App\Http\Controllers\Api\V1\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreUserRequest;
+use App\Models\User;
+use App\Models\Organisation;
+use App\Services\OrganisationService;
 use Illuminate\Http\Request;
-use App\Traits\HttpResponses;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Tymon\JWTAuth\Facades\JWTAuth;
-use App\Models\User;
-use Illuminate\Support\Facades\Log;
-use App\Models\Validators\AuthValidator;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rules\Password;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Str;
+use App\Models\EmailTemplate;
 
 class AuthController extends Controller
 {
-    use HttpResponses;
-
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function __construct(public OrganisationService $organisationService)
     {
-        //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function register()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-         // Validate the request data
         $validator = Validator::make($request->all(), [
-            'name' => 'nullable|string|max:255',
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|email:rfc|max:255|unique:users',
-            'password' => ['required', 'string', Password::min(8)
-            ->letters()
-            ->mixedCase()
-            ->numbers()
-            ->symbols()
-            ->uncompromised()],
+            'password' => 'required|string|min:6',
         ]);
-
-        // Check if validation fails
+    
         if ($validator->fails()) {
-            return $this->apiResponse(message: $validator->errors(), status_code: 400);
+            return response()->json([
+                'status_code' => 422,
+                'message' => 'Validation error',
+                'errors' => $validator->errors(),
+            ], 422);
         }
-
+    
         try {
             DB::beginTransaction();
-
-            // Creating the user
+    
             $user = User::create([
-                'name' => $request->name,
+                'id' => Str::uuid(),
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
+                'role' => 'user',
+                'is_verified' => 1,
             ]);
-
-            $profile = $user->profile()->create([
+    
+            $user->profile()->create([
                 'first_name' => $request->first_name,
-                'last_name' => $request->last_name
+                'last_name' => $request->last_name,
             ]);
-
-            // Generate JWT token
+    
+            $name = $request->first_name . "'s Organisation";
+            $organisation = $this->organisationService->create($user, $name);
+    
+            $role = $user->roles()->create([
+                'name' => 'admin',
+                'org_id' => $organisation->org_id,
+            ]);
+    
+            DB::table('users_roles')->insert([
+                'user_id' => $user->id,
+                'role_id' => $role->id,
+            ]);
+    
             $token = JWTAuth::fromUser($user);
-
+    
+            $is_superadmin = in_array($user->role, ['admin']);
+    
             DB::commit();
-            $data = [
-                'user' => [
-                    'id' => $user->id,
-                    'first_name' => $profile->first_name,
-                    'last_name' => $profile->last_name,
-                    'email' => $user->email,
-                    'avatar_url' => $profile->avatar_url,
-                    'role' => $user->role
-                ],
-            ]; 
 
-            return $this->apiResponse(
-                message: 'User Created Successfully', 
-                status_code: Response::HTTP_CREATED, 
-                data: $data,
-                token: $token
-            );
+            $email_template_id = null;
+
+            $emailTemplate = EmailTemplate::where('title', 'welcome-email')->first();;
+            if ($emailTemplate) {
+                $email_template_id = $emailTemplate->id;
+            }
+    
+            return response()->json([
+                'status_code' => 201,
+                'message' => 'User Created Successfully',
+                'email_template_id' => $email_template_id,
+                'access_token' => $token,
+                'data' => [
+                    'user' => [
+                        'id' => $user->id,
+                        'first_name' => $user->profile->first_name,
+                        'last_name' => $user->profile->last_name,
+                        'email' => $user->email,
+                        'avatar_url' => $user->avatar_url,
+                        'is_superadmin' => $is_superadmin,
+                        'role' => $user->role,
+                    ],
+                    'organisations' => [
+                        [
+                            'organisation_id' => $organisation->org_id,
+                            'name' => $organisation->name,
+                            'user_role' => 'admin',
+                            'is_owner' => true,
+                        ]
+                    ]
+                ],
+            ], 201);
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Registration error: ' . $e->getMessage());
-
-            return $this->apiResponse('Registration unsuccessful', Response::HTTP_BAD_REQUEST);
+            return response()->json([
+                'status_code' => 500,
+                'message' => 'Registration unsuccessful: ' . $e->getMessage(),
+            ], 500);
         }
     }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
+    
 }

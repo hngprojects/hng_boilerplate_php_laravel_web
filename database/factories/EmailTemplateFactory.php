@@ -26,7 +26,7 @@ class EmailTemplateFactory extends Factory
         return [
             'id' => (string) Str::uuid(),
             'title' => $this->faker->sentence,
-            'template' => $this->faker->text,
+            'template' => $this->faker->paragraph,
             'status' => $this->faker->boolean,
         ];
     }
