@@ -1,9 +1,8 @@
 name: Scheduled API Tests
 
 on:
-  push:
-    branches:
-      - dev
+  schedule:
+    - cron: '*/15 * * * *'
 
 jobs:
   run-api-tests:
@@ -13,14 +12,21 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v3
 
-    - uses: matt-ball/newman-action@master
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
       with:
-        collection: api-tests.json
-        reporters: json
+        node-version: '20' 
+
+    - name: Install Newman
+      run: npm install -g newman
         
-    
+    - name: Run Postman Collection
+      run: newman run api-tests.json -r cli,json --reporter-json-export result.json
+      continue-on-error: true
+      
 
     - name: Transfer test results via SCP
       run: sshpass -p "${{ secrets.SSH_PASSWORD }}" scp result.json ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/boilerplate-be
 
-    
+    - name: Clean up
+      run: rm -f result.json
