@@ -73,7 +73,6 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::get('/api-status', [ApiStatusCheckerController::class, 'status']);
-    Route::get('/path', [ApiStatusCheckerController::class, 'path']);
 
     Route::post('/auth/register', [AuthController::class, 'store']);
     Route::post('/auth/login', [LoginController::class, 'login']);
