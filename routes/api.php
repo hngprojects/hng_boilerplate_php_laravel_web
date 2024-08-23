@@ -1,55 +1,56 @@
 <?php
 
-use App\Http\Controllers\Api\V1\Admin\BlogController;
-use App\Http\Controllers\Api\V1\Admin\CustomerController;
-use App\Http\Controllers\Api\V1\Admin\EmailTemplateController;
-use App\Http\Controllers\Api\V1\Admin\FaqController;
-use App\Http\Controllers\Api\V1\Admin\Plan\FeatureController;
-use App\Http\Controllers\Api\V1\Admin\Plan\SubscriptionController;
-use App\Http\Controllers\Api\V1\Admin\SendEmailController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\QuestController;
+use App\Http\Controllers\Api\V1\JobController;
+use App\Http\Controllers\Api\V1\RoleController;
+use App\Http\Controllers\BillingPlanController;
 use App\Http\Controllers\Api\V1\ArticleController;
-use App\Http\Controllers\Api\V1\LanguageController;
-use App\Http\Controllers\Api\V1\Auth\AuthController;
-use App\Http\Controllers\Api\V1\Auth\ForgetPasswordRequestController;
-use App\Http\Controllers\Api\V1\Auth\ForgotResetPasswordController;
-use App\Http\Controllers\Api\V1\Auth\LoginController;
-use App\Http\Controllers\Api\V1\Auth\ResetUserPasswordController;
-use App\Http\Controllers\Api\V1\Auth\SocialAuthController;
-use App\Http\Controllers\Api\V1\BlogSearchController;
-use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\CommentController;
 use App\Http\Controllers\Api\V1\ContactController;
-use App\Http\Controllers\Api\V1\CookiePreferencesController;
-use App\Http\Controllers\Api\V1\HelpArticleController;
-use App\Http\Controllers\Api\V1\JobController;
-use App\Http\Controllers\Api\V1\JobSearchController;
-use App\Http\Controllers\Api\V1\NotificationPreferenceController;
-use App\Http\Controllers\Api\V1\Organisation\OrganisationController;
-use App\Http\Controllers\Api\V1\Organisation\OrganisationMemberController;
 use App\Http\Controllers\Api\V1\PaymentController;
-use App\Http\Controllers\Api\V1\PreferenceController;
 use App\Http\Controllers\Api\V1\ProductController;
-use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Controllers\Api\V1\SqueezeController;
-use App\Http\Controllers\Api\V1\SqueezePageCoontroller;
-use App\Http\Controllers\Api\V1\SuperAdmin\SuperAdminProductController;
-use App\Http\Controllers\Api\V1\Testimonial\TestimonialController;
+use App\Http\Controllers\Api\V1\CategoryController;
+use App\Http\Controllers\Api\V1\LanguageController;
 use App\Http\Controllers\Api\V1\TimezoneController;
-use App\Http\Controllers\Api\V1\User\AccountController;
-use App\Http\Controllers\Api\V1\User\DashboardController;
-use App\Http\Controllers\Api\V1\User\ExportUserController;
-use App\Http\Controllers\Api\V1\User\ProfileController;
-use App\Http\Controllers\Api\V1\User\UserController;
 use App\Http\Controllers\Api\V1\WaitListController;
-use App\Http\Controllers\BillingPlanController;
-use App\Http\Controllers\InvitationAcceptanceController;
-use App\Http\Controllers\NotificationSettingController;
-use App\Http\Controllers\QuestController;
-use App\Http\Controllers\UserNotificationController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\V1\Admin\AdminDashboardController;
 use App\Http\Controllers\SqueezePageUserController;
+use App\Http\Controllers\Api\V1\Admin\FaqController;
+use App\Http\Controllers\Api\V1\Auth\AuthController;
+use App\Http\Controllers\Api\V1\JobSearchController;
+use App\Http\Controllers\Api\V1\User\UserController;
+use App\Http\Controllers\UserNotificationController;
+use App\Http\Controllers\Api\V1\Admin\BlogController;
+use App\Http\Controllers\Api\V1\Auth\LoginController;
+use App\Http\Controllers\Api\V1\BlogSearchController;
+use App\Http\Controllers\Api\V1\PreferenceController;
+use App\Http\Controllers\Api\V1\HelpArticleController;
+use App\Http\Controllers\Api\V1\SqueezePageCoontroller;
+use App\Http\Controllers\Api\V1\User\AccountController;
+use App\Http\Controllers\Api\V1\User\ProfileController;
+use App\Http\Controllers\NotificationSettingController;
+use App\Http\Controllers\InvitationAcceptanceController;
+use App\Http\Controllers\Api\V1\Admin\CustomerController;
+use App\Http\Controllers\Api\V1\User\DashboardController;
+use App\Http\Controllers\Api\V1\Admin\SendEmailController;
+use App\Http\Controllers\Api\V1\Auth\SocialAuthController;
+use App\Http\Controllers\Api\V1\User\ExportUserController;
+use App\Http\Controllers\Api\V1\ApiStatusCheckerController;
+use App\Http\Controllers\Api\V1\CookiePreferencesController;
+use App\Http\Controllers\Api\V1\Admin\Plan\FeatureController;
+use App\Http\Controllers\Api\V1\Admin\EmailTemplateController;
+use App\Http\Controllers\Api\V1\Admin\AdminDashboardController;
+use App\Http\Controllers\Api\V1\Auth\ResetUserPasswordController;
 use App\Http\Controllers\Api\V1\NewsletterSubscriptionController;
+use App\Http\Controllers\Api\V1\NotificationPreferenceController;
+use App\Http\Controllers\Api\V1\Admin\Plan\SubscriptionController;
+use App\Http\Controllers\Api\V1\Testimonial\TestimonialController;
+use App\Http\Controllers\Api\V1\Auth\ForgotResetPasswordController;
+use App\Http\Controllers\Api\V1\Organisation\OrganisationController;
+use App\Http\Controllers\Api\V1\Auth\ForgetPasswordRequestController;
+use App\Http\Controllers\Api\V1\SuperAdmin\SuperAdminProductController;
+use App\Http\Controllers\Api\V1\Organisation\OrganisationMemberController;
 
 /*
 |--------------------------------------------------------------------------
@@ -70,6 +71,10 @@ Route::prefix('v1')->group(function () {
     Route::any('/', function () {
         return 'Language Learning AI Game Version 1';
     });
+
+    Route::get('/api-status', [ApiStatusCheckerController::class, 'status']);
+    Route::get('/path', [ApiStatusCheckerController::class, 'path']);
+
     Route::post('/auth/register', [AuthController::class, 'store']);
     Route::post('/auth/login', [LoginController::class, 'login']);
     Route::post('/auth/logout', [LoginController::class, 'logout'])->middleware('auth:api');
