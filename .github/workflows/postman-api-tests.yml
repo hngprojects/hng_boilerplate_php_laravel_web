@@ -1,4 +1,4 @@
-name: Scheduled API Tests
+name: Scheduled Postman API Tests
 
 on:
   schedule:
@@ -21,7 +21,7 @@ jobs:
       run: npm install -g newman
         
     - name: Run Postman Collection
-      run: newman run api-tests.json -r cli,json --reporter-json-export result.json
+      run: newman run postman-api-tests.json -r cli,json --reporter-json-export result.json
       continue-on-error: true
       
 
