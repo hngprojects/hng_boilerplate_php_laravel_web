@@ -163,14 +163,9 @@ Route::prefix('v1')->group(function () {
 
 
 
-<<<<<<< HEAD
-        Route::get('/squeeze-pages-users', [SqueezePageUserController::class, 'index']);
-    });
-=======
 
     Route::get('/squeeze-pages-users', [SqueezePageUserController::class, 'index']);
 
->>>>>>> 2e0135c1989c1b83e302bf0480bf74cf616431f2
 
     Route::middleware(['auth:api', 'admin'])->group(function () {
         Route::get('/email-templates', [EmailTemplateController::class, 'index']);
