@@ -14,11 +14,9 @@ class ApiStatusCheckerController extends Controller
     public function status()
     {
         // Load and decode the JSON file
-        // $data = file_get_contents(__DIR__ . '/../result.json');
         $data = file_get_contents(base_path('/result.json'));
-
-
         // $data = file_get_contents('https://staging.api-php.boilerplate.hng.tech/storage/result.json');
+
         $data = json_decode($data, true);
 
         // Get the collections and executions arrays from the data
@@ -33,16 +31,10 @@ class ApiStatusCheckerController extends Controller
 
             // Loop through each item within the current collection
             foreach ($collection['item'] as $itemIndex => $item) {
-                // Initialize an array to store status, response_time, and assertions_count for each execution
-                // $executionData = [
-                //     'status' => null,
-                //     'response_time' => null,
-                // ];
 
                 $status = null;
                 $response_time = null;
 
-                // Find matching execution for the current item (based on index or some other identifier)
                 if (isset($executions[$itemIndex])) {
                     $execution = $executions[$itemIndex];
 
@@ -54,11 +46,8 @@ class ApiStatusCheckerController extends Controller
                         // Loop through each assertion and extract relevant data
                         foreach ($assertions as $index => $assertion) {
                             if ($index === 0) {
-                                // First assertion will be assigned to 'status'
-                                // $executionData['status'] = $assertion['assertion'];
                                 $status = $assertion['assertion'];
                             } elseif ($index === 1) {
-                                // Second assertion will be assigned to 'response_time'
                                 $response_time = $execution['response']['responseTime'];
                             }
                         }
@@ -67,7 +56,6 @@ class ApiStatusCheckerController extends Controller
 
                 $date = new DateTime("now", new DateTimeZone('Africa/Lagos'));
                 $formattedDate = $date->format('Y-m-d h:i A');
-
 
                 // Append only the name and execution_data to the response array
                 $responseArray[] = [
@@ -79,8 +67,6 @@ class ApiStatusCheckerController extends Controller
                     'details' => $this->getDetails($execution)
                 ];
             }
-
-
         }
 
         // Return the accumulated results as a JSON response
