@@ -357,7 +357,7 @@ class RoleController extends Controller
 
             if (!$organisation) {
                 return response()->json([
-                    'status_code' => Response::HTTP_NOT_FOUND,
+                    'statusCode' => Response::HTTP_NOT_FOUND,
                     'error' => 'Not Found',
                     'message' => 'The organisation with ID ' . $org_id . ' does not exist',
                 ], Response::HTTP_NOT_FOUND);
@@ -367,7 +367,7 @@ class RoleController extends Controller
 
             if (!$role) {
                 return response()->json([
-                    'status_code' => Response::HTTP_NOT_FOUND,
+                    'statusCode' => Response::HTTP_NOT_FOUND,
                     'error' => 'Not Found',
                     'message' => 'The role with ID ' . $role_id . ' does not exist',
                 ], Response::HTTP_NOT_FOUND);
@@ -381,7 +381,7 @@ class RoleController extends Controller
             DB::commit();
 
             return response()->json([
-                'status_code' => Response::HTTP_OK,
+                'statusCode' => Response::HTTP_OK,
                 'message' => 'Role deleted successfully',
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
