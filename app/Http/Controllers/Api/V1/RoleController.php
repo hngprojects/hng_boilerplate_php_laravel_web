@@ -17,10 +17,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class RoleController extends Controller
 {
-    use HttpResponses;
+    use HttpResponses, AuthorizesRequests;
     /**
      * Store a newly created resource in storage.
      */
@@ -347,6 +348,53 @@ class RoleController extends Controller
         }
         return ResponseHelper::response("Permissions updated successfully", 202, null);
       } else return ResponseHelper::response("Role not found", 404, null);
+    }
+
+    public function destroy(Request $request, $org_id, $role_id)
+    {
+        try {
+            $organisation = Organisation::find($org_id);
+
+            if (!$organisation) {
+                return response()->json([
+                    'status_code' => Response::HTTP_NOT_FOUND,
+                    'error' => 'Not Found',
+                    'message' => 'The organisation with ID ' . $org_id . ' does not exist',
+                ], Response::HTTP_NOT_FOUND);
+            }
+
+            $role = Role::where('org_id', $org_id)->find($role_id);
+
+            if (!$role) {
+                return response()->json([
+                    'status_code' => Response::HTTP_NOT_FOUND,
+                    'error' => 'Not Found',
+                    'message' => 'The role with ID ' . $role_id . ' does not exist',
+                ], Response::HTTP_NOT_FOUND);
+            }
+
+            DB::beginTransaction();
+
+            $role->permissions()->detach();
+            $role->delete();
+
+            DB::commit();
+
+            return response()->json([
+                'status_code' => Response::HTTP_OK,
+                'message' => 'Role deleted successfully',
+            ], Response::HTTP_OK);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            Log::error('Role deletion error: ' . $e->getMessage());
+
+            return response()->json([
+                'status_code' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                'error' => 'Internal Server Error',
+                'message' => 'Role deletion failed - ' . $e->getMessage(),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
 }
