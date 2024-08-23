@@ -1,0 +1,898 @@
+{
+	"info": {
+		"_postman_id": "ec04e834-79af-43d9-b790-67224bba39d8",
+		"name": "APIs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34735841",
+		"_collection_link": "https://mojisola-2659.postman.co/workspace/Boilerplate~550e0f2d-ac66-4eb3-8e58-8488f99dcf27/collection/34735841-ec04e834-79af-43d9-b790-67224bba39d8?action=share&source=collection_link&creator=34735841"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"first_name\": \"Mojisola\",\n  \"last_name\": \"Otusheso\",\n  \"email\": \"mj@example.com\",\n  \"password\": \"Mojisola@24\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://staging.api-php.boilerplate.hng.tech/api/v1/auth/register",
+							"protocol": "https",
+							"host": [
+								"staging",
+								"api-php",
+								"boilerplate",
+								"hng",
+								"tech"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"bulldozeradmin@hng.com\",\n  \"password\": \"@Bulldozer01\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://staging.api-php.boilerplate.hng.tech/api/v1/auth/login",
+							"protocol": "https",
+							"host": [
+								"staging",
+								"api-php",
+								"boilerplate",
+								"hng",
+								"tech"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Jobs",
+			"item": [
+				{
+					"name": "Create a job",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);",
+									"});",
+									"pm.test(\"Response time is less than 500ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"try {",
+									"    const response = await pm.sendRequest({",
+									"        url: \"https://staging.api-php.boilerplate.hng.tech/api/v1/jobs\",",
+									"        method: \"POST\"",
+									"    });",
+									"",
+									"    console.log(response.json());",
+									"} catch (err) {",
+									"    console.error(err);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3N0YWdpbmcuYXBpLXBocC5ib2lsZXJwbGF0ZS5obmcudGVjaC9hcGkvdjEvYXV0aC9sb2dpbiIsImlhdCI6MTcyNDM5NjQwOSwiZXhwIjoxNzI0NDAwMDA5LCJuYmYiOjE3MjQzOTY0MDksImp0aSI6IkVTanN1ZjFlcmdZMExOaEkiLCJzdWIiOiI5Y2QzNjI2Yi1kZjFmLTQwMjktYjlkZC0xM2RhNGU0MWU4NjgiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.QYyKJRBrVF68M7C8-dPB3e7faq-Uu-aknzCqYCZDn9Y",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Software  Developer\",\n    \"description\": \"Team bulldozer is seeking reliable developer in Canada\",\n    \"location\": \"Toronto, CA\",\n    \"deadline\": \"2024-12-31\",\n    \"salary_range\": \"1200000-1500000\",\n    \"job_type\": \"Full-time\",\n    \"job_mode\": \"remote\",\n    \"experience_level\": \"Senior\",\n    \"company_name\": \"life insurance\",\n    \"key_responsibilities\": \"Lead development projects, mentor junior developers, implement best practices\",\n    \"qualifications\": \"5+ years of experience in software development, proficiency in Python and JavaScript\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://staging.api-php.boilerplate.hng.tech/api/v1/jobs",
+							"protocol": "https",
+							"host": [
+								"staging",
+								"api-php",
+								"boilerplate",
+								"hng",
+								"tech"
+							],
+							"path": [
+								"api",
+								"v1",
+								"jobs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve jobs",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Response time is less than 400ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(400);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"try {",
+									"    const response = await pm.sendRequest({",
+									"        url: \"https://staging.api-php.boilerplate.hng.tech/api/v1/jobs\",",
+									"        method: \"GET\"",
+									"    });",
+									"",
+									"    console.log(response.json());",
+									"} catch (err) {",
+									"    console.error(err);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3N0YWdpbmcuYXBpLXBocC5ib2lsZXJwbGF0ZS5obmcudGVjaC9hcGkvdjEvYXV0aC9sb2dpbiIsImlhdCI6MTcyNDM5MDAwOSwiZXhwIjoxNzI0MzkzNjA5LCJuYmYiOjE3MjQzOTAwMDksImp0aSI6InBEUEtoemdhanVWQlJ2ZlEiLCJzdWIiOiI5Y2QzNjI2Yi1kZjFmLTQwMjktYjlkZC0xM2RhNGU0MWU4NjgiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.KjqEChuDG-jDnvHjnUC6WxqpnKsBMvbm-nxcJWW3EAk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://staging.api-php.boilerplate.hng.tech/api/v1/jobs",
+							"protocol": "https",
+							"host": [
+								"staging",
+								"api-php",
+								"boilerplate",
+								"hng",
+								"tech"
+							],
+							"path": [
+								"api",
+								"v1",
+								"jobs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve a job's details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Successful GET request\", function () {",
+									"    pm.expect(pm.response.code).to.be.below(300);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"try {",
+									"    const response = await pm.sendRequest({",
+									"        url: \"https://staging.api-php.boilerplate.hng.tech/api/v1/jobs/9cd515b4-10d6-42b3-b320-0928d85a40f9\",",
+									"        method: \"GET\"",
+									"    });",
+									"",
+									"    console.log(response.json());",
+									"} catch (err) {",
+									"    console.error(err);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://staging.api-php.boilerplate.hng.tech/api/v1/jobs/9cd515b4-10d6-42b3-b320-0928d85a40f9",
+							"protocol": "https",
+							"host": [
+								"staging",
+								"api-php",
+								"boilerplate",
+								"hng",
+								"tech"
+							],
+							"path": [
+								"api",
+								"v1",
+								"jobs",
+								"9cd515b4-10d6-42b3-b320-0928d85a40f9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete jobs",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"try {",
+									"    const response = await pm.sendRequest({",
+									"        url: \"https://deployment.api-php.boilerplate.hng.tech/api/v1/jobs/9cd53ba3-164c-4797-b4a7-62b6c0ba609e\",",
+									"        method: \"DELETE\"",
+									"    });",
+									"",
+									"    console.log(response.json());",
+									"} catch (err) {",
+									"    console.error(err);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful DELETE request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 204]);",
+									"});",
+									"pm.test(\"Response time is less than 500ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2RlcGxveW1lbnQuYXBpLXBocC5ib2lsZXJwbGF0ZS5obmcudGVjaC9hcGkvdjEvYXV0aC9sb2dpbiIsImlhdCI6MTcyMjk1ODExNywiZXhwIjoxNzIyOTYxNzE3LCJuYmYiOjE3MjI5NTgxMTcsImp0aSI6InZzWXhLS1ZLQ3ZuQ0N0NWwiLCJzdWIiOiI5Y2IzOGU3NC1kNmUzLTRhNmItOWQ2Zi01YWNjNDU0NGYyNTYiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.7q7TLF_GKtuQ3nNcLX7ZCsD2WQ5kIjoVNocmD2NGXdA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://deployment.api-php.boilerplate.hng.tech/api/v1/jobs/9cd53ba3-164c-4797-b4a7-62b6c0ba609e",
+							"protocol": "https",
+							"host": [
+								"deployment",
+								"api-php",
+								"boilerplate",
+								"hng",
+								"tech"
+							],
+							"path": [
+								"api",
+								"v1",
+								"jobs",
+								"9cd53ba3-164c-4797-b4a7-62b6c0ba609e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search for a job",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Response time is less than 500ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"try {",
+									"    const response = await pm.sendRequest({",
+									"        url: \"https://staging.api-php.boilerplate.hng.tech/api/v1/jobs?id=9cd515b4-10d6-42b3-b320-0928d85a40f9\",",
+									"        method: \"GET\"",
+									"    });",
+									"",
+									"    console.log(response.json());",
+									"} catch (err) {",
+									"    console.error(err);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://staging.api-php.boilerplate.hng.tech/api/v1/jobs?id=9cd3626b-df1f-4029-b9dd-13da4e41e868",
+							"protocol": "https",
+							"host": [
+								"staging",
+								"api-php",
+								"boilerplate",
+								"hng",
+								"tech"
+							],
+							"path": [
+								"api",
+								"v1",
+								"jobs"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "9cd3626b-df1f-4029-b9dd-13da4e41e868"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Languages",
+			"item": [
+				{
+					"name": "Retrieve all languages",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Response time is less than 500ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"try {",
+									"    const response = await pm.sendRequest({",
+									"        url: \"https://staging.api-php.boilerplate.hng.tech/api/v1/languages\",",
+									"        method: \"GET\"",
+									"    });",
+									"",
+									"    console.log(response.json());",
+									"} catch (err) {",
+									"    console.error(err);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3N0YWdpbmcuYXBpLXBocC5ib2lsZXJwbGF0ZS5obmcudGVjaC9hcGkvdjEvYXV0aC9sb2dpbiIsImlhdCI6MTcyNDM5NTI1NCwiZXhwIjoxNzI0Mzk4ODU0LCJuYmYiOjE3MjQzOTUyNTQsImp0aSI6IlU0VVBlQU53dG10cVQ3UnQiLCJzdWIiOiI5Y2QzNjI2Yi1kZjFmLTQwMjktYjlkZC0xM2RhNGU0MWU4NjgiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.bW97Ai-r9QdolEhSuK7_EDdbuhvy_6QSiu9f-F8iJh8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://staging.api-php.boilerplate.hng.tech/api/v1/languages",
+							"protocol": "https",
+							"host": [
+								"staging",
+								"api-php",
+								"boilerplate",
+								"hng",
+								"tech"
+							],
+							"path": [
+								"api",
+								"v1",
+								"languages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a new language",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);",
+									"});",
+									"pm.test(\"Response time is less than 500ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"try {",
+									"    const response = await pm.sendRequest({",
+									"        url: \"https://staging.api-php.boilerplate.hng.tech/api/v1/languages\",",
+									"        method: \"POST\"",
+									"    });",
+									"",
+									"    console.log(response.json());",
+									"} catch (err) {",
+									"    console.error(err);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3N0YWdpbmcuYXBpLXBocC5ib2lsZXJwbGF0ZS5obmcudGVjaC9hcGkvdjEvYXV0aC9sb2dpbiIsImlhdCI6MTcyNDM5NTI1NCwiZXhwIjoxNzI0Mzk4ODU0LCJuYmYiOjE3MjQzOTUyNTQsImp0aSI6IlU0VVBlQU53dG10cVQ3UnQiLCJzdWIiOiI5Y2QzNjI2Yi1kZjFmLTQwMjktYjlkZC0xM2RhNGU0MWU4NjgiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.bW97Ai-r9QdolEhSuK7_EDdbuhvy_6QSiu9f-F8iJh8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"language\":\"Italian\",\n  \"code\": \"104\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://staging.api-php.boilerplate.hng.tech/api/v1/languages",
+							"protocol": "https",
+							"host": [
+								"staging",
+								"api-php",
+								"boilerplate",
+								"hng",
+								"tech"
+							],
+							"path": [
+								"api",
+								"v1",
+								"languages"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Help Center",
+			"item": [
+				{
+					"name": "Retrieve all articles",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Response time is less than 500ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"try {",
+									"    const response = await pm.sendRequest({",
+									"        url: \"https://staging.api-php.boilerplate.hng.tech/api/v1/help-center/topics\",",
+									"        method: \"GET\"",
+									"    });",
+									"",
+									"    console.log(response.json());",
+									"} catch (err) {",
+									"    console.error(err);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://staging.api-php.boilerplate.hng.tech/api/v1/help-center/topics",
+							"protocol": "https",
+							"host": [
+								"staging",
+								"api-php",
+								"boilerplate",
+								"hng",
+								"tech"
+							],
+							"path": [
+								"api",
+								"v1",
+								"help-center",
+								"topics"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"try {",
+									"    const response = await pm.sendRequest({",
+									"        url: \"https://staging.api-php.boilerplate.hng.tech/api/v1/help-center/topics\",",
+									"        method: \"POST\"",
+									"    });",
+									"",
+									"    console.log(response.json());",
+									"} catch (err) {",
+									"    console.error(err);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);",
+									"});",
+									"pm.test(\"Response time is less than 500ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3N0YWdpbmcuYXBpLXBocC5ib2lsZXJwbGF0ZS5obmcudGVjaC9hcGkvdjEvYXV0aC9sb2dpbiIsImlhdCI6MTcyNDM5NjQwOSwiZXhwIjoxNzI0NDAwMDA5LCJuYmYiOjE3MjQzOTY0MDksImp0aSI6IkVTanN1ZjFlcmdZMExOaEkiLCJzdWIiOiI5Y2QzNjI2Yi1kZjFmLTQwMjktYjlkZC0xM2RhNGU0MWU4NjgiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.QYyKJRBrVF68M7C8-dPB3e7faq-Uu-aknzCqYCZDn9Y",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\": \"9cd3626b-df1f-4029-b9dd-13da4e41e868\",\n    \"title\": \"About QAs\",\n    \"content\": \"Testing Types and techniques\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://staging.api-php.boilerplate.hng.tech/api/v1/help-center/topics",
+							"protocol": "https",
+							"host": [
+								"staging",
+								"api-php",
+								"boilerplate",
+								"hng",
+								"tech"
+							],
+							"path": [
+								"api",
+								"v1",
+								"help-center",
+								"topics"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Partially update an article",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"try {",
+									"    const response = await pm.sendRequest({",
+									"        url: \"https://staging.api-php.boilerplate.hng.tech/api/v1/help-center/topics/1d613cfc-242d-4a2e-b14e-c041849c41b8\",",
+									"        method: \"PATCH\"",
+									"    });",
+									"",
+									"    console.log(response.json());",
+									"} catch (err) {",
+									"    console.error(err);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Response time is less than 500ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3N0YWdpbmcuYXBpLXBocC5ib2lsZXJwbGF0ZS5obmcudGVjaC9hcGkvdjEvYXV0aC9sb2dpbiIsImlhdCI6MTcyNDM5NjQwOSwiZXhwIjoxNzI0NDAwMDA5LCJuYmYiOjE3MjQzOTY0MDksImp0aSI6IkVTanN1ZjFlcmdZMExOaEkiLCJzdWIiOiI5Y2QzNjI2Yi1kZjFmLTQwMjktYjlkZC0xM2RhNGU0MWU4NjgiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.QYyKJRBrVF68M7C8-dPB3e7faq-Uu-aknzCqYCZDn9Y",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"title\": \"Software Testing\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://staging.api-php.boilerplate.hng.tech/api/v1/help-center/topics/d032fd7b-a3a4-431f-936b-616589c18eaa",
+							"protocol": "https",
+							"host": [
+								"staging",
+								"api-php",
+								"boilerplate",
+								"hng",
+								"tech"
+							],
+							"path": [
+								"api",
+								"v1",
+								"help-center",
+								"topics",
+								"d032fd7b-a3a4-431f-936b-616589c18eaa"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete an article",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"try {",
+									"    const response = await pm.sendRequest({",
+									"        url: \"https://staging.api-php.boilerplate.hng.tech/api/v1/help-center/topics/1d613cfc-242d-4a2e-b14e-c041849c41b8\",",
+									"        method: \"DELETE\"",
+									"    });",
+									"",
+									"    console.log(response.json());",
+									"} catch (err) {",
+									"    console.error(err);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful DELETE request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 204]);",
+									"});",
+									"pm.test(\"Response time is less than 500ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3N0YWdpbmcuYXBpLXBocC5ib2lsZXJwbGF0ZS5obmcudGVjaC9hcGkvdjEvYXV0aC9sb2dpbiIsImlhdCI6MTcyNDM5NjQwOSwiZXhwIjoxNzI0NDAwMDA5LCJuYmYiOjE3MjQzOTY0MDksImp0aSI6IkVTanN1ZjFlcmdZMExOaEkiLCJzdWIiOiI5Y2QzNjI2Yi1kZjFmLTQwMjktYjlkZC0xM2RhNGU0MWU4NjgiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.QYyKJRBrVF68M7C8-dPB3e7faq-Uu-aknzCqYCZDn9Y",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://staging.api-php.boilerplate.hng.tech/api/v1/help-center/topics/d032fd7b-a3a4-431f-936b-616589c18eaa",
+							"protocol": "https",
+							"host": [
+								"staging",
+								"api-php",
+								"boilerplate",
+								"hng",
+								"tech"
+							],
+							"path": [
+								"api",
+								"v1",
+								"help-center",
+								"topics",
+								"d032fd7b-a3a4-431f-936b-616589c18eaa"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
