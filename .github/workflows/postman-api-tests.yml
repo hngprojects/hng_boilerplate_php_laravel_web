@@ -25,8 +25,15 @@ jobs:
       continue-on-error: true
       
 
+    
     - name: Transfer test results via SCP
-      run: sshpass -p "${{ secrets.SSH_PASSWORD }}" scp result.json ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/boilerplate-be
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        password: ${{ secrets.SSH_PASSWORD }}
+        source: "result.json"
+        target: "/var/www/boilerplate-be"
 
     - name: Clean up
       run: rm -f result.json
