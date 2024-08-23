@@ -26,7 +26,7 @@ jobs:
       
 
     - name: Transfer test results via SCP
-      run: sshpass -p "${{ secrets.SSH_PASSWORD }}" scp result.json ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/delve-be
+      run: sshpass -p "${{ secrets.SSH_PASSWORD }}" scp result.json ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/boilerplate-be
 
     - name: Clean up
       run: rm -f result.json
