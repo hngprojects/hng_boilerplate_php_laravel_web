@@ -16,8 +16,8 @@ jobs:
     - uses: matt-ball/newman-action@master
       with:
         collection: api-tests.json
-        reporters: cli,json
-        reporter-json-export: result.json
+        reporters: json
+        
     
 
     - name: Transfer test results via SCP
