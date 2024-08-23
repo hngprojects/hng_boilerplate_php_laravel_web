@@ -1,4 +1,4 @@
-name: Scheduled API Tests
+name: Scheduled Postman API Tests
 
 on:
   schedule:
@@ -21,12 +21,12 @@ jobs:
       run: npm install -g newman
         
     - name: Run Postman Collection
-      run: newman run api-tests.json -r cli,json --reporter-json-export result.json
+      run: newman run postman-api-tests.json -r cli,json --reporter-json-export result.json
       continue-on-error: true
       
 
     - name: Transfer test results via SCP
-      run: sshpass -p "${{ secrets.SSH_PASSWORD }}" scp result.json ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/boilerplate-be
+      run: sshpass -p "${{ secrets.SSH_PASSWORD }}" scp result.json ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/delve-be
 
     - name: Clean up
       run: rm -f result.json
