@@ -60,8 +60,9 @@ use App\Http\Controllers\Api\V1\NewsletterSubscriptionController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
 Route::any('/', function () {
-  return 'Language Learning AI Game';
+    return 'Language Learning AI Game';
 });
 
 Route::prefix('v1')->group(function () {
@@ -118,6 +119,8 @@ Route::prefix('v1')->group(function () {
         Route::patch('/organisations/{org_id}/products/{product_id}', [ProductController::class, 'update']);
         Route::delete('/organisations/{org_id}/products/{product_id}', [ProductController::class, 'destroy']);
     });
+
+
 
     //comment
     Route::middleware('auth:api')->group(function () {
@@ -195,6 +198,11 @@ Route::prefix('v1')->group(function () {
         Route::delete('/organisations/{org_id}/users/{user_id}', [OrganisationController::class, 'removeUser']);
         Route::get('/organisations/{organisation}/users', [organisationMemberController::class, 'index']);
 
+        //Role Organisations
+         
+
+        Route::get('/organisation/{org_id}/roles/{role_id}', [OrganisationController::class, 'getRoleId']);
+
         // members
         Route::get('/members/{org_id}/search', [OrganisationMemberController::class, 'searchMembers']);
         Route::get('/members/{org_id}/export', [OrganisationMemberController::class, 'download']);
@@ -257,9 +265,6 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('faqs', FaqController::class);
         Route::get('/dashboard/top-products', [AdminDashboardController::class, 'getTopProducts']);
         Route::get('/dashboard/all-top-products', [AdminDashboardController::class, 'getAllProductsSortedBySales']);
-
-
-
     });
 
     Route::post('/waitlists', [WaitListController::class, 'store']);
@@ -278,9 +283,9 @@ Route::prefix('v1')->group(function () {
         Route::get('/user-sales', [DashboardController::class, 'recent_sales']);
     });
 
-        //region get and update
-        Route::group(['middleware' => ['auth:api']], function () {
-            Route::get('/regions/{user_id}', [PreferenceController::class, 'showRegion']);
+    //region get and update
+    Route::group(['middleware' => ['auth:api']], function () {
+        Route::get('/regions/{user_id}', [PreferenceController::class, 'showRegion']);
     });
     // Notification settings
     Route::patch('/notification-settings/{user_id}', [NotificationPreferenceController::class, 'update']);
@@ -291,14 +296,14 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('email-templates', EmailTemplateController::class);
     });
 
-//super Admin Email template
-Route::prefix('v1/admin')->group(function () {
-    Route::get('email-templates', [EmailTemplateController::class, 'index']);
-    Route::get('email-templates/{id}', [EmailTemplateController::class, 'show']);
-    Route::post('email-templates', [EmailTemplateController::class, 'store']);
-    Route::put('email-templates/{id}', [EmailTemplateController::class, 'update']);
-    Route::delete('email-templates/{id}', [EmailTemplateController::class, 'destroy']);
-});
+    //super Admin Email template
+    Route::prefix('v1/admin')->group(function () {
+        Route::get('email-templates', [EmailTemplateController::class, 'index']);
+        Route::get('email-templates/{id}', [EmailTemplateController::class, 'show']);
+        Route::post('email-templates', [EmailTemplateController::class, 'store']);
+        Route::put('email-templates/{id}', [EmailTemplateController::class, 'update']);
+        Route::delete('email-templates/{id}', [EmailTemplateController::class, 'destroy']);
+    });
     // User Notification
     Route::patch('/notifications/{notification}', [UserNotificationController::class, 'update']);
     Route::delete('/notifications', [UserNotificationController::class, 'destroy']);
