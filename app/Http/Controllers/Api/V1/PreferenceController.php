@@ -7,11 +7,11 @@ use App\Http\Requests\Preference\DeletePreferenceRequest;
 use App\Http\Requests\Preference\StorePreferenceRequest;
 use App\Http\Requests\Preference\UpdatePreferenceRequest;
 use App\Http\Requests\Preference\SavePreferencesRequest;
+use App\Models\Preference;
+use App\Models\Region;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-
-use App\Models\Preference;
 use App\Models\Profile;
 
 class PreferenceController extends Controller
@@ -30,7 +30,7 @@ class PreferenceController extends Controller
         Log::info('Preferences retrieved', ['user_id' => Auth::id(), 'preferences' => $preferences]);
         return response()->json([
             'status_code' => 200,
-            'message' => 'Languages fetched successfully',
+            'message' => 'Preferences fetched successfully',
             'preferences' => $preferences
         ], 200);
     }
@@ -138,6 +138,8 @@ class PreferenceController extends Controller
     {
         $preference = Auth::user()->preferences()->find($id);
 
+
+
         if (!$preference) {
             return response()->json([
                 'status_code' => 404,
@@ -178,5 +180,32 @@ class PreferenceController extends Controller
                 'message' => 'Preference not found for user',
             ], 404);
         }
+    }
+
+    //update the regionsss
+    public function updateRegion(Request $request, $user_id){
+        $request->validate([
+            'region_id' => 'required|uuid|exists:regions,id'
+        ]);
+
+        $preference = Preference::where('user_id', $user_id)->first();
+
+        if(!$preference){
+            return response()->json([
+                'status'=> 404,
+                'message'=> 'Preference not found for user'
+            ], 404);
+        }
+
+        $preference->region_id = $request->input('region_id');
+        $preference->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Region updated successfully',
+            'data' => [
+                'region' => $preference->region,
+            ],
+        ]);
     }
 }

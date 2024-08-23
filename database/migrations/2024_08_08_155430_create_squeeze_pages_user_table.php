@@ -11,8 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->string('category')->nullable();
+        Schema::create('squeeze_pages_user', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('firstname');
+            $table->string('lastname');
+            $table->string('email');
+            $table->string('title');
+            $table->timestamps();
         });
     }
 
@@ -21,10 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-
-        Schema::table('products', function (Blueprint $table) {
-            $table->dropColumn('category');
-            //
-        });
+        Schema::dropIfExists('squeeze_pages_user');
     }
 };

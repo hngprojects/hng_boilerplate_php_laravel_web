@@ -3,65 +3,54 @@
 namespace App\Http\Controllers\Api\V1\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Validator;
 
 class LoginController extends Controller
 {
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'required|string|email|max:255',
-            'password' => 'required|string|min:4',
-        ]);    
-
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+    
         if ($validator->fails()) {
             return response()->json([
-                'status_code' => 400,
-                'message' => $validator->errors(),
-                'errors' => 'Bad Request'
-            ], 400);
+                'status_code' => 401,
+                'message' => 'Invalid Credentials',
+                'error' => 'Invalid Email or Password'
+            ], 401);
         }
 
-        /* $key = 'login_attempts_' . $request->ip();
-        if (RateLimiter::tooManyAttempts($key, 3)) {
-            $seconds = RateLimiter::availableIn($key);
-            return response()->json([
-                'message' => 'Too Many login attempts. Please try again in one hour',
-                'error' => 'too_many_attempts',
-                'status_code' => 403
-            ], 403);
-        } */
-
-        $credentials = $request->only('email', 'password');
-
-        if (!$token = JWTAuth::attempt($credentials)) {
+        if (!$token = JWTAuth::attempt($request->only('email', 'password'))) {
             $key = 'login_attempts_'.request()->ip();
             RateLimiter::hit($key,3600);
             return response()->json([
                 'status_code' => 401,
-                'message' => 'Invalid credentials'
+                'message' => 'Invalid credentials',
+                'error' => 'Invalid Email or Password'
             ], 401);
         }
 
-        // RateLimiter::clear($key);
-
         $user = Auth::user();
-        // $user->last_login_at = now();
-        /** @var \App\Models\User $user **/
+        $user->last_login_at = now();
         $user->save();
 
-        $name_list = explode(" ", $user->name);
-        $first_name = current($name_list);
-        if (count($name_list) > 1) {
-            $last_name = end($name_list);
-        } else {
-            $last_name = "";
-        }
-        $profile = $user->profile();
+        $organisations = $user->owned_organisations->map(function ($org) use ($user) {
+            return [
+                'organisation_id' => $org->org_id,
+                'name' => $org->name,
+                'user_role' => $user->roles()->where('org_id', $org->org_id)->first()->name ?? 'user',
+                'is_owner' => true,
+            ];
+        });
+
+        $is_superadmin = in_array($user->role, ['admin']);
 
         return response()->json([
             'status_code' => 200,
@@ -70,14 +59,17 @@ class LoginController extends Controller
             'data' => [
                 'user' => [
                     'id' => $user->id,
-                    'first_name' => $profile->first_name ?? null,
-                    'last_name' => $profile->last_name ?? null,
+                    'first_name' => $user->profile->first_name,
+                    'last_name' => $user->profile->last_name,
                     'email' => $user->email,
+                    'avatar_url' => $user->profile->avatar_url,
+                    'is_superadmin' => $is_superadmin,
                     'role' => $user->role,
-                    "avatar_url" => $profile->avatar_url ?? null
-                ]
+                ],
+                'organisations' => $organisations,
             ]
         ], 200);
+    
     }
 
     public function logout()
@@ -87,24 +79,31 @@ class LoginController extends Controller
             return response()->json([
                 'status_code' => 200,
                 'message' => 'Logout successful',
+                'error' => null,
+                'data' => []
             ], 200);
+        } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+            return response()->json([
+                'status_code' => 401,
+                'message' => 'Token has expired',
+                'error' => 'token_expired',
+                'data' => []
+            ], 401);
+        } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+            return response()->json([
+                'status_code' => 401,
+                'message' => 'Token is invalid',
+                'error' => 'token_invalid',
+                'data' => []
+            ], 401);
         } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
             return response()->json([
                 'status_code' => 401,
-                'message' => $e->getMessage(),
-                'error' => $this->getErrorCode($e)
+                'message' => 'Token is missing',
+                'error' => 'token_absent',
+                'data' => []
             ], 401);
         }
     }
-
-    private function getErrorCode($exception)
-    {
-        if ($exception instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException) {
-            return 'token_expired';
-        } elseif ($exception instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException) {
-            return 'token_invalid';
-        } else {
-            return 'token_absent';
-        }
-    }
+    
 }

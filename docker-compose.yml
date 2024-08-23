@@ -1,64 +1,51 @@
 services:
-    laravel.test:
-        build:
-            context: ./vendor/laravel/sail/runtimes/8.3
-            dockerfile: Dockerfile
-            args:
-                WWWGROUP: "${WWWGROUP}"
-        image: sail-8.3/app
-        extra_hosts:
-            - "host.docker.internal:host-gateway"
-        ports:
-            - "${APP_PORT:-80}:80"
-            - "${VITE_PORT:-5173}:${VITE_PORT:-5173}"
-        environment:
-            WWWUSER: "${WWWUSER}"
-            LARAVEL_SAIL: 1
-            XDEBUG_MODE: "${SAIL_XDEBUG_MODE:-off}"
-            XDEBUG_CONFIG: "${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}"
-            IGNITION_LOCAL_SITES_PATH: "${PWD}"
-        volumes:
-            - ".:/var/www/html"
-        networks:
-            - sail
-        depends_on:
-            - pgsql
-            - mailpit
-    pgsql:
-        image: "postgres:15"
-        ports:
-            - "${FORWARD_DB_PORT:-5432}:5432"
-        environment:
-            PGPASSWORD: "${DB_PASSWORD:-secret}"
-            POSTGRES_DB: "${DB_DATABASE}"
-            POSTGRES_USER: "${DB_USERNAME}"
-            POSTGRES_PASSWORD: "${DB_PASSWORD:-secret}"
-        volumes:
-            - "sail-pgsql:/var/lib/postgresql/data"
-            - "./vendor/laravel/sail/database/pgsql/create-testing-database.sql:/docker-entrypoint-initdb.d/10-create-testing-database.sql"
-        networks:
-            - sail
-        healthcheck:
-            test:
-                - CMD
-                - pg_isready
-                - "-q"
-                - "-d"
-                - "${DB_DATABASE}"
-                - "-U"
-                - "${DB_USERNAME}"
-            retries: 3
-            timeout: 5s
-    mailpit:
-        image: "axllent/mailpit:latest"
-        ports:
-            - "${FORWARD_MAILPIT_PORT:-1025}:1025"
-            - "${FORWARD_MAILPIT_DASHBOARD_PORT:-8025}:8025"
-        networks:
-            - sail
-networks:
-    sail:
-        driver: bridge
+  app:
+    image: myapp:latest
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      - APP_ENV=dev
+      - APP_DEBUG=true
+      - DB_CONNECTION=pgsql
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_DATABASE=app_dev
+      - DB_USERNAME=app_dev
+      - DB_PASSWORD=changethis123
+      - QUEUE_CONNECTION=redis
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: app_dev
+      POSTGRES_PASSWORD: changethis123
+      POSTGRES_DB: app_dev
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app_dev"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 5s
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6300:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      retries: 3
+      start_period: 30s
+      timeout: 5s
+
 volumes:
-    sail-pgsql:
-        driver: local
+  db_data:
