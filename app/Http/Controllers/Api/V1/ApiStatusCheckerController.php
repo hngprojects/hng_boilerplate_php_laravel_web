@@ -61,8 +61,8 @@ class ApiStatusCheckerController extends Controller
                 $responseArray[] = [
                     'api_group' => $item['name'],
                     'method' => $item['request']['method'],
-                    // 'execution_data' => $executionData,
                     'status' => $status,
+                    'response_time' => $response_time,
                     'last_checked' => $formattedDate,
                     'details' => $this->getDetails($execution)
                 ];
