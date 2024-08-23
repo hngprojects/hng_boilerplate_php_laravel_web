@@ -14,7 +14,7 @@ class ApiStatusCheckerController extends Controller
     public function status()
     {
         // Load and decode the JSON file
-        $data = file_get_contents(base_path('/result.json'));
+        $data = file_get_contents(base_path('../result.json'));
         // $data = file_get_contents('https://staging.api-php.boilerplate.hng.tech/storage/result.json');
 
         $data = json_decode($data, true);

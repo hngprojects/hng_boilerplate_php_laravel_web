@@ -72,7 +72,7 @@ Route::prefix('v1')->group(function () {
         return 'Language Learning AI Game Version 1';
     });
 
-    Route::get('/status', [ApiStatusCheckerController::class, 'status']);
+    Route::get('/api-status', [ApiStatusCheckerController::class, 'status']);
     Route::get('/path', [ApiStatusCheckerController::class, 'path']);
 
     Route::post('/auth/register', [AuthController::class, 'store']);
