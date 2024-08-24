@@ -138,7 +138,15 @@ class UserController extends Controller
             'first_name' => 'nullable|string|max:255',
             'last_name' => 'nullable|string|max:255',
             "email" => 'nullable|string|email|max:255|unique:users,email,' . $id,
-            "phone" => 'nullable|string'
+            "phone" => 'nullable|string',
+            'pronouns' => 'nullable|string|max:255',
+            'job_title' => 'nullable|string|max:255',
+            'department' => 'nullable|string|max:255',
+            'social' => 'nullable|string|max:255',
+            'bio' => 'nullable|string|max:500',
+            'phone_number' => 'nullable|string|max:20',
+            'avatar_url' => 'nullable|string|url',
+            'recovery_email' => 'nullable|string|email|max:255'
         ]);
 
         if ($validator->fails()) {
