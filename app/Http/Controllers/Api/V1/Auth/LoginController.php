@@ -38,6 +38,7 @@ class LoginController extends Controller
         }
 
         $user = Auth::user();
+        $user->is_active = 1;
         $user->last_login_at = now();
         $user->save();
 
@@ -74,6 +75,12 @@ class LoginController extends Controller
     public function logout()
     {
         try {
+            $user = auth()->user();
+
+            if ($user) {
+                $user->is_active = 0;
+                $user->save();
+            }
             JWTAuth::parseToken()->invalidate(true);
             return response()->json([
                 'status_code' => 200,

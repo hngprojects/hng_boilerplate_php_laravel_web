@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::table('products', function (Blueprint $table) {
             $table->decimal('price');
-            $table->string('slug')->unique();
-            $table->string('tags');
+            $table->decimal('cost_price')->nullable();
+            $table->enum('size', ['Small', 'Standard', 'Large'])->nullable();
             $table->string('imageUrl')->nullable();
-            $table->enum('status', ['active', 'draft'])->nullable();
+            $table->enum('status', ['in stock', 'out of stock'])->nullable();
             $table->integer('quantity')->default(5);
+            $table->string('category')->nullable();
         });
     }
 
@@ -28,11 +29,12 @@ return new class extends Migration
     {
         Schema::table('products', function (Blueprint $table) {
             $table->dropColumn('price');
-            $table->dropColumn('slug')->unique();
-            $table->dropColumn('tags');
+            $table->dropColumn('cost_price');
+            $table->dropColumn('size');
             $table->dropColumn('imageUrl');
             $table->dropColumn('status');
             $table->dropColumn('quantity');
+            $table->dropColumn('category');
         });
     }
 };

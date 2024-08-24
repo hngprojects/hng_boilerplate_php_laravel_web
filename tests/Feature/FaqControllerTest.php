@@ -22,7 +22,7 @@ class FaqControllerTest extends TestCase
         $this->token = JWTAuth::fromUser($this->superAdmin);
     }
 
-    public function test_super_admin_can_create_faq()
+    public function test_admin_can_create_faq()
     {
         $payload = [
             'question' => 'What is the return policy?',
@@ -36,7 +36,7 @@ class FaqControllerTest extends TestCase
         $response->assertStatus(201)
             ->assertJsonStructure([
                 'status_code',
-                'message',
+                'success',
                 'data' => [
                     'id',
                     'question',
@@ -112,7 +112,7 @@ class FaqControllerTest extends TestCase
             ]);
     }
 
-    public function test_super_admin_can_update_faq()
+    public function test_admin_can_update_faq()
     {
         $faq = Faq::factory()->create();
         $updatedData = [
@@ -160,7 +160,7 @@ class FaqControllerTest extends TestCase
         $this->assertDatabaseMissing('faqs', $updatedData);
     }
 
-    public function test_super_admin_can_delete_faq()
+    public function test_admin_can_delete_faq()
     {
         $faq = Faq::factory()->create();
 
