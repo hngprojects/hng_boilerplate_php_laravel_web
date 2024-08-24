@@ -68,12 +68,12 @@ class JobController extends Controller
             'title' => 'required|string',
             'description' => 'required|string',
             'location' => 'required|string',
-            'deadline' => 'required|date',
-            'salary_range' => 'required|string',
-            'job_type' => 'required|string',
-            'job_mode' => 'required|string',
-            'experience_level' => 'nullable|string',
-            'company_name' => 'nullable|string',
+            'deadline' => 'nullable|date',
+            'salary' => 'required|string',
+            'job_type' => 'nullable|string',
+            'job_mode' => 'nullable|string',
+            'level' => 'required|string',
+            'company' => 'required|string',
             'key_responsibilities' => 'nullable|string',
             'qualifications' => 'nullable|string',
         ]);
@@ -90,19 +90,27 @@ class JobController extends Controller
             $validator->validated(),
             [
                 'user_id' => auth()->id(),
-                'salary' => $request->input('salary_range'),
+                'salary' => $request->input('salary'),
                 'work_mode' => $request->input('job_mode'),
-                'benefits' => $request->input('company_name'),
+                'company' => $request->input('company'),
+                'experience_level' => $request->input('level'),
             ]
         ));
         $responseData = $job->toArray();
-        $responseData['company_name'] = $responseData['benefits'];
-        unset($responseData['benefits']);
         
         return response()->json([
             'success' => true,
             'message' => 'Job listing created successfully.',
-            'data' => $job
+            'data' => [
+                "id" => $job->id,
+                "title" => $job->title,
+                "description" => $job->description,
+                "location" => $job->location,
+                "salary" => $job->salary,
+                "level" => $job->experience_level,
+                "comapany" => $job->company,
+                "date-posted" => $job->created_at,
+            ]
         ], Response::HTTP_CREATED);
     }
 
