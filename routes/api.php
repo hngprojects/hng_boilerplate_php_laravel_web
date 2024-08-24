@@ -110,6 +110,8 @@ Route::prefix('v1')->group(function () {
     Route::get('/products/search', [ProductController::class, 'search']);
     Route::get('/products', [ProductController::class, 'index']);
     Route::get('/products/{product_id}', [ProductController::class, 'show']);
+    Route::delete('/products/{product_id}', [ProductController::class, 'delete']);
+
     Route::get('/billing-plans', [BillingPlanController::class, 'index']);
     Route::get('/billing-plans/{id}', [BillingPlanController::class, 'getBillingPlan']);
     Route::delete('/billing-plans/{id}', [BillingPlanController::class, 'destroy']);
