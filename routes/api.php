@@ -63,6 +63,7 @@ use App\Http\Controllers\Api\V1\Organisation\OrganisationMemberController;
 |
 */
 
+
 Route::any('/', function () {
     return 'Language Learning AI Game';
 });
@@ -72,7 +73,7 @@ Route::prefix('v1')->group(function () {
         return 'Language Learning AI Game Version 1';
     });
 
-    Route::get('/api-status', [ApiStatusCheckerController::class, 'status']);
+    Route::get('/api-status', [ApiStatusCheckerController::class, 'index']);
 
     Route::post('/auth/register', [AuthController::class, 'store']);
     Route::post('/auth/login', [LoginController::class, 'login']);
@@ -132,6 +133,8 @@ Route::prefix('v1')->group(function () {
         Route::patch('/organisations/{org_id}/products/{product_id}', [ProductController::class, 'update']);
         Route::delete('/organisations/{org_id}/products/{product_id}', [ProductController::class, 'destroy']);
     });
+
+
 
     //comment
     Route::middleware('auth:api')->group(function () {
@@ -212,6 +215,11 @@ Route::prefix('v1')->group(function () {
         Route::delete('/organisations/{org_id}/users/{user_id}', [OrganisationController::class, 'removeUser']);
         Route::get('/organisations/{organisation}/users', [organisationMemberController::class, 'index']);
 
+        //Role Organisations
+
+
+        Route::get('/organisation/{org_id}/roles/{role_id}', [OrganisationController::class, 'getRoleId']);
+
         // members
         Route::get('/members/{org_id}/search', [OrganisationMemberController::class, 'searchMembers']);
         Route::get('/members/{org_id}/export', [OrganisationMemberController::class, 'download']);
@@ -239,13 +247,14 @@ Route::prefix('v1')->group(function () {
         Route::put('/organisations/{org_id}/roles/{role_id}/disable', [RoleController::class, 'disableRole']);
         Route::get('/organisations/{org_id}/roles', [RoleController::class, 'index']);
         Route::get('/organisations/{org_id}/roles/{role_id}', [RoleController::class, 'show']);
+        Route::delete('/organisations/{org_id}/roles/{role_id}', [RoleController::class, 'destroy']);
 
         //Update Password
         Route::post('/password-update', [ProfileController::class, 'updatePassword']);
         //profile Update
         Route::patch('/profile', [ProfileController::class, 'update']);
-        Route::post('/profile/upload-image', [ProfileController::class, 'uploadImage']);
-        Route::get('/profile/{id}', [ProfileController::class, 'show']);
+        Route::post('/profile/picture', [ProfileController::class, 'uploadImage']);
+        Route::get('/profile', [ProfileController::class, 'show']);
 
 
 
