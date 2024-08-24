@@ -65,6 +65,7 @@ class EmailTemplateController extends Controller
             'limit' => $templates->perPage(),
         ], 200);
     }
+    
     public function update(Request $request, $id)
     {
         // Validate the request data
