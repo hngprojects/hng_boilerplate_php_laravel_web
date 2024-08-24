@@ -317,4 +317,35 @@ class HelpArticleController extends Controller
             ], 500);
         }
     }
+
+    public function show($articleId)
+    {
+        try {
+            $article = HelpArticle::findOrFail($articleId);
+            
+            $author = User::find($article->user_id);
+            $authorName = $author ? $author->name : null;
+    
+            $data = [
+                'id' => $article->article_id,
+                'title' => $article->title,
+                'content' => $article->content,
+                'author' => $authorName
+            ];
+    
+            return response()->json([
+                'status_code' => 200,
+                'message' => 'Request completed successfully',
+                'data' => $data
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status_code' => 404,
+                'message' => 'Help article not found',
+                'data' => null
+            ], 404);
+        }
+    }
+    
+    
 }
