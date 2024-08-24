@@ -239,6 +239,7 @@ Route::prefix('v1')->group(function () {
         Route::put('/organisations/{org_id}/roles/{role_id}/disable', [RoleController::class, 'disableRole']);
         Route::get('/organisations/{org_id}/roles', [RoleController::class, 'index']);
         Route::get('/organisations/{org_id}/roles/{role_id}', [RoleController::class, 'show']);
+        Route::delete('/organisations/{org_id}/roles/{role_id}', [RoleController::class, 'destroy']);
 
         //Update Password
         Route::post('/password-update', [ProfileController::class, 'updatePassword']);
