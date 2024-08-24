@@ -340,8 +340,6 @@ Route::prefix('v1')->group(function () {
     Route::get('/timezones', [TimezoneController::class, 'index']);
 
 
-    //    quest
-    Route::get('/quests/{id}/messages', [QuestController::class, 'getQuestMessages']);
 
     Route::post('/squeeze-user', [SqueezePageUserController::class, 'store']);
 
