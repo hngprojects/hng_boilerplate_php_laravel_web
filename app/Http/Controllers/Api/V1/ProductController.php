@@ -4,18 +4,11 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Models\OrganisationUser;
 use App\Http\Requests\UpdateProductRequest;
-use App\Models\User;
 use App\Models\Product;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateProductRequest;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 use App\Http\Resources\ProductResource;
-use App\Models\Order;
 
 
 class ProductController extends Controller
@@ -28,8 +21,8 @@ class ProductController extends Controller
         $query = Product::where('org_id', $orgId);
 
         // Apply filters based on query parameters
-        if ($request->has('name')) {
-            $query->where('name', 'like', '%' . $request->query('name') . '%');
+        if ($request->has('product_name')) {
+            $query->where('name', 'like', '%' . $request->query('product_name') . '%');
         }
 
         if ($request->has('category')) {
@@ -46,30 +39,31 @@ class ProductController extends Controller
 
         $products = $query->get();
 
+        // If no products are found, return a 404 response
+        if ($products->isEmpty()) {
+            return response()->json([
+                'type' => 'Not Found',
+                'title' => 'No products found',
+                'status' => 404,
+                'detail' => 'No products match the search criteria.',
+                'instance' => url()->current(),
+            ], 404);
+        }
+
         // Transform the products for the response
         $transformedProducts = $products->map(function ($product) {
             return [
                 'id' => $product->product_id,
-                'created_at' => $product->created_at,
-                'updated_at' => $product->updated_at,
                 'name' => $product->name,
                 'description' => $product->description,
-                'category' => $product->category,
-                'image' => $product->imageUrl ? url($product->imageUrl) : null,
                 'price' => $product->price,
-                'cost_price' => $product->cost_price,
-                'quantity' => $product->quantity,
-                'size' => $product->size,
-                'stock_status' => $product->quantity > 0 ? 'in stock' : 'out of stock',
-                'deletedAt' => $product->deletedAt,
+                'category' => $product->category,
+                'created_at' => $product->created_at->toIso8601String(),
+                'updated_at' => $product->updated_at->toIso8601String(),
             ];
         });
 
-        return response()->json([
-            'status_code' => 200,
-            'message' => 'Products retrieved successfully',
-            'data' => $transformedProducts
-        ]);
+        return response()->json($transformedProducts, 200);
     }
 
 
