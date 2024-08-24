@@ -164,6 +164,7 @@ Route::prefix('v1')->group(function () {
 
     // Help Articles
     Route::post('/help-center/topics', [HelpArticleController::class, 'store']);
+    Route::get('/v1/help-center/topics/{id}', [HelpArticleController::class, 'show']);
     Route::patch('/help-center/topics/{articleId}', [HelpArticleController::class, 'update']);
     Route::delete('/help-center/topics/{articleId}', [HelpArticleController::class, 'destroy']);
     Route::get('/help-center/topics', [HelpArticleController::class, 'getArticles']);
