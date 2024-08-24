@@ -8,8 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\QueryException;
-use Illuminate\Support\Facades\RateLimiter;
 use App\Models\User;
+use Illuminate\Support\Str;
 
 class HelpArticleController extends Controller
 {
@@ -21,13 +21,13 @@ class HelpArticleController extends Controller
         if (!Auth::check()) {
             return response()->json([
                 'status_code' => 401,
-                'success' => false,
-                'message' => 'Authentication failed'
+                'message' => 'Authentication failed',
+                'data' => null
             ], 401);
         }
 
+        // Validate the request data
         $validator = Validator::make($request->all(), [
-            'user_id' => 'required|uuid|exists:users,id',
             'title' => 'required|string|max:255',
             'content' => 'required|string',
         ]);
@@ -35,169 +35,147 @@ class HelpArticleController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status_code' => 422,
-                'success' => false,
                 'message' => 'Invalid input data.',
-                'errors' => $validator->errors()
+                'errors' => $validator->errors(),
+                'data' => null
             ], 422);
         }
 
         try {
+            // Create a new help article
             $article = HelpArticle::create([
-                'user_id' => $request->user_id,
+                'user_id' => Auth::id(),
                 'title' => $request->title,
                 'content' => $request->content,
             ]);
 
             return response()->json([
                 'status_code' => 201,
-                'success' => true,
                 'message' => 'Help article created successfully.',
-                'data' => $article
+                'data' => [
+                    'id' => $article->id,
+                    'title' => $article->title,
+                    'content' => $article->content,
+                    'author' => Auth::user()->name
+                ]
             ], 201);
         } catch (QueryException $e) {
-            if ($e->getCode() === '23505') { // Unique violation error code
+            if ($e->getCode() === '23505') {
                 return response()->json([
                     'status_code' => 409,
-                    'success' => false,
-                    'message' => 'An article with this title already exists.'
+                    'message' => 'An article with this title already exists.',
+                    'data' => null
                 ], 409);
             }
 
             return response()->json([
                 'status_code' => 500,
-                'success' => false,
                 'message' => 'Failed to create help article. Please try again later.',
-                'error' => $e->getMessage() // Include error message
+                'error' => $e->getMessage(),
+                'data' => null
             ], 500);
         } catch (\Exception $e) {
             return response()->json([
                 'status_code' => 500,
-                'success' => false,
                 'message' => 'Failed to create help article. Please try again later.',
-                'error' => $e->getMessage() // Include error message
+                'error' => $e->getMessage(),
+                'data' => null
             ], 500);
         }
     }
 
     public function update(Request $request, $articleId)
     {
-        // Ensure the user is authenticated
-        if (!Auth::check()) {
-            return response()->json([
-                'status_code' => 401,
-                'success' => false,
-                'message' => 'Authentication failed'
-            ], 401);
-        }
-
-        // Validate the input
-        $validator = Validator::make($request->all(), [
-            'title' => 'nullable|string|max:255',
-            'content' => 'nullable|string',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status_code' => 400,
-                'success' => false,
-                'message' => 'Invalid input data.',
-                'errors' => $validator->errors()
-            ], 400);
-        }
-
         try {
-            $article = HelpArticle::find($articleId);
-
-            if (!$article) {
+            $article = HelpArticle::findOrFail($articleId);
+    
+            $validator = Validator::make($request->all(), [
+                'title' => 'nullable|string|max:255',
+                'content' => 'nullable|string',
+            ]);
+    
+            if ($validator->fails()) {
                 return response()->json([
-                    'status_code' => 404,
+                    'status_code' => 400,
                     'success' => false,
-                    'message' => 'Help article not found.'
-                ], 404);
+                    'message' => 'Invalid input data.',
+                    'errors' => $validator->errors()
+                ], 400);
             }
-
-            // Check if the authenticated user is the author of the article
-            if (Auth::id() !== $article->user_id) {
-                return response()->json([
-                    'status_code' => 403,
-                    'success' => false,
-                    'message' => 'You do not have permission to update this article.'
-                ], 403);
-            }
-
+    
             $article->update($request->only(['title', 'content']));
-
+            $data = [
+                'id' => $article->article_id,
+                'title' => $article->title,
+                'content' => $article->content,
+                'author' =>$article->user_id 
+            ];
+    
             return response()->json([
                 'status_code' => 200,
-                'success' => true,
-                'message' => 'Help article updated successfully.',
-                'data' => $article
-            ]);
-        } catch (QueryException $e) {
-            return response()->json([
-                'status_code' => 500,
-                'success' => false,
-                'message' => 'Failed to update help article. Please try again later.',
-                'error' => $e->getMessage() // Include error message
-            ], 500);
+                'message' => 'Topic updated successfully',
+                'data' => $data
+            ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'status_code' => 500,
-                'success' => false,
-                'message' => 'Failed to update help article. Please try again later.',
-                'error' => $e->getMessage() // Include error message
-            ], 500);
+                'status_code' => 404,
+                'message' => 'Help article not found',
+                'data' => null
+            ], 404);
         }
     }
+    
+
+
     public function destroy($articleId)
     {
         // Ensure the user is authenticated
         if (!Auth::check()) {
             return response()->json([
                 'status_code' => 401,
-                'success' => false,
-                'message' => 'Authentication failed'
+                'message' => 'Authentication failed',
+                'data' => null
             ], 401);
         }
-
+    
         try {
             // Find the article by ID
             $article = HelpArticle::find($articleId);
-
+    
             if (!$article) {
                 return response()->json([
                     'status_code' => 404,
-                    'success' => false,
-                    'message' => 'Help article not found.'
+                    'message' => 'Help article not found.',
+                    'data' => null
                 ], 404);
             }
-
+    
             // Ensure only the authenticated user can delete the article
             if ($article->user_id !== Auth::id()) {
                 return response()->json([
                     'status_code' => 403,
-                    'success' => false,
-                    'message' => 'You do not have permission to access this resource.'
+                    'message' => 'You do not have permission to access this resource.',
+                    'data' => null
                 ], 403);
             }
-
+    
             // Delete the article
             $article->delete();
-
+    
             return response()->json([
                 'status_code' => 200,
-                'success' => true,
-                'message' => 'Help article deleted successfully.'
+                'message' => 'Topic deleted successfully',
+                'data' => null
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status_code' => 500,
-                'success' => false,
                 'message' => 'Failed to delete help article. Please try again later.',
-                'error' => $e->getMessage()
+                'data' => null
             ], 500);
         }
     }
+    
     public function getArticles(Request $request)
     {
         // Validate query parameters
@@ -312,4 +290,35 @@ class HelpArticleController extends Controller
             ], 500);
         }
     }
+
+    public function show($articleId)
+    {
+        try {
+            $article = HelpArticle::findOrFail($articleId);
+            
+            $author = User::find($article->user_id);
+            $authorName = $author ? $author->name : null;
+    
+            $data = [
+                'id' => $article->article_id,
+                'title' => $article->title,
+                'content' => $article->content,
+                'author' => $authorName
+            ];
+    
+            return response()->json([
+                'status_code' => 200,
+                'message' => 'Request completed successfully',
+                'data' => $data
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status_code' => 404,
+                'message' => 'Help article not found',
+                'data' => null
+            ], 404);
+        }
+    }
+    
+    
 }
