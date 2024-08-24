@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\RateLimiter;
 use App\Models\User;
+use Illuminate\Support\Str;
 
 class HelpArticleController extends Controller
 {
@@ -21,13 +22,13 @@ class HelpArticleController extends Controller
         if (!Auth::check()) {
             return response()->json([
                 'status_code' => 401,
-                'success' => false,
-                'message' => 'Authentication failed'
+                'message' => 'Authentication failed',
+                'data' => null
             ], 401);
         }
 
+        // Validate the request data
         $validator = Validator::make($request->all(), [
-            'user_id' => 'required|uuid|exists:users,id',
             'title' => 'required|string|max:255',
             'content' => 'required|string',
         ]);
@@ -35,49 +36,56 @@ class HelpArticleController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status_code' => 422,
-                'success' => false,
                 'message' => 'Invalid input data.',
-                'errors' => $validator->errors()
+                'errors' => $validator->errors(),
+                'data' => null
             ], 422);
         }
 
         try {
+            // Create a new help article
             $article = HelpArticle::create([
-                'user_id' => $request->user_id,
+                'id' => (string) Str::uuid(), 
+                'user_id' => Auth::id(), 
                 'title' => $request->title,
                 'content' => $request->content,
             ]);
 
             return response()->json([
                 'status_code' => 201,
-                'success' => true,
                 'message' => 'Help article created successfully.',
-                'data' => $article
+                'data' => [
+                    'id' => $article->id,
+                    'title' => $article->title,
+                    'content' => $article->content,
+                    'author' => Auth::user()->name 
+                ]
             ], 201);
         } catch (QueryException $e) {
-            if ($e->getCode() === '23505') { // Unique violation error code
+            if ($e->getCode() === '23505') { 
                 return response()->json([
                     'status_code' => 409,
-                    'success' => false,
-                    'message' => 'An article with this title already exists.'
+                    'message' => 'An article with this title already exists.',
+                    'data' => null
                 ], 409);
             }
 
             return response()->json([
                 'status_code' => 500,
-                'success' => false,
                 'message' => 'Failed to create help article. Please try again later.',
-                'error' => $e->getMessage() // Include error message
+                'error' => $e->getMessage(),
+                'data' => null
             ], 500);
         } catch (\Exception $e) {
             return response()->json([
                 'status_code' => 500,
-                'success' => false,
                 'message' => 'Failed to create help article. Please try again later.',
-                'error' => $e->getMessage() // Include error message
+                'error' => $e->getMessage(),
+                'data' => null
             ], 500);
         }
     }
+
 
     public function update(Request $request, $articleId)
     {
