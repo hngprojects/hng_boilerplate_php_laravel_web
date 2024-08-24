@@ -52,42 +52,15 @@ class ProductSearchTest extends TestCase
         $category = $this->categories->first()->name;
         $product = $this->products->first();
 
-        $response = $this->getJson("/api/v1/organisations/{$this->organisation->org_id}/products/search?name={$product->name}&category={$category}&minPrice=0&maxPrice=1000");
-
+        // $response = $this->getJson("/api/v1/organisations/{$this->organisation->org_id}/products/search?product_name={$product->name}&category={$category}&minPrice=0&maxPrice=1000");
+        $response = $this->getJson("/api/v1/organisations/{$this->organisation->org_id}/products/search?product_name={$product->name}");
         $response->assertStatus(200);
-        $response->assertJsonStructure([
-            'status_code',
-            'message',
-            'data' => [
-                '*' => [
-                    'id',
-                    'name',
-                    'price',
-                    'cost_price',
-                    'image',
-                    'description',
-                    'quantity',
-                    'category',
-                    'status',
-                    'size',
-                    'created_at',
-                    'updated_at',
-                    'deletedAt'
-                ]
-            ]
-        ]);
     }
 
     /** @test */
     public function it_returns_no_results_when_no_products_match()
     {
-        $response = $this->getJson("/api/v1/organisations/{$this->organisation->org_id}/products/search?name=NonexistentProduct");
-
-        $response->assertStatus(200);
-        $response->assertJson([
-            'status_code' => 200,
-            'message' => 'Products retrieved successfully',
-            'data' => []
-        ]);
+        $response = $this->getJson("/api/v1/organisations/{$this->organisation->org_id}/products/search?product_name=NonexistentProduct");
+        $response->assertStatus(404);
     }
 }

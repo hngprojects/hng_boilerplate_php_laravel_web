@@ -166,6 +166,7 @@ Route::prefix('v1')->group(function () {
 
     // Help Articles
     Route::post('/help-center/topics', [HelpArticleController::class, 'store']);
+    Route::get('/help-center/topics/{articleId}', [HelpArticleController::class, 'show']);
     Route::patch('/help-center/topics/{articleId}', [HelpArticleController::class, 'update']);
     Route::delete('/help-center/topics/{articleId}', [HelpArticleController::class, 'destroy']);
     Route::get('/help-center/topics', [HelpArticleController::class, 'getArticles']);
@@ -268,8 +269,8 @@ Route::prefix('v1')->group(function () {
 
 
 
-        Route::get('/notification-settings', [NotificationSettingController::class, 'show']);
-        Route::patch('/notification-settings', [NotificationSettingController::class, 'update']);
+        Route::get('/settings/notification-settings', [NotificationSettingController::class, 'show']);
+        Route::patch('/settings/notification-settings', [NotificationSettingController::class, 'update']);
     });
     Route::get('/notification-settings', [NotificationSettingController::class, 'show']);
 

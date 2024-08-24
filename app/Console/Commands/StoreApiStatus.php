@@ -63,7 +63,7 @@ class StoreApiStatus extends Command
                 $data = [
                     'api_group' => $item['name'],
                     'method' => $item['request']['method'],
-                    'status' => $status,
+                    'status' => $this->determineStatus($execution),
                     'response_time' => $response_time,
                     'last_checked' => $last_checked,
                     'details' => $this->getDetails($execution)
@@ -92,10 +92,24 @@ class StoreApiStatus extends Command
 
         if ($response_code >= 500 || $response_code === null) {
             return 'API not responding (HTTP ' . ($response_code ?? 'Unknown') . ')';
-        } elseif ($response_time > 400) {
+        } elseif ($response_time > 600) {
             return 'High response time detected';
         } else {
             return 'All tests passed';
+        }
+    }
+
+    private function determineStatus($execution)
+    {
+        $responseCode = $execution['response']['code'] ?? null;
+        $responseTime = $execution['response']['responseTime'] ?? null;
+
+        if ($responseCode >= 500 || $responseCode === null) {
+            return 'Down';
+        } elseif ($responseTime > 600) {
+            return 'Degraded';
+        } else {
+            return 'Operational';
         }
     }
 }
