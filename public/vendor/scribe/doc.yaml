@@ -24,7 +24,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RegisterInput'
+              $ref: "#/components/schemas/RegisterInput"
             example:
               name: johnnyDoe
               first_name: John
@@ -33,20 +33,20 @@ paths:
               password: securepassword123
         required: true
       responses:
-        '201':
+        "201":
           description: User registered successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthResponse'
+                $ref: "#/components/schemas/AuthResponse"
               example:
                 token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
                 user:
                   id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                   name: johnnyDoe
                   email: john@example.com
-                  updated_at: '2024-07-30T16:59:41.000000Z'
-                  created_at: '2024-07-30T16:59:41.000000Z'
+                  updated_at: "2024-07-30T16:59:41.000000Z"
+                  created_at: "2024-07-30T16:59:41.000000Z"
   /api/v1/auth/login:
     post:
       tags:
@@ -56,18 +56,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LoginInput'
+              $ref: "#/components/schemas/LoginInput"
             example:
               email: john@example.com
               password: securepassword123
         required: true
       responses:
-        '200':
+        "200":
           description: Login successful
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthResponse'
+                $ref: "#/components/schemas/AuthResponse"
               example:
                 token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
                 user:
@@ -79,29 +79,29 @@ paths:
                   signup_type: Token
                   is_active: 1
                   is_verified: 0
-                  created_at: '2024-07-30T16:59:41.000000Z'
-                  updated_at: '2024-07-30T16:59:41.000000Z'
+                  created_at: "2024-07-30T16:59:41.000000Z"
+                  updated_at: "2024-07-30T16:59:41.000000Z"
   /api/v1/auth/logout:
     post:
       tags:
         - Authentication
       summary: User logout
       responses:
-        '200':
+        "200":
           description: Logout successful
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SuccessResponse'
+                $ref: "#/components/schemas/SuccessResponse"
               example:
                 message: Logout successful
                 status: 200
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
               example:
                 message: Unauthorized
                 status: 401
@@ -116,17 +116,17 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PasswordResetEmailInput'
+              $ref: "#/components/schemas/PasswordResetEmailInput"
             example:
               email: john@example.com
         required: true
       responses:
-        '200':
+        "200":
           description: Password reset email sent
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SuccessResponse'
+                $ref: "#/components/schemas/SuccessResponse"
               example:
                 message: Password reset email sent successfully
   /api/v1/auth/request-password-request/{token}:
@@ -146,18 +146,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ResetPasswordInput'
+              $ref: "#/components/schemas/ResetPasswordInput"
             example:
               password: newpassword123
               password_confirmation: newpassword123
         required: true
       responses:
-        '200':
+        "200":
           description: Password reset successful
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SuccessResponse'
+                $ref: "#/components/schemas/SuccessResponse"
               example:
                 message: Password reset successfully
   /api/v1/roles:
@@ -169,17 +169,17 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RoleInput'
+              $ref: "#/components/schemas/RoleInput"
             example:
               name: admin
         required: true
       responses:
-        '201':
+        "201":
           description: Role created successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Role'
+                $ref: "#/components/schemas/Role"
               example:
                 id: 1
                 name: admin
@@ -189,7 +189,7 @@ paths:
         - Authentication
       summary: Redirect to Google for authentication
       responses:
-        '302':
+        "302":
           description: Redirect to Google
   /api/v1/auth/google/callback:
     get:
@@ -197,12 +197,12 @@ paths:
         - Authentication
       summary: Handle Google authentication callback
       responses:
-        '200':
+        "200":
           description: Authentication successful
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthResponse'
+                $ref: "#/components/schemas/AuthResponse"
               example:
                 token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
                 user:
@@ -216,14 +216,14 @@ paths:
         - Users
       summary: Get all users
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/User'
+                  $ref: "#/components/schemas/User"
               example:
                 - id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                   name: Ludie Rogahn,
@@ -236,7 +236,7 @@ paths:
                   signup_type: user,
                   social_id: null,
                   created_at: 2024-07-31T14:30:48.000000Z,
-                  updated_at: '2024-07-31T14:30:48.000000Z'
+                  updated_at: "2024-07-31T14:30:48.000000Z"
                 - id: 9ca79813-632e-4ac7-9db7-2d1ad9587c65,
                   name: Lisandro Becker,
                   email: ybraun@example.net,
@@ -248,7 +248,7 @@ paths:
                   signup_type: user,
                   social_id": null,
                   created_at: 2024-07-31T14:30:48.000000Z,
-                  updated_at: '2024-07-31T14:30:48.000000Z'
+                  updated_at: "2024-07-31T14:30:48.000000Z"
       security:
         - bearerAuth: []
     post:
@@ -259,7 +259,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RegisterInput'
+              $ref: "#/components/schemas/RegisterInput"
             example:
               first_name: Alice
               last_name: Johnson
@@ -267,12 +267,12 @@ paths:
               password: securepassword123
         required: true
       responses:
-        '201':
+        "201":
           description: User created successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: "#/components/schemas/User"
               example:
                 id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                 first_name: Alice
@@ -288,18 +288,18 @@ paths:
       description: It shows the total revenue per month.
       operationId: analytics
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_4'
+                $ref: "#/components/schemas/inline_response_200_4"
             application/xml:
               schema:
-                $ref: '#/components/schemas/inline_response_200_4'
-        '400':
+                $ref: "#/components/schemas/inline_response_200_4"
+        "400":
           description: Error fetching analytics
-        '500':
+        "500":
           description: Internal server error
       security:
         - bearerAuth: []
@@ -311,11 +311,11 @@ paths:
       description: It retrieves the 6 recent sales
       operationId: sales
       responses:
-        '200':
+        "200":
           description: Successful operation
-        '400':
+        "400":
           description: Error fetching analytics
-        '500':
+        "500":
           description: Internal server error
       security:
         - bearerAuth: []
@@ -326,27 +326,27 @@ paths:
       summary: Get dashboard statistics
       description: Retrieve the statistics for the dashboard, including total revenue, subscriptions, and sales.
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_5'
+                $ref: "#/components/schemas/inline_response_200_5"
             application/xml:
               schema:
-                $ref: '#/components/schemas/inline_response_200_5'
-        '400':
+                $ref: "#/components/schemas/inline_response_200_5"
+        "400":
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_400'
-        '500':
+                $ref: "#/components/schemas/inline_response_400"
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_500_3'
+                $ref: "#/components/schemas/inline_response_500_3"
       security:
         - bearerAuth: []
   /api/v1/export/{format}:
@@ -378,7 +378,7 @@ paths:
           schema:
             type: string
             format: date
-            example: '2023-01-01'
+            example: "2023-01-01"
         - name: end_date
           in: query
           description: The end date for the data export (YYYY-MM-DD).
@@ -388,29 +388,29 @@ paths:
           schema:
             type: string
             format: date
-            example: '2023-12-31'
+            example: "2023-12-31"
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_6'
+                $ref: "#/components/schemas/inline_response_200_6"
             application/xml:
               schema:
-                $ref: '#/components/schemas/inline_response_200_6'
-        '400':
+                $ref: "#/components/schemas/inline_response_200_6"
+        "400":
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_400_1'
-        '500':
+                $ref: "#/components/schemas/inline_response_400_1"
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_500_3'
+                $ref: "#/components/schemas/inline_response_500_3"
       security:
         - bearerAuth: []
   /api/v1/products:
@@ -420,26 +420,26 @@ paths:
       summary: Get all products
       description: Retrieve a list of all products with selected fields.
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/inline_response_200_7'
-        '400':
+                  $ref: "#/components/schemas/inline_response_200_7"
+        "400":
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_400_2'
-        '500':
+                $ref: "#/components/schemas/inline_response_400_2"
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_500_3'
+                $ref: "#/components/schemas/inline_response_500_3"
       security:
         - bearerAuth: []
   /api/v1/products/create:
@@ -453,33 +453,33 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/products_create_body'
+              $ref: "#/components/schemas/products_create_body"
         required: true
       responses:
-        '201':
+        "201":
           description: Product created successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_201_2'
-        '400':
+                $ref: "#/components/schemas/inline_response_201_2"
+        "400":
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_400_3'
-        '422':
+                $ref: "#/components/schemas/inline_response_400_3"
+        "422":
           description: Validation Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_422_3'
-        '500':
+                $ref: "#/components/schemas/inline_response_422_3"
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_500_3'
+                $ref: "#/components/schemas/inline_response_500_3"
       security:
         - bearerAuth: []
   /api/v1/products/{id}:
@@ -502,39 +502,39 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/products_id_body'
+              $ref: "#/components/schemas/products_id_body"
         required: true
       responses:
-        '200':
+        "200":
           description: Product updated successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_8'
-        '400':
+                $ref: "#/components/schemas/inline_response_200_8"
+        "400":
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_400_3'
-        '404':
+                $ref: "#/components/schemas/inline_response_400_3"
+        "404":
           description: Product not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_404_1'
-        '422':
+                $ref: "#/components/schemas/inline_response_404_1"
+        "422":
           description: Validation Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_422_3'
-        '500':
+                $ref: "#/components/schemas/inline_response_422_3"
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_500_3'
+                $ref: "#/components/schemas/inline_response_500_3"
       security:
         - bearerAuth: []
   /api/v1/products/{id}/delete:
@@ -553,26 +553,26 @@ paths:
           schema:
             type: string
       responses:
-        '204':
+        "204":
           description: No Content
-        '400':
+        "400":
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_400_4'
-        '404':
+                $ref: "#/components/schemas/inline_response_400_4"
+        "404":
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_404_1'
-        '500':
+                $ref: "#/components/schemas/inline_response_404_1"
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_500_3'
+                $ref: "#/components/schemas/inline_response_500_3"
       security:
         - bearerAuth: []
   /api/v1/profile:
@@ -584,28 +584,28 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/v1_profile_body'
+              $ref: "#/components/schemas/v1_profile_body"
         required: true
       responses:
-        '200':
+        "200":
           description: Profile updated successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_9'
-        '400':
+                $ref: "#/components/schemas/inline_response_200_9"
+        "400":
           description: Validation errors
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_400_5'
-        '404':
+                $ref: "#/components/schemas/inline_response_400_5"
+        "404":
           description: Profile not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_404_2'
-  /api/v1/profile/upload-image:
+                $ref: "#/components/schemas/inline_response_404_2"
+  /api/v1/profile/picture:
     post:
       tags:
         - Profile
@@ -614,47 +614,47 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/profile_uploadimage_body'
+              $ref: "#/components/schemas/profile_uploadimage_body"
         required: true
       responses:
-        '200':
+        "200":
           description: Image uploaded and profile updated successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_10'
-        '400':
+                $ref: "#/components/schemas/inline_response_200_10"
+        "400":
           description: Validation errors
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_400_5'
-        '404':
+                $ref: "#/components/schemas/inline_response_400_5"
+        "404":
           description: Profile not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_404_2'
-        '500':
+                $ref: "#/components/schemas/inline_response_404_2"
+        "500":
           description: Failed to upload image
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_404_2'
+                $ref: "#/components/schemas/inline_response_404_2"
   /api/v1/products/categories:
     get:
       tags:
         - Products
       summary: Get all product categories
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Category'
+                  $ref: "#/components/schemas/Category"
               example:
                 - id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                   name: Electronics
@@ -674,14 +674,14 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Topic'
+                  $ref: "#/components/schemas/Topic"
               example:
                 - id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                   title: Introduction to AI
@@ -692,14 +692,14 @@ paths:
         - Help Center
       summary: Get all help center topics
       responses:
-        '200':
+        "200":
           description: A list of help center topics
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/inline_response_200_11'
+                  $ref: "#/components/schemas/inline_response_200_11"
     post:
       tags:
         - Help Center
@@ -709,15 +709,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/helpcenter_topics_body'
+              $ref: "#/components/schemas/helpcenter_topics_body"
         required: true
       responses:
-        '201':
+        "201":
           description: Help article created successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_201_3'
+                $ref: "#/components/schemas/inline_response_201_3"
       security:
         - bearerAuth: []
   /api/v1/help-center/topics/search:
@@ -735,14 +735,14 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: A list of help center topics matching the search query
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/inline_response_200_11'
+                  $ref: "#/components/schemas/inline_response_200_11"
   /api/v1/help-center/topics/{articleId}:
     delete:
       tags:
@@ -759,12 +759,12 @@ paths:
             type: string
             format: uuid
       responses:
-        '200':
+        "200":
           description: Help article deleted successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_12'
+                $ref: "#/components/schemas/inline_response_200_12"
       security:
         - bearerAuth: []
     patch:
@@ -786,15 +786,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/topics_articleId_body'
+              $ref: "#/components/schemas/topics_articleId_body"
         required: true
       responses:
-        '200':
+        "200":
           description: Help article updated successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_13'
+                $ref: "#/components/schemas/inline_response_200_13"
       security:
         - bearerAuth: []
   /api/v1/contact:
@@ -806,19 +806,19 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ContactInput'
+              $ref: "#/components/schemas/ContactInput"
             example:
               name: John Doe
               email: john@example.com
               message: I have a question about your services.
         required: true
       responses:
-        '200':
+        "200":
           description: Inquiry sent successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SuccessResponse'
+                $ref: "#/components/schemas/SuccessResponse"
               example:
                 message: Your inquiry has been sent successfully
   /api/v1/blogs/latest:
@@ -847,18 +847,18 @@ paths:
             type: integer
             example: 10
       responses:
-        '200':
+        "200":
           description: A list of the latest blog posts
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200'
-        '500':
+                $ref: "#/components/schemas/inline_response_200"
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_500'
+                $ref: "#/components/schemas/inline_response_500"
   /api/v1/blogs/{id}:
     get:
       tags:
@@ -876,18 +876,18 @@ paths:
             type: string
             format: uuid
       responses:
-        '200':
+        "200":
           description: Blog post details
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_1'
-        '500':
+                $ref: "#/components/schemas/inline_response_200_1"
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_500_1'
+                $ref: "#/components/schemas/inline_response_500_1"
     delete:
       tags:
         - Blogs
@@ -904,20 +904,20 @@ paths:
             type: string
             format: uuid
       responses:
-        '204':
+        "204":
           description: Blog post deleted successfully
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_401'
-        '404':
+                $ref: "#/components/schemas/inline_response_401"
+        "404":
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_404'
+                $ref: "#/components/schemas/inline_response_404"
       security:
         - bearerAuth: []
   /api/v1/blogs:
@@ -930,27 +930,27 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/blogs_body'
+              $ref: "#/components/schemas/blogs_body"
         required: true
       responses:
-        '201':
+        "201":
           description: Blog post created successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_201'
-        '401':
+                $ref: "#/components/schemas/inline_response_201"
+        "401":
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_401'
-        '422':
+                $ref: "#/components/schemas/inline_response_401"
+        "422":
           description: Unprocessable Entity
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_422'
+                $ref: "#/components/schemas/inline_response_422"
       security:
         - bearerAuth:
             - JWT
@@ -1024,24 +1024,24 @@ paths:
             type: integer
             example: 20
       responses:
-        '200':
+        "200":
           description: List of blogs matching the search criteria
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_3'
-        '422':
+                $ref: "#/components/schemas/inline_response_200_3"
+        "422":
           description: Validation error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_422_2'
-        '500':
+                $ref: "#/components/schemas/inline_response_422_2"
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_500_2'
+                $ref: "#/components/schemas/inline_response_500_2"
   /api/v1/squeeze:
     post:
       tags:
@@ -1051,18 +1051,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SqueezeInput'
+              $ref: "#/components/schemas/SqueezeInput"
             example:
               email: john@example.com
               name: John Doe
         required: true
       responses:
-        '201':
+        "201":
           description: Squeeze page created successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SuccessResponse'
+                $ref: "#/components/schemas/SuccessResponse"
               example:
                 message: Squeeze page created successfully
   /api/v1/invitations/generate:
@@ -1074,18 +1074,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/InvitationInput'
+              $ref: "#/components/schemas/InvitationInput"
             example:
               email: newuser@example.com
               role: member
         required: true
       responses:
-        '201':
+        "201":
           description: Invitation generated successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InvitationResponse'
+                $ref: "#/components/schemas/InvitationResponse"
               example:
                 message: Invitation sent successfully
                 invitation_token: abc123xyz789
@@ -1105,7 +1105,7 @@ paths:
           schema:
             type: string
       responses:
-        '302':
+        "302":
           description: Redirect to invitation acceptance page
   /api/v1/invite:
     post:
@@ -1116,7 +1116,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/InvitationAcceptInput'
+              $ref: "#/components/schemas/InvitationAcceptInput"
             example:
               token: abc123xyz789
               first_name: Jane
@@ -1124,12 +1124,12 @@ paths:
               password: securepassword123
         required: true
       responses:
-        '200':
+        "200":
           description: Invitation accepted successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthResponse'
+                $ref: "#/components/schemas/AuthResponse"
               example:
                 token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
                 user:
@@ -1143,14 +1143,14 @@ paths:
         - Features
       summary: Get all features
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Feature'
+                  $ref: "#/components/schemas/Feature"
               example:
                 - id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                   name: Advanced Analytics
@@ -1168,18 +1168,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/FeatureInput'
+              $ref: "#/components/schemas/FeatureInput"
             example:
               name: Custom Branding
               description: Ability to add custom branding to the platform
         required: true
       responses:
-        '201':
+        "201":
           description: Feature created successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Feature'
+                $ref: "#/components/schemas/Feature"
               example:
                 id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                 name: Custom Branding
@@ -1200,12 +1200,12 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Feature'
+                $ref: "#/components/schemas/Feature"
               example:
                 id: 1
                 name: Advanced Analytics
@@ -1228,18 +1228,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/FeatureInput'
+              $ref: "#/components/schemas/FeatureInput"
             example:
               name: Enhanced Analytics
               description: Access to enhanced and real-time analytics tools
         required: true
       responses:
-        '200':
+        "200":
           description: Feature updated successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Feature'
+                $ref: "#/components/schemas/Feature"
               example:
                 id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                 name: Enhanced Analytics
@@ -1259,12 +1259,12 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
+        "200":
           description: Feature deleted successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SuccessResponse'
+                $ref: "#/components/schemas/SuccessResponse"
               example:
                 message: Feature deleted successfully
       security:
@@ -1275,14 +1275,14 @@ paths:
         - Plans
       summary: Get all subscription plans
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Plan'
+                  $ref: "#/components/schemas/Plan"
               example:
                 - id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                   name: Basic
@@ -1308,7 +1308,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PlanInput'
+              $ref: "#/components/schemas/PlanInput"
             example:
               name: Enterprise
               price: 49.99
@@ -1318,12 +1318,12 @@ paths:
                 - 3
         required: true
       responses:
-        '201':
+        "201":
           description: Plan created successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Plan'
+                $ref: "#/components/schemas/Plan"
               example:
                 id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                 name: Enterprise
@@ -1351,12 +1351,12 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Plan'
+                $ref: "#/components/schemas/Plan"
               example:
                 id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                 name: Basic
@@ -1382,7 +1382,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PlanInput'
+              $ref: "#/components/schemas/PlanInput"
             example:
               name: Basic Plus
               price: 14.99
@@ -1391,12 +1391,12 @@ paths:
                 - 2
         required: true
       responses:
-        '200':
+        "200":
           description: Plan updated successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Plan'
+                $ref: "#/components/schemas/Plan"
               example:
                 id: 1
                 name: Basic Plus
@@ -1421,12 +1421,12 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
+        "200":
           description: Plan deleted successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SuccessResponse'
+                $ref: "#/components/schemas/SuccessResponse"
               example:
                 message: Subscription plan deleted successfully
       security:
@@ -1445,12 +1445,12 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
+        "200":
           description: Subscription cancelled successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SuccessResponse'
+                $ref: "#/components/schemas/SuccessResponse"
               example:
                 message: Subscription cancelled successfully
       security:
@@ -1461,14 +1461,14 @@ paths:
         - Organisations
       summary: Get all organisations
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Organisation'
+                  $ref: "#/components/schemas/Organisation"
               example:
                 - id: 1
                   name: Acme Corp
@@ -1498,7 +1498,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/OrganisationInput'
+              $ref: "#/components/schemas/OrganisationInput"
             example:
               name: Acme Corp
               email: hello@acme.com,
@@ -1510,12 +1510,12 @@ paths:
               description: Leading innovation company
         required: true
       responses:
-        '201':
+        "201":
           description: Organisation created successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Organisation'
+                $ref: "#/components/schemas/Organisation"
               example:
                 id: 1
                 name: Acme Corp
@@ -1545,18 +1545,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/OrganisationInput'
+              $ref: "#/components/schemas/OrganisationInput"
             example:
               name: Acme Corporation
               description: Global leader in innovation
         required: true
       responses:
-        '200':
+        "200":
           description: Organisation updated successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Organisation'
+                $ref: "#/components/schemas/Organisation"
               example:
                 id: 1
                 name: Acme Corporation
@@ -1576,12 +1576,12 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
+        "200":
           description: Organisation deleted successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SuccessResponse'
+                $ref: "#/components/schemas/SuccessResponse"
               example:
                 message: Organisation deleted successfully
       security:
@@ -1607,12 +1607,12 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
+        "200":
           description: User removed from organisation successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SuccessResponse'
+                $ref: "#/components/schemas/SuccessResponse"
               example:
                 message: User removed from organisation successfully
       security:
@@ -1631,14 +1631,14 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/User'
+                  $ref: "#/components/schemas/User"
               example:
                 - id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                   first_name: John
@@ -1684,24 +1684,24 @@ paths:
             type: integer
             default: 10
       responses:
-        '200':
+        "200":
           description: Users retrieved successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_14'
-        '400':
+                $ref: "#/components/schemas/inline_response_200_14"
+        "400":
           description: Invalid organisation ID
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_400_6'
-        '404':
+                $ref: "#/components/schemas/inline_response_400_6"
+        "404":
           description: organisation does not exist
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_404_3'
+                $ref: "#/components/schemas/inline_response_404_3"
   /api/v1/testimonials:
     post:
       tags:
@@ -1711,18 +1711,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TestimonialInput'
+              $ref: "#/components/schemas/TestimonialInput"
             example:
               content: This product has revolutionized our workflow!
               rating: 5
         required: true
       responses:
-        '201':
+        "201":
           description: Testimonial created successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Testimonial'
+                $ref: "#/components/schemas/Testimonial"
               example:
                 id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                 user_id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
@@ -1744,12 +1744,12 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Testimonial'
+                $ref: "#/components/schemas/Testimonial"
               example:
                 id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                 user_id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
@@ -1770,12 +1770,12 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
+        "200":
           description: Testimonial deleted successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SuccessResponse'
+                $ref: "#/components/schemas/SuccessResponse"
               example:
                 message: Testimonial deleted successfully
       security:
@@ -1786,14 +1786,14 @@ paths:
         - Jobs
       summary: Get all jobs
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Job'
+                  $ref: "#/components/schemas/Job"
               example:
                 - id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                   title: Software Engineer
@@ -1815,7 +1815,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/JobInput'
+              $ref: "#/components/schemas/JobInput"
             example:
               title: Software Engineer
               description: We're looking for a talented software engineer to join our team.
@@ -1830,12 +1830,12 @@ paths:
               salary: 100000
         required: true
       responses:
-        '201':
+        "201":
           description: Job created successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Job'
+                $ref: "#/components/schemas/Job"
               example:
                 id: 1fbgvjfbvjcnjvjdnvdnkkdnvk
                 title: Software Engineer
@@ -1865,12 +1865,12 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Job'
+                $ref: "#/components/schemas/Job"
               example:
                 id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                 title: Senior Software Engineer
@@ -1895,7 +1895,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/JobInput'
+              $ref: "#/components/schemas/JobInput"
             example:
               title: Senior Software Engineer
               description: We're looking for a senior software engineer to lead our development team.
@@ -1903,12 +1903,12 @@ paths:
               salary: 130000
         required: true
       responses:
-        '200':
+        "200":
           description: Job updated successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Job'
+                $ref: "#/components/schemas/Job"
               example:
                 id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                 title: Senior Software Engineer
@@ -1930,12 +1930,12 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
+        "200":
           description: Job deleted successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SuccessResponse'
+                $ref: "#/components/schemas/SuccessResponse"
               example:
                 message: Job deleted successfully
       security:
@@ -1954,14 +1954,14 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Job'
+                  $ref: "#/components/schemas/Job"
               example:
                 - id: 1
                   title: Senior Software Engineer
@@ -1987,7 +1987,7 @@ paths:
               - csv
               - json
       responses:
-        '200':
+        "200":
           description: User data exported successfully
           content:
             application/octet-stream:
@@ -2002,12 +2002,12 @@ paths:
         - Accounts
       summary: Deactivate user account
       responses:
-        '200':
+        "200":
           description: Account deactivated successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SuccessResponse'
+                $ref: "#/components/schemas/SuccessResponse"
               example:
                 message: Account deactivated successfully
       security:
@@ -2036,17 +2036,17 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RoleInput'
+              $ref: "#/components/schemas/RoleInput"
             example:
               name: Senior Manager
         required: true
       responses:
-        '200':
+        "200":
           description: Role updated successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Role'
+                $ref: "#/components/schemas/Role"
               example:
                 id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                 name: Senior Manager
@@ -2073,12 +2073,12 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
+        "200":
           description: Role disabled successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SuccessResponse'
+                $ref: "#/components/schemas/SuccessResponse"
               example:
                 message: Role disabled successfully
       security:
@@ -2089,14 +2089,14 @@ paths:
         - Customers
       summary: Get all customers
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Customer'
+                  $ref: "#/components/schemas/Customer"
               example:
                 - id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                   name: John Doe
@@ -2128,27 +2128,27 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/blogs_id_body'
+              $ref: "#/components/schemas/blogs_id_body"
         required: true
       responses:
-        '200':
+        "200":
           description: Blog post updated successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_2'
-        '401':
+                $ref: "#/components/schemas/inline_response_200_2"
+        "401":
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_401'
-        '422':
+                $ref: "#/components/schemas/inline_response_401"
+        "422":
           description: Unprocessable Entity
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_422'
+                $ref: "#/components/schemas/inline_response_422"
       security:
         - bearerAuth: []
   /api/v1/user/preferences:
@@ -2157,14 +2157,14 @@ paths:
         - User Preferences
       summary: Get user preferences
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Preference'
+                  $ref: "#/components/schemas/Preference"
               example:
                 - id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                   user_id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
@@ -2184,18 +2184,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PreferenceInput'
+              $ref: "#/components/schemas/PreferenceInput"
             example:
               key: theme
               value: dark
         required: true
       responses:
-        '201':
+        "201":
           description: User preference created successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Preference'
+                $ref: "#/components/schemas/Preference"
               example:
                 id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                 user_id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
@@ -2220,18 +2220,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PreferenceInput'
+              $ref: "#/components/schemas/PreferenceInput"
             example:
               key: theme
               value: light
         required: true
       responses:
-        '200':
+        "200":
           description: User preference updated successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Preference'
+                $ref: "#/components/schemas/Preference"
               example:
                 id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
                 user_id: 31491b6a-a2f1-47d4-804c-0a705bbb73a8
@@ -2252,12 +2252,12 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
+        "200":
           description: User preference deleted successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SuccessResponse'
+                $ref: "#/components/schemas/SuccessResponse"
               example:
                 message: User preference deleted successfully
       security:
@@ -2291,18 +2291,18 @@ paths:
             type: integer
             default: 10
       responses:
-        '200':
+        "200":
           description: A list of email templates
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_15'
-        '403':
+                $ref: "#/components/schemas/inline_response_200_15"
+        "403":
           description: Forbidden. User is not authorized to access this resource
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_403'
+                $ref: "#/components/schemas/inline_response_403"
       security:
         - bearerAuth: []
   /api/v1/email-templates/{id}:
@@ -2322,30 +2322,30 @@ paths:
             type: string
             format: uuid
       responses:
-        '200':
+        "200":
           description: Successful response with the email template details.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_16'
-        '400':
+                $ref: "#/components/schemas/inline_response_200_16"
+        "400":
           description: Invalid template ID format.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_400_7'
-        '401':
+                $ref: "#/components/schemas/inline_response_400_7"
+        "401":
           description: Unauthorized access.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_401_1'
-        '404':
+                $ref: "#/components/schemas/inline_response_401_1"
+        "404":
           description: Template not found.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_404_4'
+                $ref: "#/components/schemas/inline_response_404_4"
       security:
         - bearerAuth: []
     patch:
@@ -2367,33 +2367,33 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/emailtemplates_id_body'
+              $ref: "#/components/schemas/emailtemplates_id_body"
         required: true
       responses:
-        '200':
+        "200":
           description: Email template updated successfully.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_17'
-        '400':
+                $ref: "#/components/schemas/inline_response_200_17"
+        "400":
           description: Invalid input data
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_400_8'
-        '403':
+                $ref: "#/components/schemas/inline_response_400_8"
+        "403":
           description: Unauthorized access
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_403'
-        '404':
+                $ref: "#/components/schemas/inline_response_403"
+        "404":
           description: Template not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_404_5'
+                $ref: "#/components/schemas/inline_response_404_5"
       security:
         - bearerAuth: []
   /api/v1/notification-settings/{user_id}:
@@ -2413,18 +2413,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NotificationSettingsInput'
+              $ref: "#/components/schemas/NotificationSettingsInput"
             example:
               email_notifications: true
               push_notifications: false
         required: true
       responses:
-        '200':
+        "200":
           description: Notification settings updated successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/NotificationSettings'
+                $ref: "#/components/schemas/NotificationSettings"
               example:
                 id: 1
                 user_id: 1
@@ -2441,15 +2441,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/FAQInput'
+              $ref: "#/components/schemas/FAQInput"
         required: true
       responses:
-        '201':
+        "201":
           description: FAQ created successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FAQ'
+                $ref: "#/components/schemas/FAQ"
       security:
         - bearerAuth: []
   /api/v1/faqs:
@@ -2458,14 +2458,14 @@ paths:
         - FAQ
       summary: Get all FAQs
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/FAQ'
+                  $ref: "#/components/schemas/FAQ"
   /api/v1/blogs/{blogId}/comments:
     get:
       tags:
@@ -2482,17 +2482,17 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Comments retrieved successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_18'
-        '400':
+                $ref: "#/components/schemas/inline_response_200_18"
+        "400":
           description: Bad request
-        '404':
+        "404":
           description: Blog not found
-        '500':
+        "500":
           description: Internal server error
     post:
       tags:
@@ -2512,18 +2512,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/blogId_comments_body'
+              $ref: "#/components/schemas/blogId_comments_body"
         required: true
       responses:
-        '201':
+        "201":
           description: Comment created successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_201_4'
-        '400':
+                $ref: "#/components/schemas/inline_response_201_4"
+        "400":
           description: Bad request
-        '500':
+        "500":
           description: Internal server error
   /api/v1/comments/{commentId}/reply:
     post:
@@ -2544,20 +2544,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/commentId_reply_body'
+              $ref: "#/components/schemas/commentId_reply_body"
         required: true
       responses:
-        '201':
+        "201":
           description: Reply created successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_201_5'
-        '400':
+                $ref: "#/components/schemas/inline_response_201_5"
+        "400":
           description: Bad request
-        '404':
+        "404":
           description: Comment not found
-        '500':
+        "500":
           description: Internal server error
   /api/v1/comments/{commentId}/like:
     post:
@@ -2575,17 +2575,17 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Comment liked successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_19'
-        '400':
+                $ref: "#/components/schemas/inline_response_200_19"
+        "400":
           description: Bad request
-        '404':
+        "404":
           description: Comment not found
-        '500':
+        "500":
           description: Internal server error
   /api/v1/comments/{commentId}/dislike:
     post:
@@ -2603,17 +2603,17 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Comment disliked successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_20'
-        '400':
+                $ref: "#/components/schemas/inline_response_200_20"
+        "400":
           description: Bad request
-        '404':
+        "404":
           description: Comment not found
-        '500':
+        "500":
           description: Internal server error
   /api/v1/comments/edit/{commentId}:
     patch:
@@ -2634,20 +2634,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/edit_commentId_body'
+              $ref: "#/components/schemas/edit_commentId_body"
         required: true
       responses:
-        '200':
+        "200":
           description: Comment edited successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_21'
-        '400':
+                $ref: "#/components/schemas/inline_response_200_21"
+        "400":
           description: Bad request
-        '404':
+        "404":
           description: Comment not found
-        '500':
+        "500":
           description: Internal server error
   /api/v1/comments/{commentId}:
     delete:
@@ -2665,17 +2665,17 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Comment deleted successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_22'
-        '400':
+                $ref: "#/components/schemas/inline_response_200_22"
+        "400":
           description: Bad request
-        '404':
+        "404":
           description: Comment not found
-        '500':
+        "500":
           description: Internal server error
 components:
   schemas:
@@ -2715,7 +2715,7 @@ components:
         token:
           type: string
         user:
-          $ref: '#/components/schemas/User'
+          $ref: "#/components/schemas/User"
     User:
       type: object
       properties:
@@ -2820,7 +2820,7 @@ components:
         user_id:
           type: array
           items:
-            $ref: '#/components/schemas/User'
+            $ref: "#/components/schemas/User"
         created_at:
           type: string
           format: date-time
@@ -2839,11 +2839,11 @@ components:
         product_id:
           type: array
           items:
-            $ref: '#/components/schemas/Product'
+            $ref: "#/components/schemas/Product"
         size_id:
           type: array
           items:
-            $ref: '#/components/schemas/size'
+            $ref: "#/components/schemas/size"
     size:
       type: object
       properties:
@@ -2854,11 +2854,11 @@ components:
         product_variant_id:
           type: array
           items:
-            $ref: '#/components/schemas/Product_variant'
+            $ref: "#/components/schemas/Product_variant"
         product_id:
           type: array
           items:
-            $ref: '#/components/schemas/Product'
+            $ref: "#/components/schemas/Product"
     Topic:
       type: object
       properties:
@@ -2942,11 +2942,11 @@ components:
         created_at:
           type: string
           format: date-time
-          example: '2024-07-30T23:21:44Z'
+          example: "2024-07-30T23:21:44Z"
         updated_at:
           type: string
           format: date-time
-          example: '2024-07-30T23:21:44Z'
+          example: "2024-07-30T23:21:44Z"
     inline_response_200_1:
       type: object
       properties:
@@ -2973,11 +2973,11 @@ components:
         created_at:
           type: string
           format: date-time
-          example: '2024-07-30T23:21:44Z'
+          example: "2024-07-30T23:21:44Z"
         updated_at:
           type: string
           format: date-time
-          example: '2024-07-30T23:21:44Z'
+          example: "2024-07-30T23:21:44Z"
     inline_response_200_2:
       type: object
       properties:
@@ -3004,18 +3004,18 @@ components:
         created_at:
           type: string
           format: date-time
-          example: '2024-07-30T23:21:44Z'
+          example: "2024-07-30T23:21:44Z"
         updated_at:
           type: string
           format: date-time
-          example: '2024-07-30T23:21:44Z'
+          example: "2024-07-30T23:21:44Z"
     inline_response_200_3:
       type: object
       properties:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/inline_response_200_1'
+            $ref: "#/components/schemas/inline_response_200_1"
         page:
           type: integer
           example: 1
@@ -3055,11 +3055,11 @@ components:
         created_at:
           type: string
           format: date-time
-          example: '2024-07-30T23:21:44Z'
+          example: "2024-07-30T23:21:44Z"
         updated_at:
           type: string
           format: date-time
-          example: '2024-07-30T23:21:44Z'
+          example: "2024-07-30T23:21:44Z"
     inline_response_401:
       type: object
       properties:
@@ -3245,7 +3245,7 @@ components:
         features:
           type: array
           items:
-            $ref: '#/components/schemas/Feature'
+            $ref: "#/components/schemas/Feature"
     PlanInput:
       required:
         - name
@@ -3579,7 +3579,7 @@ components:
         details:
           type: array
           items:
-            $ref: '#/components/schemas/inline_response_422_3_details'
+            $ref: "#/components/schemas/inline_response_422_3_details"
     apiv1productsid_variants:
       type: object
       properties:
@@ -3611,7 +3611,7 @@ components:
         variants:
           type: array
           items:
-            $ref: '#/components/schemas/apiv1productsid_variants'
+            $ref: "#/components/schemas/apiv1productsid_variants"
     inline_response_200_8:
       type: object
       properties:
@@ -3678,7 +3678,7 @@ components:
         Message:
           type: string
         Data:
-          $ref: '#/components/schemas/Profile'
+          $ref: "#/components/schemas/Profile"
     inline_response_400_5:
       type: object
       properties:
@@ -3711,7 +3711,7 @@ components:
         Message:
           type: string
         Data:
-          $ref: '#/components/schemas/inline_response_200_10_Data'
+          $ref: "#/components/schemas/inline_response_200_10_Data"
     inline_response_200_11:
       type: object
       properties:
@@ -3757,7 +3757,7 @@ components:
           type: string
           example: Help article created successfully.
         data:
-          $ref: '#/components/schemas/inline_response_201_3_data'
+          $ref: "#/components/schemas/inline_response_201_3_data"
     inline_response_200_12:
       type: object
       properties:
@@ -3792,7 +3792,7 @@ components:
           type: string
           example: Help article updated successfully.
         data:
-          $ref: '#/components/schemas/inline_response_200_13_data'
+          $ref: "#/components/schemas/inline_response_200_13_data"
     inline_response_200_14:
       type: object
       properties:
@@ -3808,9 +3808,9 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/inline_response_200_14_data'
+            $ref: "#/components/schemas/inline_response_200_14_data"
         pagination:
-          $ref: '#/components/schemas/inline_response_200_14_pagination'
+          $ref: "#/components/schemas/inline_response_200_14_pagination"
     inline_response_400_6:
       type: object
       properties:
@@ -3835,7 +3835,7 @@ components:
         templates:
           type: array
           items:
-            $ref: '#/components/schemas/inline_response_200_15_templates'
+            $ref: "#/components/schemas/inline_response_200_15_templates"
         total:
           type: integer
         page:
@@ -3867,11 +3867,11 @@ components:
         created_at:
           type: string
           format: date-time
-          example: '2024-07-27T14:30:00Z'
+          example: "2024-07-27T14:30:00Z"
         updated_at:
           type: string
           format: date-time
-          example: '2024-07-27T14:30:00Z'
+          example: "2024-07-27T14:30:00Z"
     inline_response_400_7:
       type: object
       properties:
@@ -3934,7 +3934,7 @@ components:
           type: string
           example: Email template updated successfully
         data:
-          $ref: '#/components/schemas/inline_response_200_17_data'
+          $ref: "#/components/schemas/inline_response_200_17_data"
     inline_response_400_8:
       type: object
       properties:
@@ -3968,7 +3968,7 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/Comment'
+            $ref: "#/components/schemas/Comment"
     blogId_comments_body:
       type: object
       properties:
@@ -3985,7 +3985,7 @@ components:
           type: string
           example: Comment created successfully
         data:
-          $ref: '#/components/schemas/Comment'
+          $ref: "#/components/schemas/Comment"
     commentId_reply_body:
       type: object
       properties:
@@ -4002,7 +4002,7 @@ components:
           type: string
           example: Reply created successfully
         data:
-          $ref: '#/components/schemas/Comment'
+          $ref: "#/components/schemas/Comment"
     inline_response_200_19:
       type: object
       properties:
@@ -4013,7 +4013,7 @@ components:
           type: string
           example: Comment liked successfully
         data:
-          $ref: '#/components/schemas/Comment'
+          $ref: "#/components/schemas/Comment"
     inline_response_200_20:
       type: object
       properties:
@@ -4024,7 +4024,7 @@ components:
           type: string
           example: Comment disliked successfully
         data:
-          $ref: '#/components/schemas/Comment'
+          $ref: "#/components/schemas/Comment"
     edit_commentId_body:
       type: object
       properties:
@@ -4041,7 +4041,7 @@ components:
           type: string
           example: Comment edited successfully
         data:
-          $ref: '#/components/schemas/Comment'
+          $ref: "#/components/schemas/Comment"
     inline_response_200_22:
       type: object
       properties:
@@ -4084,11 +4084,11 @@ components:
         updated_at:
           type: string
           format: date-time
-          example: '2024-07-30T22:09:50Z'
+          example: "2024-07-30T22:09:50Z"
         created_at:
           type: string
           format: date-time
-          example: '2024-07-30T22:09:50Z'
+          example: "2024-07-30T22:09:50Z"
     inline_response_200_13_data:
       type: object
       properties:
@@ -4109,11 +4109,11 @@ components:
         created_at:
           type: string
           format: date-time
-          example: '2024-07-30T22:09:50Z'
+          example: "2024-07-30T22:09:50Z"
         updated_at:
           type: string
           format: date-time
-          example: '2024-07-30T22:10:19Z'
+          example: "2024-07-30T22:10:19Z"
     inline_response_200_14_data:
       type: object
       properties:

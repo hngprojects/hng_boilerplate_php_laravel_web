@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Models\WaitList;
+use App\Mail\WaitlistConfirmation;
+use Illuminate\Support\Facades\Mail;
 
 class WaitListController extends Controller
 {
@@ -46,6 +48,8 @@ class WaitListController extends Controller
                 'name' => $request->name,
                 'email' => $request->email
             ]);
+
+            Mail::to($waitlist->email)->send(new WaitlistConfirmation($waitlist));
 
             return response()->json([
                 'status' => 201,

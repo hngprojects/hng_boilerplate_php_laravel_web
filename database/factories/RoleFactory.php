@@ -11,10 +11,12 @@ class RoleFactory extends Factory
     protected $model = Role::class;
 
     public function definition()
-    {
+    { $organisation = Organisation::factory()->create();
+
+
         return [
             'name' => $this->faker->jobTitle,
-            'org_id' => Organisation::factory(),
+            'org_id' => $organisation->org_id,
             'description' => $this->faker->sentence,
             'is_active' => true,
             'is_default' => false,
