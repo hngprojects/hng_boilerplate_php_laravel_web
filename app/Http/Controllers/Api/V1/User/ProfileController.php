@@ -12,12 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator; 
-use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\File;
-
+use Illuminate\Support\Facades\Validator;
 
 class ProfileController extends Controller
 {
@@ -40,12 +35,14 @@ class ProfileController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show()
+
     {
+        $user = Auth::user();
         try {
-            $user = User::with('profile')->findOrFail($id);
+            $user = User::with('profile')->findOrFail($user->id);
             $profile = $user->profile;
-    
+
             return response()->json([
                 'status_code' => 200,
                 'message' => 'Successfully fetched profile',
@@ -68,7 +65,7 @@ class ProfileController extends Controller
                     'avatar_url' => $profile->avatar_url ?? null,
                 ]
             ], 200);
-        } catch (ModelNotFoundException $e) {
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json([
                 'status_code' => 404,
                 'message' => 'Profile not found',
@@ -80,7 +77,7 @@ class ProfileController extends Controller
             ], 500);
         }
     }
-    
+
 
     /**
      * Update the specified resource in storage.
@@ -94,7 +91,7 @@ class ProfileController extends Controller
             'pronoun' => 'string|max:255|nullable',
             'bio' => 'string|max:500|nullable',
             'email' => 'string|email|max:255|nullable',
-            'avatar_url' => 'string|nullable', 
+            'avatar_url' => 'string|nullable',
             'display_image' => 'string|nullable'
         ]);
 
@@ -107,10 +104,10 @@ class ProfileController extends Controller
 
         if (!$profile) {
             return response()
-            ->json([
-                'Status' => 404, 
-                'Message' => 'Profile not found'
-            ], 404);
+                ->json([
+                    'Status' => 404,
+                    'Message' => 'Profile not found'
+                ], 404);
         }
 
         $profile->update([
@@ -130,67 +127,66 @@ class ProfileController extends Controller
         }
 
         return response()
-        ->json([
-            'Status' => 200, 
-            'Message' => 'Profile updated successfully', 
-            'Data' => $profile->refresh()
-        ], 200);
+            ->json([
+                'Status' => 200,
+                'Message' => 'Profile updated successfully',
+                'Data' => $profile->refresh()
+            ], 200);
     }
 
 
 
     public function uploadImage(Request $request)
     {
-      
+
         $validator = Validator::make($request->all(), [
             'file' => 'required|image|mimes:jpeg,png,jpg,gif'
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json([
                 'Status' => 400,
                 'Message' => $validator->errors()
             ], 400);
         }
-    
-   
-        $file = $request->file('file');
-        $fileName = time() . '.' . $file->getClientOriginalExtension();
-        $filePath = public_path('uploads');
-        
-       
-        if (!File::exists($filePath)) {
-            File::makeDirectory($filePath, 0755, true);
+
+        $imageUrl = '';
+        // Check if the file is present
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $extension = $file->getClientOriginalExtension();
+            $filename = time() . '.' . $extension;
+            $path = 'uploads/profile_images/';
+            $file->move(public_path($path), $filename);
+
+            $imageUrl = $path . $filename;
+        } else {
+            $imageUrl = null;
         }
-    
-  
-        $file->move($filePath, $fileName);
-    
-       
-        $imageUrl = url('uploads/' . $fileName);
-    
-       
+
+
+
         $user = Auth::user();
         $profile = $user->profile;
-    
+
         if (!$profile) {
             return response()->json([
-                'Status' => 404,
-                'Message' => 'Profile not found'
+                'status_code' => 404,
+                'message' => 'Profile not found'
             ], 404);
         }
-    
+
         $profile->update(['avatar_url' => $imageUrl]);
-    
+
         return response()->json([
-            'Status' => 200,
-            'Message' => 'Image uploaded and profile updated successfully',
-            'Data' => ['avatar_url' => $imageUrl]
+            'status_code' => 200,
+            'message' => 'Image uploaded and profile updated successfully',
+            'data' => ['avatar_url' => $imageUrl]
         ], 200);
     }
-    
 
-    
+
+
 
 
 
@@ -198,36 +194,36 @@ class ProfileController extends Controller
      * updatePassword
      */
     public function updatePassword(Request $request)
-{
-    // Validation
-    $request->validate([
-        'old_password' => 'required',
-        'new_password' => [
-            'required',
-            'confirmed',
-            'min:8', // at least 8 characters
-            'regex:/[A-Z]/', // at least one uppercase letter
-            'regex:/[0-9]/' // at least one number
-        ],
-    ]);
+    {
+        // Validation
+        $request->validate([
+            'old_password' => 'required',
+            'new_password' => [
+                'required',
+                'confirmed',
+                'min:8', // at least 8 characters
+                'regex:/[A-Z]/', // at least one uppercase letter
+                'regex:/[0-9]/' // at least one number
+            ],
+        ]);
 
-    if (!Hash::check($request->old_password, Auth::user()->password)) {
+        if (!Hash::check($request->old_password, Auth::user()->password)) {
+            return response()->json([
+                'Status' => 400,
+                'message' => 'Old Password does not match!',
+            ], 400);
+        }
+
+        // Update The New Password
+        User::whereId(Auth::user()->id)->update([
+            'password' => Hash::make($request->new_password)
+        ]);
+
         return response()->json([
-            'Status' => 400,
-            'message' => 'Old Password does not match!',
-        ], 400);
+            'Status' => 200,
+            'Message' => 'Password changed successfully',
+        ], 200);
     }
-
-    // Update The New Password
-    User::whereId(Auth::user()->id)->update([
-        'password' => Hash::make($request->new_password)
-    ]);
-
-    return response()->json([
-        'Status' => 200,
-        'Message' => 'Password changed successfully',
-    ], 200);
-}
 
 
 
@@ -253,7 +249,7 @@ class ProfileController extends Controller
             'gmtoffset' => 'required|string',
             'description' => 'required|string',
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json([
                 'Status' => 409,
@@ -261,9 +257,9 @@ class ProfileController extends Controller
                 'Errors' => $validator->errors(),
             ], 409);
         }
-    
+
         $timezone = Timezone::create($request->only(['timezone', 'gmtoffset', 'description']));
-    
+
         if (auth()->check()) {
             $userId = auth()->id();
             Preference::updateOrCreate(
@@ -275,7 +271,7 @@ class ProfileController extends Controller
                 ]
             );
         }
-    
+
         return response()->json([
             'id' => $timezone->id,
             'timezone' => $timezone->timezone,
@@ -284,24 +280,6 @@ class ProfileController extends Controller
         ], 201);
     }
 
-    
-    
-    
-
-
-
-
-
-       public function getAllTimezones()
-{
-    $timezones = Timezone::latest()->get();
-
-    return response()->json([
-        'Status' => 200,
-        'Message' => 'List of supported timezones.',
-        'Data' => $timezones,
-    ], 200);
-}//End method  
 
 
 
@@ -309,58 +287,68 @@ class ProfileController extends Controller
 
 
 
-public function updateTimezones(Request $request, $id)
-{
-    $timezone = Timezone::find($id);
 
-    if (!$timezone) {
+    public function getAllTimezones()
+    {
+        $timezones = Timezone::latest()->get();
+
         return response()->json([
-            'Status' => 404,
-            'Message' => 'Timezone not found',
-        ], 404);
-    }
+            'Status' => 200,
+            'Message' => 'List of supported timezones.',
+            'Data' => $timezones,
+        ], 200);
+    } //End method  
 
-    $validator = Validator::make($request->all(), [
-        'timezone' => 'required|string|unique:timezones,timezone,' . $id,
-        'gmtoffset' => 'required|string',
-        'description' => 'required|string',
-    ]);
 
-    if ($validator->fails()) {
+
+
+
+
+
+    public function updateTimezones(Request $request, $id)
+    {
+        $timezone = Timezone::find($id);
+
+        if (!$timezone) {
+            return response()->json([
+                'Status' => 404,
+                'Message' => 'Timezone not found',
+            ], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'timezone' => 'required|string|unique:timezones,timezone,' . $id,
+            'gmtoffset' => 'required|string',
+            'description' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'Status' => 409,
+                'Message' => 'Timezone already exists',
+                'Errors' => $validator->errors(),
+            ], 409);
+        }
+
+        $timezone->update($request->only(['timezone', 'gmtoffset', 'description']));
+
+        if (auth()->check()) {
+            $userId = auth()->id();
+            Preference::updateOrCreate(
+                ['user_id' => $userId],
+                [
+                    'timezone_id' => $timezone->id,
+                    'name' => $timezone->timezone,
+                    'value' => $timezone->timezone // Ensure the `value` column is populated
+                ]
+            );
+        }
+
         return response()->json([
-            'Status' => 409,
-            'Message' => 'Timezone already exists',
-            'Errors' => $validator->errors(),
-        ], 409);
+            'id' => $timezone->id,
+            'timezone' => $timezone->timezone,
+            'gmtoffset' => $timezone->gmtoffset,
+            'description' => $timezone->description,
+        ], 200);
     }
-
-    $timezone->update($request->only(['timezone', 'gmtoffset', 'description']));
-
-    if (auth()->check()) {
-        $userId = auth()->id();
-        Preference::updateOrCreate(
-            ['user_id' => $userId],
-            [
-                'timezone_id' => $timezone->id,
-                'name' => $timezone->timezone,
-                'value' => $timezone->timezone // Ensure the `value` column is populated
-            ]
-        );
-    }
-
-    return response()->json([
-        'id' => $timezone->id,
-        'timezone' => $timezone->timezone,
-        'gmtoffset' => $timezone->gmtoffset,
-        'description' => $timezone->description,
-    ], 200);
-}
-
-
-
-    
-
-
-
-
 }

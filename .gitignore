@@ -21,3 +21,4 @@ docker-compose.yml
 /public/uploads
 ResponseHTTP_OK,
 can
+result.json
