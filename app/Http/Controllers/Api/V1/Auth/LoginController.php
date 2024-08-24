@@ -18,7 +18,7 @@ class LoginController extends Controller
             'email' => 'required|email',
             'password' => 'required',
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json([
                 'status_code' => 401,
@@ -28,8 +28,8 @@ class LoginController extends Controller
         }
 
         if (!$token = JWTAuth::attempt($request->only('email', 'password'))) {
-            $key = 'login_attempts_'.request()->ip();
-            RateLimiter::hit($key,3600);
+            $key = 'login_attempts_' . request()->ip();
+            RateLimiter::hit($key, 3600);
             return response()->json([
                 'status_code' => 401,
                 'message' => 'Invalid credentials',
@@ -70,7 +70,6 @@ class LoginController extends Controller
                 'organisations' => $organisations,
             ]
         ], 200);
-    
     }
 
     public function logout()
@@ -78,8 +77,7 @@ class LoginController extends Controller
         try {
             $user = auth()->user();
 
-            if($user)
-            {
+            if ($user) {
                 $user->is_active = 0;
                 $user->save();
             }
@@ -113,5 +111,4 @@ class LoginController extends Controller
             ], 401);
         }
     }
-    
 }

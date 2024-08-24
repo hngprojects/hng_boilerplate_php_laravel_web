@@ -16,9 +16,7 @@ use App\Models\EmailTemplate;
 
 class AuthController extends Controller
 {
-    public function __construct(public OrganisationService $organisationService)
-    {
-    }
+    public function __construct(public OrganisationService $organisationService) {}
 
     public function store(Request $request)
     {
@@ -28,7 +26,7 @@ class AuthController extends Controller
             'email' => 'required|string|email:rfc|max:255|unique:users',
             'password' => 'required|string|min:6',
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json([
                 'status_code' => 422,
@@ -36,10 +34,10 @@ class AuthController extends Controller
                 'errors' => $validator->errors(),
             ], 422);
         }
-    
+
         try {
             DB::beginTransaction();
-    
+
             $user = User::create([
                 'id' => Str::uuid(),
                 'email' => $request->email,
@@ -47,29 +45,29 @@ class AuthController extends Controller
                 'role' => 'user',
                 'is_verified' => 1,
             ]);
-    
+
             $user->profile()->create([
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
             ]);
-    
+
             $name = $request->first_name . "'s Organisation";
             $organisation = $this->organisationService->create($user, $name);
-    
+
             $role = $user->roles()->create([
                 'name' => 'admin',
                 'org_id' => $organisation->org_id,
             ]);
-    
+
             DB::table('users_roles')->insert([
                 'user_id' => $user->id,
                 'role_id' => $role->id,
             ]);
-    
+
             $token = JWTAuth::fromUser($user);
-    
+
             $is_superadmin = in_array($user->role, ['admin']);
-    
+
             DB::commit();
 
             $email_template_id = null;
@@ -78,7 +76,7 @@ class AuthController extends Controller
             if ($emailTemplate) {
                 $email_template_id = $emailTemplate->id;
             }
-    
+
             return response()->json([
                 'status_code' => 201,
                 'message' => 'User Created Successfully',
@@ -112,5 +110,4 @@ class AuthController extends Controller
             ], 500);
         }
     }
-    
 }

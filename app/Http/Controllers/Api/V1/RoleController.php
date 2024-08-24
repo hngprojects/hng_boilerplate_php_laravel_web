@@ -152,83 +152,84 @@ class RoleController extends Controller
         }
     }
 
-    public function assignRole(Request $request, $org_id, $user_id) { 
-      $validator = Validator::make($request->all(), [
-        'role' => 'required|string|exists:roles,name',
-      ]);
+    public function assignRole(Request $request, $org_id, $user_id)
+    {
+        $validator = Validator::make($request->all(), [
+            'role' => 'required|string|exists:roles,name',
+        ]);
 
-      if ($validator->fails()) {
-        return $this->apiResponse($validator->errors(), 422);
-      }
+        if ($validator->fails()) {
+            return $this->apiResponse($validator->errors(), 422);
+        }
 
-      $user = User::find($user_id);
-      if (!$user) return ResponseHelper::response("User not found", 404, null);
-      if($organisation = Organisation::find($org_id)){
-        if(!$organisation->users->contains($user->id))
-          return ResponseHelper::response("You are not authorised to perform this action", 409, null);
+        $user = User::find($user_id);
+        if (!$user) return ResponseHelper::response("User not found", 404, null);
+        if ($organisation = Organisation::find($org_id)) {
+            if (!$organisation->users->contains($user->id))
+                return ResponseHelper::response("You are not authorised to perform this action", 409, null);
 
-        $role_id = Role::where('org_id', $org_id)->where('name', $request->role)->pluck('id');
-        if($result = $user->roles()->syncWithoutDetaching($role_id))
-          return ResponseHelper::response("Roles updated successfully", 200, null);
-        else 
-          return response()->json(['message' => 'Role update failed', 'error' => $result], 400);
+            $role_id = Role::where('org_id', $org_id)->where('name', $request->role)->pluck('id');
+            if ($result = $user->roles()->syncWithoutDetaching($role_id))
+                return ResponseHelper::response("Roles updated successfully", 200, null);
+            else
+                return response()->json(['message' => 'Role update failed', 'error' => $result], 400);
         } else return ResponseHelper::response("Organisation not found", 404, null);
     }
 
     public function update(UpdateRoleRequest $request, $org_id, $role_id)
     {
         $user = auth('api')->user();
-        if(!$user) return ResponseHelper::response("Authentication failed", 401, null);
-        if($organisation = Organisation::find($org_id)){
-          if(!$organisation->users->contains($user->id)) return ResponseHelper::response("You are not authorised to perform this action", 401, null);
-          if($role = Role::find($role_id)){
-              $role->update($request->only('name', 'description'));
-              return ResponseHelper::response("Role updated successfully", 200, $role);
-          } else return ResponseHelper::response("Role not found", 404, null);
+        if (!$user) return ResponseHelper::response("Authentication failed", 401, null);
+        if ($organisation = Organisation::find($org_id)) {
+            if (!$organisation->users->contains($user->id)) return ResponseHelper::response("You are not authorised to perform this action", 401, null);
+            if ($role = Role::find($role_id)) {
+                $role->update($request->only('name', 'description'));
+                return ResponseHelper::response("Role updated successfully", 200, $role);
+            } else return ResponseHelper::response("Role not found", 404, null);
         } else return ResponseHelper::response("Organisation not found", 404, null);
     }
 
-   // To get all roles
-   public function index($org_id)
-   {
-       try {
-           // Validate the organisation ID (UUID format)
-           if (!Str::isUuid($org_id)) {
-               return response()->json([
-                   'status_code' => Response::HTTP_BAD_REQUEST,
-                   'error' => 'Bad Request',
-                   'message' => 'Invalid organisation ID format',
-               ], Response::HTTP_BAD_REQUEST);
-           }
+    // To get all roles
+    public function index($org_id)
+    {
+        try {
+            // Validate the organisation ID (UUID format)
+            if (!Str::isUuid($org_id)) {
+                return response()->json([
+                    'status_code' => Response::HTTP_BAD_REQUEST,
+                    'error' => 'Bad Request',
+                    'message' => 'Invalid organisation ID format',
+                ], Response::HTTP_BAD_REQUEST);
+            }
 
-           // Check whether organisation exists
-           $organisation = Organisation::where('org_id', $org_id)->first();
-           if (!$organisation) {
-               return response()->json([
-                   'status_code' => Response::HTTP_NOT_FOUND,
-                   'error' => 'Not Found',
-                   'message' => 'The organisation with ID ' . $org_id . ' does not exist',
-               ], Response::HTTP_NOT_FOUND);
-           }
+            // Check whether organisation exists
+            $organisation = Organisation::where('org_id', $org_id)->first();
+            if (!$organisation) {
+                return response()->json([
+                    'status_code' => Response::HTTP_NOT_FOUND,
+                    'error' => 'Not Found',
+                    'message' => 'The organisation with ID ' . $org_id . ' does not exist',
+                ], Response::HTTP_NOT_FOUND);
+            }
 
-           // Fetch all roles within the organisation
-           $roles = Role::where('org_id', $org_id)->get(['id', 'name', 'description']);
+            // Fetch all roles within the organisation
+            $roles = Role::where('org_id', $org_id)->get(['id', 'name', 'description']);
 
-           return response()->json([
-               'status_code' => Response::HTTP_OK,
-               'data' => $roles,
-           ], Response::HTTP_OK);
-       } catch (\Exception $e) {
+            return response()->json([
+                'status_code' => Response::HTTP_OK,
+                'data' => $roles,
+            ], Response::HTTP_OK);
+        } catch (\Exception $e) {
             Log::error('Role creation error: ' . $e->getMessage());
-           return response()->json([
-               'status_code' => Response::HTTP_INTERNAL_SERVER_ERROR,
-               'error' => 'Internal Server Error',
-               'message' => 'An error occurred while fetching roles',
-           ], Response::HTTP_INTERNAL_SERVER_ERROR);
-       }
-   }
+            return response()->json([
+                'status_code' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                'error' => 'Internal Server Error',
+                'message' => 'An error occurred while fetching roles',
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 
-   public function show($org_id, $role_id)
+    public function show($org_id, $role_id)
     {
         try {
             // Validate UUID format
@@ -331,23 +332,24 @@ class RoleController extends Controller
         }
     }
 
-    public function assignPermissions(Request $request, $org_id, $role_id){
-      $role = Role::where('org_id', $org_id)->with('permissions')->find($role_id);
-      $payload = Validator::make($request->all(), [
-        'permission_list' => 'required|array'
-      ]);
-      if($payload->fails()) return ResponseHelper::response($payload->errors(), 422, null);
-      if($role && !$payload->fails()){
-        foreach ($request->permission_list as $permission => $value) {
-          $permissionId = Permission::where('name', $permission)->value('id');
-          if ($value && $permissionId) {
-            $role->permissions()->attach($permissionId);
-          } else {
-            $role->permissions()->detach($permissionId);
-          }
-        }
-        return ResponseHelper::response("Permissions updated successfully", 202, null);
-      } else return ResponseHelper::response("Role not found", 404, null);
+    public function assignPermissions(Request $request, $org_id, $role_id)
+    {
+        $role = Role::where('org_id', $org_id)->with('permissions')->find($role_id);
+        $payload = Validator::make($request->all(), [
+            'permission_list' => 'required|array'
+        ]);
+        if ($payload->fails()) return ResponseHelper::response($payload->errors(), 422, null);
+        if ($role && !$payload->fails()) {
+            foreach ($request->permission_list as $permission => $value) {
+                $permissionId = Permission::where('name', $permission)->value('id');
+                if ($value && $permissionId) {
+                    $role->permissions()->attach($permissionId);
+                } else {
+                    $role->permissions()->detach($permissionId);
+                }
+            }
+            return ResponseHelper::response("Permissions updated successfully", 202, null);
+        } else return ResponseHelper::response("Role not found", 404, null);
     }
 
     public function destroy(Request $request, $org_id, $role_id)
@@ -357,7 +359,7 @@ class RoleController extends Controller
 
             if (!$organisation) {
                 return response()->json([
-                    'statusCode' => Response::HTTP_NOT_FOUND,
+                    'status_code' => Response::HTTP_NOT_FOUND,
                     'error' => 'Not Found',
                     'message' => 'The organisation with ID ' . $org_id . ' does not exist',
                 ], Response::HTTP_NOT_FOUND);
@@ -367,7 +369,7 @@ class RoleController extends Controller
 
             if (!$role) {
                 return response()->json([
-                    'statusCode' => Response::HTTP_NOT_FOUND,
+                    'status_code' => Response::HTTP_NOT_FOUND,
                     'error' => 'Not Found',
                     'message' => 'The role with ID ' . $role_id . ' does not exist',
                 ], Response::HTTP_NOT_FOUND);
@@ -381,13 +383,11 @@ class RoleController extends Controller
             DB::commit();
 
             return response()->json([
-                'statusCode' => Response::HTTP_OK,
+                'status_code' => Response::HTTP_OK,
                 'message' => 'Role deleted successfully',
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
             DB::rollBack();
-
-            Log::error('Role deletion error: ' . $e->getMessage());
 
             return response()->json([
                 'status_code' => Response::HTTP_INTERNAL_SERVER_ERROR,
@@ -396,7 +396,4 @@ class RoleController extends Controller
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
 }
-
-?>
