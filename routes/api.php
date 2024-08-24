@@ -285,6 +285,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/squeeze-pages/search', [SqueezePageCoontroller::class, 'search']);
         Route::get('/squeeze-pages/filter', [SqueezePageCoontroller::class, 'filter']);
         Route::apiResource('squeeze-pages', SqueezePageCoontroller::class);
+        Route::get('/dashboards', [AdminDashboardController::class, 'dashboardStatistics']);
         Route::get('/dashboard/statistics', [AdminDashboardController::class, 'getStatistics']);
         Route::get('/dashboard/top-products', [AdminDashboardController::class, 'getTopProducts']);
         Route::get('/dashboard/all-top-products', [AdminDashboardController::class, 'getAllProductsSortedBySales']);
