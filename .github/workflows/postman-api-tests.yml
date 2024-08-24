@@ -1,7 +1,8 @@
 name: Scheduled API Tests
 
 on:
-  push:
+  schedule:
+    - cron: '*/15 * * * *'
 
 jobs:
   run-api-tests:
@@ -28,10 +29,9 @@ jobs:
       with:
         php-version: '8.2'
 
-    - name: Add APP_URL
-      run: export APP_URL=${{ secrets.APP_URL }}
-
-    - name: POST parsed result to Hosted Application
-      run: php post-postman-api-tests-results.php 
+    - name: Send parsed result to Hosted Application
+      run: |
+          export APP_URL=${{ secrets.APP_URL }}
+          php send-postman-api-tests-results.php 
    
     
