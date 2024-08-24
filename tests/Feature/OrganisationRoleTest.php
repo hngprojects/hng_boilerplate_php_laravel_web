@@ -94,7 +94,7 @@ class OrganisationRoleTest extends TestCase
         // Send request for a non-existent role
         $response = $this->withHeaders([
             'Authorization' => "Bearer $token"
-        ])->getJson("/api/v1/organisation/{$organisation->org_id}/roles/999");
+        ])->getJson("/api/v1/organisation/{$organisation->org_id}/roles/00000000-0000-0000-0000-000000000000");
 
         // Assert not found response
         $response->assertStatus(404)

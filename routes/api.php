@@ -74,6 +74,7 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::get('/api-status', [ApiStatusCheckerController::class, 'index']);
+    Route::post('/api-status', [ApiStatusCheckerController::class, 'store']);
 
     Route::post('/auth/register', [AuthController::class, 'store']);
     Route::post('/auth/login', [LoginController::class, 'login']);
@@ -242,7 +243,7 @@ Route::prefix('v1')->group(function () {
         Route::patch('/accounts/deactivate', [AccountController::class, 'deactivate']);
 
         // Roles
-        Route::post('/organisations/{org_id}/roles', [RoleController::class, 'store']);
+        Route::post('/organisations/{orgId}/roles', [RoleController::class, 'store']);
         Route::put('/organisations/{org_id}/roles/{role_id}', [RoleController::class, 'update']);
         Route::put('/organisations/{org_id}/roles/{role_id}/disable', [RoleController::class, 'disableRole']);
         Route::get('/organisations/{org_id}/roles', [RoleController::class, 'index']);
@@ -265,8 +266,8 @@ Route::prefix('v1')->group(function () {
 
 
 
-        Route::get('/notification-settings', [NotificationSettingController::class, 'show']);
-        Route::patch('/notification-settings', [NotificationSettingController::class, 'update']);
+        Route::get('/settings/notification-settings', [NotificationSettingController::class, 'show']);
+        Route::patch('/settings/notification-settings', [NotificationSettingController::class, 'update']);
     });
     Route::get('/notification-settings', [NotificationSettingController::class, 'show']);
 
@@ -341,7 +342,7 @@ Route::prefix('v1')->group(function () {
 
 
     //    quest
-    Route::get('/quests/{id}/messages', [QuestController::class, 'getQuestMessages']);
+    // Route::get('/quests/{id}/messages', [QuestController::class, 'getQuestMessages']);
 
     Route::post('/squeeze-user', [SqueezePageUserController::class, 'store']);
 

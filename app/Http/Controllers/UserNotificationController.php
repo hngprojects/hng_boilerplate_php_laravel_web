@@ -59,7 +59,6 @@ class UserNotificationController extends Controller
 
         // Return 201
         return response()->json([
-            'status' => 'success',
             'message' => 'Notification created successfully',
             'status_code' => 201,
             'data' => [
@@ -115,9 +114,11 @@ class UserNotificationController extends Controller
             $isRead = $notification->pivot->status === 'read';
             return [
                 'id' => $notification->id,
-                'message' => $notification->message,
+                'user_id' => auth()->id(),
                 'is_read' => $isRead,
+                'message' => $notification->message,
                 'created_at' => $notification->created_at,
+                'updated_at' => $notification->updated_at,
             ];
         });
 
@@ -125,8 +126,7 @@ class UserNotificationController extends Controller
         $status = $isRead === 'false' ? 'Unread ' : '';
 
         return response()->json([
-            'status' => 'success',
-            'message' => "{$status}Notifications retrieved successfully",
+            'message' => "{$status}Notification retrieved successfully",
             'status_code' => Response::HTTP_OK,
             'data' => [
                 'total_notification_count' => $totalNotificationsCount,
@@ -182,36 +182,40 @@ class UserNotificationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy()
+    public function destroy(Request $request)
     {
         try {
-
-            UserNotification::query()->where([
-                ['user_id', auth()->id()],
-                ['status', 'unread']
-            ])->update([
-                'status' => 'read'
-            ]);
-
+            // Check if the user is authenticated
+            $user = Auth::user();
+    
+            // Update the status of all notifications (read or unread) for the authenticated user to 'read'
+            UserNotification::query()
+                ->where('user_id', $user->id)
+                ->update(['status' => 'read']);
+    
+            // Return a success response
             return response()->json([
-                'status' => 'success',
-                'message' => 'notifications cleared successfully',
-                'status_code' => Response::HTTP_OK,
-                'data' => UserNotification::query()->where('user_id', auth()->id())->get(),
+                'data' => 'All notifications have been cleared.',
+                'message' => 'All notifications cleared successfully',
+                'status_code' => Response::HTTP_OK
             ], Response::HTTP_OK);
         } catch (ModelNotFoundException $exception) {
+            // Handle case where notifications are not found
             return response()->json([
-                'status' => 'error',
-                'message' => 'notifications not found',
-                'status_code' => Response::HTTP_NOT_FOUND,
+                'data' => null,
+                'error' => 'Notifications not found',
+                'message' => 'No notifications found to clear',
+                'status_code' => Response::HTTP_NOT_FOUND
             ], Response::HTTP_NOT_FOUND);
         } catch (\Exception $exception) {
             Log::error($exception->getMessage());
             return response()->json([
-                'status' => 'error',
-                'message' => 'something went wrong',
-                'status_code' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                'data' => null,
+                'error' => 'Internal Server Error',
+                'message' => 'Something went wrong while clearing notifications',
+                'status_code' => Response::HTTP_INTERNAL_SERVER_ERROR
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+    
 }
