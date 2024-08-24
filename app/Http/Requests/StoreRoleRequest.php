@@ -23,26 +23,33 @@ class StoreRoleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'role_name' => [
+            'name' => [
                 'required',
                 'string',
                 'max:255'
             ],
-            'organisation_id' => [
-                'required',
+            'description' => [
+                'nullable',
                 'string',
                 'max:255',
-                'exists:organisations,org_id',
-                Rule::unique('roles', 'org_id')->where('name', $this->input('role_name'))
             ],
-            'permissions_id' => 'required',
+            'permissions' => [
+                'required',
+                'array',
+            ],
+            'permissions.*' => [
+                'uuid', 
+                'exists:permissions,id',
+            ],
         ];
     }
 
     public function messages()
     {
         return [
-            'organisation_id.unique'=> "'".$this->input('role_name')."' role has already been created for the organisation",
+            'permissions.array' => 'Permissions must be provided as an array.',
+            'permissions.*.uuid' => 'Each permission ID must be a valid UUID.',
+            'permissions.*.exists' => 'Each permission ID must be valid.',
         ];
     }
 }

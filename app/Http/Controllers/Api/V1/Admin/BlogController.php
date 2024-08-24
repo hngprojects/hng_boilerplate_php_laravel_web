@@ -117,7 +117,7 @@ class BlogController extends Controller
             DB::beginTransaction();
 
             $savedPath = Storage::disk('public')->put('images', $request->file('image_url'));
-            $imageUrl = url('storage/' . $savedPath);
+            $imageUrl = 'storage/' . $savedPath;
 
             $blog = Blog::create([
                 'title' => $request->get('title'),

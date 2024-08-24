@@ -189,7 +189,7 @@ class BlogControllerTest extends TestCase
 
         $image = UploadedFile::fake()->image('image1.jpg');
         $path = Storage::putFile('public/images', $image);
-        $imageUrl = url('storage/' . str_replace('public/', '', $path));
+        $imageUrl = url('storage/' . str_replace('public/', '', $path)); 
 
         $response = $this->withHeaders(['Authorization' => "Bearer $token"])->postJson('/api/v1/blogs', [
             'title' => 'Test Blog Post',
