@@ -65,6 +65,7 @@ class EmailTemplateController extends Controller
             'limit' => $templates->perPage(),
         ], 200);
     }
+
     public function update(Request $request, $id)
     {
         // Validate the request data
@@ -97,7 +98,6 @@ class EmailTemplateController extends Controller
 
     public function store(Request $request)
     {
-
         // Validate request data
         $validatedData = $request->validate([
             'title' => 'required|string|max:255|unique:email_templates,title',
@@ -108,12 +108,22 @@ class EmailTemplateController extends Controller
         // Create email template
         $emailTemplate = EmailTemplate::create($validatedData);
 
+        // Format the response to match the API schema in the screenshot
         return response()->json([
-            'status_code' => 200,
+            'data' => [
+                'id' => $emailTemplate->id,
+                'name' => $emailTemplate->title,
+                'subject' => '', // Add subject if applicable
+                'template_body' => $emailTemplate->template,
+                'placeholders' => [
+                    // Add placeholders if available
+                ],
+            ],
             'message' => 'Email template created successfully',
-            'data' => $emailTemplate
-        ], 200);
+            'status_code' => 201
+        ], 201);
     }
+
 
     public function destroy($id)
 {
