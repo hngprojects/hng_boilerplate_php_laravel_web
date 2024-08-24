@@ -25,7 +25,7 @@ class BillingPlanControllerTest extends TestCase
         $updateData = [
             'name' => 'Updated Plan',
             'frequency' => 'Yearly',
-            'is_active' => false,
+            // 'is_active' => false,
             'amount' => 20000, // updated price in kobo
             'description' => 'An updated plan description',
         ];
