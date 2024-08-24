@@ -266,8 +266,8 @@ Route::prefix('v1')->group(function () {
 
 
 
-        Route::get('/notification-settings', [NotificationSettingController::class, 'show']);
-        Route::patch('/notification-settings', [NotificationSettingController::class, 'update']);
+        Route::get('/settings/notification-settings', [NotificationSettingController::class, 'show']);
+        Route::patch('/settings/notification-settings', [NotificationSettingController::class, 'update']);
     });
     Route::get('/notification-settings', [NotificationSettingController::class, 'show']);
 
