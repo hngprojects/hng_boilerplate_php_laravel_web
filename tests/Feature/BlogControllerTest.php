@@ -189,7 +189,7 @@ class BlogControllerTest extends TestCase
 
         $image = UploadedFile::fake()->image('image1.jpg');
         $path = Storage::putFile('public/images', $image);
-        $imageUrl = str_replace('public/', 'storage/', $path); 
+        $imageUrl = url('storage/' . str_replace('public/', '', $path)); 
 
         $response = $this->withHeaders(['Authorization' => "Bearer $token"])->postJson('/api/v1/blogs', [
             'title' => 'Test Blog Post',
@@ -222,7 +222,7 @@ class BlogControllerTest extends TestCase
             'title' => 'Test Blog Post',
             'content' => 'This is a test blog post content.',
             'author_id' => $admin->id,
-            'image_url' => $imageUrl,
+            'image_url' => $imageUrl,  // Use the full URL here
             'category' => 'Example 2',
         ]);
 

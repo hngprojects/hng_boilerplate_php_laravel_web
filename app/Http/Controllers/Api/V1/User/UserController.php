@@ -201,7 +201,7 @@ class UserController extends Controller
     
         if (!$user) {
             return response()->json([
-                'status_code' => 404,
+                'statusCode' => 404,
                 'message' => 'User not found'
             ], 404);
         }
@@ -211,7 +211,7 @@ class UserController extends Controller
         if ($authUser->id !== $user->id) {
             if (!in_array($authUser->role, ['superAdmin', 'admin'])) {
                 return response()->json([
-                    'status_code' => 403,
+                    'statusCode' => 403,
                     'message' => 'Unauthorized to delete this user'
                 ], 403);
             }
@@ -220,7 +220,7 @@ class UserController extends Controller
         $user->delete();
     
         return response()->json([
-            'status_code' => 200,
+            'statusCode' => 200,
             'message' => 'User deleted successfully'
         ], 200);
     }
