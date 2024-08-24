@@ -313,16 +313,16 @@ class HelpArticleController extends Controller
         }
     }
 
-    public function show($id)
+    public function show($articleId)
     {
         try {
-            $article = HelpArticle::findOrFail($id);
+            $article = HelpArticle::findOrFail($articleId);
             
             $author = User::find($article->user_id);
-            $authorName = $author ? $author->first_name . ' ' . $author->last_name : null;
+            $authorName = $author ? $author->name : null;
     
             $data = [
-                'id' => $article->id,
+                'id' => $article->article_id,
                 'title' => $article->title,
                 'content' => $article->content,
                 'author' => $authorName
