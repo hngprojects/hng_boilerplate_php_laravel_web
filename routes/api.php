@@ -63,6 +63,7 @@ use App\Http\Controllers\Api\V1\Organisation\OrganisationMemberController;
 |
 */
 
+
 Route::any('/', function () {
     return 'Language Learning AI Game';
 });
@@ -132,6 +133,8 @@ Route::prefix('v1')->group(function () {
         Route::patch('/organisations/{org_id}/products/{product_id}', [ProductController::class, 'update']);
         Route::delete('/organisations/{org_id}/products/{product_id}', [ProductController::class, 'destroy']);
     });
+
+
 
     //comment
     Route::middleware('auth:api')->group(function () {
@@ -211,6 +214,11 @@ Route::prefix('v1')->group(function () {
         Route::delete('/organisations/{org_id}', [OrganisationController::class, 'destroy']);
         Route::delete('/organisations/{org_id}/users/{user_id}', [OrganisationController::class, 'removeUser']);
         Route::get('/organisations/{organisation}/users', [organisationMemberController::class, 'index']);
+
+        //Role Organisations
+         
+
+        Route::get('/organisation/{org_id}/roles/{role_id}', [OrganisationController::class, 'getRoleId']);
 
         // members
         Route::get('/members/{org_id}/search', [OrganisationMemberController::class, 'searchMembers']);
