@@ -5,7 +5,6 @@ namespace App\Console\Commands;
 use DateTime;
 use DateTimeZone;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 
 class StoreApiStatus extends Command
@@ -70,7 +69,7 @@ class StoreApiStatus extends Command
                     'details' => $this->getDetails($execution)
                 ];
 
-                $url = config('app.url') . '/api/v1/api-status';
+                $url = "https://staging.api-php.boilerplate.hng.tech/api/v1/api-status";
 
                 $response = Http::post($url, $data);
 
