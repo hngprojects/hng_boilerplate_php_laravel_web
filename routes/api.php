@@ -341,7 +341,7 @@ Route::prefix('v1')->group(function () {
 
 
     //    quest
-    Route::get('/quests/{id}/messages', [QuestController::class, 'getQuestMessages']);
+    // Route::get('/quests/{id}/messages', [QuestController::class, 'getQuestMessages']);
 
     Route::post('/squeeze-user', [SqueezePageUserController::class, 'store']);
 
