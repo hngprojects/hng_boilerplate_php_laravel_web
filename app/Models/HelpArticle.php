@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 
 class HelpArticle extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUuids;
 
     // Specify the table associated with the model
     protected $table = 'articles';
@@ -24,18 +24,6 @@ class HelpArticle extends Model
 
     // Define the fillable fields
     protected $fillable = ['user_id', 'title', 'content'];
-
-    // Define the boot method to set UUID on creation
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($model) {
-            if (empty($model->article_id)) {
-                $model->article_id = (string) Str::uuid();
-            }
-        });
-    }
 
     // Define relationship with User model
     public function user()
