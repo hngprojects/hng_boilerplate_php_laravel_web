@@ -136,7 +136,6 @@ class UserController extends Controller
             "phone" => 'nullable|string',
             'pronouns' => 'nullable|string|max:255',
             'job_title' => 'nullable|string|max:255',
-            'department' => 'nullable|string|max:255',
             'social' => 'nullable|string|max:255',
             'bio' => 'nullable|string|max:500',
             'phone_number' => 'nullable|string|max:20',
