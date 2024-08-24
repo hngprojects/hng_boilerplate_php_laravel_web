@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use DateTime;
 use DateTimeZone;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Http;
 
 class StoreApiStatus extends Command
 {
@@ -29,7 +30,7 @@ class StoreApiStatus extends Command
     {
 
         // Get test result from json file
-        $data = file_get_contents(base_path('../result.json'));
+        $data = file_get_contents(base_path('result.json'));
 
         $data = json_decode($data, true);
 
@@ -58,19 +59,29 @@ class StoreApiStatus extends Command
                 $date = new DateTime("now", new DateTimeZone('Africa/Lagos'));
                 $last_checked = $date->format('Y-m-d h:i A');
 
-                // Update the api status record
-                \App\Models\ApiStatus::updateOrCreate(['api_group' => $item['name']], [
+
+                $data = [
                     'api_group' => $item['name'],
                     'method' => $item['request']['method'],
                     'status' => $status,
                     'response_time' => $response_time,
                     'last_checked' => $last_checked,
-                    'details' => $this->getDetails($execution),
-                ]);
+                    'details' => $this->getDetails($execution)
+                ];
+
+                $url = "https://staging.api-php.boilerplate.hng.tech/api/v1/api-status";
+
+                $response = Http::post($url, $data);
+
+                if ($response->failed()) {
+
+                    return $this->info('Failed to send API status data: '. $response->body());
+                }
+
             }
         }
 
-        $this->info('Api status stored successfully');
+        $this->info('API status data stored successfully: ' . $response->body());
     }
 
 

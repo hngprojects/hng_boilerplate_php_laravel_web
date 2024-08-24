@@ -59,7 +59,6 @@ class UserNotificationController extends Controller
 
         // Return 201
         return response()->json([
-            'status' => 'success',
             'message' => 'Notification created successfully',
             'status_code' => 201,
             'data' => [
@@ -115,9 +114,11 @@ class UserNotificationController extends Controller
             $isRead = $notification->pivot->status === 'read';
             return [
                 'id' => $notification->id,
-                'message' => $notification->message,
+                'user_id' => auth()->id(),
                 'is_read' => $isRead,
+                'message' => $notification->message,
                 'created_at' => $notification->created_at,
+                'updated_at' => $notification->updated_at,
             ];
         });
 
@@ -125,8 +126,7 @@ class UserNotificationController extends Controller
         $status = $isRead === 'false' ? 'Unread ' : '';
 
         return response()->json([
-            'status' => 'success',
-            'message' => "{$status}Notifications retrieved successfully",
+            'message' => "{$status}Notification retrieved successfully",
             'status_code' => Response::HTTP_OK,
             'data' => [
                 'total_notification_count' => $totalNotificationsCount,
