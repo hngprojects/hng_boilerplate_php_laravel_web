@@ -19,7 +19,7 @@ class RoleCreationTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         $this->test_user = User::factory()->create();
 
         $this->test_org = Organisation::factory()->create([
@@ -48,10 +48,10 @@ class RoleCreationTest extends TestCase
 
 
         $response->assertStatus(201)
-                 ->assertJsonStructure([
-                     'status_code',
-                     'message'
-                 ]);
+            ->assertJsonStructure([
+                'status_code',
+                'message'
+            ]);
 
         $this->assertDatabaseHas('roles', [
             'name' => 'Test role',
