@@ -94,6 +94,7 @@ class JobController extends Controller
                 'work_mode' => $request->input('job_mode'),
                 'company' => $request->input('company'),
                 'experience_level' => $request->input('level'),
+                'job_type' => $request->input('job_type'),
             ]
         ));
         $responseData = $job->toArray();
