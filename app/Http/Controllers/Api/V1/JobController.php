@@ -7,6 +7,8 @@ use App\Models\Job;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+
 
 class JobController extends Controller
 {
@@ -177,19 +179,47 @@ class JobController extends Controller
 
     public function destroy($id)
     {
+        // Check if the authenticated user is an admin
         if (auth()->user()->role !== 'admin') {
             return response()->json([
-                'success' => false,
-                'message' => 'Only admin users can delete job listings.',
+                'data' => null,
+                'error' => 'Only admin users can delete job listings.',
+                'message' => 'Unauthorized action.',
+                'status_code' => Response::HTTP_FORBIDDEN,
             ], Response::HTTP_FORBIDDEN);
         }
 
-        $job = Job::findOrFail($id);
-        $job->delete();
+        try {
+            // Find the job listing by ID
+            $job = Job::findOrFail($id);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Job listing deleted successfully.'
-        ], Response::HTTP_OK);
+            // Delete the job listing
+            $job->delete();
+
+            return response()->json([
+                'data' => null,
+                'error' => null,
+                'message' => 'Job listing deleted successfully.',
+                'status_code' => Response::HTTP_OK,
+            ], Response::HTTP_OK);
+
+        } catch (ModelNotFoundException $e) {
+            // Handle the case where the job listing was not found
+            return response()->json([
+                'data' => null,
+                'error' => 'Job listing not found.',
+                'message' => 'Job listing could not be found.',
+                'status_code' => Response::HTTP_NOT_FOUND,
+            ], Response::HTTP_NOT_FOUND);
+        } catch (\Exception $e) {
+            // Handle any other errors that may occur
+            return response()->json([
+                'data' => null,
+                'error' => 'An error occurred while deleting the job listing.',
+                'message' => 'Failed to delete job listing.',
+                'status_code' => Response::HTTP_INTERNAL_SERVER_ERROR,
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
+
 }

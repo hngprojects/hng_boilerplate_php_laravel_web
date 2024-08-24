@@ -158,20 +158,23 @@ class JobControllerTest extends TestCase
     }
 
     public function test_destroy_deletes_job_as_admin()
-    {
-        $job = Job::factory()->create();
+{
+    $job = Job::factory()->create();
 
-        $response = $this->withHeaders(['Authorization' => "Bearer $this->adminToken"])
-            ->deleteJson("/api/v1/jobs/{$job->id}");
+    $response = $this->withHeaders(['Authorization' => "Bearer $this->adminToken"])
+        ->deleteJson("/api/v1/jobs/{$job->id}");
 
-        $response->assertStatus(200)
-            ->assertJson([
-                'success' => true,
-                'message' => 'Job listing deleted successfully.'
-            ]);
+    $response->assertStatus(200)
+        ->assertJson([
+            'data' => null,
+            'error' => null,
+            'message' => 'Job listing deleted successfully.',
+            'status_code' => 200
+        ]);
 
-        $this->assertDatabaseMissing('jobs', ['id' => $job->id]);
-    }
+    $this->assertDatabaseMissing('jobs', ['id' => $job->id]);
+}
+
 
     public function test_destroy_fails_for_non_admin_user()
     {
