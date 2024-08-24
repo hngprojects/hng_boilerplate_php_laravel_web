@@ -95,13 +95,8 @@ class UserController extends Controller
                     'username' => '', 
                     'jobTitle' => $user->profile->job_title ?? null,
                     'pronouns' => $user->profile->pronoun ?? null,
-                    'department' => null, 
                     'email' => $user->email,
                     'bio' => $user->profile->bio ?? null,
-                    'social_links' => null,
-                    'language' => null, 
-                    'region' => null, 
-                    'timezones' => null, 
                     'profile_pic_url' => $user->profile->avatar_url ?? null,
                     'deletedAt' => $user->profile->deleted_at ?? null
                 ],
