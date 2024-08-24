@@ -171,6 +171,7 @@ class BlogControllerTest extends TestCase
             ->deleteJson("/api/v1/blogs/{$blog->id}")
             ->assertStatus(401); // Forbidden
     }
+
     public function test_blog_creation_endpoint_is_protected()
     {
         $response = $this->postJson('/api/v1/blogs', [
@@ -193,22 +194,33 @@ class BlogControllerTest extends TestCase
         $response = $this->withHeaders(['Authorization' => "Bearer $token"])->postJson('/api/v1/blogs', [
             'title' => 'Test Blog Post',
             'content' => 'This is a test blog post content.',
-            'author' => $admin->name,
             'author_id' => $admin->id,
             'image_url' => $image,
             'category' => 'Example 2',
         ]);
 
         $response->assertStatus(201)
+            ->assertJsonStructure([
+                'id',
+                'title',
+                'image_url',
+                'content',
+                'published_date',
+                'updated_date',
+                'author_id',
+                'category',
+                'comments'
+            ])
             ->assertJson([
-                'message' => 'Blog post created successfully.',
-                'status_code' => 201,
+                'title' => 'Test Blog Post',
+                'content' => 'This is a test blog post content.',
+                'author_id' => $admin->id,
+                'category' => 'Example 2',
             ]);
 
         $this->assertDatabaseHas('blogs', [
             'title' => 'Test Blog Post',
             'content' => 'This is a test blog post content.',
-            'author' => $admin->name,
             'author_id' => $admin->id,
             'image_url' => $imageUrl,
             'category' => 'Example 2',
