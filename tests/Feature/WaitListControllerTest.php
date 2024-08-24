@@ -23,33 +23,77 @@ class WaitListControllerTest extends TestCase
      *
      * @return void
      */
+    // public function testIndex()
+    // {
 
-    public function testIndex()
-    {
-        // Create an admin user
-        $admin = User::factory()->create(['role' => 'admin']);
+    //     $admin = User::factory()->create(['role' => 'admin']);
 
-        // Generate a JWT token for the admin user
-        $token = JWTAuth::fromUser($admin);
+    //     // Create some waitlist entries
+    //     WaitList::factory()->count(3)->create();
+    //     $response = $this->actingAs($admin)->getJson('/api/v1/waitlists');
+    //     $response->assertStatus(200);
+    //     $response->assertJsonStructure([
+    //         'status',
+    //         'data' => [
+    //             '*' => ['id', 'name', 'email', 'created_at', 'updated_at']
+    //         ]
+    //     ]);
+    // }
 
-        // Create some waitlist entries
-        WaitList::factory()->count(3)->create();
+//     public function testIndex()
+// {
+//     // Create an admin role
+//     $adminRole = \App\Models\Role::create(['name' => 'admin']);
 
-        // Act as the admin user with the generated token
-        $response = $this->withHeaders(['Authorization' => 'Bearer ' . $token])
-                        ->getJson('/api/v1/waitlists');
+//     // Create a user and assign the admin role
+//     $admin = \App\Models\User::factory()->create(); // Create user without role
+//     $admin->roles()->attach($adminRole->id); // Attach the admin role to the user
 
-        // Assert that the response status is 200
-        $response->assertStatus(200);
+//     // Create some waitlist entries
+//     \App\Models\WaitList::factory()->count(3)->create();
 
-        // Assert that the response contains the correct data structure
-        $response->assertJsonStructure([
-            'status',
-            'data' => [
-                '*' => ['id', 'name', 'email', 'created_at', 'updated_at']
-            ]
-        ]);
-    }
+//     // Act as the admin user and make a GET request to the index endpoint
+//     $response = $this->actingAs($admin)->getJson('/api/v1/waitlists');
+
+//     // Assert that the response status is 200
+//     $response->assertStatus(200);
+
+//     // Assert that the response contains the correct data structure
+//     $response->assertJsonStructure([
+//         'status',
+//         'data' => [
+//             '*' => ['id', 'name', 'email', 'created_at', 'updated_at']
+//         ]
+//     ]);
+// }
+
+
+public function testIndex()
+{
+    // Create an admin user
+    $admin = User::factory()->create(['role' => 'admin']);
+
+    // Generate a JWT token for the admin user
+    $token = JWTAuth::fromUser($admin);
+
+    // Create some waitlist entries
+    WaitList::factory()->count(3)->create();
+
+    // Act as the admin user with the generated token
+    $response = $this->withHeaders(['Authorization' => 'Bearer ' . $token])
+                     ->getJson('/api/v1/waitlists');
+
+    // Assert that the response status is 200
+    $response->assertStatus(200);
+
+    // Assert that the response contains the correct data structure
+    $response->assertJsonStructure([
+        'status',
+        'data' => [
+            '*' => ['id', 'name', 'email', 'created_at', 'updated_at']
+        ]
+    ]);
+}
 
 
     /**

@@ -29,4 +29,9 @@ class Blog extends Model
      * @var string
      */
     protected $keyType = 'string';
+
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
+    }
 }
