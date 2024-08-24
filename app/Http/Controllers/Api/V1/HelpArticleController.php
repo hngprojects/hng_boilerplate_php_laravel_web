@@ -133,49 +133,49 @@ class HelpArticleController extends Controller
         if (!Auth::check()) {
             return response()->json([
                 'status_code' => 401,
-                'success' => false,
-                'message' => 'Authentication failed'
+                'message' => 'Authentication failed',
+                'data' => null
             ], 401);
         }
-
+    
         try {
             // Find the article by ID
             $article = HelpArticle::find($articleId);
-
+    
             if (!$article) {
                 return response()->json([
                     'status_code' => 404,
-                    'success' => false,
-                    'message' => 'Help article not found.'
+                    'message' => 'Help article not found.',
+                    'data' => null
                 ], 404);
             }
-
+    
             // Ensure only the authenticated user can delete the article
             if ($article->user_id !== Auth::id()) {
                 return response()->json([
                     'status_code' => 403,
-                    'success' => false,
-                    'message' => 'You do not have permission to access this resource.'
+                    'message' => 'You do not have permission to access this resource.',
+                    'data' => null
                 ], 403);
             }
-
+    
             // Delete the article
             $article->delete();
-
+    
             return response()->json([
                 'status_code' => 200,
-                'success' => true,
-                'message' => 'Help article deleted successfully.'
+                'message' => 'Topic deleted successfully',
+                'data' => null
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status_code' => 500,
-                'success' => false,
                 'message' => 'Failed to delete help article. Please try again later.',
-                'error' => $e->getMessage()
+                'data' => null
             ], 500);
         }
     }
+    
     public function getArticles(Request $request)
     {
         // Validate query parameters
