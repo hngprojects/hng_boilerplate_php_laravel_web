@@ -160,6 +160,30 @@ class BillingPlanController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $plans = SubscriptionPlan::find($id);
+
+        if (!$plans) {
+            return response()->json([
+                'status_code' => 404,
+                'error' => 'Not Found',
+                'message' => 'Plan not found'
+            ], 404);
+        }
+
+        try {
+            $plans->delete();
+
+            // Return success response
+            return response()->json([
+                'data' => true,
+                'status_code' => 200,
+                'message' => 'Plan deleted successfully'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 500,
+                'message' => 'Internal server error'
+            ], 500);
+        }
     }
 }
