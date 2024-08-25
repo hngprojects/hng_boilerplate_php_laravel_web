@@ -185,12 +185,12 @@ Route::prefix('v1')->group(function () {
         Route::patch('/email-templates/{id}', [EmailTemplateController::class, 'update']);
         Route::delete('/email-templates/{id}', [EmailTemplateController::class, 'destroy']);
     });
+
     Route::middleware(['auth:api', 'admin'])->group(function () {
-
-
         // Dashboard
         Route::get('/users-list', [AdminDashboardController::class, 'getUsers']);
     });
+
     Route::post('/email-requests', [SendEmailController::class, 'createEmailRequest']);
 
 
