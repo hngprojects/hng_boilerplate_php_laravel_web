@@ -107,7 +107,7 @@ class HelpArticleController extends Controller
                 'id' => $article->article_id,
                 'title' => $article->title,
                 'content' => $article->content,
-                'author' =>$article->user_id
+                'author' => $article->user_id
             ];
 
             return response()->json([
@@ -186,10 +186,8 @@ class HelpArticleController extends Controller
         ]);
 
         try {
-            // Build the query
             $query = HelpArticle::query();
 
-            // Apply search filter if provided
             if ($request->has('search')) {
                 $query->where(function ($query) use ($request) {
                     $query->where('title', 'like', '%' . $request->search . '%')
@@ -197,29 +195,25 @@ class HelpArticleController extends Controller
                 });
             }
 
-            // Apply category filter if provided
             if ($request->has('category')) {
                 $query->where('category', $request->category);
             }
 
-            // Pagination
             $page = $request->get('page', 1);
             $size = $request->get('size', 10);
             $articles = $query->paginate($size, ['*'], 'page', $page);
 
             return response()->json([
                 'status_code' => 200,
-                'success' => true,
                 'message' => 'Articles retrieved successfully.',
-                'data' => [
-                    'topics' => $articles->items(),
-                    'pagination' => [
-                        'page' => $articles->currentPage(),
-                        'size' => $articles->perPage(),
-                        'total_pages' => $articles->lastPage(),
-                        'total_items' => $articles->total()
-                    ]
-                ]
+                'data' =>  collect($articles->items())->map(function ($item) {
+                    return [
+                        'id' => $item->article_id,
+                        'title' => $item->title,
+                        'content' => $item->content,
+                        'author' => $item->user->name,
+                    ];
+                })->toArray()
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -318,6 +312,4 @@ class HelpArticleController extends Controller
             ], 404);
         }
     }
-
-
 }
