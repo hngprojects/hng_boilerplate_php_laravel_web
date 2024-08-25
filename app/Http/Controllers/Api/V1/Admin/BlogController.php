@@ -65,9 +65,30 @@ class BlogController extends Controller
     public function index()
     {
         try{
-            $blogPosts = Blog::orderBy('created_at', 'desc')
-                ->select('id', 'title', 'content', 'author', 'created_at', 'category', 'image_url')
-                ->get();
+            $blogPosts = Blog::with('comments')
+            ->orderBy('created_at', 'desc')
+            ->select('id', 'title', 'content', 'author', 'created_at', 'category', 'image_url')
+            ->get();
+
+            $blogPosts = $blogPosts->map(function ($blog) {
+                return [
+                    'id' => $blog->id,
+                    'title' => $blog->title,
+                    'content' => $blog->content,
+                    'published_date' => $blog->created_at?->toIso8601String(),
+                    'updated_date' => $blog->updated_at?->toIso8601String(),
+                    'author_id' => $blog->author_id,
+                    'category' => $blog->category,
+                    'image_url' => $blog->image_url,
+                    'comments' => $blog->comments->map(function ($comment) {
+                        return [
+                            'id' => $comment->id,
+                            'content' => $comment->content,
+                            'created_at' => $comment->created_at?->toIso8601String(),
+                        ];
+                    }),
+                ];
+            });
 
             return response()->json([
                 'data' => $blogPosts,
@@ -163,11 +184,12 @@ class BlogController extends Controller
     public function show(Request $request, string $id)
     {
         try {
-            $blog = Blog::find($id);
+            $blog = Blog::with('comments')->find($id);
 
             if(!$blog){
                 return response()->json([
                     'error' => 'Blog not found.',
+                    'message' => 'Blog not found.',
                     'status_code' => Response::HTTP_NOT_FOUND,
                 ], 404);
             }
@@ -178,14 +200,21 @@ class BlogController extends Controller
                     'category' => $blog->category,
                     'content' => $blog->content,
                     'image_url' => $blog->image_url,
-                    'created_at' => $blog->created_at,
+                    'published_date' => $blog->created_at?->toIso8601String(),
+                    'updated_date' => $blog->updated_at?->toIso8601String(),
+                    'author_id' => $blog->author_id,
+                    'comments' => $blog->comments->map(function ($comment) {
+                        return [
+                            'id' => $comment->id,
+                            'content' => $comment->content,
+                            'created_at' => $comment->created_at?->toIso8601String(),
+                        ];
+                }),
                 ],
-                'message' => 'Blog post fetched sucessfully.',
+                'message' => 'Blog post details fetched sucessfully.',
                 'status_code' => Response::HTTP_OK,
             ], Response::HTTP_OK);
         } catch (Exception $exception) {
-            // Log::error('Error creating blog post: ' . $exception->getMessage());
-            DB::rollBack();
             return response()->json(['error' => 'Internal server error.'], 500);
         }
     }

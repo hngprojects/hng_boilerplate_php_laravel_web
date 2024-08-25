@@ -17,7 +17,6 @@ class HelpArticleController extends Controller
 
     public function store(Request $request)
     {
-        // Ensure the user is authenticated
         if (!Auth::check()) {
             return response()->json([
                 'status_code' => 401,
@@ -53,7 +52,7 @@ class HelpArticleController extends Controller
                 'status_code' => 201,
                 'message' => 'Help article created successfully.',
                 'data' => [
-                    'id' => $article->id,
+                    'id' => $article->article_id,
                     'title' => $article->title,
                     'content' => $article->content,
                     'author' => Auth::user()->name
@@ -88,12 +87,12 @@ class HelpArticleController extends Controller
     {
         try {
             $article = HelpArticle::findOrFail($articleId);
-    
+
             $validator = Validator::make($request->all(), [
                 'title' => 'nullable|string|max:255',
                 'content' => 'nullable|string',
             ]);
-    
+
             if ($validator->fails()) {
                 return response()->json([
                     'status_code' => 400,
@@ -102,15 +101,15 @@ class HelpArticleController extends Controller
                     'errors' => $validator->errors()
                 ], 400);
             }
-    
+
             $article->update($request->only(['title', 'content']));
             $data = [
                 'id' => $article->article_id,
                 'title' => $article->title,
                 'content' => $article->content,
-                'author' =>$article->user_id 
+                'author' => $article->user_id
             ];
-    
+
             return response()->json([
                 'status_code' => 200,
                 'message' => 'Topic updated successfully',
@@ -124,7 +123,7 @@ class HelpArticleController extends Controller
             ], 404);
         }
     }
-    
+
 
 
     public function destroy($articleId)
@@ -137,11 +136,11 @@ class HelpArticleController extends Controller
                 'data' => null
             ], 401);
         }
-    
+
         try {
             // Find the article by ID
             $article = HelpArticle::find($articleId);
-    
+
             if (!$article) {
                 return response()->json([
                     'status_code' => 404,
@@ -149,7 +148,7 @@ class HelpArticleController extends Controller
                     'data' => null
                 ], 404);
             }
-    
+
             // Ensure only the authenticated user can delete the article
             if ($article->user_id !== Auth::id()) {
                 return response()->json([
@@ -158,10 +157,10 @@ class HelpArticleController extends Controller
                     'data' => null
                 ], 403);
             }
-    
+
             // Delete the article
             $article->delete();
-    
+
             return response()->json([
                 'status_code' => 200,
                 'message' => 'Topic deleted successfully',
@@ -175,7 +174,7 @@ class HelpArticleController extends Controller
             ], 500);
         }
     }
-    
+
     public function getArticles(Request $request)
     {
         // Validate query parameters
@@ -187,10 +186,8 @@ class HelpArticleController extends Controller
         ]);
 
         try {
-            // Build the query
             $query = HelpArticle::query();
 
-            // Apply search filter if provided
             if ($request->has('search')) {
                 $query->where(function ($query) use ($request) {
                     $query->where('title', 'like', '%' . $request->search . '%')
@@ -198,29 +195,25 @@ class HelpArticleController extends Controller
                 });
             }
 
-            // Apply category filter if provided
             if ($request->has('category')) {
                 $query->where('category', $request->category);
             }
 
-            // Pagination
             $page = $request->get('page', 1);
             $size = $request->get('size', 10);
             $articles = $query->paginate($size, ['*'], 'page', $page);
 
             return response()->json([
                 'status_code' => 200,
-                'success' => true,
                 'message' => 'Articles retrieved successfully.',
-                'data' => [
-                    'topics' => $articles->items(),
-                    'pagination' => [
-                        'page' => $articles->currentPage(),
-                        'size' => $articles->perPage(),
-                        'total_pages' => $articles->lastPage(),
-                        'total_items' => $articles->total()
-                    ]
-                ]
+                'data' =>  collect($articles->items())->map(function ($item) {
+                    return [
+                        'id' => $item->article_id,
+                        'title' => $item->title,
+                        'content' => $item->content,
+                        'author' => $item->user->name,
+                    ];
+                })->toArray()
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -295,17 +288,17 @@ class HelpArticleController extends Controller
     {
         try {
             $article = HelpArticle::findOrFail($articleId);
-            
+
             $author = User::find($article->user_id);
             $authorName = $author ? $author->name : null;
-    
+
             $data = [
                 'id' => $article->article_id,
                 'title' => $article->title,
                 'content' => $article->content,
                 'author' => $authorName
             ];
-    
+
             return response()->json([
                 'status_code' => 200,
                 'message' => 'Request completed successfully',
@@ -319,6 +312,4 @@ class HelpArticleController extends Controller
             ], 404);
         }
     }
-    
-    
 }
