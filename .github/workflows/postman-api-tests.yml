@@ -31,7 +31,10 @@ jobs:
 
     - name: Send parsed result to Hosted Application
       run: |
-          export APP_URL=${{ secrets.APP_URL }}
-          php send-postman-api-tests-results.php 
+          cp .env.example .env
+          composer install --no-interaction --prefer-dist --optimize-autoloader
+          echo "APP_URL=${{ secrets.APP_URL }}" >> .env
+          php artisan store:api-status
+
    
     
