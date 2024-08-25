@@ -108,7 +108,7 @@ class ShowRoleTest extends TestCase
     public function testFetchRoleForNonExistentOrganisation()
     {
         // Use a UUID that does not exist in the database
-        $response = $this->getJson('/api/v1/organisations/00000000-0000-0000-0000-000000000000/roles/1');
+        $response = $this->getJson('/api/v1/organisations/00000000-0000-0000-0000-000000000000/roles/'. Str::uuid());
 
         $response->assertStatus(404)
                  ->assertJson([
@@ -128,13 +128,13 @@ class ShowRoleTest extends TestCase
         $organisation = Organisation::factory()->create(['user_id' => $this->user->id]);
 
         // Use a valid UUID for organisation but one that does not exist as a role
-        $response = $this->getJson("/api/v1/organisations/{$organisation->org_id}/roles/00000000000000000000000000000000");
+        $response = $this->getJson("/api/v1/organisations/{$organisation->org_id}/roles/00000000-0000-0000-0000-000000000000");
 
         $response->assertStatus(404)
                  ->assertJson([
                      'status_code' => 404,
                      'error' => 'Not Found',
-                     'message' => 'The role with ID 00000000000000000000000000000000 does not exist',
+                     'message' => 'The role with ID 00000000-0000-0000-0000-000000000000 does not exist',
                  ]);
     }
 }

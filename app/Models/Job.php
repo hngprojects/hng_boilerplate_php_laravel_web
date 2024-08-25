@@ -22,7 +22,8 @@ class Job extends Model
         'deadline',
         'key_responsibilities',
         'qualifications',
-        'user_id'
+        'user_id',
+        'company'
     ];
     
 

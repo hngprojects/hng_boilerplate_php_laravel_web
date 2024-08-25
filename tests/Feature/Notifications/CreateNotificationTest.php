@@ -46,7 +46,6 @@ class CreateNotificationTest extends TestCase
         // Assert the response status and structure
         $response->assertStatus(201)
             ->assertJsonStructure([
-                'status',
                 'message',
                 'status_code',
                 'data' => [

@@ -72,7 +72,7 @@ class RoleDeletionTest extends TestCase
         $this->actingAs($this->admin_user, 'api');
 
         // Attempt to delete a non-existent role
-        $response = $this->deleteJson('/api/v1/organisations/' . $this->test_org->org_id . '/roles/9999');
+        $response = $this->deleteJson('/api/v1/organisations/' . $this->test_org->org_id . '/roles/00000000-0000-0000-0000-000000000000');
 
         // Assert a 404 Not Found response
         $response->assertStatus(404);

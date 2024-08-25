@@ -25,17 +25,14 @@ class RoleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreRoleRequest $request)
+    public function store(StoreRoleRequest $request, $orgId)
     {
-        Log::info('Incoming role creation request', $request->all());
 
         try {
             DB::beginTransaction();
 
-            $org_id = $request->organisation_id;
-
             // Validate the organisation ID as a UUID
-            if (!preg_match('/^[a-f0-9-]{36}$/', $org_id)) {
+            if (!preg_match('/^[a-f0-9-]{36}$/', $orgId)) {
                 return response()->json([
                     'status_code' => Response::HTTP_BAD_REQUEST,
                     'error' => 'Invalid input',
@@ -44,17 +41,17 @@ class RoleController extends Controller
             }
 
             // Check whether the organisation exists
-            $organisation = Organisation::find($org_id);
+            $organisation = Organisation::find($orgId);
             if (!$organisation) {
                 return response()->json([
                     'status_code' => Response::HTTP_NOT_FOUND,
                     'error' => 'Organisation not found',
-                    'message' => 'The organisation with ID ' . $org_id . ' does not exist',
+                    'message' => 'The organisation with ID ' . $orgId . ' does not exist',
                 ], Response::HTTP_NOT_FOUND);
             }
 
             // Check for duplicate role name within the organisation
-            $existingRole = Role::where('org_id', $org_id)->where('name', $request->role_name)->first();
+            $existingRole = Role::where('org_id', $orgId)->where('name', $request->name)->first();
             if ($existingRole) {
                 return response()->json([
                     'status_code' => Response::HTTP_CONFLICT,
@@ -65,22 +62,34 @@ class RoleController extends Controller
 
             // Creating the role
             $role = Role::create([
-                'name' => $request->role_name,
+                'name' => $request->name,
                 'description' => $request->description,
-                'org_id' => $org_id,
+                'org_id' => $orgId,
             ]);
 
             // Attach the permission to the role
-            $role->permissions()->attach($request->permissions_id);
+            $role->permissions()->attach($request->permissions);
+
+            // Retrieve all attached permissions with additional details
+            $permissions = $role->permissions->map(function ($permission) {
+                return [
+                    'id' => $permission->permission_id,
+                    'name' => $permission->name,
+                ];
+            });
 
             DB::commit();
 
             return response()->json([
-                'id' => $role->id,
-                'name' => $role->name,
-                'description' => $role->description,
-                'message' => "Role created successfully",
-                'status_code' => Response::HTTP_CREATED,
+                'status_code' => 201,
+                'data' => [
+                    'id' => $role->id,
+                    'name' => $role->name,
+                    'description' => $role->description,
+                    'permissions' => $permissions,
+                ],
+                'error' => null,
+                'message' => 'Role created successfully',
             ], Response::HTTP_CREATED);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -161,9 +170,13 @@ class RoleController extends Controller
         if ($validator->fails()) {
             return $this->apiResponse($validator->errors(), 422);
         }
+        if ($validator->fails()) {
+            return $this->apiResponse($validator->errors(), 422);
+        }
 
         $user = User::find($user_id);
-        if (!$user) return ResponseHelper::response("User not found", 404, null);
+        if (!$user)
+            return ResponseHelper::response("User not found", 404, null);
         if ($organisation = Organisation::find($org_id)) {
             if (!$organisation->users->contains($user->id))
                 return ResponseHelper::response("You are not authorised to perform this action", 409, null);
@@ -173,22 +186,27 @@ class RoleController extends Controller
                 return ResponseHelper::response("Roles updated successfully", 200, null);
             else
                 return response()->json(['message' => 'Role update failed', 'error' => $result], 400);
-        } else return ResponseHelper::response("Organisation not found", 404, null);
+        } else
+            return ResponseHelper::response("Organisation not found", 404, null);
     }
 
     public function update(UpdateRoleRequest $request, $org_id, $role_id)
     {
         $user = auth('api')->user();
-        if (!$user) return ResponseHelper::response("Authentication failed", 401, null);
+        if (!$user)
+            return ResponseHelper::response("Authentication failed", 401, null);
         if ($organisation = Organisation::find($org_id)) {
-            if (!$organisation->users->contains($user->id)) return ResponseHelper::response("You are not authorised to perform this action", 401, null);
+            if (!$organisation->users->contains($user->id))
+                return ResponseHelper::response("You are not authorised to perform this action", 401, null);
             if ($role = Role::find($role_id)) {
                 $role->update($request->only('name', 'description'));
                 return ResponseHelper::response("Role updated successfully", 200, $role);
-            } else return ResponseHelper::response("Role not found", 404, null);
-        } else return ResponseHelper::response("Organisation not found", 404, null);
+            } else
+                return ResponseHelper::response("Role not found", 404, null);
+        } else
+            return ResponseHelper::response("Organisation not found", 404, null);
     }
-
+    
     // To get all roles
     public function index($org_id)
     {
@@ -233,7 +251,7 @@ class RoleController extends Controller
     {
         try {
             // Validate UUID format
-            if (!Str::isUuid($org_id) || !is_numeric($role_id)) {
+            if (!Str::isUuid($org_id) || !Str::isUuid($role_id)) {
                 Log::error('Invalid UUID or ID format', [
                     'org_id' => $org_id,
                     'role_id' => $role_id,
@@ -338,7 +356,8 @@ class RoleController extends Controller
         $payload = Validator::make($request->all(), [
             'permission_list' => 'required|array'
         ]);
-        if ($payload->fails()) return ResponseHelper::response($payload->errors(), 422, null);
+        if ($payload->fails())
+            return ResponseHelper::response($payload->errors(), 422, null);
         if ($role && !$payload->fails()) {
             foreach ($request->permission_list as $permission => $value) {
                 $permissionId = Permission::where('name', $permission)->value('id');
@@ -349,7 +368,8 @@ class RoleController extends Controller
                 }
             }
             return ResponseHelper::response("Permissions updated successfully", 202, null);
-        } else return ResponseHelper::response("Role not found", 404, null);
+        } else
+            return ResponseHelper::response("Role not found", 404, null);
     }
 
     public function destroy(Request $request, $org_id, $role_id)

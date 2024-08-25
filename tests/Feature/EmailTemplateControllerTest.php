@@ -248,10 +248,14 @@ class EmailTemplateControllerTest extends TestCase
             'status' => true
         ]);
 
-        $response->assertStatus(200)
+        $response->assertStatus(201)
             ->assertJson([
-                'status_code' => 200,
+                'status_code' => 201,
                 'message' => 'Email template created successfully',
+                'data' => [
+                    'name' => 'Welcome Email',
+                    'template_body' => '<p>Hello, welcome to our service!</p>',
+                ],
             ]);
 
         $this->assertDatabaseHas('email_templates', [
@@ -260,6 +264,7 @@ class EmailTemplateControllerTest extends TestCase
             'status' => true,
         ]);
     }
+
 
     public function it_requires_title_to_create_email_template()
     {

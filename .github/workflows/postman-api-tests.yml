@@ -1,4 +1,4 @@
-name: Scheduled Postman API Tests
+name: Scheduled API Tests
 
 on:
   schedule:
@@ -23,17 +23,18 @@ jobs:
     - name: Run Postman Collection
       run: newman run postman-api-tests.json -r cli,json --reporter-json-export result.json
       continue-on-error: true
-      
 
-    
-    - name: Transfer test results via SCP
-      uses: appleboy/scp-action@v0.1.7
+    - name: Set up PHP
+      uses: nanasess/setup-php@v4
       with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USER }}
-        password: ${{ secrets.SSH_PASSWORD }}
-        source: "result.json"
-        target: "/var/www/boilerplate-be"
+        php-version: '8.2'
 
-    - name: Clean up
-      run: rm -f result.json
+    - name: Send parsed result to Hosted Application
+      run: |
+          cp .env.example .env
+          composer install --no-interaction --prefer-dist --optimize-autoloader
+          echo "APP_URL=${{ secrets.APP_URL }}" >> .env
+          php artisan store:api-status
+
+   
+    

@@ -110,8 +110,11 @@ Route::prefix('v1')->group(function () {
     Route::get('/products/search', [ProductController::class, 'search']);
     Route::get('/products', [ProductController::class, 'index']);
     Route::get('/products/{product_id}', [ProductController::class, 'show']);
+    Route::delete('/products/{product_id}', [ProductController::class, 'delete']);
+
     Route::get('/billing-plans', [BillingPlanController::class, 'index']);
     Route::get('/billing-plans/{id}', [BillingPlanController::class, 'getBillingPlan']);
+    Route::put('/billing-plans/{id}', [BillingPlanController::class, 'update']);
     Route::get('/payments/paystack/{organisation_id}/verify/{id}', [PaymentController::class, 'handlePaystackCallback']);
     Route::get('/payments/flutterwave/{organisation_id}/verify/{id}', [PaymentController::class, 'handleFlutterwaveCallback']);
     Route::post('/languages', [LanguageController::class, 'create']);
@@ -164,6 +167,7 @@ Route::prefix('v1')->group(function () {
 
     // Help Articles
     Route::post('/help-center/topics', [HelpArticleController::class, 'store']);
+    Route::get('/help-center/topics/{articleId}', [HelpArticleController::class, 'show']);
     Route::patch('/help-center/topics/{articleId}', [HelpArticleController::class, 'update']);
     Route::delete('/help-center/topics/{articleId}', [HelpArticleController::class, 'destroy']);
     Route::get('/help-center/topics', [HelpArticleController::class, 'getArticles']);
@@ -181,12 +185,12 @@ Route::prefix('v1')->group(function () {
         Route::patch('/email-templates/{id}', [EmailTemplateController::class, 'update']);
         Route::delete('/email-templates/{id}', [EmailTemplateController::class, 'destroy']);
     });
+
     Route::middleware(['auth:api', 'admin'])->group(function () {
-
-
         // Dashboard
         Route::get('/users-list', [AdminDashboardController::class, 'getUsers']);
     });
+
     Route::post('/email-requests', [SendEmailController::class, 'createEmailRequest']);
 
 
@@ -243,7 +247,7 @@ Route::prefix('v1')->group(function () {
         Route::patch('/accounts/deactivate', [AccountController::class, 'deactivate']);
 
         // Roles
-        Route::post('/organisations/{org_id}/roles', [RoleController::class, 'store']);
+        Route::post('/organisations/{orgId}/roles', [RoleController::class, 'store']);
         Route::put('/organisations/{org_id}/roles/{role_id}', [RoleController::class, 'update']);
         Route::put('/organisations/{org_id}/roles/{role_id}/disable', [RoleController::class, 'disableRole']);
         Route::get('/organisations/{org_id}/roles', [RoleController::class, 'index']);
@@ -266,8 +270,8 @@ Route::prefix('v1')->group(function () {
 
 
 
-        Route::get('/notification-settings', [NotificationSettingController::class, 'show']);
-        Route::patch('/notification-settings', [NotificationSettingController::class, 'update']);
+        Route::get('/settings/notification-settings', [NotificationSettingController::class, 'show']);
+        Route::patch('/settings/notification-settings', [NotificationSettingController::class, 'update']);
     });
     Route::get('/notification-settings', [NotificationSettingController::class, 'show']);
 
@@ -342,7 +346,7 @@ Route::prefix('v1')->group(function () {
 
 
     //    quest
-    Route::get('/quests/{id}/messages', [QuestController::class, 'getQuestMessages']);
+    // Route::get('/quests/{id}/messages', [QuestController::class, 'getQuestMessages']);
 
     Route::post('/squeeze-user', [SqueezePageUserController::class, 'store']);
 
