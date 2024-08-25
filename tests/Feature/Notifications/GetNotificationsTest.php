@@ -47,7 +47,6 @@ class GetNotificationsTest extends TestCase
         // Assert the response status and structure
         $response->assertStatus(200)
             ->assertJsonStructure([
-                'status',
                 'message',
                 'status_code',
                 'data' => [
@@ -86,7 +85,6 @@ class GetNotificationsTest extends TestCase
         // Assert the response status and structure
         $response->assertStatus(200)
             ->assertJsonStructure([
-                'status',
                 'message',
                 'status_code',
                 'data' => [

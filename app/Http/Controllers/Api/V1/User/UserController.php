@@ -95,13 +95,8 @@ class UserController extends Controller
                     'username' => '', 
                     'jobTitle' => $user->profile->job_title ?? null,
                     'pronouns' => $user->profile->pronoun ?? null,
-                    'department' => null, 
                     'email' => $user->email,
                     'bio' => $user->profile->bio ?? null,
-                    'social_links' => null,
-                    'language' => null, 
-                    'region' => null, 
-                    'timezones' => null, 
                     'profile_pic_url' => $user->profile->avatar_url ?? null,
                     'deletedAt' => $user->profile->deleted_at ?? null
                 ],
@@ -138,7 +133,14 @@ class UserController extends Controller
             'first_name' => 'nullable|string|max:255',
             'last_name' => 'nullable|string|max:255',
             "email" => 'nullable|string|email|max:255|unique:users,email,' . $id,
-            "phone" => 'nullable|string'
+            "phone" => 'nullable|string',
+            'pronouns' => 'nullable|string|max:255',
+            'job_title' => 'nullable|string|max:255',
+            'social' => 'nullable|string|max:255',
+            'bio' => 'nullable|string|max:500',
+            'phone_number' => 'nullable|string|max:20',
+            'avatar_url' => 'nullable|string|url',
+            'recovery_email' => 'nullable|string|email|max:255'
         ]);
 
         if ($validator->fails()) {
@@ -199,7 +201,7 @@ class UserController extends Controller
     
         if (!$user) {
             return response()->json([
-                'status_code' => 404,
+                'statusCode' => 404,
                 'message' => 'User not found'
             ], 404);
         }
@@ -209,7 +211,7 @@ class UserController extends Controller
         if ($authUser->id !== $user->id) {
             if (!in_array($authUser->role, ['superAdmin', 'admin'])) {
                 return response()->json([
-                    'status_code' => 403,
+                    'statusCode' => 403,
                     'message' => 'Unauthorized to delete this user'
                 ], 403);
             }
@@ -218,7 +220,7 @@ class UserController extends Controller
         $user->delete();
     
         return response()->json([
-            'status_code' => 200,
+            'statusCode' => 200,
             'message' => 'User deleted successfully'
         ], 200);
     }

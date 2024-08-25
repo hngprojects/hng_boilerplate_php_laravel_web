@@ -1,0 +1,37 @@
+name: Scheduled API Tests
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+
+jobs:
+  run-api-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20' 
+
+    - name: Install Newman
+      run: npm install -g newman
+        
+    - name: Run Postman Collection
+      run: newman run postman-api-tests.json -r cli,json --reporter-json-export result.json
+      continue-on-error: true
+
+    - name: Set up PHP
+      uses: nanasess/setup-php@v4
+      with:
+        php-version: '8.2'
+
+    - name: Send parsed result to Hosted Application
+      run: |
+          export APP_URL=${{ secrets.APP_URL }}
+          php send-postman-api-tests-results.php 
+   
+    

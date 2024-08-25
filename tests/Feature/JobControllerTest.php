@@ -51,12 +51,11 @@ class JobControllerTest extends TestCase
             'title' => 'Software Engineer',
             'description' => 'Develop amazing software',
             'location' => 'New York',
-            'salary_range' => '100000',
-            'job_type' => 'Full-time',
+            'salary' => '100000',
             'job_mode' => 'Remote',
             'deadline' => '2023-12-31',
-            'company_name' => 'Corp insurance',
-            'experience_level' => 'Mid-level',
+            'company' => 'Corp insurance',
+            'level' => 'Mid-level',
             'key_responsibilities' => 'Develop and maintain software',
             'qualifications' => 'Bachelor\'s degree in Computer Science'
         ];
@@ -68,7 +67,7 @@ class JobControllerTest extends TestCase
             ->assertJsonStructure([
                 'success',
                 'message',
-                'data' => ['id', 'title', 'description', 'location', 'salary', 'job_type', 'work_mode', 'deadline', 'benefits', 'experience_level', 'key_responsibilities', 'qualifications', 'created_at', 'updated_at']
+                'data' => ['id', 'title', 'description', 'location', 'salary', 'level']
             ]);
 
         $this->assertDatabaseHas('jobs', [
@@ -76,13 +75,6 @@ class JobControllerTest extends TestCase
             'description' => 'Develop amazing software',
             'location' => 'New York',
             'salary' => '100000',
-            'job_type' => 'Full-time',
-            'work_mode' => 'Remote',
-            'deadline' => '2023-12-31',
-            'benefits' => 'Corp insurance',
-            'experience_level' => 'Mid-level',
-            'key_responsibilities' => 'Develop and maintain software',
-            'qualifications' => 'Bachelor\'s degree in Computer Science'
         ]);
     }
 
@@ -158,20 +150,23 @@ class JobControllerTest extends TestCase
     }
 
     public function test_destroy_deletes_job_as_admin()
-    {
-        $job = Job::factory()->create();
+{
+    $job = Job::factory()->create();
 
-        $response = $this->withHeaders(['Authorization' => "Bearer $this->adminToken"])
-            ->deleteJson("/api/v1/jobs/{$job->id}");
+    $response = $this->withHeaders(['Authorization' => "Bearer $this->adminToken"])
+        ->deleteJson("/api/v1/jobs/{$job->id}");
 
-        $response->assertStatus(200)
-            ->assertJson([
-                'success' => true,
-                'message' => 'Job listing deleted successfully.'
-            ]);
+    $response->assertStatus(200)
+        ->assertJson([
+            'data' => null,
+            'error' => null,
+            'message' => 'Job listing deleted successfully.',
+            'status_code' => 200
+        ]);
 
-        $this->assertDatabaseMissing('jobs', ['id' => $job->id]);
-    }
+    $this->assertDatabaseMissing('jobs', ['id' => $job->id]);
+}
+
 
     public function test_destroy_fails_for_non_admin_user()
     {

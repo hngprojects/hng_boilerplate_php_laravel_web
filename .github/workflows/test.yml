@@ -2,44 +2,44 @@ name: Code Quality
 
 on:
   pull_request_target:
-    branches:
-      - dev
+
 jobs:
   lint:
     runs-on: ubuntu-latest
-    services:
-      postgres:
-         image: postgres:latest
-         env:
-           POSTGRES_DB: postgres        
-           POSTGRES_PASSWORD: postgres
-           POSTGRES_USER: postgres
-         ports:
-           - 5432:5432
-       # Set health checks to wait until postgres has started
-         options: >-
-           --health-cmd pg_isready
-           --health-interval 10s
-           --health-timeout 5s
-           --health-retries 5
+    
     steps:
+
+      - name: Set unique container name
+        id: container_name
+        run: echo "CONTAINER_NAME=postgres_${{ github.run_id }}_${{ github.job }}" >> $GITHUB_ENV
+
+      - name: Start PostgreSQL container
+        run: |
+          docker run -d --name $CONTAINER_NAME \
+            -e POSTGRES_DB=postgres \
+            -e POSTGRES_USER=postgres \
+            -e POSTGRES_PASSWORD=postgres \
+            -p 0:5432 postgres:latest
+          
+          # Extract the dynamically assigned port
+          POSTGRES_PORT=$(docker inspect --format='{{(index (index .NetworkSettings.Ports "5432/tcp") 0).HostPort}}' $CONTAINER_NAME)
+          
+          # Export the port to the environment
+          echo "POSTGRES_PORT=$POSTGRES_PORT" >> $GITHUB_ENV
+
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Set up PHP
-        uses: shivammathur/setup-php@v2
+        uses: nanasess/setup-php@v4
         with:
           php-version: '8.2'
           extensions: pgsql, pdo_pgsql, zip, bcmath, apcu
           ini-values: |
             apc.enabled=1
             apc.enable_cli=1
-
-      - name: Run PHP Linting
-        run: |
-          find . -type f -name "*.php" | xargs -n1 php -l
 
       - name: Get Composer cache directory
         id: composer-cache
@@ -52,6 +52,7 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-composer-
+
       - name: Install PHP dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
@@ -61,22 +62,21 @@ jobs:
           echo "APP_KEY=${{ secrets.APP_KEY }}" >> .env
           echo "DB_CONNECTION=pgsql" >> .env
           echo "DB_HOST=localhost" >> .env
-          echo "DB_PORT=5432" >> .env
+          echo "DB_PORT=$POSTGRES_PORT" >> .env
           echo "DB_DATABASE=postgres" >> .env
           echo "DB_USERNAME=postgres" >> .env
           echo "DB_PASSWORD=postgres" >> .env
-          # echo "DATABASE_URL=postgres://${{ secrets.DB_USERNAME }}:${{ secrets.DB_PASSWORD }}@${{ secrets.DB_HOST }}:${{ secrets.DB_PORT }}/${{ secrets.DB_DATABASE }}?sslmode=disable" >> .env
 
       - name: Run database migrations
         run: php artisan migrate --force
-
-      - name: Clear all cache
-        run: php artisan optimize
-
-      - name: Clear configuration cache
-        run: php artisan config:clear
 
       - name: Run Laravel tests
         run: |
           php artisan jwt:secret
           php artisan test
+
+      - name: Stop and remove PostgreSQL container
+        if: always()  # Ensures this step runs even if the previous steps fail
+        run: |
+          docker stop $CONTAINER_NAME
+          docker rm $CONTAINER_NAME

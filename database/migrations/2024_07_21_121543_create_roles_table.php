@@ -10,9 +10,9 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    {
+{
         Schema::create('roles', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('name');
             $table->text('description')->nullable();
             $table->foreignUuid('org_id')->references('org_id')->on('organisations')->constrained()->onDelete('cascade')->onUpdate('cascade');

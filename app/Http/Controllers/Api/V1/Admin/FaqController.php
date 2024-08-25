@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Faq;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -25,21 +26,21 @@ class FaqController extends Controller
                 'question' => $validatedData['question'],
                 'answer' => $validatedData['answer'],
                 'category' => $validatedData['category'],
+                // 'role' => Role::USER,
             ]);
 
             return response()->json([
                 'status_code' => 201,
-                'message' => 'FAQ created successfully',
+                // 'message' => 'FAQ created successfully',
+                'success' => true,
                 'data' => $faq
             ], 201);
-
         } catch (ValidationException $e) {
             return response()->json([
                 'status_code' => 422,
                 'message' => 'Validation failed',
                 'data' => $e->errors()
             ], 422);
-
         } catch (Exception $e) {
             return response()->json([
                 'status_code' => 500,
@@ -50,7 +51,7 @@ class FaqController extends Controller
     }
 
 
-     public function index()
+    public function index()
     {
         try {
             $faqs = Faq::all()->map(function ($faq) {
@@ -63,13 +64,12 @@ class FaqController extends Controller
                     'category' => $faq->category,
                 ];
             });
-    
+
             return response()->json([
                 'status_code' => 200,
                 'message' => 'Faq fetched successfully',
                 'data' => $faqs
             ], 200);
-    
         } catch (Exception $e) {
             return response()->json([
                 'status_code' => 500,
@@ -78,7 +78,7 @@ class FaqController extends Controller
             ], 500);
         }
     }
-    
+
     public function update(Request $request, $id)
     {
         try {
@@ -87,15 +87,15 @@ class FaqController extends Controller
                 'answer' => 'required|string',
                 'category' => 'required|string',
             ]);
-    
+
             $faq = Faq::findOrFail($id);
-    
+
             $faq->update([
                 'question' => $validatedData['question'],
                 'answer' => $validatedData['answer'],
                 'category' => $validatedData['category'],
             ]);
-    
+
             return response()->json([
                 'status_code' => 200,
                 'message' => 'FAQ updated successfully',
@@ -108,14 +108,12 @@ class FaqController extends Controller
                     'updated_at' => $faq->updated_at->toIso8601String(),
                 ]
             ], 200);
-    
         } catch (ValidationException $e) {
             return response()->json([
                 'status_code' => 422,
                 'message' => 'Validation failed',
                 'data' => $e->errors()
             ], 422);
-    
         } catch (Exception $e) {
             return response()->json([
                 'status_code' => 500,
@@ -125,17 +123,16 @@ class FaqController extends Controller
         }
     }
 
-public function destroy($id)
+    public function destroy($id)
     {
         try {
             $faq = Faq::findOrFail($id);
             $faq->delete();
-    
+
             return response()->json([
                 'status_code' => 200,
                 'message' => 'FAQ successfully deleted'
             ], 200);
-    
         } catch (Exception $e) {
             return response()->json([
                 'status_code' => 500,
@@ -144,5 +141,4 @@ public function destroy($id)
             ], 500);
         }
     }
-    
 }

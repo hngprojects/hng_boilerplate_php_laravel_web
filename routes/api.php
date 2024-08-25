@@ -1,55 +1,56 @@
 <?php
 
-use App\Http\Controllers\Api\V1\Admin\BlogController;
-use App\Http\Controllers\Api\V1\Admin\CustomerController;
-use App\Http\Controllers\Api\V1\Admin\EmailTemplateController;
-use App\Http\Controllers\Api\V1\Admin\FaqController;
-use App\Http\Controllers\Api\V1\Admin\Plan\FeatureController;
-use App\Http\Controllers\Api\V1\Admin\Plan\SubscriptionController;
-use App\Http\Controllers\Api\V1\Admin\SendEmailController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\QuestController;
+use App\Http\Controllers\Api\V1\JobController;
+use App\Http\Controllers\Api\V1\RoleController;
+use App\Http\Controllers\BillingPlanController;
 use App\Http\Controllers\Api\V1\ArticleController;
-use App\Http\Controllers\Api\V1\LanguageController;
-use App\Http\Controllers\Api\V1\Auth\AuthController;
-use App\Http\Controllers\Api\V1\Auth\ForgetPasswordRequestController;
-use App\Http\Controllers\Api\V1\Auth\ForgotResetPasswordController;
-use App\Http\Controllers\Api\V1\Auth\LoginController;
-use App\Http\Controllers\Api\V1\Auth\ResetUserPasswordController;
-use App\Http\Controllers\Api\V1\Auth\SocialAuthController;
-use App\Http\Controllers\Api\V1\BlogSearchController;
-use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\CommentController;
 use App\Http\Controllers\Api\V1\ContactController;
-use App\Http\Controllers\Api\V1\CookiePreferencesController;
-use App\Http\Controllers\Api\V1\HelpArticleController;
-use App\Http\Controllers\Api\V1\JobController;
-use App\Http\Controllers\Api\V1\JobSearchController;
-use App\Http\Controllers\Api\V1\NotificationPreferenceController;
-use App\Http\Controllers\Api\V1\Organisation\OrganisationController;
-use App\Http\Controllers\Api\V1\Organisation\OrganisationMemberController;
 use App\Http\Controllers\Api\V1\PaymentController;
-use App\Http\Controllers\Api\V1\PreferenceController;
 use App\Http\Controllers\Api\V1\ProductController;
-use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Controllers\Api\V1\SqueezeController;
-use App\Http\Controllers\Api\V1\SqueezePageCoontroller;
-use App\Http\Controllers\Api\V1\SuperAdmin\SuperAdminProductController;
-use App\Http\Controllers\Api\V1\Testimonial\TestimonialController;
+use App\Http\Controllers\Api\V1\CategoryController;
+use App\Http\Controllers\Api\V1\LanguageController;
 use App\Http\Controllers\Api\V1\TimezoneController;
-use App\Http\Controllers\Api\V1\User\AccountController;
-use App\Http\Controllers\Api\V1\User\DashboardController;
-use App\Http\Controllers\Api\V1\User\ExportUserController;
-use App\Http\Controllers\Api\V1\User\ProfileController;
-use App\Http\Controllers\Api\V1\User\UserController;
 use App\Http\Controllers\Api\V1\WaitListController;
-use App\Http\Controllers\BillingPlanController;
-use App\Http\Controllers\InvitationAcceptanceController;
-use App\Http\Controllers\NotificationSettingController;
-use App\Http\Controllers\QuestController;
-use App\Http\Controllers\UserNotificationController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\V1\Admin\AdminDashboardController;
 use App\Http\Controllers\SqueezePageUserController;
+use App\Http\Controllers\Api\V1\Admin\FaqController;
+use App\Http\Controllers\Api\V1\Auth\AuthController;
+use App\Http\Controllers\Api\V1\JobSearchController;
+use App\Http\Controllers\Api\V1\User\UserController;
+use App\Http\Controllers\UserNotificationController;
+use App\Http\Controllers\Api\V1\Admin\BlogController;
+use App\Http\Controllers\Api\V1\Auth\LoginController;
+use App\Http\Controllers\Api\V1\BlogSearchController;
+use App\Http\Controllers\Api\V1\PreferenceController;
+use App\Http\Controllers\Api\V1\HelpArticleController;
+use App\Http\Controllers\Api\V1\SqueezePageCoontroller;
+use App\Http\Controllers\Api\V1\User\AccountController;
+use App\Http\Controllers\Api\V1\User\ProfileController;
+use App\Http\Controllers\NotificationSettingController;
+use App\Http\Controllers\InvitationAcceptanceController;
+use App\Http\Controllers\Api\V1\Admin\CustomerController;
+use App\Http\Controllers\Api\V1\User\DashboardController;
+use App\Http\Controllers\Api\V1\Admin\SendEmailController;
+use App\Http\Controllers\Api\V1\Auth\SocialAuthController;
+use App\Http\Controllers\Api\V1\User\ExportUserController;
+use App\Http\Controllers\Api\V1\ApiStatusCheckerController;
+use App\Http\Controllers\Api\V1\CookiePreferencesController;
+use App\Http\Controllers\Api\V1\Admin\Plan\FeatureController;
+use App\Http\Controllers\Api\V1\Admin\EmailTemplateController;
+use App\Http\Controllers\Api\V1\Admin\AdminDashboardController;
+use App\Http\Controllers\Api\V1\Auth\ResetUserPasswordController;
 use App\Http\Controllers\Api\V1\NewsletterSubscriptionController;
+use App\Http\Controllers\Api\V1\NotificationPreferenceController;
+use App\Http\Controllers\Api\V1\Admin\Plan\SubscriptionController;
+use App\Http\Controllers\Api\V1\Testimonial\TestimonialController;
+use App\Http\Controllers\Api\V1\Auth\ForgotResetPasswordController;
+use App\Http\Controllers\Api\V1\Organisation\OrganisationController;
+use App\Http\Controllers\Api\V1\Auth\ForgetPasswordRequestController;
+use App\Http\Controllers\Api\V1\SuperAdmin\SuperAdminProductController;
+use App\Http\Controllers\Api\V1\Organisation\OrganisationMemberController;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,6 +63,7 @@ use App\Http\Controllers\Api\V1\NewsletterSubscriptionController;
 |
 */
 
+
 Route::any('/', function () {
     return 'Language Learning AI Game';
 });
@@ -70,6 +72,10 @@ Route::prefix('v1')->group(function () {
     Route::any('/', function () {
         return 'Language Learning AI Game Version 1';
     });
+
+    Route::get('/api-status', [ApiStatusCheckerController::class, 'index']);
+    Route::post('/api-status', [ApiStatusCheckerController::class, 'store']);
+
     Route::post('/auth/register', [AuthController::class, 'store']);
     Route::post('/auth/login', [LoginController::class, 'login']);
     Route::post('/auth/logout', [LoginController::class, 'logout'])->middleware('auth:api');
@@ -104,8 +110,11 @@ Route::prefix('v1')->group(function () {
     Route::get('/products/search', [ProductController::class, 'search']);
     Route::get('/products', [ProductController::class, 'index']);
     Route::get('/products/{product_id}', [ProductController::class, 'show']);
+    Route::delete('/products/{product_id}', [ProductController::class, 'delete']);
+
     Route::get('/billing-plans', [BillingPlanController::class, 'index']);
     Route::get('/billing-plans/{id}', [BillingPlanController::class, 'getBillingPlan']);
+    Route::delete('/billing-plans/{id}', [BillingPlanController::class, 'destroy']);
     Route::get('/payments/paystack/{organisation_id}/verify/{id}', [PaymentController::class, 'handlePaystackCallback']);
     Route::get('/payments/flutterwave/{organisation_id}/verify/{id}', [PaymentController::class, 'handleFlutterwaveCallback']);
     Route::post('/languages', [LanguageController::class, 'create']);
@@ -128,6 +137,8 @@ Route::prefix('v1')->group(function () {
         Route::patch('/organisations/{org_id}/products/{product_id}', [ProductController::class, 'update']);
         Route::delete('/organisations/{org_id}/products/{product_id}', [ProductController::class, 'destroy']);
     });
+
+
 
     //comment
     Route::middleware('auth:api')->group(function () {
@@ -156,6 +167,7 @@ Route::prefix('v1')->group(function () {
 
     // Help Articles
     Route::post('/help-center/topics', [HelpArticleController::class, 'store']);
+    Route::get('/help-center/topics/{articleId}', [HelpArticleController::class, 'show']);
     Route::patch('/help-center/topics/{articleId}', [HelpArticleController::class, 'update']);
     Route::delete('/help-center/topics/{articleId}', [HelpArticleController::class, 'destroy']);
     Route::get('/help-center/topics', [HelpArticleController::class, 'getArticles']);
@@ -208,6 +220,11 @@ Route::prefix('v1')->group(function () {
         Route::delete('/organisations/{org_id}/users/{user_id}', [OrganisationController::class, 'removeUser']);
         Route::get('/organisations/{organisation}/users', [organisationMemberController::class, 'index']);
 
+        //Role Organisations
+
+
+        Route::get('/organisation/{org_id}/roles/{role_id}', [OrganisationController::class, 'getRoleId']);
+
         // members
         Route::get('/members/{org_id}/search', [OrganisationMemberController::class, 'searchMembers']);
         Route::get('/members/{org_id}/export', [OrganisationMemberController::class, 'download']);
@@ -230,18 +247,19 @@ Route::prefix('v1')->group(function () {
         Route::patch('/accounts/deactivate', [AccountController::class, 'deactivate']);
 
         // Roles
-        Route::post('/organisations/{org_id}/roles', [RoleController::class, 'store']);
+        Route::post('/organisations/{orgId}/roles', [RoleController::class, 'store']);
         Route::put('/organisations/{org_id}/roles/{role_id}', [RoleController::class, 'update']);
         Route::put('/organisations/{org_id}/roles/{role_id}/disable', [RoleController::class, 'disableRole']);
         Route::get('/organisations/{org_id}/roles', [RoleController::class, 'index']);
         Route::get('/organisations/{org_id}/roles/{role_id}', [RoleController::class, 'show']);
+        Route::delete('/organisations/{org_id}/roles/{role_id}', [RoleController::class, 'destroy']);
 
         //Update Password
         Route::post('/password-update', [ProfileController::class, 'updatePassword']);
         //profile Update
         Route::patch('/profile', [ProfileController::class, 'update']);
-        Route::post('/profile/upload-image', [ProfileController::class, 'uploadImage']);
-        Route::get('/profile/{id}', [ProfileController::class, 'show']);
+        Route::post('/profile/picture', [ProfileController::class, 'uploadImage']);
+        Route::get('/profile', [ProfileController::class, 'show']);
 
 
 
@@ -252,8 +270,8 @@ Route::prefix('v1')->group(function () {
 
 
 
-        Route::get('/notification-settings', [NotificationSettingController::class, 'show']);
-        Route::patch('/notification-settings', [NotificationSettingController::class, 'update']);
+        Route::get('/settings/notification-settings', [NotificationSettingController::class, 'show']);
+        Route::patch('/settings/notification-settings', [NotificationSettingController::class, 'update']);
     });
     Route::get('/notification-settings', [NotificationSettingController::class, 'show']);
 
@@ -328,7 +346,7 @@ Route::prefix('v1')->group(function () {
 
 
     //    quest
-    Route::get('/quests/{id}/messages', [QuestController::class, 'getQuestMessages']);
+    // Route::get('/quests/{id}/messages', [QuestController::class, 'getQuestMessages']);
 
     Route::post('/squeeze-user', [SqueezePageUserController::class, 'store']);
 

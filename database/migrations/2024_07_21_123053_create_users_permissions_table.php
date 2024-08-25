@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('users_permissions', function (Blueprint $table) {
             $table->id();
             $table->foreignUuid('user_id')->constrained('users', 'id')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('permission_id')->constrained('permissions', 'id')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignUuid('permission_id')->constrained('permissions', 'id')->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
         });
     }

@@ -11,10 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('permissions', function (Blueprint $table) {
+        Schema::create('api_statuses', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('name');
-            $table->timestamp('deleted_at')->nullable();
+            $table->string('api_group')->nullable();
+            $table->string('method')->nullable();
+            $table->string('status')->nullable();
+            $table->string('response_time')->nullable();
+            $table->string('last_checked')->timestamps();
+            $table->string('details')->nullable();
             $table->timestamps();
         });
     }
@@ -24,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('permissions');
+        Schema::dropIfExists('api_statuses');
     }
 };
