@@ -4,7 +4,7 @@
 $baseUrl = getenv('APP_URL');
 
 if (!$baseUrl) {
-    $baseUrl = 'http://127.0.0.1:8000'; // Default to localhost if APP_URL is not set
+    $baseUrl = 'http://127.0.0.1:8000';
     echo "Warning: APP_URL environment variable is not set. Using default: $baseUrl\n";
 }
 
@@ -26,7 +26,7 @@ function processJsonAndSend($baseUrl)
         die("Error: Invalid JSON in result.json - " . json_last_error_msg() . "\n");
     }
 
-    $lastChecked = date('Y-m-d H:M:S', filemtime($jsonPath));
+    $lastChecked = filemtime($jsonPath);
 
     $processedData = [];
     foreach ($data['run']['executions'] as $execution) {
@@ -64,7 +64,16 @@ function processJsonAndSend($baseUrl)
 
     echo "Status: $httpCode\n";
     echo "Response: $response\n";
+
+    if ($httpCode >= 400) {
+        echo "Error: HTTP status code indicates an error occurred.\n";
+        $responseData = json_decode($response, true);
+        if (json_last_error() === JSON_ERROR_NONE && isset($responseData['error'])) {
+            echo "Server Error Message: " . $responseData['error'] . "\n";
+        }
+    }
 }
+
 
 
 
