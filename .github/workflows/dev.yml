@@ -83,9 +83,7 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
             echo "About to Deploy"
-            cd /var/www/langlearnai-be/deployment
-            eval $(ssh-agent)
-            ssh-add ~/.ssh/id_ecdsa
+            cd /var/www/boilerplate-be/dev
             git pull origin dev
             composer install
             php artisan migrate --force
