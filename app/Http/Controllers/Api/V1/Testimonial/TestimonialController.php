@@ -6,27 +6,31 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTestimonialRequest;
 use App\Http\Requests\UpdateTestimonialRequest;
 use App\Models\Testimonial;
+use App\Traits\ApiResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Response;
 
 class TestimonialController extends Controller
 {
+    use ApiResponse;
 
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
-    }
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json($this->errorResponse('Unauthorized. Please log in.', Response::HTTP_UNAUTHORIZED));
+        }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        try {
+            $testimonials = Testimonial::all();
+            return response()->json($this->successResponse('Testimonials fetched successfully', $testimonials->toArray()));
+        } catch (\Exception $e) {
+            return response()->json($this->errorResponse('Internal Server Error. Please try again later.', Response::HTTP_INTERNAL_SERVER_ERROR, ['error' => $e->getMessage()]));
+        }
     }
 
     /**
@@ -35,177 +39,99 @@ class TestimonialController extends Controller
     public function store(StoreTestimonialRequest $request)
     {
         $user = Auth::user();
-
         if (!$user) {
-            return response()->json([
-                'status' => 'Unauthorized',
-                'message' => 'Unauthorized. Please log in.',
-                'status_code' => 401,
-            ], 401);
+            return response()->json($this->errorResponse('Unauthorized. Please log in.', Response::HTTP_UNAUTHORIZED));
         }
 
         try {
+            // Check if user has a name, if not use a fallback
+            $userName = $user->name ?? $user->username ?? 'Anonymous User';
+
             $testimonial = Testimonial::create([
                 'user_id' => $user->id,
-                'name' => $user->name,
+                'name' => $userName,
                 'content' => $request->get('content'),
             ]);
 
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Testimonial created successfully',
-                'data' => $testimonial,
-            ], 201);
+            return response()->json($this->successResponse('Testimonial created successfully', $testimonial->toArray()), Response::HTTP_CREATED);
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'Internal Server Error',
-                'message' => 'Internal Server Error. Please try again later.',
-                'status_code' => 500,
-            ], 500);
+            return response()->json($this->errorResponse('Internal Server Error. Please try again later.', Response::HTTP_INTERNAL_SERVER_ERROR, ['error' => $e->getMessage()]));
         }
     }
-
 
     /**
      * Display the specified resource.
      */
-
-
-    // public function show(Testimonial $testimonial_id)
-    // {
-    //     $user = Auth::user();
-
-    //     if (!$user) {
-    //         return response()->json([
-    //             'status' => 'Unauthorized',
-    //             'message' => 'Unauthorized. Please log in.',
-    //             'status_code' => 401,
-    //         ], 401);
-    //     }
-
-    //     $testimonial = Testimonial::find($testimonial_id);
-
-    //     if (!$testimonial) {
-    //         return response()->json([
-    //             'status' => 'Not Found',
-    //             'message' => 'Testimonial not found.',
-    //             'status_code' => 404,
-    //         ], 404);
-    //     }
-
-    //     return response()->json([
-    //         'status' => 'success',
-    //         'message' => 'Testimonial fetched successfully',
-    //         'data' => $testimonial,
-    //     ], 200);
-    // }
-
-//     public function show(Testimonial $testimonial)
-// {
-//     $user = Auth::user();
-
-//     if (!$user) {
-//         return response()->json([
-//             'status' => 'Unauthorized',
-//             'message' => 'Unauthorized. Please log in.',
-//             'status_code' => 401,
-//         ], 401);
-//     }
-
-//     return response()->json([
-//         'status' => 'success',
-//         'message' => 'Testimonial fetched successfully',
-//         'data' => $testimonial,
-//     ], 200);
-// }
-
-
-public function show($id)
-{
-    $user = Auth::user();
-
-    if (!$user) {
-        return response()->json([
-            'status' => 'Unauthorized',
-            'message' => 'Unauthorized. Please log in.',
-            'status_code' => 401,
-        ], 401);
-    }
-
-    try {
-        $testimonial = Testimonial::findOrFail($id);
-    } catch (ModelNotFoundException $e) {
-        return response()->json([
-            'status' => 'Not Found',
-            'message' => 'Testimonial not found.',
-            'status_code' => 404,
-        ], 404);
-    }
-
-    return response()->json([
-        'status' => 'success',
-        'message' => 'Testimonial fetched successfully',
-        'data' => $testimonial,
-    ], 200);
-}
-
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Testimonial $testimonial)
+    public function show(string $id) 
     {
-        //
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json($this->errorResponse('Unauthorized. Please log in.', Response::HTTP_UNAUTHORIZED));
+        }
+
+        try {
+            $testimonial = Testimonial::findOrFail($id);
+            return response()->json($this->successResponse('Testimonial fetched successfully', $testimonial->toArray()));
+        } catch (ModelNotFoundException $e) {
+            return response()->json($this->errorResponse('Testimonial not found.', Response::HTTP_NOT_FOUND));
+        } catch (\Exception $e) {
+            return response()->json($this->errorResponse('Internal Server Error. Please try again later.', Response::HTTP_INTERNAL_SERVER_ERROR, ['error' => $e->getMessage()]));
+        }
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTestimonialRequest $request, Testimonial $testimonial)
+    public function update(UpdateTestimonialRequest $request, string $id) 
     {
-        //
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json($this->errorResponse('Unauthorized. Please log in.', Response::HTTP_UNAUTHORIZED));
+        }
+
+        try {
+            $testimonial = Testimonial::findOrFail($id);
+
+            // Check if the user owns this testimonial or is an admin
+            if ($testimonial->user_id !== $user->id && $user->role !== 'admin') {
+                return response()->json($this->errorResponse('You do not have permission to update this testimonial.', Response::HTTP_FORBIDDEN));
+            }
+
+            $testimonial->update([
+                'content' => $request->get('content')
+            ]);
+
+            return response()->json($this->successResponse('Testimonial updated successfully', $testimonial->toArray()));
+        } catch (ModelNotFoundException $e) {
+            return response()->json($this->errorResponse('Testimonial not found.', Response::HTTP_NOT_FOUND));
+        } catch (\Exception $e) {
+            return response()->json($this->errorResponse('Internal Server Error. Please try again later.', Response::HTTP_INTERNAL_SERVER_ERROR, ['error' => $e->getMessage()]));
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(string $id) 
     {
         $user = Auth::user();
-
-
         if (!$user) {
-            return response()->json([
-                'status' => 'Unauthorized',
-                'message' => 'Unauthorized. Please log in.',
-                'status_code' => 401,
-            ], 401);
+            return response()->json($this->errorResponse('Unauthorized. Please log in.', Response::HTTP_UNAUTHORIZED));
         }
 
         if ($user->role !== 'admin') {
-            return response()->json([
-                'status' => 'Forbidden',
-                'message' => 'You do not have the required permissions to perform this action.',
-                'status_code' => 403,
-            ], 403);
+            return response()->json($this->errorResponse('You do not have the required permissions to perform this action.', Response::HTTP_FORBIDDEN));
         }
 
         try {
             $testimonial = Testimonial::findOrFail($id);
             $testimonial->delete();
+
+            return response()->json($this->successResponse('Testimonial deleted successfully'));
         } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'status' => 'Not Found',
-                'message' => 'Testimonial not found.',
-                'status_code' => 404,
-            ], 404);
+            return response()->json($this->errorResponse('Testimonial not found.', Response::HTTP_NOT_FOUND));
+        } catch (\Exception $e) {
+            return response()->json($this->errorResponse('Internal Server Error. Please try again later.', Response::HTTP_INTERNAL_SERVER_ERROR, ['error' => $e->getMessage()]));
         }
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Testimonial deleted successfully',
-            'status_code' => 200,
-        ], 200);
     }
-
 }
