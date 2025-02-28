@@ -42,7 +42,45 @@ class BillingPlanController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'duration' => 'required|string|in:Monthly,Yearly',
+            'price' => 'required|numeric|min:0',
+            'description' => 'required|string',
+        ]);
+
+        try {
+            $billingPlan = SubscriptionPlan::where('name', '=', $validated['name'])->first();
+
+            if($billingPlan){
+                return response()->json([
+                    "status" => "error",
+                    "status_code" => 403,
+                    "message" => "Billing plan alreay exists!",
+                    "data" => []
+                ], 403);
+            }
+
+            $billingPlan = SubscriptionPlan::create($validated);
+
+            return response()->json([
+                "status" => "success",
+                "status_code" => 201,
+                "message" => "Billing plan successfully created!",
+                "data" => [
+                    ...$billingPlan->toArray()
+                ]
+            ], 201);
+
+        } catch (\Throwable $th) {
+            print_r($th);
+                return response()->json([
+                    "status" => "error",
+                    "status_code" => 500,
+                    "message" => "Internal Server Error!",
+                    "data" => []
+                ], 500);
+        }
     }
 
     /**

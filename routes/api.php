@@ -113,6 +113,7 @@ Route::prefix('v1')->group(function () {
     Route::delete('/products/{product_id}', [ProductController::class, 'delete']);
 
     Route::get('/billing-plans', [BillingPlanController::class, 'index']);
+    Route::post('/billing-plans', [BillingPlanController::class, 'store']);
     Route::get('/billing-plans/{id}', [BillingPlanController::class, 'getBillingPlan']);
     Route::put('/billing-plans/{id}', [BillingPlanController::class, 'update']);
     Route::get('/payments/paystack/{organisation_id}/verify/{id}', [PaymentController::class, 'handlePaystackCallback']);
