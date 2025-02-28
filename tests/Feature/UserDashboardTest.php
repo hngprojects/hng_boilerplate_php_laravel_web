@@ -69,6 +69,10 @@ class UserDashboardTest extends TestCase
         $lastMonth = Carbon::now()->subMonth()->format('M'); // Last month abbreviation
 
 
+        $currentMonth = Carbon::now()->format('M'); // Current month abbreviation
+        $lastMonth = Carbon::now()->subMonth()->format('M'); // Last month abbreviation
+
+
         $order = Order::factory()->create([
             'product_id' => $product->product_id,
             'quantity' => 2,
