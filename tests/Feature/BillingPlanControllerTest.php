@@ -23,8 +23,9 @@ class BillingPlanControllerTest extends TestCase
 
         $data = [
             'name' => 'Discounted Plan',
-            'duration' => 'Yearly',
-            'price' => 20000,
+            'frequency' => 'Yearly',
+            'amount' => 20000,
+            'is_active' => true,
             'description' => 'A discounted plan description',
         ];
 
