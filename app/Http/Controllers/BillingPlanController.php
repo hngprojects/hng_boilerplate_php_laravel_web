@@ -44,8 +44,9 @@ class BillingPlanController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'duration' => 'required|string|in:Monthly,Yearly',
-            'price' => 'required|numeric|min:0',
+            'frequency' => 'required|string|in:Monthly,Yearly',
+            'is_active' => 'boolean',
+            'amount' => 'required|numeric|min:0',
             'description' => 'required|string',
         ]);
 
@@ -61,7 +62,12 @@ class BillingPlanController extends Controller
                 ], 403);
             }
 
-            $billingPlan = SubscriptionPlan::create($validated);
+            $billingPlan = new SubscriptionPlan;
+            $billingPlan->name = $validated['name'];
+            $billingPlan->duration = $validated['frequency'];
+            $billingPlan->price = $validated['amount'];
+            $billingPlan->description = $validated['description'];
+            $billingPlan->save();
 
             return response()->json([
                 "status" => "success",
