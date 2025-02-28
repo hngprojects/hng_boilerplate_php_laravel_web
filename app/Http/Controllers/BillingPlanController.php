@@ -56,7 +56,7 @@ class BillingPlanController extends Controller
                 return response()->json([
                     "status" => "error",
                     "status_code" => 403,
-                    "message" => "Billing plan alreay exists!",
+                    "message" => "Billing plan already exists!",
                     "data" => []
                 ], 403);
             }
