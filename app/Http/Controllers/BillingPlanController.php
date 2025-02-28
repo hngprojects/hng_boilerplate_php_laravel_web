@@ -165,8 +165,9 @@ class BillingPlanController extends Controller
         if (!$plans) {
             return response()->json([
                 'status_code' => 404,
-                'error' => 'Not Found',
-                'message' => 'Plan not found'
+                'status' => 'error',
+                'message' => 'Plan not found',
+                'data' => []
             ], 404);
         }
 
@@ -175,14 +176,17 @@ class BillingPlanController extends Controller
 
             // Return success response
             return response()->json([
-                'data' => true,
+                'data' => [],
                 'status_code' => 204,
+                'status' => 'success',
                 'message' => 'Plan deleted successfully'
             ], 204);
         } catch (\Exception $e) {
             return response()->json([
-                'status' => 500,
-                'message' => 'Internal server error'
+                'status' => "error",
+                'status_code' => 500,
+                'message' => 'Internal server error',
+                'data' => []
             ], 500);
         }
     }
