@@ -69,12 +69,7 @@ class BillingPlanControllerTest extends TestCase
 
         $response = $this->deleteJson("/api/v1/billing-plans/{$plan->id}");
 
-        $response->assertStatus(204)
-            ->assertJson([
-                'data' => true,
-                'status_code' => 204,
-                'message' => 'Plan deleted successfully'
-            ]);
+        $response->assertStatus(204);
 
         $this->assertDatabaseMissing('subscription_plans', ['id' => $plan->id]);
     }
