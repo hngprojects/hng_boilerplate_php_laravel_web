@@ -65,8 +65,20 @@ class Organisation extends Model
 
     public function getPublicColumns()
     {
-        $publicColumns = ['org_id', "user_id", "name", "slug", "description", "email", "industry", "type", "country", "address", "state"];
-        return $this->only($publicColumns);
+        return [
+            'id' => $this->org_id,
+            'name' => $this->name,
+            'description' => $this->description,
+            'owner_id' => $this->user_id,
+            'email' => $this->email,
+            'industry' => $this->industry,
+            'type' => $this->type,
+            'country' => $this->country,
+            'address' => $this->address,
+            'state' => $this->state,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at
+        ];
     }
     public function product()
     {

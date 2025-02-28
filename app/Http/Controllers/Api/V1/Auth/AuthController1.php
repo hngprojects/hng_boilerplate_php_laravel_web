@@ -18,7 +18,7 @@ use App\Models\Validators\AuthValidator;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
 
-class AuthController extends Controller
+class AuthController1 extends Controller
 {
     use HttpResponses;
 
@@ -43,7 +43,7 @@ class AuthController extends Controller
      */
     public function store(Request $request)
     {
-         // Validate the request data
+        // Validate the request data
         $validator = Validator::make($request->all(), [
             'name' => 'nullable|string|max:255',
             'first_name' => 'required|string|max:255',
@@ -77,7 +77,7 @@ class AuthController extends Controller
             ]);
 
             $organization = $user->owned_organisations()->create([
-                'name' => $request->first_name."'s Organisation",
+                'name' => $request->first_name . "'s Organisation",
             ]);
 
             $organization_user = OrganisationUser::create([
@@ -120,7 +120,6 @@ class AuthController extends Controller
 
             return $this->apiResponse('Registration unsuccessful', Response::HTTP_BAD_REQUEST);
         }
-
     }
 
     /**

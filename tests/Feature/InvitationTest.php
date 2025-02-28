@@ -40,7 +40,7 @@ class InvitationTest extends TestCase
             'password' => 'Ed8M7s*)?e:hTb^#&;C!<y',
         ]);
 
-        $this->accessToken = $loginResponse['access_token'];
+        $this->accessToken = $loginResponse->json('data.access_token');
 
         // Create an organisation
         $orgResponse = $this->postJson('/api/v1/organisations', [
@@ -54,7 +54,8 @@ class InvitationTest extends TestCase
             'state' => 'test state'
         ], ['Authorization' => 'Bearer ' . $this->accessToken]);
 
-        $this->organisationId = $orgResponse['data']['org_id'];
+        // Use proper response JSON access method and new field name
+        $this->organisationId = $orgResponse->json('data.id');
 
         // Generate an invitation
         $invitationResponse = $this->postJson('/api/v1/invitations/generate', [
@@ -62,7 +63,7 @@ class InvitationTest extends TestCase
             'email' => 'test@example.com'
         ]);
 
-        $this->invitationLink = $invitationResponse['invitation']['link'];
+        $this->invitationLink = $invitationResponse->json('invitation.link');
     }
 
     public function test_accept_invitation_via_get()
