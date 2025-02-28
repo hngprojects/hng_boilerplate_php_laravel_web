@@ -42,17 +42,14 @@ class TestimonialController extends Controller
         if (!$user) {
             return response()->json($this->errorResponse('Unauthorized. Please log in.', Response::HTTP_UNAUTHORIZED));
         }
-
+    
         try {
-            // Check if user has a name, if not use a fallback
-            $userName = $user->name ?? $user->username ?? 'Anonymous User';
-
             $testimonial = Testimonial::create([
                 'user_id' => $user->id,
-                'name' => $userName,
+                'name' => $request->get('name') ?? 'Anonymous User', // Use request name, fallback to 'Anonymous User'
                 'content' => $request->get('content'),
             ]);
-
+    
             return response()->json($this->successResponse('Testimonial created successfully', $testimonial->toArray()), Response::HTTP_CREATED);
         } catch (\Exception $e) {
             return response()->json($this->errorResponse('Internal Server Error. Please try again later.', Response::HTTP_INTERNAL_SERVER_ERROR, ['error' => $e->getMessage()]));

@@ -25,31 +25,39 @@ class TestimonialTest extends TestCase
         ]);
     }
 
-    public function testAuthenticatedUserCanCreateTestimonial()
-    {
-        // Create a user with a known password
-        $user = User::factory()->create(['password' => bcrypt('password')]);
+    public function testAuthenticatedUserCanCreateTestimonialWithAnonymousName()
+{
+    // Create a user with a known password
+    $user = User::factory()->create(['password' => bcrypt('password')]);
 
-        // Get a JWT token
-        $token = JWTAuth::attempt(['email' => $user->email, 'password' => 'password']);
+    // Get a JWT token
+    $token = JWTAuth::attempt(['email' => $user->email, 'password' => 'password']);
 
-        // Make an authenticated request
-        $response = $this->postJson('/api/v1/testimonials', [
-            'content' => 'This is a testimonial.',
-        ], [
-            'Authorization' => 'Bearer ' . $token,
-        ]);
+    // Make an authenticated request without a name
+    $response = $this->postJson('/api/v1/testimonials', [
+        'content' => 'This is a testimonial without a name.',
+    ], [
+        'Authorization' => 'Bearer ' . $token,
+    ]);
 
-        $response->assertStatus(201);
-        $response->assertJson([
-            'status' => 'success',
-            'message' => 'Testimonial created successfully',
-            'data' => [
-                'name' => $user->name,
-                'content' => 'This is a testimonial.',
-            ],
-        ]);
-    }
+    $response->assertStatus(201);
+    $response->assertJson([
+        'status' => 'success',
+        'message' => 'Testimonial created successfully',
+        'data' => [
+            'name' => 'Anonymous User', // Expecting the fallback
+            'content' => 'This is a testimonial without a name.',
+            'user_id' => $user->id,
+        ],
+    ]);
+
+    // Verify the testimonial exists in the database
+    $this->assertDatabaseHas('testimonials', [
+        'user_id' => $user->id,
+        'name' => 'Anonymous User',
+        'content' => 'This is a testimonial without a name.',
+    ]);
+}
 
     public function testValidationErrorsAreReturnedForMissingData()
     {
