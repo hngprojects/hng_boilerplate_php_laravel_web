@@ -16,7 +16,6 @@ class EnsureEmailIsVerified
     public function handle(Request $request, Closure $next): Response
     {
         // Ensure user is authenticated
-        dump($request->user);
         if (! $request->user() || ! $request->user()->hasVerifiedEmail()) {
             return response()->json([
                 'status_code' => 403,
