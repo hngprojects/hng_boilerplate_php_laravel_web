@@ -176,9 +176,9 @@ class BillingPlanController extends Controller
             // Return success response
             return response()->json([
                 'data' => true,
-                'status_code' => 200,
+                'status_code' => 204,
                 'message' => 'Plan deleted successfully'
-            ], 200);
+            ], 204);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 500,
