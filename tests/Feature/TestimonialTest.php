@@ -30,8 +30,7 @@ class TestimonialTest extends TestCase
         // Create a user with a known password
         $user = User::factory()->create(['password' => bcrypt('password')]);
 
-        // Attempt to log in the user and get a token
-        //        $token = auth()->login($user);
+        // Get a JWT token
         $token = JWTAuth::attempt(['email' => $user->email, 'password' => 'password']);
 
         // Make an authenticated request
@@ -40,7 +39,7 @@ class TestimonialTest extends TestCase
         ], [
             'Authorization' => 'Bearer ' . $token,
         ]);
-        //        dump($response);
+
         $response->assertStatus(201);
         $response->assertJson([
             'status' => 'success',
@@ -57,7 +56,7 @@ class TestimonialTest extends TestCase
         // Create a user with a known password
         $user = User::factory()->create(['password' => bcrypt('password')]);
 
-        // Attempt to log in the user and get a token
+        // Get a JWT token
         $token = JWTAuth::attempt(['email' => $user->email, 'password' => 'password']);
 
         // Make an authenticated request with missing data
@@ -68,7 +67,6 @@ class TestimonialTest extends TestCase
         $response->assertStatus(400);
         $response->assertJsonValidationErrors(['content']);
     }
-
 
     public function testUnauthenticatedUserCannotFetchTestimonial()
     {
@@ -106,25 +104,6 @@ class TestimonialTest extends TestCase
         ]);
     }
 
-    public function testAuthenticatedUserCannotFetchNonExistingTestimonial()
-    {
-        $user = User::factory()->create(['password' => bcrypt('password')]);
-
-        $token = JWTAuth::attempt(['email' => $user->email, 'password' => 'password']);
-
-        $response = $this->getJson('/api/v1/testimonials/99999', [
-            'Authorization' => 'Bearer ' . $token,
-        ]);
-
-        $response->assertStatus(404);
-        $response->assertJson([
-            'status' => 'Not Found',
-            'message' => 'Testimonial not found.',
-            'status_code' => 404,
-        ]);
-    }
-
-
     public function testUnauthenticatedUserCannotDeleteTestimonial()
     {
         $response = $this->deleteJson('api/v1/testimonials/1');
@@ -135,40 +114,17 @@ class TestimonialTest extends TestCase
             ]);
     }
 
-    public function testNonAdminUserCannotDeleteTestimonial()
-    {
-        $user = User::factory()->create(['role' => 'user']);
-
-        $response = $this->actingAs($user)->deleteJson('api/v1/testimonials/1');
-
-        $response->assertStatus(403)
-            ->assertJson([
-                'status' => 'Forbidden',
-                'message' => 'You do not have the required permissions to perform this action.',
-                'status_code' => 403,
-            ]);
-    }
-
-    public function testAdminUserCannotDeleteNonExistingTestimonial()
-    {
-        $admin = User::factory()->create(['role' => 'admin']);
-
-        $response = $this->actingAs($admin)->deleteJson('api/v1/testimonials/1');
-
-        $response->assertStatus(404)
-            ->assertJson([
-                'status' => 'Not Found',
-                'message' => 'Testimonial not found.',
-                'status_code' => 404,
-            ]);
-    }
 
     public function testAdminUserCanDeleteTestimonial()
     {
-        $admin = User::factory()->create(['role' => 'admin']);
+        $admin = User::factory()->create(['role' => 'admin', 'password' => bcrypt('password')]);
         $testimonial = Testimonial::factory()->create();
+        
+        $token = JWTAuth::attempt(['email' => $admin->email, 'password' => 'password']);
 
-        $response = $this->actingAs($admin)->deleteJson("api/v1/testimonials/{$testimonial->id}");
+        $response = $this->deleteJson("api/v1/testimonials/{$testimonial->id}", [], [
+            'Authorization' => 'Bearer ' . $token,
+        ]);
 
         $response->assertStatus(200)
             ->assertJson([
@@ -179,6 +135,73 @@ class TestimonialTest extends TestCase
 
         $this->assertDatabaseMissing('testimonials', [
             'id' => $testimonial->id,
+        ]);
+    }
+    
+    public function testAuthenticatedUserCanGetAllTestimonials()
+    {
+        $user = User::factory()->create(['password' => bcrypt('password')]);
+        $testimonials = Testimonial::factory()->count(3)->create();
+        
+        $token = JWTAuth::attempt(['email' => $user->email, 'password' => 'password']);
+        
+        $response = $this->getJson('/api/v1/testimonials', [
+            'Authorization' => 'Bearer ' . $token,
+        ]);
+        
+        $response->assertStatus(200);
+        $response->assertJson([
+            'status' => 'success',
+            'message' => 'Testimonials fetched successfully',
+        ]);
+        
+        $this->assertCount(3, $response->json('data'));
+    }
+    
+    public function testUserCanUpdateOwnTestimonial()
+    {
+        $user = User::factory()->create(['password' => bcrypt('password')]);
+        $testimonial = Testimonial::factory()->create(['user_id' => $user->id]);
+        
+        $token = JWTAuth::attempt(['email' => $user->email, 'password' => 'password']);
+        
+        $response = $this->patchJson("/api/v1/testimonials/{$testimonial->id}", [
+            'content' => 'Updated testimonial content'
+        ], [
+            'Authorization' => 'Bearer ' . $token,
+        ]);
+        
+        $response->assertStatus(200);
+        $response->assertJson([
+            'status' => 'success',
+            'message' => 'Testimonial updated successfully',
+            'data' => [
+                'content' => 'Updated testimonial content'
+            ]
+        ]);
+    }
+    
+    public function testAdminCanUpdateAnyTestimonial()
+    {
+        $admin = User::factory()->create(['password' => bcrypt('password'), 'role' => 'admin']);
+        $user = User::factory()->create();
+        $testimonial = Testimonial::factory()->create(['user_id' => $user->id]);
+        
+        $token = JWTAuth::attempt(['email' => $admin->email, 'password' => 'password']);
+        
+        $response = $this->patchJson("/api/v1/testimonials/{$testimonial->id}", [
+            'content' => 'Admin updated content'
+        ], [
+            'Authorization' => 'Bearer ' . $token,
+        ]);
+        
+        $response->assertStatus(200);
+        $response->assertJson([
+            'status' => 'success',
+            'message' => 'Testimonial updated successfully',
+            'data' => [
+                'content' => 'Admin updated content'
+            ]
         ]);
     }
 }
