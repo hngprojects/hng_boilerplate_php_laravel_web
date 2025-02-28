@@ -47,7 +47,7 @@ class OrganisationTest extends TestCase
         $token = JWTAuth::fromUser($user);
 
         $response = $this->withHeader('Authorization', "Bearer $token")
-            ->getJson("/api/v1/{$user->id}/organisations");
+            ->getJson("/api/v1/organisations");
 
         $response->assertStatus(200)
             ->assertJsonStructure([
@@ -57,7 +57,7 @@ class OrganisationTest extends TestCase
                 'data' => [
                     'organisations' => [
                         '*' => [
-                            'org_id',
+                            'id',
                             'name',
                             'email',
                             'description',
@@ -78,11 +78,12 @@ class OrganisationTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->getJson("/api/v1/{$user->id}/organisations");
+        $response = $this->getJson("/api/v1/organisations");
 
-        $response->assertStatus(Response::HTTP_UNAUTHORIZED)->assertJsonStructure([
-            'message',
-        ]);
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED)
+            ->assertJsonStructure([
+                'message',
+            ]);
     }
 
     public function test_authenticated_user_with_no_organisations()
@@ -91,7 +92,7 @@ class OrganisationTest extends TestCase
 
         $token = JWTAuth::fromUser($user);
         $response = $this->withHeader('Authorization', "Bearer $token")
-            ->getJson("/api/v1/{$user->id}/organisations");
+            ->getJson("/api/v1/organisations");
 
         $response->assertStatus(200)
             ->assertJson([
@@ -113,16 +114,16 @@ class OrganisationTest extends TestCase
 
         $token = JWTAuth::attempt(['email' => $user1->email, 'password' => 'password']);
         $response = $this->withHeader('Authorization', "Bearer $token")
-            ->getJson("/api/v1/{$user2->id}/organisations"); // Accessing user2's organisations
+            ->getJson("/api/v1/organisations");
 
-        $response->assertStatus(403)
+        $response->assertStatus(200) // Expecting 200 because user1 has no organisations
             ->assertJson([
-                'status' => 'error',
-                'message' => 'Forbidden',
-                'status_code' => '403',
-
+                'status' => 'success',
+                'message' => 'No organisations available',
+                'status_code' => 200,
+                'data' => [
+                    'organisations' => []
+                ]
             ]);
     }
-
-
 }

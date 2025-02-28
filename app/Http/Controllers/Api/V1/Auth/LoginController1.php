@@ -9,14 +9,14 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
-class LoginController extends Controller
+class LoginController1 extends Controller
 {
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|string|email|max:255',
             'password' => 'required|string|min:4',
-        ]);    
+        ]);
 
         if ($validator->fails()) {
             return response()->json([
@@ -39,8 +39,8 @@ class LoginController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (!$token = JWTAuth::attempt($credentials)) {
-            $key = 'login_attempts_'.request()->ip();
-            RateLimiter::hit($key,3600);
+            $key = 'login_attempts_' . request()->ip();
+            RateLimiter::hit($key, 3600);
             return response()->json([
                 'status_code' => 401,
                 'message' => 'Invalid credentials'

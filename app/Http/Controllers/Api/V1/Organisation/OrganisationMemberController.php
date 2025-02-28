@@ -46,7 +46,7 @@ class organisationMemberController extends Controller
         // Fetch members of the organisation
         $members = OrganisationUser::where('org_id', $organisationId)
             ->join('users', 'organisation_user.user_id', '=', 'users.id')
-            ->paginate($pageSize, ['users.id as userId', 'users.name as firstName', 'users.email', 'users.phone'], 'page', $page);
+            ->paginate($pageSize, ['users.id as id', 'users.name as name', 'users.email', 'users.phone as phone_number'], 'page', $page);
 
         return response()->json([
             'status' => 'success',
