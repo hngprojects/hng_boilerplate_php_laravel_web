@@ -5,10 +5,68 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Models\SubscriptionPlan;
+use App\Models\User;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class BillingPlanControllerTest extends TestCase
 {
     use RefreshDatabase;
+
+    /** @test */
+    public function it_creates_a_billing_plan_successfully()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+        $saved = SubscriptionPlan::where('name', '=', 'Discounted Plan')->first();
+
+        if($saved) $saved->delete();
+
+        $data = [
+            'name' => 'Discounted Plan',
+            'duration' => 'Yearly',
+            'price' => 20000,
+            'description' => 'A discounted plan description',
+        ];
+
+        $response = $this->postJson("/api/v1/billing-plans", $data);
+
+        // Assert: Check the response status and structure
+        $response->assertStatus(201)
+                 ->assertJsonStructure([
+                     'data' => [
+                         'id',
+                         'name',
+                         'duration',
+                         'price',
+                         'description',
+                         'created_at',
+                         'updated_at',
+                     ],
+                     'message',
+                     'status_code',
+                     'status'
+                 ]);
+
+        $this->assertDatabaseHas('subscription_plans',  [
+            'name' => 'Discounted Plan',
+            'duration' => 'Yearly',
+            'price' => 20000,
+            'description' => 'A discounted plan description',
+        ]);
+
+
+        $res = $this->postJson("/api/v1/billing-plans", $data);
+
+        // Assert: Check the response status and structure
+        $res->assertStatus(403)
+                 ->assertJsonStructure([
+                     'data' => [],
+                     'message',
+                     'status_code',
+                     'status'
+                 ]);
+
+    }
 
     /** @test */
     public function it_updates_a_billing_plan_successfully()
