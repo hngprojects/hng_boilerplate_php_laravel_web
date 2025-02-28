@@ -65,41 +65,31 @@ class UserDashboardTest extends TestCase
             'price' => 1000,
             'user_id' => $user->id,
         ]);
+        $currentMonth = Carbon::now()->format('M'); // Current month abbreviation
+        $lastMonth = Carbon::now()->subMonth()->format('M'); // Last month abbreviation
+
 
         $order = Order::factory()->create([
             'product_id' => $product->product_id,
             'quantity' => 2,
-            'total_amount' => 2000,
-        ]);
-        $order->created_at = Carbon::now()->subMonth();
-        $order->save();
-        Order::factory()->create([
-            'product_id' => $product->product_id,
-            'quantity' => 3,
             'total_amount' => 3000,
         ]);
         $response = $this->get('/api/v1/user-analytics');
+
+        $expectedData = array_fill_keys(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], 0);
+        $expectedData[$lastMonth] = 2000.00;
+        $expectedData[$currentMonth] = 3000.00;
+
         $response->assertJson(
             [
                 'message' => 'User analytics retrieved successfully',
                 'status_code' => 200,
-                'data' => [
-                    'Jan' => 0,
-                    'Feb' => 0,
-                    'Mar' => 0,
-                    'Apr' => 0,
-                    'May' => 0,
-                    'Jun' => 0,
-                    'Jul' => 2000.00,
-                    'Aug' => 3000.00,
-                    'Sep' => 0,
-                    'Oct' => 0,
-                    'Nov' => 0,
-                    'Dec' => 0,
-                ]
+                'data' => $expectedData
             ]
         );
     }
+
+
 
     public function test_accurate_data_is_returned_for_recent_sales()
     {

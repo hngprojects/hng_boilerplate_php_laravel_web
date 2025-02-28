@@ -21,8 +21,10 @@ class OrganisationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index($user_id)
+    public function index()
     {
+
+        $user_id = auth('api')->user()->id;
         try {
             // Ensure that the authenticated user is accessing their own organisations
             $authUser = auth('api')->user();

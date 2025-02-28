@@ -4,13 +4,14 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use \Illuminate\Http\Request;
+
 class OrganisationResource extends JsonResource
 {
 
     public function toArray(Request $request): array
     {
         return [
-            'organisation_id' => $this->org_id,
+            'id' => $this->org_id,
             'name' => $this->name,
             'email' => $this->email,
             'description' => $this->description,
