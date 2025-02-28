@@ -481,6 +481,57 @@
       }
     },
     "/api/v1/billing-plans": {
+        "post": {
+            "summary": "Create new billing plan",
+            "tags": ["Billing"],
+            "security": [
+                {
+                    "bearerAuth": []
+                }
+            ],
+            "requestBody": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/BillingPlan"
+                        }
+                    }
+                }
+            },
+            "responses": {
+                "201": {
+                    "description": "Billing plan created successfully",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BillingPlanResponse"
+                            }
+                        }
+                    }
+                },
+                "403": {
+                    "description": "Billing plan already exists",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ErrorResponse"
+                            }
+                        }
+                    }
+                },
+                "500": {
+                    "description": "Internal Server Error",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ErrorResponse"
+                            }
+                        }
+                    }
+                }
+            }
+        },
       "get": {
         "summary": "Get billing plans",
         "tags": ["Billing"],
@@ -510,7 +561,59 @@
             "description": "Billing plan details retrieved successfully"
           }
         }
-      }
+      },
+      "put": {
+        "summary": "Update billing plan",
+        "tags": ["Billing"],
+        "security": [
+            {
+                "bearerAuth": []
+            }
+        ],
+        "requestBody": {
+            "required": true,
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/BillingPlan"
+                    }
+                }
+            }
+        },
+        "responses": {
+            "201": {
+                "description": "Billing plan created successfully",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/BillingPlanResponse"
+                        }
+                    }
+                }
+            },
+            "404": {
+                "description": "Billing plan not found",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "500": {
+                "description": "Internal Server Error",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     },
     "/api/v1/payments/paystack/{organisation_id}/verify/{id}": {
       "get": {
@@ -2425,7 +2528,58 @@
           }
         },
         "required": ["type", "content"]
-      }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+            "status": {
+                "type": "string"
+            },
+            "status_code": {
+                "type": "integer"
+            },
+            "message": {
+                "type": "string"
+            },
+            "data": {
+                "type": "object"
+            }
+        }
+      },
+      "BillingPlan": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "duration": {
+            "type": "string"
+          },
+          "price": {
+            "type": "integer"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "BillingPlanResponse": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "string"
+                },
+                "status_code": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "data": {
+                    "$ref": "#/components/schemas/BillingPlan"
+                }
+            }
+        }
     },
     "securitySchemes": {
       "bearerAuth": {
