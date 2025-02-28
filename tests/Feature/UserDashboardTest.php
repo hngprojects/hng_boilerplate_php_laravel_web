@@ -61,38 +61,46 @@ class UserDashboardTest extends TestCase
     {
         $user = User::factory()->create();
         $this->actingAs($user);
+
         $product = Product::factory()->create([
             'price' => 1000,
             'user_id' => $user->id,
         ]);
-        $currentMonth = Carbon::now()->format('M'); // Current month abbreviation
-        $lastMonth = Carbon::now()->subMonth()->format('M'); // Last month abbreviation
 
+        // Get current and last month
+        $currentMonth = Carbon::now()->format('M');
+        $lastMonth = Carbon::now()->subMonth()->format('M');
 
-        $currentMonth = Carbon::now()->format('M'); // Current month abbreviation
-        $lastMonth = Carbon::now()->subMonth()->format('M'); // Last month abbreviation
-
-
-        $order = Order::factory()->create([
+        // Create last month's order
+        $lastMonthOrder = Order::factory()->create([
             'product_id' => $product->product_id,
             'quantity' => 2,
+            'total_amount' => 2000,
+        ]);
+        $lastMonthOrder->created_at = Carbon::now()->subMonth();
+        $lastMonthOrder->save();
+
+        // Create current month's order
+        $currentMonthOrder = Order::factory()->create([
+            'product_id' => $product->product_id,
+            'quantity' => 3,
             'total_amount' => 3000,
         ]);
+
         $response = $this->get('/api/v1/user-analytics');
 
+        // Create expected data with proper number format
         $expectedData = array_fill_keys(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], 0);
-        $expectedData[$lastMonth] = 2000.00;
-        $expectedData[$currentMonth] = 3000.00;
+        $expectedData[$lastMonth] = '2000.00';
+        $expectedData[$currentMonth] = '3000.00';
 
-        $response->assertJson(
-            [
+        $response->assertStatus(200)
+            ->assertJson([
                 'message' => 'User analytics retrieved successfully',
                 'status_code' => 200,
                 'data' => $expectedData
-            ]
-        );
+            ]);
     }
-
 
 
     public function test_accurate_data_is_returned_for_recent_sales()
