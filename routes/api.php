@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Auth\VerificationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\QuestController;
 use App\Http\Controllers\Api\V1\JobController;
@@ -77,6 +78,13 @@ Route::prefix('v1')->group(function () {
     Route::post('/api-status', [ApiStatusCheckerController::class, 'store']);
 
     Route::post('/auth/register', [AuthController::class, 'store']);
+
+
+    Route::get('/auth/email/verify', [VerificationController::class, 'emailNotice'])->middleware('auth')->name('verification.notice');
+    Route::get('/auth/email/verify/{id}/{hash}', [VerificationController::class,'verifyEmail'])->middleware(['auth', 'signed'])->name('verification.verify');
+    Route::post('/auth/email/verification-notification', [VerificationController::class, 'resendEmail'])->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
+
     Route::post('/auth/login', [LoginController::class, 'login']);
     Route::post('/auth/logout', [LoginController::class, 'logout'])->middleware('auth:api');
     Route::post('/auth/password-reset-email', ForgetPasswordRequestController::class)->name('password.reset');
@@ -96,7 +104,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/auth/facebook/callback', [SocialAuthController::class, 'callbackFromFacebook']);
     Route::post('/auth/facebook/callback', [SocialAuthController::class, 'saveFacebookRequest']);
 
-    Route::middleware('auth:api')->group(function () {
+    Route::middleware(['auth:api', 'email.verified'])->group(function () {
 
         Route::get('/users/stats', [UserController::class, 'stats']);
         Route::apiResource('/users', UserController::class);
@@ -115,6 +123,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/billing-plans', [BillingPlanController::class, 'index']);
     Route::get('/billing-plans/{id}', [BillingPlanController::class, 'getBillingPlan']);
     Route::put('/billing-plans/{id}', [BillingPlanController::class, 'update']);
+    Route::delete('/billing-plans/{id}', [BillingPlanController::class, 'destroy']);
     Route::get('/payments/paystack/{organisation_id}/verify/{id}', [PaymentController::class, 'handlePaystackCallback']);
     Route::get('/payments/flutterwave/{organisation_id}/verify/{id}', [PaymentController::class, 'handleFlutterwaveCallback']);
     Route::post('/languages', [LanguageController::class, 'create']);
@@ -123,7 +132,7 @@ Route::prefix('v1')->group(function () {
 
     Route::middleware('throttle:10,1')->get('/topics/search', [ArticleController::class, 'search']);
 
-    Route::middleware('auth:api')->group(function () {
+    Route::middleware(['auth:api', 'email.verified'])->group(function () {
 
         Route::get('/organisations/{orgId}/products/search', [ProductController::class, 'search']);
 
@@ -141,7 +150,7 @@ Route::prefix('v1')->group(function () {
 
 
     //comment
-    Route::middleware('auth:api')->group(function () {
+    Route::middleware(['auth:api', 'email.verified'])->group(function () {
         Route::post('/blogs/{blogId}/comments', [CommentController::class, 'createComment']);
         Route::post('/comments/{commentId}/reply', [CommentController::class, 'replyComment']);
         Route::post('/comments/{commentId}/like', [CommentController::class, 'likeComment']);
@@ -179,14 +188,14 @@ Route::prefix('v1')->group(function () {
     Route::get('/squeeze-pages-users', [SqueezePageUserController::class, 'index']);
 
 
-    Route::middleware(['auth:api', 'admin'])->group(function () {
+    Route::middleware(['auth:api', 'admin', 'email.verified'])->group(function () {
         Route::get('/email-templates', [EmailTemplateController::class, 'index']);
         Route::post('/email-templates', [EmailTemplateController::class, 'store']);
         Route::patch('/email-templates/{id}', [EmailTemplateController::class, 'update']);
         Route::delete('/email-templates/{id}', [EmailTemplateController::class, 'destroy']);
     });
 
-    Route::middleware(['auth:api', 'admin'])->group(function () {
+    Route::middleware(['auth:api', 'admin', 'email.verified'])->group(function () {
         // Dashboard
         Route::get('/users-list', [AdminDashboardController::class, 'getUsers']);
     });
@@ -199,7 +208,7 @@ Route::prefix('v1')->group(function () {
     Route::post('/invite', [InvitationAcceptanceController::class, 'acceptInvitationPost']);
 
 
-    Route::middleware('auth:api')->group(function () {
+    Route::middleware(['auth:api', 'email.verified'])->group(function () {
 
         // Subscriptions, Plans and Features
         Route::apiResource('/features', FeatureController::class);
@@ -275,10 +284,10 @@ Route::prefix('v1')->group(function () {
     });
     Route::get('/notification-settings', [NotificationSettingController::class, 'show']);
 
-    Route::middleware(['auth:api', 'admin'])->get('/customers', [CustomerController::class, 'index']);
+    Route::middleware(['auth:api', 'admin', 'email.verified'])->get('/customers', [CustomerController::class, 'index']);
 
     //Blogs
-    Route::group(['middleware' => ['auth.jwt', 'admin']], function () {
+    Route::group(['middleware' => ['auth.jwt', 'email.verified' ,'admin']], function () {
         Route::post('/blogs', [BlogController::class, 'store']);
         Route::patch('/blogs/edit/{id}', [BlogController::class, 'update'])->name('admin.blogs.update');
         Route::delete('/blogs/{id}', [BlogController::class, 'destroy']);
@@ -307,7 +316,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/blogs/{id}', [BlogController::class, 'show']);
     Route::get('/blogs', [BlogController::class, 'index']);
 
-    Route::group(['middleware' => ['auth:api']], function () {
+    Route::group(['middleware' => ['auth:api', 'email.verified']], function () {
         Route::post('/user/preferences', [PreferenceController::class, 'store']);
         Route::put('/user/preferences/{id}', [PreferenceController::class, 'update']);
         Route::get('/user/preferences', [PreferenceController::class, 'index']);
@@ -318,7 +327,7 @@ Route::prefix('v1')->group(function () {
     });
 
     //region get and update
-    Route::group(['middleware' => ['auth:api']], function () {
+    Route::group(['middleware' => ['auth:api', 'email.verified']], function () {
         Route::put('/regions/{user_id}', [PreferenceController::class, 'updateRegion']);
         Route::get('/regions/{user_id}', [PreferenceController::class, 'showRegion']);
     });
@@ -326,7 +335,7 @@ Route::prefix('v1')->group(function () {
     Route::patch('/notification-settings/{user_id}', [NotificationPreferenceController::class, 'update']);
 
 
-    Route::middleware(['auth:api', 'admin'])->group(function () {
+    Route::middleware(['auth:api', 'email.verified', 'admin'])->group(function () {
         //Email Template
         Route::apiResource('email-templates', EmailTemplateController::class);
     });
@@ -342,8 +351,8 @@ Route::prefix('v1')->group(function () {
     // User Notification
     Route::patch('/notifications/{notification}', [UserNotificationController::class, 'update']);
     Route::delete('/notifications', [UserNotificationController::class, 'destroy']);
-    Route::post('/notifications', [UserNotificationController::class, 'create'])->middleware('auth.jwt');
-    Route::get('/notifications', [UserNotificationController::class, 'getByUser'])->middleware('auth.jwt');
+    Route::post('/notifications', [UserNotificationController::class, 'create'])->middleware(['auth.jwt', 'email.verified']);
+    Route::get('/notifications', [UserNotificationController::class, 'getByUser'])->middleware(['auth.jwt', 'email.verified']);
     //Timezone
     Route::get('/timezones', [TimezoneController::class, 'index']);
 
