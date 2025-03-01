@@ -10,7 +10,7 @@ use App\Mail\MagicLinkEmail;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
-use RefreshDatabase;
+use Exception;
 
 class MagicLinkController extends Controller
 {
@@ -25,47 +25,55 @@ class MagicLinkController extends Controller
     // Send a magic link to the user's email.
     public function sendMagicLink(Request $request)
     {
+        try {
         
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
-        ]);
+            $validator = Validator::make($request->all(), [
+                'email' => 'required|email',
+            ]);
 
-        if ($validator->fails()) {
+            if ($validator->fails()) {
+                return response()->json([
+                    'status_code' => 400,
+                    'status' => 'error',
+                    'message' => 'Invalid email address',
+                    'data' => $validator->errors(),
+                ], 400);
+            }
+
+            $user = User::where('email', $request->email)->first();
+
+            if (!$user) {
+                return response()->json([
+                    'status_code' => 404,
+                    'status' => 'error',
+                    'message' => 'User not found',
+                    'data' => [],
+                ], 404);
+            }
+
+            // Generate a unique token
+            $token = Str::random(60);
+            $expiresAt = Carbon::now()->addMinutes(30); // expires in 30 minutes
+
+            // Save the token to the user in db
+            $user->magic_link_token = $token;
+            $user->magic_link_expires_at = $expiresAt;
+            $user->save();
+
+            // Send email
+            Mail::to($user->email)->send(new MagicLinkEmail($token));
+
             return response()->json([
-                'status_code' => 400,
-                'status' => 'error',
-                'message' => 'Invalid email address',
-                'data' => $validator->errors(),
-            ], 400);
-        }
-
-        $user = User::where('email', $request->email)->first();
-
-        if (!$user) {
+                'status_code' => 200,
+                'status' => 'success',
+                'message' => 'Verification token sent to email',
+            ], 200);
+        } catch (\Exception $e) {
             return response()->json([
-                'status_code' => 404,
+                'status_code' => 500,
                 'status' => 'error',
-                'message' => 'User not found',
-                'data' => [],
-            ], 404);
+                'message' => 'Failed to send email',
+            ], 500);
         }
-
-        // Generate a unique token
-        $token = Str::random(60);
-        $expiresAt = Carbon::now()->addMinutes(30); // expires in 30 minutes
-
-        // Save the token to the user in db
-        $user->magic_link_token = $token;
-        $user->magic_link_expires_at = $expiresAt;
-        $user->save();
-
-        // Send email
-        Mail::to($user->email)->send(new MagicLinkEmail($token));
-
-        return response()->json([
-            'status_code' => 200,
-            'status' => 'success',
-            'message' => 'Verification token sent to email',
-        ], 200);
     }
 }
