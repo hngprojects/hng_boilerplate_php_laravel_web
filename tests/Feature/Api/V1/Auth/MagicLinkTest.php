@@ -95,32 +95,25 @@ class MagicLinkTest extends TestCase
     // Test that an error is returned if email sending fails
     public function test_email_sending_failure_returns_error()
     {
-    
-        Mail::fake();
-        
         Mail::shouldReceive('send')
+            ->once()
             ->andThrow(new Exception('Failed to send email'));
     
-        
         $user = User::factory()->create([
             'email' => 'test@example.com',
         ]);
     
-        
         $response = $this->postJson('/api/v1/auth/magic-link', [
             'email' => $user->email,
         ]);
-
-
+    
         $response->assertStatus(500)
                  ->assertJson([
                      'status_code' => 500,
                      'status' => 'error',
                      'message' => 'Failed to send email'
                  ]);
-    
-        // Assert that no email was sent
-        Mail::assertNotSent(MagicLinkEmail::class);
     }
+    
     // End of method
 }
