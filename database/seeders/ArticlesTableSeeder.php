@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\Article;
@@ -11,6 +12,10 @@ class ArticlesTableSeeder extends Seeder
 {
     public function run()
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        Article::query()->delete();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
         $users = User::all();
         foreach ($this->articles as $article) {
             Article::create([
