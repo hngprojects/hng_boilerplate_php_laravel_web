@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -15,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
-class User extends Authenticatable  implements JWTSubject, CanResetPasswordContract
+class User extends Authenticatable  implements JWTSubject, CanResetPasswordContract, MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable, HasUuids, CanResetPassword, SoftDeletes;
 
@@ -41,6 +42,7 @@ class User extends Authenticatable  implements JWTSubject, CanResetPasswordContr
         'email',
         'password',
         'role',
+        'email_verified_at'
     ];
     
     /* protected $fillable = [

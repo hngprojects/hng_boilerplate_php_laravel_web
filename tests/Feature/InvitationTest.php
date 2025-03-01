@@ -29,6 +29,11 @@ class InvitationTest extends TestCase
             'last_name' => 'User',
         ]);
 
+        //pseudo email verification
+        $user = User::where('email', 'test@example.com')->first();
+        $user->email_verified_at = now();
+        $user->save();
+
         // Login the user
         $loginResponse = $this->postJson('/api/v1/auth/login', [
             'email' => 'test@example.com',
