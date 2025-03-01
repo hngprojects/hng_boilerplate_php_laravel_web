@@ -510,7 +510,58 @@
             "description": "Billing plan details retrieved successfully"
           }
         }
-      }
+      },
+    "delete": {
+        "summary": "Delete billing plan",
+        "tags": ["Billing"],
+        "security": [
+            {
+                "bearerAuth": []
+            }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Billing plan details deleted successfully",
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/ErrorResponse"
+                    }
+                }
+            }
+          },
+        "404": {
+            "description": "Billing plan not found",
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/ErrorResponse"
+                    }
+                }
+            }
+        },
+        "500": {
+            "description": "Internal Server Error",
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/ErrorResponse"
+                    }
+                }
+            }
+        }
+    }
+    }
     },
     "/api/v1/payments/paystack/{organisation_id}/verify/{id}": {
       "get": {
@@ -2425,7 +2476,58 @@
           }
         },
         "required": ["type", "content"]
-      }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+            "status": {
+                "type": "string"
+            },
+            "status_code": {
+                "type": "integer"
+            },
+            "message": {
+                "type": "string"
+            },
+            "data": {
+                "type": "object"
+            }
+        }
+      },
+      "BillingPlan": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "duration": {
+            "type": "string"
+          },
+          "price": {
+            "type": "integer"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "BillingPlanResponse": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "string"
+                },
+                "status_code": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "data": {
+                    "$ref": "#/components/schemas/BillingPlan"
+                }
+            }
+        }
     },
     "securitySchemes": {
       "bearerAuth": {

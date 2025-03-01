@@ -115,6 +115,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/billing-plans', [BillingPlanController::class, 'index']);
     Route::get('/billing-plans/{id}', [BillingPlanController::class, 'getBillingPlan']);
     Route::put('/billing-plans/{id}', [BillingPlanController::class, 'update']);
+    Route::delete('/billing-plans/{id}', [BillingPlanController::class, 'destroy']);
     Route::get('/payments/paystack/{organisation_id}/verify/{id}', [PaymentController::class, 'handlePaystackCallback']);
     Route::get('/payments/flutterwave/{organisation_id}/verify/{id}', [PaymentController::class, 'handleFlutterwaveCallback']);
     Route::post('/languages', [LanguageController::class, 'create']);
