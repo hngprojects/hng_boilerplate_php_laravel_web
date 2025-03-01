@@ -14,13 +14,6 @@ use Exception;
 
 class MagicLinkController extends Controller
 {
-
-    public function setUp(): void
-    {
-        parent::setUp();
-        $this->artisan('migrate'); // Run migrations for the test database
-    }
-
     
     // Send a magic link to the user's email.
     public function sendMagicLink(Request $request)
