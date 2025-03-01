@@ -51,6 +51,7 @@ use App\Http\Controllers\Api\V1\Organisation\OrganisationController;
 use App\Http\Controllers\Api\V1\Auth\ForgetPasswordRequestController;
 use App\Http\Controllers\Api\V1\SuperAdmin\SuperAdminProductController;
 use App\Http\Controllers\Api\V1\Organisation\OrganisationMemberController;
+use App\Http\Controllers\Api\V1\Auth\MagicLinkController;
 
 /*
 |--------------------------------------------------------------------------
@@ -76,6 +77,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/api-status', [ApiStatusCheckerController::class, 'index']);
     Route::post('/api-status', [ApiStatusCheckerController::class, 'store']);
 
+    // Auths
     Route::post('/auth/register', [AuthController::class, 'store']);
     Route::post('/auth/login', [LoginController::class, 'login']);
     Route::post('/auth/logout', [LoginController::class, 'logout'])->middleware('auth:api');
@@ -86,6 +88,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
     Route::post('/auth/google/callback', [SocialAuthController::class, 'saveGoogleRequest']);
     Route::post('/auth/google', [SocialAuthController::class, 'saveGoogleRequestPost']);
+    Route::post('/auth/magic-link', [MagicLinkController::class, 'sendMagicLink']);
     /* Forget and Reset Password using OTP */
     Route::post('/auth/forgot-password', [ForgotResetPasswordController::class, 'forgetPassword']);
     Route::post('/auth/reset-forgot-password', [ForgotResetPasswordController::class, 'resetPassword']);
