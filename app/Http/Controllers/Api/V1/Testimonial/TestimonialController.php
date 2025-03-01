@@ -15,9 +15,6 @@ class TestimonialController extends Controller
 {
     use ApiResponse;
 
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $user = Auth::user();
@@ -33,9 +30,6 @@ class TestimonialController extends Controller
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreTestimonialRequest $request)
     {
         $user = Auth::user();
@@ -44,9 +38,14 @@ class TestimonialController extends Controller
         }
     
         try {
+            $name = $request->get('name') ?? $user->name; 
+            if (empty($name)) {
+                $name = 'Anonymous User'; 
+            }
+
             $testimonial = Testimonial::create([
                 'user_id' => $user->id,
-                'name' => $request->get('name') ?? 'Anonymous User', // Use request name, fallback to 'Anonymous User'
+                'name' => $name,
                 'content' => $request->get('content'),
             ]);
     
@@ -56,9 +55,6 @@ class TestimonialController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id) 
     {
         $user = Auth::user();
@@ -76,9 +72,6 @@ class TestimonialController extends Controller
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdateTestimonialRequest $request, string $id) 
     {
         $user = Auth::user();
@@ -88,8 +81,6 @@ class TestimonialController extends Controller
 
         try {
             $testimonial = Testimonial::findOrFail($id);
-
-            // Check if the user owns this testimonial or is an admin
             if ($testimonial->user_id !== $user->id && $user->role !== 'admin') {
                 return response()->json($this->errorResponse('You do not have permission to update this testimonial.', Response::HTTP_FORBIDDEN));
             }
@@ -106,9 +97,6 @@ class TestimonialController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id) 
     {
         $user = Auth::user();
