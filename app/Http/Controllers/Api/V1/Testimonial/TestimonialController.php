@@ -15,13 +15,15 @@ class TestimonialController extends Controller
 {
     use ApiResponse;
 
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
+
     public function index()
     {
-        $user = Auth::user();
-        if (!$user) {
-            return response()->json($this->errorResponse('Unauthorized. Please log in.', Response::HTTP_UNAUTHORIZED));
-        }
-
+        $this->authorize('viewAny', Testimonial::class);
+        
         try {
             $testimonials = Testimonial::all();
             return response()->json($this->successResponse('Testimonials fetched successfully', $testimonials->toArray()));
@@ -32,12 +34,10 @@ class TestimonialController extends Controller
 
     public function store(StoreTestimonialRequest $request)
     {
-        $user = Auth::user();
-        if (!$user) {
-            return response()->json($this->errorResponse('Unauthorized. Please log in.', Response::HTTP_UNAUTHORIZED));
-        }
-    
+        $this->authorize('create', Testimonial::class);
+        
         try {
+            $user = Auth::user();
             $name = $request->get('name') ?? $user->name; 
             if (empty($name)) {
                 $name = 'Anonymous User'; 
@@ -55,15 +55,12 @@ class TestimonialController extends Controller
         }
     }
 
-    public function show(string $id) 
+    public function show($id) 
     {
-        $user = Auth::user();
-        if (!$user) {
-            return response()->json($this->errorResponse('Unauthorized. Please log in.', Response::HTTP_UNAUTHORIZED));
-        }
-
         try {
             $testimonial = Testimonial::findOrFail($id);
+            $this->authorize('view', $testimonial);
+            
             return response()->json($this->successResponse('Testimonial fetched successfully', $testimonial->toArray()));
         } catch (ModelNotFoundException $e) {
             return response()->json($this->errorResponse('Testimonial not found.', Response::HTTP_NOT_FOUND));
@@ -72,18 +69,11 @@ class TestimonialController extends Controller
         }
     }
 
-    public function update(UpdateTestimonialRequest $request, string $id) 
+    public function update(UpdateTestimonialRequest $request, $id) 
     {
-        $user = Auth::user();
-        if (!$user) {
-            return response()->json($this->errorResponse('Unauthorized. Please log in.', Response::HTTP_UNAUTHORIZED));
-        }
-
         try {
             $testimonial = Testimonial::findOrFail($id);
-            if ($testimonial->user_id !== $user->id && $user->role !== 'admin') {
-                return response()->json($this->errorResponse('You do not have permission to update this testimonial.', Response::HTTP_FORBIDDEN));
-            }
+            $this->authorize('update', $testimonial);
 
             $testimonial->update([
                 'content' => $request->get('content')
@@ -97,26 +87,21 @@ class TestimonialController extends Controller
         }
     }
 
-    public function destroy(string $id) 
-    {
-        $user = Auth::user();
-        if (!$user) {
-            return response()->json($this->errorResponse('Unauthorized. Please log in.', Response::HTTP_UNAUTHORIZED));
-        }
+    public function destroy($id) 
+{
+    try {
+        $testimonial = Testimonial::findOrFail($id);
+        $this->authorize('delete', $testimonial);
 
-        if ($user->role !== 'admin') {
-            return response()->json($this->errorResponse('You do not have the required permissions to perform this action.', Response::HTTP_FORBIDDEN));
-        }
-
-        try {
-            $testimonial = Testimonial::findOrFail($id);
-            $testimonial->delete();
-
-            return response()->json($this->successResponse('Testimonial deleted successfully'));
-        } catch (ModelNotFoundException $e) {
-            return response()->json($this->errorResponse('Testimonial not found.', Response::HTTP_NOT_FOUND));
-        } catch (\Exception $e) {
-            return response()->json($this->errorResponse('Internal Server Error. Please try again later.', Response::HTTP_INTERNAL_SERVER_ERROR, ['error' => $e->getMessage()]));
-        }
+        $testimonial->delete();
+        return response()->json($this->successResponse('Testimonial deleted successfully'));
+    } catch (ModelNotFoundException $e) {
+        return response()->json($this->errorResponse('Testimonial not found.', Response::HTTP_NOT_FOUND));
+    } catch (\Illuminate\Auth\Access\AuthorizationException $e) {
+        
+        return response()->json($this->errorResponse('You do not have the required permissions to perform this action.', Response::HTTP_FORBIDDEN));
+    } catch (\Exception $e) {
+        return response()->json($this->errorResponse('Internal Server Error. Please try again later.', Response::HTTP_INTERNAL_SERVER_ERROR, ['error' => $e->getMessage()]));
     }
+}
 }
