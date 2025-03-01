@@ -95,9 +95,9 @@ class MagicLinkTest extends TestCase
     // Test that an error is returned if email sending fails
     public function test_email_sending_failure_returns_error()
     {
-        Mail::shouldReceive('send')
-            ->once()
-            ->andThrow(new Exception('Failed to send email'));
+        Mail::shouldReceive('to->send')
+                ->once()
+                ->andThrow(new Exception('Failed to send email'));
     
         $user = User::factory()->create([
             'email' => 'test@example.com',
