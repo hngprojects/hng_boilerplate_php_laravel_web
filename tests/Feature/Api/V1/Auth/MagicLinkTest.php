@@ -96,6 +96,8 @@ class MagicLinkTest extends TestCase
     public function test_email_sending_failure_returns_error()
     {
     
+        Mail::fake();
+        
         Mail::shouldReceive('send')
             ->andThrow(new Exception('Failed to send email'));
     
