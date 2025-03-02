@@ -12,10 +12,6 @@ class BlogSeeder extends Seeder
 {
     public function run(): void
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-        Blog::query()->delete();
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-
         $categories = ['Business', 'Food', 'Lifestyle', 'World News'];
         $images = [
             'https://free-images.com/lg/dd2c/port_au_prince_haiti.jpg',

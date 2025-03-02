@@ -12,14 +12,10 @@ class ArticlesTableSeeder extends Seeder
 {
     public function run()
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-        Article::query()->delete();
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-
         $users = User::all();
         foreach ($this->articles as $article) {
             Article::create([
-                'user_id' => $users->random()->id,
+                'user_id' => User::factory()->create()->id,
                 'title' => $article['title'],
                 'content' => $article['content'],
             ]);
