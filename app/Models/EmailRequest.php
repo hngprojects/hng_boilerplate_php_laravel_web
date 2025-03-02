@@ -13,6 +13,9 @@ class EmailRequest extends Model
     protected $table = 'email_requests';
     protected $keyType = 'uuid';
     public $incrementing = false;
+    protected $casts = [
+        'variables' => 'array',
+    ];
     protected $fillable = [
         "template_id",
         "subject",
