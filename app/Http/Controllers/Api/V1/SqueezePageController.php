@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 
-class SqueezePageCoontroller extends Controller
+class SqueezePageController extends Controller
 {
     /**
      * Display a listing of the resource.

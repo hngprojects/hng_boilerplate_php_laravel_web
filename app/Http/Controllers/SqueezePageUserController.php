@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\SqueezePage;
 use Illuminate\Http\Request;
 use App\Models\SqueezePageUser;
+use Illuminate\Http\Response;
 
 class SqueezePageUserController extends Controller
 {
