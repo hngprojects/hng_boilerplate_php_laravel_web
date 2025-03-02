@@ -13,16 +13,19 @@ class MagicLinkEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $token; // Add a public property to store the token
+    public $token;
+    public $email;
 
     /**
      * Create a new message instance.
      *
+     * @param string $email
      * @param string $token
      */
-    public function __construct($token)
+    public function __construct($email, $token)
     {
-        $this->token = $token; // Store the token
+        $this->email = $email;
+        $this->token = $token;
     }
 
     /**
@@ -31,7 +34,7 @@ class MagicLinkEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Your Magic Link for Login', // Customize the subject
+            subject: 'Your Magic Link for Login', 
         );
     }
 
@@ -41,8 +44,12 @@ class MagicLinkEmail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.magic_link', // Use the custom email view
-            with: ['token' => $this->token], // Pass the token to the view
+            view: 'emails.magic_link', 
+            with: [
+                'token' => $this->token,
+                'email' => $this->email,
+                'magicLink' => url("/api/v1/auth/magic-link/verify?email={$this->email}&token={$this->token}") // '/api/v1/auth/magic-link/verify/' is just a place holder for the frontend  link
+            ],
         );
     }
 

@@ -14,6 +14,7 @@ use Exception;
 class MagicLinkTest extends TestCase
 {
 
+    // Send Magic Link Tests
     use RefreshDatabase;
     
     // Test that a magic link email is sent for a valid email.
@@ -114,6 +115,72 @@ class MagicLinkTest extends TestCase
                      'message' => 'Failed to send email'
                  ]);
     }
+    // End of method
+
+
+
+    // Verify Magic link Tests
+
     
+    // Test verification with an invalid token
+    public function test_verification_fails_with_invalid_token()
+    {
+        $user = User::factory()->create([
+            'magic_link_token' => 'valid-token',
+            'magic_link_expires_at' => now()->addMinutes(30),
+        ]);
+
+        $response = $this->postJson('/api/v1/auth/magic-link/verify', [
+            'email' => $user->email,
+            'token' => 'invalid-token'
+        ]);
+
+        $response->assertStatus(401)
+            ->assertJson([
+                'status_code' => 401,
+                'status' => 'error',
+                'message' => 'Invalid or expired token',
+            ]);
+    }
+    // End of method
+
+
+    // Test verification with an expired token
+    public function test_verification_fails_with_expired_token()
+    {
+        $user = User::factory()->create([
+            'magic_link_token' => 'valid-token',
+            'magic_link_expires_at' => now()->subMinutes(5), // Token expired
+        ]);
+
+        $response = $this->postJson('/api/v1/auth/magic-link/verify', [
+            'email' => $user->email,
+            'token' => 'valid-token'
+        ]);
+
+        $response->assertStatus(401)
+            ->assertJson([
+                'status_code' => 401,
+                'status' => 'error',
+                'message' => 'Invalid or expired token',
+            ]);
+    }
+    // End of method
+
+
+    // Test verification with a non-existent email
+    public function test_verification_fails_with_non_existent_email()
+    {
+        $response = $this->postJson('/api/v1/auth/magic-link/verify', [
+            'email' => 'nonexistent@example.com',
+            'token' => 'random-token'
+        ]);
+
+        $response->assertStatus(404)
+            ->assertJson([
+                'status_code' => 404,
+                'message' => 'User not found'
+            ]);
+    }
     // End of method
 }

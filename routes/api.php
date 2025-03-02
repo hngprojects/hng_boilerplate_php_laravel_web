@@ -89,6 +89,8 @@ Route::prefix('v1')->group(function () {
     Route::post('/auth/google/callback', [SocialAuthController::class, 'saveGoogleRequest']);
     Route::post('/auth/google', [SocialAuthController::class, 'saveGoogleRequestPost']);
     Route::post('/auth/magic-link', [MagicLinkController::class, 'sendMagicLink']);
+    Route::post('/auth/magic-link/verify', [MagicLinkController::class, 'verifyMagicLink']);
+
     /* Forget and Reset Password using OTP */
     Route::post('/auth/forgot-password', [ForgotResetPasswordController::class, 'forgetPassword']);
     Route::post('/auth/reset-forgot-password', [ForgotResetPasswordController::class, 'resetPassword']);
