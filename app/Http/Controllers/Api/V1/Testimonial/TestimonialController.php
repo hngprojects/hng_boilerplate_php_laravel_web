@@ -6,31 +6,24 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTestimonialRequest;
 use App\Http\Requests\UpdateTestimonialRequest;
 use App\Models\Testimonial;
-use App\Traits\ApiResponse;
+use App\Helpers\ResponseHelper;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Response;
 
 class TestimonialController extends Controller
 {
-    use ApiResponse;
-
-    public function __construct()
-    {
-        $this->middleware('auth:api');
-    }
-
     public function index()
-    {
-        $this->authorize('viewAny', Testimonial::class);
-        
-        try {
-            $testimonials = Testimonial::all();
-            return response()->json($this->successResponse('Testimonials fetched successfully', $testimonials->toArray()));
-        } catch (\Exception $e) {
-            return response()->json($this->errorResponse('Internal Server Error. Please try again later.', Response::HTTP_INTERNAL_SERVER_ERROR, ['error' => $e->getMessage()]));
-        }
+{
+    $this->authorize('viewAny', Testimonial::class);
+    
+    try {
+        $testimonials = Testimonial::all();
+        return ResponseHelper::response('Testimonials fetched successfully', Response::HTTP_OK, collect($testimonials));
+    } catch (\Exception $e) {
+        return ResponseHelper::response('Internal Server Error. Please try again later.', Response::HTTP_INTERNAL_SERVER_ERROR, ['error' => $e->getMessage()]);
     }
+}
 
     public function store(StoreTestimonialRequest $request)
     {
@@ -49,9 +42,9 @@ class TestimonialController extends Controller
                 'content' => $request->get('content'),
             ]);
     
-            return response()->json($this->successResponse('Testimonial created successfully', $testimonial->toArray()), Response::HTTP_CREATED);
+            return ResponseHelper::response('Testimonial created successfully', Response::HTTP_CREATED, $testimonial->toArray());
         } catch (\Exception $e) {
-            return response()->json($this->errorResponse('Internal Server Error. Please try again later.', Response::HTTP_INTERNAL_SERVER_ERROR, ['error' => $e->getMessage()]));
+            return ResponseHelper::response('Internal Server Error. Please try again later.', Response::HTTP_INTERNAL_SERVER_ERROR, ['error' => $e->getMessage()]);
         }
     }
 
@@ -61,11 +54,11 @@ class TestimonialController extends Controller
             $testimonial = Testimonial::findOrFail($id);
             $this->authorize('view', $testimonial);
             
-            return response()->json($this->successResponse('Testimonial fetched successfully', $testimonial->toArray()));
+            return ResponseHelper::response('Testimonial fetched successfully', Response::HTTP_OK, $testimonial->toArray());
         } catch (ModelNotFoundException $e) {
-            return response()->json($this->errorResponse('Testimonial not found.', Response::HTTP_NOT_FOUND));
+            return ResponseHelper::response('Testimonial not found.', Response::HTTP_NOT_FOUND);
         } catch (\Exception $e) {
-            return response()->json($this->errorResponse('Internal Server Error. Please try again later.', Response::HTTP_INTERNAL_SERVER_ERROR, ['error' => $e->getMessage()]));
+            return ResponseHelper::response('Internal Server Error. Please try again later.', Response::HTTP_INTERNAL_SERVER_ERROR, ['error' => $e->getMessage()]);
         }
     }
 
@@ -79,29 +72,28 @@ class TestimonialController extends Controller
                 'content' => $request->get('content')
             ]);
 
-            return response()->json($this->successResponse('Testimonial updated successfully', $testimonial->toArray()));
+            return ResponseHelper::response('Testimonial updated successfully', Response::HTTP_OK, $testimonial->toArray());
         } catch (ModelNotFoundException $e) {
-            return response()->json($this->errorResponse('Testimonial not found.', Response::HTTP_NOT_FOUND));
+            return ResponseHelper::response('Testimonial not found.', Response::HTTP_NOT_FOUND);
         } catch (\Exception $e) {
-            return response()->json($this->errorResponse('Internal Server Error. Please try again later.', Response::HTTP_INTERNAL_SERVER_ERROR, ['error' => $e->getMessage()]));
+            return ResponseHelper::response('Internal Server Error. Please try again later.', Response::HTTP_INTERNAL_SERVER_ERROR, ['error' => $e->getMessage()]);
         }
     }
 
     public function destroy($id) 
-{
-    try {
-        $testimonial = Testimonial::findOrFail($id);
-        $this->authorize('delete', $testimonial);
+    {
+        try {
+            $testimonial = Testimonial::findOrFail($id);
+            $this->authorize('delete', $testimonial);
 
-        $testimonial->delete();
-        return response()->json($this->successResponse('Testimonial deleted successfully'));
-    } catch (ModelNotFoundException $e) {
-        return response()->json($this->errorResponse('Testimonial not found.', Response::HTTP_NOT_FOUND));
-    } catch (\Illuminate\Auth\Access\AuthorizationException $e) {
-        
-        return response()->json($this->errorResponse('You do not have the required permissions to perform this action.', Response::HTTP_FORBIDDEN));
-    } catch (\Exception $e) {
-        return response()->json($this->errorResponse('Internal Server Error. Please try again later.', Response::HTTP_INTERNAL_SERVER_ERROR, ['error' => $e->getMessage()]));
+            $testimonial->delete();
+            return ResponseHelper::response('Testimonial deleted successfully', Response::HTTP_OK);
+        } catch (ModelNotFoundException $e) {
+            return ResponseHelper::response('Testimonial not found.', Response::HTTP_NOT_FOUND);
+        } catch (\Illuminate\Auth\Access\AuthorizationException $e) {
+            return ResponseHelper::response('You do not have the required permissions to perform this action.', Response::HTTP_FORBIDDEN);
+        } catch (\Exception $e) {
+            return ResponseHelper::response('Internal Server Error. Please try again later.', Response::HTTP_INTERNAL_SERVER_ERROR, ['error' => $e->getMessage()]);
+        }
     }
-}
 }

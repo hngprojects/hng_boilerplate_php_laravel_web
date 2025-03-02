@@ -27,41 +27,37 @@ class TestimonialTest extends TestCase
     }
 
     public function testAuthenticatedUserCanCreateTestimonial()
-    {
-        
-        $user = User::factory()->create(['password' => bcrypt('password')]);
+{
+    $user = User::factory()->create(['password' => bcrypt('password')]);
+    $token = JWTAuth::attempt(['email' => $user->email, 'password' => 'password']);
 
-        
-        $token = JWTAuth::attempt(['email' => $user->email, 'password' => 'password']);
+    $response = $this->postJson('/api/v1/testimonials', [
+        'content' => 'This is a testimonial.',
+    ], [
+        'Authorization' => 'Bearer ' . $token,
+    ]);
 
-        $response = $this->postJson('/api/v1/testimonials', [
-            'content' => 'This is a testimonial.',
-        ], [
-            'Authorization' => 'Bearer ' . $token,
-        ]);
+    $response->assertStatus(201); // Ensure status code is 201
+    $response->assertJson([
+        'status' => 'success',
+        'status_code' => 201, // Update to 201
+        'message' => 'Testimonial created successfully',
+    ]);
 
-        $response->assertStatus(201);
-        $response->assertJson([
-            'status' => 'success',
-            'status_code' => 200,  
-            'message' => 'Testimonial created successfully',
-        ]);
-        
-        
-        $response->assertJsonStructure([
-            'status',
-            'status_code',
-            'message',
-            'data' => [
-                'user_id',
-                'name',
-                'content',
-                'id',
-                'updated_at',
-                'created_at'
-            ]
-        ]);
-    }
+    $response->assertJsonStructure([
+        'status',
+        'status_code',
+        'message',
+        'data' => [
+            'user_id',
+            'name',
+            'content',
+            'id',
+            'updated_at',
+            'created_at',
+        ],
+    ]);
+}
 
     public function testValidationErrorsAreReturnedForMissingData()
     {
@@ -131,19 +127,18 @@ class TestimonialTest extends TestCase
     public function testAuthenticatedUserCannotFetchNonExistingTestimonial()
     {
         $user = User::factory()->create(['password' => bcrypt('password')]);
-
         $token = JWTAuth::attempt(['email' => $user->email, 'password' => 'password']);
-
+    
         $response = $this->getJson('/api/v1/testimonials/99999', [
             'Authorization' => 'Bearer ' . $token,
         ]);
-        $response->assertStatus(200);
-        $this->assertTrue(
-            $response->json('status') === 'error' || 
-            $response->json('status') === 'Not Found' || 
-            $response->json('message') === 'Testimonial not found.' ||
-            strpos($response->json('message'), 'not found') !== false
-        );
+    
+        $response->assertStatus(404); 
+        $response->assertJson([
+            'status' => 'error',
+            'status_code' => 404,
+            'message' => 'Testimonial not found.',
+        ]);
     }
 
 
