@@ -72,8 +72,11 @@ class NotificationSettingController extends Controller
             'slack_notifications_announcement_and_update_emails' => 'required|boolean',
         ]);
         $user = Auth::user();
-        $settings = $user->notificationSetting;
-        $settings->update($request->all());
+        $settings = $user->notificationSetting();
+        $settings->updateOrCreate(
+            ['user_id' => $user->id],  // Find existing settings by user_id
+            $request->all()             // Update with new data or create if not found
+        );
         return response()->json([
             'status' => 'success',
             'message' => 'Notification preferences updated successfully',
