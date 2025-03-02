@@ -20,6 +20,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Disable foreign key checks
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         //create an admin user
         $this->call([
             AdminSeeder::class
