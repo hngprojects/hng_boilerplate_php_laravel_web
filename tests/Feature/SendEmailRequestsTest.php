@@ -83,35 +83,35 @@ class SendEmailRequestsTest extends TestCase
 
     public function test_job_sends_emails()
     {
-    // Create a template
-    $template = EmailTemplate::create([
-        'id' => (string) \Illuminate\Support\Str::uuid(),
-        'title' => 'Welcome Template',
-        'template' => '<p>Hello {{name}},</p><p>Welcome to our service!</p>',
-        'status' => true,
-    ]);
+        // Create a template
+        $template = EmailTemplate::create([
+            'id' => (string) \Illuminate\Support\Str::uuid(),
+            'title' => 'Welcome Template',
+            'template' => '<p>Hello {{name}},</p><p>Welcome to our service!</p>',
+            'status' => true,
+        ]);
 
-    // Create an email request
-    $request = EmailRequest::create([
-        'id' => (string) \Illuminate\Support\Str::uuid(),
-        'template_id' => $template->id,
-        'subject' => 'Test Subject',
-        'recipient' => 'test@example.com',
-        'variables' => '{"name": "John Doe"}',
-        'status' => 'pending',
-    ]);
+        // Create an email request
+        $request = EmailRequest::create([
+            'id' => (string) \Illuminate\Support\Str::uuid(),
+            'template_id' => $template->id,
+            'subject' => 'Test Subject',
+            'recipient' => 'test@example.com',
+            'variables' => '{"name": "John Doe"}',
+            'status' => 'pending',
+        ]);
 
-    SendEmailRequestsJob::dispatch();
+        SendEmailRequestsJob::dispatch();
 
-    // Assert the email was sent
-    Mail::assertSent(EmailRequestMailable::class, function (EmailRequestMailable $mail) use ($request) {
-        return $mail->hasTo($request->recipient) &&
-               $mail->subject === $request->subject &&
-               $mail->htmlContent === '<p>Hello John Doe,</p><p>Welcome to our service!</p>'; 
-    });
+        // Assert the email was sent
+        Mail::assertSent(EmailRequestMailable::class, function (EmailRequestMailable $mail) use ($request) {
+            return $mail->hasTo($request->recipient) &&
+                $mail->subject === $request->subject &&
+                $mail->htmlContent === '<p>Hello John Doe,</p><p>Welcome to our service!</p>'; 
+        });
 
-    $request->refresh();
-    $this->assertEquals('sent', $request->status);
+        $request->refresh();
+        $this->assertEquals('sent', $request->status);
     }
 
     public function test_job_logs_error_when_email_sending_fails()
