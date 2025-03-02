@@ -6,7 +6,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Models\SubscriptionPlan;
 use App\Models\User;
-use Tymon\JWTAuth\Facades\JWTAuth;
 
 class BillingPlanControllerTest extends TestCase
 {
@@ -116,5 +115,19 @@ class BillingPlanControllerTest extends TestCase
             'price' => 20000,
             'description' => 'An updated plan description',
         ]);
+    }
+
+    /** @test **/
+    public function test_delete_billing_plan()
+    {
+        $plan = SubscriptionPlan::factory()->create();
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $response = $this->deleteJson("/api/v1/billing-plans/{$plan->id}");
+
+        $response->assertStatus(204);
+
+        $this->assertDatabaseMissing('subscription_plans', ['id' => $plan->id]);
     }
 }

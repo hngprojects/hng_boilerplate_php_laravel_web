@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 
-class SqueezePageCoontroller extends Controller
+class SqueezePageController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -93,29 +93,29 @@ class SqueezePageCoontroller extends Controller
 
     public function search(Request $request)
     {
-            $request->validate([
-                'q' => 'required|string|max:255',
-            ]);
+        $request->validate([
+            'q' => 'required|string|max:255',
+        ]);
 
-            $query = SqueezePage::query();
+        $query = SqueezePage::query();
 
-            if ($searchTerm = $request->input('q')) {
-                $query->where(function ($q) use ($searchTerm) {
-                    $q->where('headline', 'LIKE', "%{$searchTerm}%")
-                        ->orWhere('sub_headline', 'LIKE', "%{$searchTerm}%")
-                        ->orWhere('content', 'LIKE', "%{$searchTerm}%")
-                        ->orWhere('title', 'LIKE', "%{$searchTerm}%")
-                        ->orWhere('slug', 'LIKE', "%{$searchTerm}%");
-                });
-            }
+        if ($searchTerm = $request->input('q')) {
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('headline', 'LIKE', "%{$searchTerm}%")
+                    ->orWhere('sub_headline', 'LIKE', "%{$searchTerm}%")
+                    ->orWhere('content', 'LIKE', "%{$searchTerm}%")
+                    ->orWhere('title', 'LIKE', "%{$searchTerm}%")
+                    ->orWhere('slug', 'LIKE', "%{$searchTerm}%");
+            });
+        }
 
-            $results = $query->get();
+        $results = $query->get();
 
-            return response()->json([
-                'status' => Response::HTTP_OK,
-                'message' => 'Search result retrieved',
-                'data' => $results,
-            ]);
+        return response()->json([
+            'status' => Response::HTTP_OK,
+            'message' => 'Search result retrieved',
+            'data' => $results,
+        ]);
     }
 
     public function filter(FilterSqueezeRequest $request)
@@ -140,5 +140,28 @@ class SqueezePageCoontroller extends Controller
             'message' => 'Filtered results',
             'data' => $results,
         ]);
+    }
+
+    public function activateSqueezePage($id)
+    {
+        try {
+            $squeezePage = SqueezePage::findOrFail($id);
+
+            // Toggle the activate boolean field
+            $squeezePage->activate = !$squeezePage->activate;
+            $squeezePage->save();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => $squeezePage->activate ? 'Squeeze page activated' : 'Squeeze page deactivated',
+                'data' => $squeezePage,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to toggle activation status',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }

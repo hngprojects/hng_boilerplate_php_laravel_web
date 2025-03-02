@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SqueezePage;
 use Illuminate\Http\Request;
 use App\Models\SqueezePageUser;
+use Illuminate\Http\Response;
 
 class SqueezePageUserController extends Controller
 {
@@ -48,11 +50,11 @@ class SqueezePageUserController extends Controller
         $limit = $request->input('limit', 10);
 
         $offset = ($page - 1) * $limit;
-     
+
         $squeezePageUsers = SqueezePageUser::select('firstname', 'lastname', 'email', 'title', 'created_at')
-                ->offset($offset)
-                ->limit($limit)
-                ->get();
+            ->offset($offset)
+            ->limit($limit)
+            ->get();
 
         $totalItems = SqueezePageUser::count();
         $totalPages = ceil($totalItems / $limit);
@@ -61,9 +63,9 @@ class SqueezePageUserController extends Controller
             'message' => 'User details retrieved successfully.',
             'data' => $squeezePageUsers,
             'pagination' => [
-                    'totalItems' => $totalItems,
-                    'totalPages' => $totalPages,
-                    'currentPage' => $page,
+                'totalItems' => $totalItems,
+                'totalPages' => $totalPages,
+                'currentPage' => $page,
             ],
             'status_code' => 200,
         ], 200);

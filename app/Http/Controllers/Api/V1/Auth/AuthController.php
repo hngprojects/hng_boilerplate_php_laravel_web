@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Organisation;
 use App\Services\OrganisationService;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -67,7 +68,7 @@ class AuthController extends Controller
             $token = JWTAuth::fromUser($user);
 
             $is_superadmin = in_array($user->role, ['admin']);
-
+            
             DB::commit();
 
             $email_template_id = null;
@@ -76,6 +77,8 @@ class AuthController extends Controller
             if ($emailTemplate) {
                 $email_template_id = $emailTemplate->id;
             }
+
+            event(new Registered($user));
 
             return response()->json([
                 'status_code' => 201,

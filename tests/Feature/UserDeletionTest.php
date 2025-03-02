@@ -25,6 +25,7 @@ class UserDeletionTest extends TestCase
             'password' => bcrypt('@Bulldozer01'), // Admin password
             'role' => 'admin',
             'is_verified' => 1,
+            'email_verified_at' => now()
         ]);
 
         // Attempt to delete a non-existent user
@@ -51,6 +52,7 @@ class UserDeletionTest extends TestCase
             'password' => bcrypt('password'),
             'role' => 'user',
             'is_verified' => 1,
+            'email_verified_at' => now()
         ]);
 
         $anotherUser = User::create([
@@ -86,6 +88,7 @@ class UserDeletionTest extends TestCase
             'password' => bcrypt('@Bulldozer01'), // Admin password
             'role' => 'admin',
             'is_verified' => 1,
+            'email_verified_at' => now()
         ]);
 
         $user = User::create([
@@ -122,6 +125,7 @@ class UserDeletionTest extends TestCase
             'password' => bcrypt('@Bulldozer01'),
             'role' => 'superAdmin',
             'is_verified' => 1,
+            'email_verified_at' => now()
         ]);
 
         $anotherUser = User::create([
@@ -158,6 +162,7 @@ class UserDeletionTest extends TestCase
             'password' => bcrypt('@Bulldozer01'),
             'role' => 'superAdmin',
             'is_verified' => 1,
+            'email_verified_at' => now()
         ]);
 
         // Delete self as a super admin

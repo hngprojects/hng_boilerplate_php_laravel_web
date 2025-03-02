@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Routing\Exceptions\InvalidSignatureException;
 use Throwable;
 use Illuminate\Http\Request;
 use Prometheus\Storage\Redis;
@@ -85,5 +86,13 @@ class Handler extends ExceptionHandler
               ], 401);
           }
         });
+        $this->renderable(function (InvalidSignatureException $e, Request $request) {
+            if ($request->is('api/*')) {
+                return response()->json([
+                    "error" => "InvalidSignature",
+                    'message' => "Expired or Invalid Verification Link",
+                ], 403);
+            }
+          });
     }
 }
