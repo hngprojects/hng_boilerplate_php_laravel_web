@@ -11,22 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-         // Drop the table if it exists
-         if (Schema::hasTable('testimonials')) {
+        // Drop the table if it exists
+        if (Schema::hasTable('testimonials')) {
             Schema::drop('testimonials');
         }
 
         // Create the table
         Schema::create('testimonials', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->uuid('id')->primary(); // Change to UUID primary key
             $table->uuid('user_id');
             $table->string('name');
             $table->text('content');
             $table->timestamps();
         });
     }
-    // }
-
 
     /**
      * Reverse the migrations.

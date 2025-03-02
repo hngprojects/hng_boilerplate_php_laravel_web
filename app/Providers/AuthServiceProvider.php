@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Models\Organisation;
 use App\Policies\OrganisationPolicy;
+use App\Models\Testimonial;
+use App\Policies\TestimonialPolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -16,6 +18,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         Organisation::class => OrganisationPolicy::class,
+        Testimonial::class => TestimonialPolicy::class,
     ];
 
     /**
@@ -23,6 +26,6 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $this->registerPolicies();
     }
 }

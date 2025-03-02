@@ -245,10 +245,11 @@ Route::prefix('v1')->group(function () {
         Route::delete('/organisations/{org_id}', [OrganisationController::class, 'destroy']);
 
         // Testimonials
+        Route::get('/testimonials', [TestimonialController::class, 'index']);
         Route::post('/testimonials', [TestimonialController::class, 'store']);
-        Route::get('/testimonials/{testimonial_id}', [TestimonialController::class, 'show']);
-        Route::delete('/testimonials/{testimonial}', [TestimonialController::class, 'destroy']);
-
+        Route::get('/testimonials/{id}', [TestimonialController::class, 'show']);
+        Route::patch('/testimonials/{id}', [TestimonialController::class, 'update']);
+        Route::delete('/testimonials/{id}', [TestimonialController::class, 'destroy']);
         // Jobs
         Route::post('/jobs', [JobController::class, 'store']);
         Route::put('/jobs/{id}', [JobController::class, 'update']);
