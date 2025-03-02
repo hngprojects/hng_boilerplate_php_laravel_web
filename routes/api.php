@@ -303,6 +303,9 @@ Route::prefix('v1')->group(function () {
         Route::post('/faqs', [FaqController::class, 'store']);
         Route::put('/faqs/{id}', [FaqController::class, 'update']);
         Route::delete('/faqs/{id}', [FaqController::class, 'destroy']);
+
+        // end point to activate a squeeze page
+        Route::patch('/squeeze-pages/{id}/activate', [SqueezePageCoontroller::class, 'activateSqueezePage']);
     });
 
     Route::post('/waitlists', [WaitListController::class, 'store']);
@@ -358,7 +361,6 @@ Route::prefix('v1')->group(function () {
     // Route::get('/quests/{id}/messages', [QuestController::class, 'getQuestMessages']);
 
     Route::post('/squeeze-user', [SqueezePageUserController::class, 'store']);
-
 
     //Newsletter Subscription
     Route::post('newsletter-subscription', [NewsletterSubscriptionController::class, 'store']);
