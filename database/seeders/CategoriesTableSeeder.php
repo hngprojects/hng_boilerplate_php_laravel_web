@@ -16,9 +16,9 @@ class CategoriesTableSeeder extends Seeder
     public function run()
     {
         // Truncate the table to remove existing records
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        //DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         Category::query()->delete();
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        //DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
 
         // Define categories
