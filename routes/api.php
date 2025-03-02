@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Api\V1\Auth\VerificationController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\QuestController;
 use App\Http\Controllers\Api\V1\JobController;
 use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Controllers\BillingPlanController;
@@ -50,8 +49,8 @@ use App\Http\Controllers\Api\V1\Testimonial\TestimonialController;
 use App\Http\Controllers\Api\V1\Auth\ForgotResetPasswordController;
 use App\Http\Controllers\Api\V1\Organisation\OrganisationController;
 use App\Http\Controllers\Api\V1\Auth\ForgetPasswordRequestController;
-use App\Http\Controllers\Api\V1\SuperAdmin\SuperAdminProductController;
 use App\Http\Controllers\Api\V1\Organisation\OrganisationMemberController;
+use App\Http\Controllers\Api\V1\SqueezePageController;
 use App\Http\Controllers\Api\V1\Auth\MagicLinkController;
 
 /*
@@ -297,9 +296,9 @@ Route::prefix('v1')->group(function () {
         Route::patch('/blogs/edit/{id}', [BlogController::class, 'update'])->name('admin.blogs.update');
         Route::delete('/blogs/{id}', [BlogController::class, 'destroy']);
         Route::get('/waitlists', [WaitListController::class, 'index']);
-        Route::get('/squeeze-pages/search', [SqueezePageCoontroller::class, 'search']);
-        Route::get('/squeeze-pages/filter', [SqueezePageCoontroller::class, 'filter']);
-        Route::apiResource('squeeze-pages', SqueezePageCoontroller::class);
+        Route::get('/squeeze-pages/search', [SqueezePageController::class, 'search']);
+        Route::get('/squeeze-pages/filter', [SqueezePageController::class, 'filter']);
+        Route::apiResource('squeeze-pages', SqueezePageController::class);
         Route::get('/dashboard/statistics', [AdminDashboardController::class, 'getStatistics']);
         Route::get('/dashboard/top-products', [AdminDashboardController::class, 'getTopProducts']);
         Route::get('/dashboard/all-top-products', [AdminDashboardController::class, 'getAllProductsSortedBySales']);
@@ -310,7 +309,7 @@ Route::prefix('v1')->group(function () {
         Route::delete('/faqs/{id}', [FaqController::class, 'destroy']);
 
         // end point to activate a squeeze page
-        Route::patch('/squeeze-pages/{id}/activate', [SqueezePageCoontroller::class, 'activateSqueezePage']);
+        Route::patch('/squeeze-pages/{id}/activate', [SqueezePageController::class, 'activateSqueezePage']);
     });
 
     Route::post('/waitlists', [WaitListController::class, 'store']);
