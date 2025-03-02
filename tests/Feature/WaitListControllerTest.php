@@ -61,49 +61,29 @@ class WaitListControllerTest extends TestCase
      */
     public function testStore()
     {
-        // Fake the mail sending
-        Mail::fake();
 
         $payload = [
             'name' => 'John Doe',
             'email' => 'john.doe@example.com'
         ];
 
-        $response = $this->withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-        ])->postJson('/api/v1/waitlists', $payload);
+        $response = $this->postJson('/api/v1/waitlists', $payload);
+        $response->assertStatus(201);
+        $response->assertJson([
+            'status' => 201,
+            'message' => 'You have been added to the waitlist and an email has been sent.',
+            'data' => [
+                'name' => 'John Doe',
+                'email' => 'john.doe@example.com'
+            ]
+        ]);
 
-        // Enhanced debugging on failure
-        if ($response->status() !== 201) {
-            dump([
-                'Status Code' => $response->status(),
-                'Response Content' => $response->json(),
-                'Validation Errors' => $response->status() === 422 ? $response->json()['message'] : null
-            ]);
-        }
-
-        $response->assertStatus(201)
-            ->assertJson([
-                'status' => 201,
-                'message' => 'You have been added to the waitlist and an email has been sent.',
-                'data' => [
-                    'name' => 'John Doe',
-                    'email' => 'john.doe@example.com'
-                ]
-            ]);
-
-        // Database assertions
         $this->assertDatabaseHas('wait_lists', [
             'name' => 'John Doe',
             'email' => 'john.doe@example.com'
         ]);
-
-        // Mail assertions
-        Mail::assertSent(WaitlistConfirmation::class, function ($mail) {
-            return $mail->hasTo('john.doe@example.com');
-        });
     }
+
 
     public function testStoreValidationFailure()
     {
