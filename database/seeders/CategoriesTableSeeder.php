@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Category;
+use Illuminate\Support\Facades\DB;
 
 class CategoriesTableSeeder extends Seeder
 {
@@ -15,7 +16,10 @@ class CategoriesTableSeeder extends Seeder
     public function run()
     {
         // Truncate the table to remove existing records
-        Category::truncate();
+        //DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        Category::query()->delete();
+        //DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
 
         // Define categories
         $categories = [

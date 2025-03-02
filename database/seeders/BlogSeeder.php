@@ -12,7 +12,9 @@ class BlogSeeder extends Seeder
 {
     public function run(): void
     {
-        DB::table('blogs')->truncate();
+        //DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        Blog::query()->delete();
+        //DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         $categories = ['Business', 'Food', 'Lifestyle', 'World News'];
         $images = [
