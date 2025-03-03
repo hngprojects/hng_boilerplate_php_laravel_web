@@ -22,3 +22,6 @@ docker-compose.yml
 ResponseHTTP_OK,
 can
 result.json
+branch_structure.json
+temp_auto_push.bat
+temp_interactive_push.bat
