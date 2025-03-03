@@ -69,4 +69,33 @@ class UpdateNotificationPreferenceTest extends TestCase
 
         $response->assertStatus(400);
     }
+
+    /** @test */
+    public function it_creates_settings_if_none_exist()
+    {
+        $user = User::factory()->create();
+
+        $data = [
+            'mobile_push_notifications' => true,
+            'email_notification_activity_in_workspace' => true,
+            'email_notification_always_send_email_notifications' => true,
+            'email_notification_email_digest' => true,
+            'email_notification_announcement_and_update_emails' => true,
+            'slack_notifications_activity_on_your_workspace' => true,
+            'slack_notifications_always_send_email_notifications' => true,
+            'slack_notifications_announcement_and_update_emails' => true,
+        ];
+
+        $response = $this->actingAs($user, 'api')
+            ->patchJson('/api/v1/settings/notification-settings', $data);
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'status' => 'success',
+                'message' => 'Notification preferences updated successfully',
+                'status_code' => 200,
+            ]);
+
+        $this->assertDatabaseHas('notification_settings', $data + ['user_id' => $user->id]);
+    }
 }
