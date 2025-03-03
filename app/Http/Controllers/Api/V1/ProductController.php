@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Models\OrganisationUser;
-use App\Http\Requests\UpdateProductRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Models\ProductComment;
+use App\Models\OrganisationUser;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CreateProductRequest;
 use App\Http\Resources\ProductResource;
+use App\Http\Requests\CreateProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 
 
 class ProductController extends Controller
@@ -396,5 +397,65 @@ class ProductController extends Controller
             'message' => 'Product successfully deleted.',
             // 'data' => $product
         ], 204);
+    }
+
+    public function createComment(Request $request, $org_id, $product_id)
+    {
+        $product = Product::find($product_id);
+        if (!$product) {
+            return response()->json([
+                'status' => 'error',
+                "message" => "Product not found",
+                'status_code' => 404,
+            ]);
+        }
+
+        $request->validate([
+            'comment' => 'required|string|max:500',
+        ]);
+
+        $comment = ProductComment::create([
+            'user_id' => auth()->id(),
+            'product_id' => $product_id,
+            'comment' => $request->input('comment'),
+        ]);
+
+        return response()->json([
+            'status_code' => 201,
+            'message' => 'Comment added successfully', 
+            'comment' => $comment
+        ], 201);
+    }
+
+    public function updateComment(Request $request, $product_id, $comment_id)
+    {
+        $comment = ProductComment::find($comment_id);
+        if (!$comment) {
+            return response()->json([
+                'status' => 'error',
+                "message" => "comment not found",
+                'status_code' => 404,
+            ]);
+        }
+
+        $request->validate([
+            'comment' => 'required|string|max:500',
+        ]);
+
+        $comment = ProductComment::where('id', $comment_id)->where('user_id', auth()->id())->first();
+
+        if (!$comment) {
+            return response()->json(['message' => 'Comment not found or not authorized to update'], 403);
+        }
+
+        $comment->update([
+            'comment' => $request->input('comment'),
+        ]);
+
+        return response()->json([
+            'status_code' => 200,
+            'message' => 'Comment updated successfully', 
+            'comment' => $comment
+        ], 200);
     }
 }

@@ -149,6 +149,8 @@ Route::prefix('v1')->group(function () {
         Route::post('/organisations/{org_id}/products', [ProductController::class, 'store']);
         Route::patch('/organisations/{org_id}/products/{product_id}', [ProductController::class, 'update']);
         Route::delete('/organisations/{org_id}/products/{product_id}', [ProductController::class, 'destroy']);
+        Route::post('/organisations/{org_id}/products/{product_id}/comments', [ProductController::class, 'createComment']);
+        Route::put('/organisations/{product_id}/comments/{comment_id}', [ProductController::class, 'updateComment']);
     });
 
 
